@@ -232,6 +232,37 @@
     background:radial-gradient(closest-side, rgba(255,255,255,.85), rgba(255,255,255,0));}
   .ab-white::after{background:radial-gradient(closest-side, rgba(255,255,255,.95), rgba(210,210,215,.55));}
   .ab-black::after{background:radial-gradient(closest-side, rgba(230,230,235,.75), rgba(230,230,235,0));}
+  /* mechanical keyboard — deep deck, red modifiers, real key travel */
+  .keyboard-card{grid-column:1/-1;min-width:0}
+  .mk-scroll{width:100%;overflow-x:auto;padding:2px 0 10px}
+  .mk-rig{width:min(900px,100%);min-width:720px;margin:auto}
+  .mk-display{display:block;box-sizing:border-box;min-height:112px;margin:0 34px 22px;padding:18px 20px;border-radius:10px;background:#19191b;color:#f7f7f8;
+    box-shadow:0 10px 22px rgba(0,0,0,.20),inset 0 1px 1px rgba(255,255,255,.08);font:400 20px/1.45 "IBM Plex Mono",monospace;letter-spacing:.4px;white-space:pre-wrap}
+  .mk-board{background:#262628;border:1px solid #151516;border-radius:11px;padding:16px;box-shadow:0 7px 0 #111113,0 16px 28px rgba(0,0,0,.20),inset 0 1px 1px rgba(255,255,255,.10)}
+  .mk-row{display:flex;gap:6px;margin-bottom:7px}.mk-row:last-child{margin-bottom:0}
+  .mk-key{--key-top:#f8f8f8;--key-bottom:#dedee1;--key-ink:#29292c;flex:var(--w,1) 1 0;min-width:34px;height:48px;border:1px solid #b8b8bd;border-radius:6px;background:linear-gradient(180deg,var(--key-top),var(--key-bottom));color:var(--key-ink);cursor:pointer;position:relative;
+    box-shadow:0 5px 0 #9b9ba0,0 7px 8px rgba(0,0,0,.30),inset 0 2px 2px rgba(255,255,255,.88);font:500 14px "IBM Plex Sans",sans-serif;touch-action:manipulation;transform-origin:50% 100%}
+  .mk-key::after{content:"";position:absolute;left:8%;right:8%;top:2px;height:26%;border-radius:5px;background:linear-gradient(rgba(255,255,255,.60),transparent);pointer-events:none}
+  .mk-key.accent{--key-top:#e74848;--key-bottom:#8c0000;--key-ink:#fff;border-color:#810000;background:linear-gradient(180deg,var(--key-top),#CC0000 58%,var(--key-bottom));box-shadow:0 5px 0 #650000,0 7px 8px rgba(0,0,0,.34),inset 0 2px 2px rgba(255,255,255,.34)}
+  .mk-key[data-pressed="true"],.mk-key:active{transform:translateY(5px) scale(.985);box-shadow:0 0 0 #777,0 1px 2px rgba(0,0,0,.35),inset 0 3px 6px rgba(0,0,0,.24)}
+  .mk-key:focus-visible{outline:3px solid #CC0000;outline-offset:2px;z-index:2}
+  .mk-key[aria-pressed="true"]{box-shadow:0 2px 0 #650000,inset 0 3px 7px rgba(0,0,0,.28)}
+  .ucc-key-mark{width:22px;height:22px;position:relative;display:inline-flex;align-items:center;justify-content:center;font:800 8px "IBM Plex Sans",sans-serif;color:#fff}
+  .ucc-key-mark::before,.ucc-key-mark::after{content:"";position:absolute;border:3px solid #fff;border-right-color:transparent;border-radius:50%}
+  .ucc-key-mark::before{inset:0}.ucc-key-mark::after{inset:5px;border-width:2px}.ucc-key-mark b{position:relative;z-index:1;font-size:7px}
+  @media(max-width:780px){.mk-rig{min-width:680px}.mk-display{margin-left:20px;margin-right:20px}.mk-key{height:44px;font-size:13px}.mk-board{padding:12px}}
+  /* single concave push button — dished cap sinks into a machined socket */
+  .concave-stage{width:360px;max-width:100%;min-height:270px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px}
+  .concave-led{width:14px;height:14px;border-radius:50%;background:#CC0000;box-shadow:0 0 0 4px rgba(204,0,0,.08),0 3px 7px rgba(100,0,0,.28)}
+  .concave-socket{width:166px;height:166px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#0b0b0d,#28282c 52%,#111113);
+    border:1px solid #09090a;box-shadow:inset 0 10px 16px rgba(0,0,0,.72),inset 0 -4px 7px rgba(255,255,255,.14),5px 12px 22px rgba(0,0,0,.24)}
+  .concave-button{width:146px;height:146px;border-radius:50%;border:1px solid #a9a9ae;padding:0;position:relative;cursor:pointer;touch-action:manipulation;background:linear-gradient(150deg,#fafafa,#d9d9dc 72%);
+    box-shadow:0 8px 11px rgba(0,0,0,.46),0 -3px 4px rgba(255,255,255,.95),inset 0 1px 2px #fff;transform-origin:50% 100%}
+  .concave-button:focus-visible{outline:3px solid #CC0000;outline-offset:5px}
+  .concave-top{position:absolute;inset:8px;border-radius:50%;background:radial-gradient(ellipse at 50% 58%,#c5c5c8 0%,#dadadd 48%,#f9f9f9 76%,#c9c9cd 100%);
+    box-shadow:inset 8px 10px 18px rgba(0,0,0,.22),inset -8px -10px 17px rgba(255,255,255,.88),0 1px 1px rgba(255,255,255,.9);pointer-events:none}
+  .concave-top::after{content:"";position:absolute;inset:10%;border-radius:50%;background:radial-gradient(ellipse at 35% 24%,rgba(255,255,255,.55),transparent 48%);mix-blend-mode:screen}
+  .concave-button[data-pressed="true"]{transform:translateY(9px) scale(.975)}
   /* Drams—037 global code-reveal control */
   .code-toggle-card{min-height:250px}
   .d37-wrap{display:flex;align-items:center;gap:16px}
@@ -267,7 +298,7 @@
   <div class="portable"><strong>Portable by design.</strong> No hosted design service is required. The controls are self-contained, accessible, and ready to adapt.</div>
   <nav class="atlas-map" aria-label="Control atlas guide">
     <h3>Find the right pattern</h3>
-    <ul><li><strong>Tune a value</strong> with a rotary dial.</li><li><strong>Choose a fixed position</strong> with a detented dial or sliding ordinal control.</li><li><strong>Combine independent states</strong> with the Triune Gate.</li><li><strong>Control playback</strong> with the Aether Receiver or Horologion.</li><li><strong>Measure elapsed time</strong> with the Vigil Clock.</li><li><strong>Trigger an action</strong> with the Three Keys.</li><li><strong>Inspect the construction</strong> by opening the Code Veil.</li></ul>
+    <ul><li><strong>Tune a value</strong> with a rotary dial.</li><li><strong>Choose a fixed position</strong> with a detented dial or sliding ordinal control.</li><li><strong>Combine independent states</strong> with the Triune Gate.</li><li><strong>Control playback</strong> with the Aether Receiver or Horologion.</li><li><strong>Measure elapsed time</strong> with the Vigil Clock.</li><li><strong>Type with tactile feedback</strong> on the Mechanical Keyboard.</li><li><strong>Trigger an action</strong> with the Push Button or Three Keys.</li><li><strong>Inspect the construction</strong> by opening the Code Veil.</li></ul>
   </nav>
 </header>
 <div class="accentrow">Signal accent:
@@ -440,6 +471,32 @@
 </div></div>
 
 <div class="section-title">Trigger controls</div>
+<div class="cap"><span>Mechanical Keyboard · tactile text input</span><span class="pill">POINTER / KEYBOARD</span></div>
+<div class="grid"><div class="card keyboard-card">
+  <p class="component-copy">A compact mechanical board with deep key travel, Cinnabar modifier keys, and the UnCommon Core brandmark. Every key visibly bottoms out when tapped.</p>
+  <div class="mk-scroll">
+    <div class="mk-rig" id="mechanicalKeyboard" role="group" aria-label="UnCommon Core mechanical keyboard">
+      <output class="mk-display" id="keyboardDisplay" aria-live="polite">UnCommon Core</output>
+      <div class="mk-board" id="keyboardKeys"></div>
+    </div>
+  </div>
+  <div class="readout"><b id="keyboardState">READY</b> · tap a key to type</div>
+  <div class="hint">Cinnabar replaces the reference orange · pointer tap or Space / Enter visibly depresses each key</div>
+</div></div>
+
+<div class="cap"><span>Push Button · concave momentary control</span><span class="pill">PRESS / RELEASE</span></div>
+<div class="grid"><div class="card">
+  <p class="component-copy">A single-purpose actuator with a dished surface, a visible socket, and enough vertical travel to make the press unmistakable.</p>
+  <div class="concave-stage">
+    <div class="concave-led" aria-hidden="true"></div>
+    <div class="concave-socket" id="concaveSocket">
+      <button type="button" class="concave-button" id="concaveButton" aria-label="Concave push button" aria-pressed="false"><span class="concave-top" aria-hidden="true"></span></button>
+    </div>
+  </div>
+  <div class="readout"><b id="concaveState">READY</b> · <span id="concaveCount">0 presses</span></div>
+  <div class="hint">dished Ivory cap · Cinnabar signal · pointer or Space / Enter · momentary return</div>
+</div></div>
+
 <div class="cap"><span>The Three Keys · tactile action controls</span><span class="pill">MOMENTARY / LATCH</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">Three arcade-style controls with a physical press, visible socket, and immediate signal response. Use momentary behavior for hold actions or latch behavior for persistent state.</p>
@@ -907,6 +964,67 @@ $("timerStart").onclick=()=>{ensureAudio();if(AC)AC.resume();
 $("timerReset").onclick=()=>{timerRemaining=timerDuration;timerMode="ready";timerAlarmed=false;renderTimer();};
 (function timerLoop(){renderTimer();requestAnimationFrame(timerLoop);})();
 
+/* mechanical keyboard: semantic keys, visible bottom-out, lightweight typing model */
+const keyboardRows=[
+  [["Esc",1.1,"accent"],...[1,2,3,4,5,6,7,8,9,10,11,12].map(n=>[`F${n}`,1,"accent"])],
+  [["`",1,"accent"],...["1","2","3","4","5","6","7","8","9","0","-","="].map(k=>[k]),["⌫",2.1,"accent","Backspace"]],
+  [["Tab",1.55,"accent"],...["Q","W","E","R","T","Y","U","I","O","P","[","]","\\"].map(k=>[k])],
+  [["Caps",1.75,"accent","CapsLock"],...["A","S","D","F","G","H","J","K","L",";","'"].map(k=>[k]),["Enter",2.1,"accent","Enter"]],
+  [["Shift",2.15,"accent","Shift"],...["Z","X","C","V","B","N","M",",",".","/"].map(k=>[k]),["Shift",2.15,"accent","Shift"]],
+  [["Ctrl",1.25,"accent","Control"],["UCC",1.25,"accent","Brand"],["Alt",1.25,"accent","Alt"],["Space",6.8,""," "],["Alt",1.25,"accent","Alt"],["UCC",1.25,"accent","Brand"],["Menu",1.35,"accent","Menu"],["Ctrl",1.25,"accent","Control"]]
+];
+const keyboardKeys=$("keyboardKeys"),keyboardDisplay=$("keyboardDisplay"),keyboardState=$("keyboardState");
+let typed="",caps=false,shifted=false;
+function keyLegend(label,key){
+  if(key!=="Brand") return document.createTextNode(label);
+  const mark=document.createElement("span");mark.className="ucc-key-mark";mark.setAttribute("aria-hidden","true");mark.innerHTML="<b>U</b>";return mark;
+}
+function setKeyDown(button,down){
+  button.dataset.pressed=String(down);
+  animate(button,down?{y:5,scale:.985}:{y:0,scale:1},T({type:"spring",stiffness:780,damping:34,mass:.45}));
+}
+function typeFromKey(button){
+  const key=button.dataset.key,label=button.dataset.label;
+  if(key==="Backspace") typed=typed.slice(0,-1);
+  else if(key==="Enter") typed+="\n";
+  else if(key==="Tab") typed+="\t";
+  else if(key==="CapsLock"){caps=!caps;button.setAttribute("aria-pressed",String(caps));}
+  else if(key==="Shift"){shifted=!shifted;document.querySelectorAll('.mk-key[data-key="Shift"]').forEach(k=>k.setAttribute("aria-pressed",String(shifted)));}
+  else if(key===" "||key.length===1){const upper=caps!==shifted;typed+=/^[a-z]$/i.test(label)?(upper?label.toUpperCase():label.toLowerCase()):label;shifted=false;document.querySelectorAll('.mk-key[data-key="Shift"]').forEach(k=>k.setAttribute("aria-pressed","false"));}
+  keyboardDisplay.textContent=typed||"UnCommon Core";
+  keyboardState.textContent=key==="Brand"?"UCC BRANDMARK":key+" PRESSED";
+}
+keyboardRows.forEach(rowData=>{
+  const row=document.createElement("div");row.className="mk-row";
+  rowData.forEach(([label,width=1,tone="",key=label])=>{
+    const button=document.createElement("button");button.type="button";button.className="mk-key"+(tone?" "+tone:"");button.style.setProperty("--w",width);button.dataset.key=key;button.dataset.label=label;button.dataset.pressed="false";button.setAttribute("aria-label",key==="Brand"?"UnCommon Core brandmark key":label+" key");if(key==="CapsLock"||key==="Shift")button.setAttribute("aria-pressed","false");button.appendChild(keyLegend(label,key));
+    button.addEventListener("pointerdown",()=>setKeyDown(button,true));["pointerup","pointercancel","pointerleave"].forEach(type=>button.addEventListener(type,()=>setKeyDown(button,false)));
+    button.addEventListener("keydown",e=>{if(!e.repeat&&(e.key===" "||e.key==="Enter"))setKeyDown(button,true)});button.addEventListener("keyup",e=>{if(e.key===" "||e.key==="Enter")setKeyDown(button,false)});
+    button.addEventListener("click",()=>typeFromKey(button));row.appendChild(button);
+  });keyboardKeys.appendChild(row);
+});
+
+/* concave push button: cap, dish, and socket move as one tactile system */
+const concaveButton=$("concaveButton"),concaveSocket=$("concaveSocket"),concaveTop=concaveButton.querySelector(".concave-top");
+let concavePresses=0,concaveHeld=false;
+const CONCAVE_SOCKET_REST="inset 0 10px 16px rgba(0,0,0,.72), inset 0 -4px 7px rgba(255,255,255,.14), 5px 12px 22px rgba(0,0,0,.24)";
+const CONCAVE_SOCKET_DOWN="inset 0 14px 22px rgba(0,0,0,.82), inset 0 -2px 5px rgba(255,255,255,.10), 2px 5px 10px rgba(0,0,0,.18)";
+const CONCAVE_DISH_REST="inset 8px 10px 18px rgba(0,0,0,.22), inset -8px -10px 17px rgba(255,255,255,.88), 0 1px 1px rgba(255,255,255,.9)";
+const CONCAVE_DISH_DOWN="inset 10px 13px 20px rgba(0,0,0,.32), inset -5px -7px 12px rgba(255,255,255,.66), 0 0 0 rgba(0,0,0,0)";
+function renderConcave(down,instant=false){
+  concaveHeld=down;concaveButton.dataset.pressed=String(down);concaveButton.setAttribute("aria-pressed",String(down));$("concaveState").textContent=down?"DEPRESSED":"READY";
+  const transition=instant||reduce?{duration:0}:{type:"spring",stiffness:720,damping:32,mass:.55};
+  animate(concaveButton,down?{y:9,scale:.975}:{y:0,scale:1},transition);
+  animate(concaveSocket,{boxShadow:down?CONCAVE_SOCKET_DOWN:CONCAVE_SOCKET_REST},{duration:instant?0:.11});
+  concaveTop.style.boxShadow=down?CONCAVE_DISH_DOWN:CONCAVE_DISH_REST;
+}
+concaveButton.addEventListener("pointerdown",()=>renderConcave(true));
+["pointerup","pointercancel","pointerleave"].forEach(type=>concaveButton.addEventListener(type,()=>renderConcave(false)));
+concaveButton.addEventListener("keydown",e=>{if(!e.repeat&&(e.key===" "||e.key==="Enter"))renderConcave(true)});
+concaveButton.addEventListener("keyup",e=>{if(e.key===" "||e.key==="Enter")renderConcave(false)});
+concaveButton.addEventListener("click",()=>{concavePresses++;$("concaveCount").textContent=concavePresses+" "+(concavePresses===1?"press":"presses");});
+renderConcave(false,true);
+
 /* arcade push-buttons: momentary press + latch, LED follows, click sound */
 const PRESS_SHADOW="0 -2px 4px -2px rgba(0,0,0,.50), 0 1px 2px rgba(0,0,0,.20), 0 0 0 4px rgba(0,0,0,.40), inset 0 2px 3px rgba(255,255,255,.4), inset 0 6px 12px rgba(0,0,0,.45)";
 const REST_SHADOW="0 -4px 6px -2px rgba(0,0,0,.55), 0 5px 9px rgba(0,0,0,.20), 0 4px 5px -2px rgba(255,255,255,.65), inset 0 2px 3px rgba(255,255,255,.7), inset 0 -6px 9px rgba(0,0,0,.30)";
@@ -1016,6 +1134,21 @@ const remaining = Math.max(0, endAt - Date.now());
 const elapsedRatio = 1 - remaining / durationMs;
 progressCircle.setAttribute("stroke-dashoffset", circumference * (1-elapsedRatio));
 // Derive every frame from wall time so background tabs do not lose time.`},
+  {id:"mechanicalKeyboard",title:"Mechanical Keyboard",code:String.raw`const keySpring = { type:"spring", stiffness:780, damping:34, mass:.45 };
+function setKeyDown(key, down) {
+  key.dataset.pressed = String(down);
+  animate(key, down ? { y:5, scale:.985 } : { y:0, scale:1 }, keySpring);
+}
+// Render each key as a native button. Cinnabar keys use #CC0000.
+// Pointer and keyboard events share the same press/release path.`},
+  {id:"concaveButton",title:"Push Button",code:String.raw`const pressSpring = { type:"spring", stiffness:720, damping:32, mass:.55 };
+function renderPress(down) {
+  button.setAttribute("aria-pressed", String(down));
+  animate(button, down ? { y:9, scale:.975 } : { y:0, scale:1 }, pressSpring);
+  animate(socket, { boxShadow: down ? SOCKET_DOWN : SOCKET_REST });
+  dish.style.boxShadow = down ? DISH_DOWN : DISH_REST;
+}
+// The radial-gradient cap and inset shadows create the concavity.`},
   {id:"abtns",title:"The Three Keys",code:String.raw`const press = { type:"spring", stiffness:650, damping:26, mass:.6 };
 animate(button, pressed ? { y:6, scale:.94 } : { y:0, scale:1 }, press);
 animate(socket, { boxShadow: pressed ? SOCKET_DEEP : SOCKET_REST });

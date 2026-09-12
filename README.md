@@ -2,9 +2,11 @@
 
 A shareable atlas of tactile, hardware-inspired UI/UX controls built with semantic HTML, CSS, JavaScript, and [Motion](https://motion.dev/)—without a hosted design service.
 
-## Live demo
+## Repository
 
-**https://alanism.github.io/ucc-elements/**
+Browse the source, copy the patterns, or clone it from:
+
+**https://github.com/alanism/ucc-elements**
 
 ## Components
 
@@ -22,6 +24,8 @@ A shareable atlas of tactile, hardware-inspired UI/UX controls built with semant
   - Wall-clock-accurate countdown
   - Increasing Cinnabar elapsed indicator
   - Integrated start/stop and reset controls
+- **Mechanical Keyboard** — 74 tactile keys with Cinnabar modifiers, UCC brandmarks, visible key travel, and a working text display
+- **Push Button** — single concave momentary control with a dished Ivory cap, recessed socket, and Cinnabar signal
 - **The Three Keys** — tactile momentary or latched action controls
 
 ## Try it locally
