@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>UCC toggle — Motion replica (no Framer service)</title>
+<style>
+  :root{ --fg:#111; --muted:#6e6e6e; --tile:#f5f6f7; --accent:#cc0000; --track-off:#efefef; }
+  *{box-sizing:border-box} body{margin:0;font-family:-apple-system,Inter,SF Pro Text,sans-serif;color:var(--fg);background:#fff}
+  header{padding:28px 32px 8px} header h1{font-size:22px;margin:0} header p{color:var(--muted);font-size:14px;max-width:720px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;padding:20px 32px 40px}
+  .card{background:var(--tile);border-radius:4px;padding:56px 20px;display:flex;align-items:center;justify-content:center;min-height:260px;position:relative}
+  .cap{display:flex;justify-content:space-between;align-items:center;padding:10px 32px 0;font-size:15px}
+  .pill{font-size:12px;background:#e9e9eb;color:#6e6e6e;border-radius:20px;padding:3px 10px}
+  /* THE TOGGLE */
+  .track{width:132px;height:60px;border-radius:999px;background:var(--track-off);position:relative;cursor:pointer;border:0;outline-offset:6px;
+    box-shadow:inset 0 2px 6px rgba(0,0,0,.08), inset 0 -1px 2px rgba(255,255,255,.9);}
+  .track:focus-visible{outline:3px solid #cc0000}
+  .knob{position:absolute;top:5px;left:5px;width:50px;height:50px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #ffffff, #f4f4f4 70%, #ececec);
+    box-shadow:0 10px 22px rgba(0,0,0,.22), 0 2px 6px rgba(0,0,0,.18);}
+  .row{display:flex;gap:12px;align-items:center;justify-content:center;padding:0 32px 8px;color:var(--muted);font-size:13px}
+  button.demo{font:12px ui-monospace,monospace;border:1px solid #d0d0d0;background:#fff;border-radius:20px;padding:8px 14px;cursor:pointer}
+  code{background:#f1f1f1;padding:2px 6px;border-radius:6px;font-size:12px}
+  pre{background:#111;color:#eee;padding:18px;border-radius:12px;margin:0 32px 40px;overflow:auto;font-size:12.5px;line-height:1.6}
+  @media (prefers-reduced-motion:reduce){ .knob{transition:none!important} }
+</style>
+</head>
+<body>
+<header>
+  <h1>UCC toggle · two states, one smooth spring</h1>
+  <p><a href="index.html">← back to Elements showcase</a></p>
+  <p>Left = OFF (grey track <code>#EFEFEF</code>, knob left). Right = ON (red track <code>#CC0000</code>, knob right). Click either — the knob glides on a spring (<code>stiffness 500 · damping 32</code>) while the track cross-fades. No Framer service. Motion (Framer Motion) via CDN.</p>
+</header>
+
+<div class="cap"><span>Drams—037 · OFF state (your screenshot 2)</span><span class="pill">State A</span></div>
+<div class="grid"><div class="card">
+  <button class="track" id="t1" role="switch" aria-checked="false" aria-label="Drams 037 replica OFF demo"><span class="knob"></span></button>
+</div></div>
+
+<div class="cap"><span>Drams—037 · ON state (your screenshot 1) — interactive</span><span class="pill">State B · click me</span></div>
+<div class="grid"><div class="card">
+  <button class="track" id="t2" role="switch" aria-checked="true" aria-label="Drams 037 replica interactive"><span class="knob"></span></button>
+</div></div>
+
+<div class="row">
+  <button class="demo" id="resetOff">Set OFF</button>
+  <button class="demo" id="resetOn">Set ON</button>
+  <span id="label" aria-live="polite">t2 = ON</span>
+</div>
+
+<pre id="code">// React + Motion (no Framer hosting) — the exact pattern
+// npm i motion  (motion.dev = Framer Motion's successor)
+import { motion } from "motion/react";
+
+const spring = { type: "spring", stiffness: 500, damping: 32 };
+
+function Drams037({ on, onToggle }) {
+  return (
+    &lt;motion.button role="switch" aria-checked={on} onClick={onToggle}
+      animate={{ backgroundColor: on ? "#e76a2e" : "#efefef" }}
+      transition={spring}
+      style={{ width: 132, height: 60, borderRadius: 999 }}
+    &gt;
+      &lt;motion.span
+        animate={{ x: on ? 72 : 0 }}
+        transition={spring}
+        style={{ width: 50, height: 50, borderRadius: "50%", background: "#fff" }}
+      /&gt;
+    &lt;/motion.button&gt;
+  );
+}
+// Track animates backgroundColor; knob animates x — same spring, one gesture.
+// whileTap={{ scale: 0.97 }} adds press squish. Respect reduced motion:
+// const reduce = useReducedMotion(); transition={reduce ? {duration:0} : spring}</pre>
+
+<script type="module">
+import { animate } from "https://cdn.jsdelivr.net/npm/motion@11/+esm";
+const SPRING = { type: "spring", stiffness: 500, damping: 32, mass: 1 };
+
+function wire(el, initialOn) {
+  let on = initialOn;
+  const knob = el.querySelector(".knob");
+  const X_OFF = 0, X_ON = 72; // 132 - 50 - 5*2
+  function render(instant=false) {
+    el.setAttribute("aria-checked", String(on));
+    const opts = instant ? { duration: 0 } : SPRING;
+    animate(knob, { x: on ? X_ON : X_OFF }, opts);
+    animate(el, { backgroundColor: on ? "#cc0000" : "#efefef" }, instant ? {duration:0} : { ...SPRING, stiffness: 400, damping: 34 });
+    if (el.id === "t2") document.getElementById("label").textContent = "t2 = " + (on ? "ON" : "OFF");
+  }
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  el.addEventListener("click", () => { on = !on; render(reduce); });
+  // press squish
+  el.addEventListener("pointerdown", () => animate(el, { scale: 0.97 }, { duration: 0.1 }));
+  el.addEventListener("pointerup", () => animate(el, { scale: 1 }, SPRING));
+  render(true);
+  return { set(v){ on = v; render(reduce); } };
+}
+const t1 = wire(document.getElementById("t1"), false);
+const t2 = wire(document.getElementById("t2"), true);
+document.getElementById("resetOff").onclick = () => t2.set(false);
+document.getElementById("resetOn").onclick = () => t2.set(true);
+</script>
+</body>
+</html>
