@@ -6,12 +6,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;700&display=swap"/>
-<title>UnCommon Core Elements — tactile control library</title>
+<title>Enochian Elements — Control Atlas</title>
 <style>
   :root{ --accent:#CC0000; --ink:#111; --muted:#6e6e6e; --tile:#f5f6f7; }
   *{box-sizing:border-box} body{margin:0;font-family:"IBM Plex Sans",-apple-system,Inter,SF Pro Text,sans-serif;color:var(--ink);background:#fff}
-  header{padding:28px 32px 4px} header h1{font-size:22px;margin:0 0 6px}
-  header p{color:var(--muted);font-size:14px;max-width:780px}
+  header{padding:36px 32px 12px;max-width:980px} header h1{font-size:32px;margin:0 0 4px;letter-spacing:-.6px}
+  header h2{font-size:16px;font-weight:500;color:var(--muted);margin:0 0 22px}
+  header p{color:var(--muted);font-size:15px;line-height:1.65;max-width:860px}
+  .portable{border-left:3px solid var(--accent);padding:10px 14px;margin:20px 0;color:var(--ink);background:#f7f7f8;max-width:760px}
+  .atlas-map{margin-top:26px}.atlas-map h3{font-size:15px;margin:0 0 10px}.atlas-map ul{margin:0;padding-left:20px;color:var(--muted);font-size:14px;line-height:1.7}
+  .section-title{padding:36px 32px 2px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .component-copy{align-self:stretch;max-width:690px;margin:0 auto;color:var(--muted);font-size:13px;line-height:1.55;text-align:left}
+  .component-copy strong{color:var(--ink)}
+  .finish-line{margin:44px 32px 56px;padding:28px 0;border-top:1px solid #dedee2;max-width:860px}
+  .finish-line h2{font-size:18px;margin:0 0 10px}.finish-line p{color:var(--muted);font-size:14px;line-height:1.6}
+  .finish-line blockquote{margin:18px 0 0;padding-left:15px;border-left:3px solid var(--accent);font-weight:700}
   .accentrow{display:flex;gap:10px;align-items:center;padding:12px 32px 0;font-size:13px;color:var(--muted)}
   .accentrow button{font:12px "IBM Plex Mono",ui-monospace,monospace;border:1px solid #d0d0d0;background:#fff;border-radius:20px;padding:8px 14px;cursor:pointer}
   .accentrow button[aria-pressed="true"]{background:#111;color:#fff;border-color:#111}
@@ -225,28 +234,39 @@
 </head>
 <body>
 <header>
-  <h1>UnCommon Core Elements — tactile controls, no Framer service</h1>
-  <p>Drams—037 code switch · rotary dials · N-step controls · triple switch · light/red/black radio · live clock-radio · white/black stopwatch timer · arcade buttons. Toggle SHOW CODE for copyable implementation snippets beneath every element. <a href="toggle.html">Two-state toggle study →</a></p>
+  <h1>Enochian Elements</h1>
+  <h2>A control atlas for touch, motion, and state</h2>
+  <p>These controls are designed to be felt before they are understood: dials that turn with weight, switches that settle into place, buttons that press into their sockets, and displays that make state visible.</p>
+  <p>Every element below is a working interaction study. Change its state, test its keyboard behavior, and reveal the implementation when you want to inspect the pattern behind the surface.</p>
+  <div class="portable"><strong>Portable by design.</strong> No hosted design service is required. The controls are self-contained, accessible, and ready to adapt.</div>
+  <nav class="atlas-map" aria-label="Control atlas guide">
+    <h3>Find the right pattern</h3>
+    <ul><li><strong>Tune a value</strong> with a rotary dial.</li><li><strong>Choose a fixed position</strong> with a detented dial or sliding ordinal control.</li><li><strong>Combine independent states</strong> with the Triune Gate.</li><li><strong>Control playback</strong> with the Aether Receiver or Horologion.</li><li><strong>Measure elapsed time</strong> with the Vigil Clock.</li><li><strong>Trigger an action</strong> with the Three Keys.</li><li><strong>Inspect the construction</strong> by opening the Code Veil.</li></ul>
+  </nav>
 </header>
-<div class="accentrow">Accent:
-  <button id="accOrange" aria-pressed="false">Classic orange</button>
-  <button id="accRed" aria-pressed="true">UCC red</button>
+<div class="accentrow">Signal accent:
+  <button id="accOrange" aria-pressed="false">EMBER</button>
+  <button id="accRed" aria-pressed="true">CINNABAR</button>
 </div>
 
-<div class="cap"><span>Drams—037 · code reveal switch</span><span class="pill">SHOW UI/UX CODE</span></div>
+<div class="section-title">Inspect the construction</div>
+<div class="cap"><span>The Code Veil · reveal the implementation</span><span class="pill">CODE HIDDEN / VISIBLE</span></div>
 <div class="grid"><div class="card code-toggle-card">
+  <p class="component-copy">The Code Veil turns the atlas from a visual catalogue into a practical reference. Switch it on to reveal a copyable implementation fragment beneath every control.</p>
   <div class="d37-wrap">
     <button class="d37-track" id="codeToggle" role="switch" aria-checked="false" aria-label="Show code snippets">
       <span class="d37-knob" aria-hidden="true"></span>
     </button>
     <span class="d37-label" id="codeToggleLabel" aria-live="polite">CODE HIDDEN</span>
   </div>
-  <div class="hint">switch ON to reveal the implementation snippet beneath every UI/UX element</div>
+  <div class="hint">pointer or keyboard · Space / Enter · every revealed pattern is copyable</div>
 </div></div>
 
-<div class="cap"><span>Dark Volume · rotary, tick ring</span><span class="pill">2 states + continuous</span></div>
+<div class="section-title">Value controls</div>
+<div class="cap"><span>Obsidian Dial · rotary volume control</span><span class="pill">5% · CONTINUOUS · 80%</span></div>
 <div class="grid"><div class="card">
-  <div class="dial" id="darkDial" role="slider" tabindex="0" aria-label="Dark volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="5" aria-valuetext="5 percent">
+  <p class="component-copy">A dark, high-contrast dial with a signal-colored position marker. Use it when a value control should feel substantial and remain legible at a glance.</p>
+  <div class="dial" id="darkDial" role="slider" tabindex="0" aria-label="Obsidian Dial volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="5" aria-valuetext="5 percent">
     <svg class="ticks" id="darkTicks" viewBox="0 0 220 220"></svg>
     <div class="dark-base"></div><div class="dark-knob" id="darkKnob"><div class="dash"></div></div>
   </div>
@@ -255,17 +275,20 @@
   <div class="hint">drag ↕ · ←/→ keys · Home/End</div>
 </div></div>
 
-<div class="cap"><span>Standard Volume · light puck, dot</span><span class="pill">continuous</span></div>
+<div class="cap"><span>Ivory Dial · light rotary control</span><span class="pill">0–100%</span></div>
 <div class="grid"><div class="card">
-  <div class="dial" id="lightDial" role="slider" tabindex="0" aria-label="Standard volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50 percent">
+  <p class="component-copy">The same value model in a quieter finish. A single signal dot marks the current position without adding visual weight.</p>
+  <div class="dial" id="lightDial" role="slider" tabindex="0" aria-label="Ivory Dial volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50 percent">
     <div class="light-base"></div><div class="light-knob" id="lightKnob"><div class="dot"></div></div>
   </div>
   <div class="readout"><b id="lightVal">50%</b></div>
   <div class="hint">drag ↕ · ←/→ keys · Home/End</div>
 </div></div>
 
-<div class="cap"><span>Stepper dial · N detents</span><span class="pill">3 · 5 · 7 · 10</span></div>
+<div class="section-title">Discrete choice controls</div>
+<div class="cap"><span>Choir Dial · fixed-position rotary selector</span><span class="pill">3 · 5 · 7 · 10</span></div>
 <div class="grid"><div class="card">
+  <p class="component-copy">For ordered choices where landing between values would be meaningless. Select the number of detents and the dial redraws its scale while preserving an explicit position.</p>
   <div class="stepbar" id="nbar" role="group" aria-label="Number of steps">
     <button data-n="3">3</button><button data-n="5">5</button><button data-n="7" aria-pressed="true">7</button><button data-n="10">10</button>
   </div>
@@ -278,8 +301,9 @@
   <div class="hint">drag ↕ · click a tick · ←/→ keys</div>
 </div></div>
 
-<div class="cap"><span>N-pill bar · same N, flat variant</span><span class="pill">layoutId-style glide</span></div>
+<div class="cap"><span>Ordinal Veil · sliding segmented control</span><span class="pill">3 · 5 · 7 · 10</span></div>
 <div class="grid"><div class="card">
+  <p class="component-copy">The Choir Dial's fixed-choice logic in a compact horizontal form. One active marker glides between options so a change in state never feels like a teleport.</p>
   <div class="stepbar" id="nbar2" role="group" aria-label="Number of options">
     <button data-n="3">3</button><button data-n="5" aria-pressed="true">5</button><button data-n="7">7</button><button data-n="10">10</button>
   </div>
@@ -288,24 +312,27 @@
   <div class="hint">the sliding pill glides on one spring — same pattern as CALM/PRESSURE</div>
 </div></div>
 
-<div class="cap"><span>Triple Switch · 3× vertical binary</span><span class="pill">UP = ON</span></div>
+<div class="cap"><span>Triune Gate · three independent switches</span><span class="pill">UP = ON</span></div>
 <div class="grid"><div class="card">
-  <div class="triple" id="triple" role="group" aria-label="Triple switch">
+  <p class="component-copy">Three binary decisions in one visible instrument. Each column moves independently while the readout exposes the complete configuration.</p>
+  <div class="triple" id="triple" role="group" aria-label="Triune Gate switches">
     <div class="tunit"><div class="tdot"></div><div class="ttrack"><div class="tthumb" role="switch" tabindex="0" aria-checked="false" aria-label="Switch 1"><div class="well"></div><div class="well"></div></div></div></div>
     <div class="tunit"><div class="tdot"></div><div class="ttrack"><div class="tthumb" role="switch" tabindex="0" aria-checked="false" aria-label="Switch 2"><div class="well"></div><div class="well"></div></div></div></div>
     <div class="tunit"><div class="tdot"></div><div class="ttrack"><div class="tthumb" role="switch" tabindex="0" aria-checked="false" aria-label="Switch 3"><div class="well"></div><div class="well"></div></div></div></div>
   </div>
   <div class="readout"><b id="tripleVal">OFF – OFF – OFF</b></div>
   <div class="prevnext"><button id="triPreset1">OFF–ON–OFF</button><button id="triPreset2">ON–OFF–ON</button><button id="triPreset3">ON–OFF–OFF</button></div>
-  <div class="hint">your 3 screenshots as presets · drag ↕ · click · arrow keys</div>
+  <div class="hint">three test presets · drag ↕ · click · Space / Enter · arrow keys</div>
 </div></div>
 
-<div class="cap"><span>Rotary Radio Player · grill + power</span><span class="pill">OFFLINE / ON</span></div>
+<div class="section-title">Playback and time</div>
+<div class="cap"><span>Aether Receiver · rotary radio player</span><span class="pill">OFFLINE / ENOCHIAN BROADCAST</span></div>
 <div class="grid"><div class="card">
+  <p class="component-copy">Playback treated as a physical object. The grill, power control, signal LEDs, and volume dial each carry part of the state.</p>
   <div class="rthemes" id="radioThemes" role="group" aria-label="Radio finish">
-    <button type="button" data-theme="light" aria-pressed="true">LIGHT</button>
-    <button type="button" data-theme="red" aria-pressed="false">RED</button>
-    <button type="button" data-theme="black" aria-pressed="false">BLACK</button>
+    <button type="button" data-theme="light" aria-pressed="true">IVORY</button>
+    <button type="button" data-theme="red" aria-pressed="false">CINNABAR</button>
+    <button type="button" data-theme="black" aria-pressed="false">OBSIDIAN</button>
   </div>
   <div class="radio" id="radio" data-theme="light">
     <div class="rhead">
@@ -316,7 +343,7 @@
     <div class="rfoot">
       <div class="rscale" id="rscale"></div>
       <div class="rrow">
-        <div class="rbrand"><svg viewBox="0 0 100 100" width="26" height="26" role="img" aria-label="UCC logo"><circle cx="50" cy="50" r="38" fill="none" stroke="#111" stroke-width="13" stroke-dasharray="209.4 29.4" stroke-dashoffset="-11.7"/><circle cx="50" cy="50" r="21" fill="none" stroke="#111" stroke-width="8" stroke-dasharray="116.5 15.4" stroke-dashoffset="-7.7"/><text x="50" y="60" text-anchor="middle" font-family="'IBM Plex Sans',-apple-system,Inter,sans-serif" font-weight="800" font-size="24" fill="#111">U</text></svg><div class="rb-t">UCC<span>RADIO</span></div></div>
+        <div class="rbrand"><svg viewBox="0 0 100 100" width="26" height="26" role="img" aria-label="Enochian sigil"><circle cx="50" cy="50" r="38" fill="none" stroke="#111" stroke-width="13" stroke-dasharray="209.4 29.4" stroke-dashoffset="-11.7"/><circle cx="50" cy="50" r="21" fill="none" stroke="#111" stroke-width="8" stroke-dasharray="116.5 15.4" stroke-dashoffset="-7.7"/><text x="50" y="58" text-anchor="middle" font-family="'IBM Plex Sans',-apple-system,Inter,sans-serif" font-weight="800" font-size="18" fill="#111">EN</text></svg><div class="rb-t">ENOCHIAN<span>RECEIVER</span></div></div>
         <div class="rknob" id="rknob" role="slider" tabindex="0" aria-label="Radio volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" aria-valuetext="Volume 25 percent"><div class="rgloss"></div><div class="rmarker" aria-hidden="true"></div></div>
         <div class="rled"><svg id="rledSvg" viewBox="0 0 56 8" width="56" height="8" aria-hidden="true"></svg><svg id="rspk" viewBox="0 0 34 26" width="34" height="26" aria-hidden="true"></svg></div>
       </div>
@@ -327,9 +354,10 @@
   <div class="hint">power click also starts a soft WebAudio static bed · knob = gain + meter</div>
 </div></div>
 
-<div class="cap"><span>Square Clock-Radio · live hands</span><span class="pill">UCC brand × 3</span></div>
+<div class="cap"><span>Horologion · live clock and playback state</span><span class="pill">IDENTITY × 3</span></div>
 <div class="grid"><div class="card">
-  <div class="clkcase" role="group" aria-label="Clock radio">
+  <p class="component-copy">A readable analog face with live digital time. The signal-colored second hand and arc make time visible without competing with the primary hands.</p>
+  <div class="clkcase" role="group" aria-label="Horologion clock and playback state">
     <div class="clkdial">
       <svg id="clkSvg" viewBox="0 0 272 272" style="position:absolute;inset:0"></svg>
       <div class="clkbrand" id="clkBrand"></div>
@@ -345,15 +373,16 @@
     <button class="corner c-bl" id="brandPrev" aria-label="Previous brand">←</button>
     <button class="corner c-br" id="brandNext" aria-label="Next brand">→</button>
   </div>
-  <div class="readout"><b id="brandVal">UCC logo</b></div>
-  <div class="hint">live time · red arc = seconds · ←/→ corners switch brand · speaker toggles playing</div>
+  <div class="readout"><b id="brandVal">Enochian sigil</b></div>
+  <div class="hint">live time · cinnabar arc = seconds · ←/→ changes identity · speaker toggles playback</div>
 </div></div>
 
-<div class="cap"><span>Timer Clock · stopwatch countdown</span><span class="pill">60 SEC · 5 / 10 / 25 MIN</span></div>
+<div class="cap"><span>Vigil Clock · elapsed-time countdown</span><span class="pill">60 SEC · 5 / 10 / 25 MIN</span></div>
 <div class="grid"><div class="card">
+  <p class="component-copy">Duration made legible through three synchronized signals: a digital readout, an increasing elapsed-time arc, and a remaining-time subdial.</p>
   <div class="rthemes" id="timerThemes" role="group" aria-label="Timer finish">
-    <button type="button" data-theme="white" aria-pressed="true">WHITE</button>
-    <button type="button" data-theme="black" aria-pressed="false">BLACK</button>
+    <button type="button" data-theme="white" aria-pressed="true">IVORY</button>
+    <button type="button" data-theme="black" aria-pressed="false">OBSIDIAN</button>
   </div>
   <div class="timer-presets" id="timerPresets" role="group" aria-label="Countdown duration">
     <button type="button" data-seconds="60" aria-pressed="true">60 SEC</button>
@@ -361,10 +390,10 @@
     <button type="button" data-seconds="600" aria-pressed="false">10 MIN</button>
     <button type="button" data-seconds="1500" aria-pressed="false">25 MIN</button>
   </div>
-  <div class="timercase" id="timerCase" data-theme="white" data-progress="0" role="group" aria-label="Countdown timer">
+  <div class="timercase" id="timerCase" data-theme="white" data-progress="0" role="group" aria-label="Vigil Clock countdown timer">
     <div class="timerdial">
       <svg class="timer-svg" id="timerSvg" viewBox="0 0 304 304" aria-hidden="true"></svg>
-      <div class="timer-brand">UCC · TIMER</div>
+      <div class="timer-brand">ENOCHIAN · VIGIL</div>
       <div class="timer-digital" id="timerDigital" role="timer" aria-label="1 minute remaining">01:00.0</div>
       <div class="timer-state" id="timerState" aria-live="polite">READY · 60 SECOND TEST</div>
     </div>
@@ -375,22 +404,30 @@
       <span class="timer-reset-glyph" aria-hidden="true">↻</span>
     </button>
   </div>
-  <div class="hint">top-left starts/stops · top-right resets · red arc increases with elapsed time · upper subdial tracks remaining minutes</div>
+  <div class="hint">top-left starts/stops · top-right resets · cinnabar arc increases with elapsed time · upper subdial tracks remaining minutes</div>
 </div></div>
 
-<div class="cap"><span>Triple Push Buttons · arcade domes</span><span class="pill">momentary / latch</span></div>
+<div class="section-title">Trigger controls</div>
+<div class="cap"><span>The Three Keys · tactile action controls</span><span class="pill">MOMENTARY / LATCH</span></div>
 <div class="grid"><div class="card">
+  <p class="component-copy">Three arcade-style controls with a physical press, visible socket, and immediate signal response. Use momentary behavior for hold actions or latch behavior for persistent state.</p>
   <div class="stepbar" id="abMode" role="group" aria-label="Button behavior">
     <button data-m="moment" aria-pressed="true">momentary</button><button data-m="latch" aria-pressed="false">latch</button>
   </div>
-  <div class="abtns" id="abtns" role="group" aria-label="Triple push buttons">
-    <div class="abunit"><div class="aled"></div><div class="asocket"><button class="abtn ab-red" aria-label="Red arcade button"></button></div></div>
-    <div class="abunit"><div class="aled"></div><div class="asocket"><button class="abtn ab-white" aria-label="White arcade button"></button></div></div>
-    <div class="abunit"><div class="aled"></div><div class="asocket"><button class="abtn ab-black" aria-label="Black arcade button"></button></div></div>
+  <div class="abtns" id="abtns" role="group" aria-label="The Three Keys">
+    <div class="abunit"><div class="aled"></div><div class="asocket"><button class="abtn ab-red" aria-label="Cinnabar key"></button></div></div>
+    <div class="abunit"><div class="aled"></div><div class="asocket"><button class="abtn ab-white" aria-label="Ivory key"></button></div></div>
+    <div class="abunit"><div class="aled"></div><div class="asocket"><button class="abtn ab-black" aria-label="Obsidian key"></button></div></div>
   </div>
   <div class="readout"><b id="abVal">all released</b></div>
-  <div class="hint">hold to light the LED · latch mode toggles on click · soft click sound</div>
+  <div class="hint">cinnabar · ivory · obsidian · pointer or keyboard · soft confirmation click</div>
 </div></div>
+
+<footer class="finish-line">
+  <h2>The Enochian finish line</h2>
+  <p>A good control does more than respond to input. It tells the user what changed, what is possible next, and why the control belongs there.</p>
+  <blockquote>Choose the instrument. Change the state. See the result. Reuse the pattern.</blockquote>
+</footer>
 
 <script type="module">
 import { animate } from "https://cdn.jsdelivr.net/npm/motion@11/+esm";
@@ -648,14 +685,15 @@ function blip(freq){
 function renderRadio(instant=false){
   const palette=radioPalettes[radioTheme];
   $("radio").dataset.theme=radioTheme;
-  $("radio").setAttribute("aria-label", radioTheme+" finish radio player");
+  $("radio").setAttribute("aria-label", ({light:"Ivory",red:"Cinnabar",black:"Obsidian"}[radioTheme])+" Aether Receiver");
   document.querySelectorAll("#radioThemes button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.theme===radioTheme)));
   $("pwrBtn").setAttribute("aria-checked", String(radioOn));
   $("pdot").style.background=radioOn?palette.powerOn:palette.powerOff;
   $("pdot").style.boxShadow=radioOn?`0 0 7px ${palette.powerOn}`:"none";
-  $("rl1").textContent = radioOn ? "KIDS CLASSICAL." : "OFFLINE";
+  $("rl1").textContent = radioOn ? "ENOCHIAN BROADCAST" : "OFFLINE";
   $("rl2").textContent = radioOn ? "17:48 Sep 11" : "17:40 Sep 11";
-  $("radioVal").textContent = radioTheme.toUpperCase()+" · "+(radioOn ? ("ON · "+Math.round(rvol*100)+"%") : "OFF");
+  const finishName={light:"IVORY",red:"CINNABAR",black:"OBSIDIAN"}[radioTheme];
+  $("radioVal").textContent = finishName+" · "+(radioOn ? ("ON · "+Math.round(rvol*100)+"%") : "OFF");
   const lit = radioOn ? Math.round(rvol*13) : 0;
   ledDots.forEach((c,i)=>c.setAttribute("fill",i<lit?palette.ledOn:palette.ledOff));
   rdash.style.left=(rvol*100)+"%";
@@ -719,18 +757,18 @@ const ARC_R=93, ARC_C=2*Math.PI*ARC_R;
 const arc=clkEl("circle",{cx:CX,cy:CY,r:ARC_R,fill:"none",stroke:ACCENT,"stroke-width":9,
   "stroke-dasharray":ARC_C,"stroke-dashoffset":ARC_C,"stroke-linecap":"round",
   transform:`rotate(-90 ${CX} ${CY})`,opacity:.9});
-/* UCC logo redrawn as SVG: twin C-rings open east + central U */
-function uccLogoSVG(){
+/* Enochian identity sigil: nested open rings + EN monogram */
+function enochianSigilSVG(){
   const C1=(2*Math.PI*38), C2=(2*Math.PI*21), gap1=C1*35/360, gap2=C2*42/360;
-  return `<svg viewBox="0 0 100 100" width="39" height="39" role="img" aria-label="UCC logo">`
+  return `<svg viewBox="0 0 100 100" width="39" height="39" role="img" aria-label="Enochian sigil">`
     +`<circle cx="50" cy="50" r="38" fill="none" stroke="#111" stroke-width="13" stroke-dasharray="${C1-gap1} ${gap1}" stroke-dashoffset="${-C1*17.5/360}"/>`
     +`<circle cx="50" cy="50" r="21" fill="none" stroke="#111" stroke-width="8" stroke-dasharray="${C2-gap2} ${gap2}" stroke-dashoffset="${-C2*21/360}"/>`
-    +`<text x="50" y="60" text-anchor="middle" font-family="'IBM Plex Sans',-apple-system,Inter,sans-serif" font-weight="800" font-size="24" fill="#111">U</text></svg>`;
+    +`<text x="50" y="58" text-anchor="middle" font-family="'IBM Plex Sans',-apple-system,Inter,sans-serif" font-weight="800" font-size="18" fill="#111">EN</text></svg>`;
 }
 const brands=[
-  { name:"UCC logo", html:uccLogoSVG() },
-  { name:"“UnCommon Core” wordmark", html:`<div class="b1">UNCOMMON CORE</div><div class="b2">RADIO</div>` },
-  { name:"“UCC” initialism", html:`<div class="b1" style="font-size:22px;letter-spacing:6px">UCC</div><div class="b2">RADIO</div>` },
+  { name:"Enochian sigil", html:enochianSigilSVG() },
+  { name:"“ENOCHIAN” wordmark", html:`<div class="b1">ENOCHIAN</div><div class="b2">HOROLOGION</div>` },
+  { name:"“EN” initialism", html:`<div class="b1" style="font-size:22px;letter-spacing:6px">EN</div><div class="b2">HOROLOGION</div>` },
 ];
 let bi=0;
 function renderBrand(){ $("clkBrand").innerHTML=brands[bi].html; $("brandVal").textContent=brands[bi].name; }
@@ -874,58 +912,58 @@ const abUnits=[...document.querySelectorAll("#abtns .abunit")].map((unit)=>{
 /* Drams—037 drives a page-wide, copyable code layer */
 const CODE_SPRING={type:"spring",stiffness:500,damping:32,mass:1};
 const CODE_SNIPPETS=[
-  {id:"codeToggle",title:"Drams—037 code reveal",code:String.raw`const spring = { type: "spring", stiffness: 500, damping: 32 };
+  {id:"codeToggle",title:"The Code Veil",code:String.raw`const spring = { type: "spring", stiffness: 500, damping: 32 };
 <motion.button role="switch" aria-checked={showCode}
   animate={{ backgroundColor: showCode ? "#CC0000" : "#EFEFEF" }}
   transition={spring} onClick={() => setShowCode(v => !v)}>
   <motion.span animate={{ x: showCode ? 72 : 0 }} transition={spring} />
 </motion.button>`},
-  {id:"darkDial",title:"Dark rotary dial",code:String.raw`const value = useMotionValue(0.05);
+  {id:"darkDial",title:"Obsidian Dial",code:String.raw`const value = useMotionValue(0.05);
 const rotation = useTransform(value, [0, 1], [-135, 135]);
 <motion.div role="slider" aria-valuenow={Math.round(value.get()*100)}
   drag="y" dragMomentum={false} style={{ rotate: rotation }} />`},
-  {id:"lightDial",title:"Light rotary dial",code:String.raw`.light-base { background:#EFEFEF; border-radius:50%; }
+  {id:"lightDial",title:"Ivory Dial",code:String.raw`.light-base { background:#EFEFEF; border-radius:50%; }
 .light-knob {
   background:#FFF;
   box-shadow:6px 8px 16px rgba(0,0,0,.16);
 }
 .dot { background:#CC0000; }`},
-  {id:"stepDial",title:"N-detent stepper",code:String.raw`const stepWidth = trackWidth / (steps - 1);
+  {id:"stepDial",title:"Choir Dial",code:String.raw`const stepWidth = trackWidth / (steps - 1);
 const index = clamp(Math.round(x.get() / stepWidth), 0, steps - 1);
 animate(x, index * stepWidth,
   { type:"spring", stiffness:600, damping:32, mass:.8 });
 // Arrow keys ±1 · PageUp/PageDown ±2 · Home/End`},
-  {id:"npill",title:"N-pill segmented control",code:String.raw`<LayoutGroup>
+  {id:"npill",title:"Ordinal Veil",code:String.raw`<LayoutGroup>
   {options.map(option => <button key={option}>
     {selected === option &&
       <motion.span layoutId="active-pill" transition={spring} />}
     <span>{option}</span>
   </button>)}
 </LayoutGroup>`},
-  {id:"triple",title:"Triple vertical switch",code:String.raw`.triple { display:flex; gap:72px; }
+  {id:"triple",title:"Triune Gate",code:String.raw`.triple { display:flex; gap:72px; }
 .tunit { width:56px; } /* absolute thumb needs a flex width */
 .tthumb { width:56px; height:100px; }
 const travel = (176 - 100) / 2;
 animate(thumb, { y: on ? -travel : travel }, snapSpring);`},
-  {id:"radio",title:"Rotary radio player",code:String.raw`<div className="radio" data-theme={theme}>
+  {id:"radio",title:"Aether Receiver",code:String.raw`<div className="radio" data-theme={theme}>
   <button role="switch" aria-checked={playing}>Power</button>
   <div className="grill" />
   <div role="slider" aria-valuenow={volume} className="rknob" />
 </div>
 /* light · #CC0000 red · #121214 black theme tokens */`},
-  {id:"clkBrand",title:"Live square clock-radio",code:String.raw`function tickClock(now = new Date()) {
+  {id:"clkBrand",title:"Horologion",code:String.raw`function tickClock(now = new Date()) {
   hourHand.style.transform = "rotate(" + ((now.getHours()%12)*30 + now.getMinutes()*.5) + "deg)";
   minuteHand.style.transform = "rotate(" + (now.getMinutes()*6 + now.getSeconds()*.1) + "deg)";
   secondHand.style.transform = "rotate(" + (now.getSeconds()*6) + "deg)";
   requestAnimationFrame(() => tickClock(new Date()));
 }`},
-  {id:"timerCase",title:"Stopwatch countdown timer",code:String.raw`const presets = [60, 5*60, 10*60, 25*60];
+  {id:"timerCase",title:"Vigil Clock",code:String.raw`const presets = [60, 5*60, 10*60, 25*60];
 const endAt = Date.now() + remainingMs;
 const remaining = Math.max(0, endAt - Date.now());
 const elapsedRatio = 1 - remaining / durationMs;
 progressCircle.setAttribute("stroke-dashoffset", circumference * (1-elapsedRatio));
 // Derive every frame from wall time so background tabs do not lose time.`},
-  {id:"abtns",title:"Arcade push buttons",code:String.raw`const press = { type:"spring", stiffness:650, damping:26, mass:.6 };
+  {id:"abtns",title:"The Three Keys",code:String.raw`const press = { type:"spring", stiffness:650, damping:26, mass:.6 };
 animate(button, pressed ? { y:6, scale:.94 } : { y:0, scale:1 }, press);
 animate(socket, { boxShadow: pressed ? SOCKET_DEEP : SOCKET_REST });
 // Native <button>; latch changes on click, momentary follows hold.`}
