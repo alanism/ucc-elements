@@ -24,7 +24,7 @@ Browse the source, copy the patterns, or clone it from:
   - Wall-clock-accurate countdown
   - Increasing Cinnabar elapsed indicator
   - Integrated start/stop and reset controls
-- **Mechanical Keyboard** — 74 tactile keys with Cinnabar modifiers, UCC brandmarks, visible key travel, and a working text display
+- **Mechanical Keyboard** — 74 tactile keys with matte concave Cinnabar modifiers, UCC brandmarks, visible key travel, a working text display, and Ivory/Obsidian typing-key finishes
 - **Push Button** — single concave momentary control with a dished Ivory cap, recessed socket, and Cinnabar signal
 - **The Three Keys** — tactile momentary or latched action controls
 

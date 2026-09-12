@@ -240,10 +240,12 @@
     box-shadow:0 10px 22px rgba(0,0,0,.20),inset 0 1px 1px rgba(255,255,255,.08);font:400 20px/1.45 "IBM Plex Mono",monospace;letter-spacing:.4px;white-space:pre-wrap}
   .mk-board{background:#262628;border:1px solid #151516;border-radius:11px;padding:16px;box-shadow:0 7px 0 #111113,0 16px 28px rgba(0,0,0,.20),inset 0 1px 1px rgba(255,255,255,.10)}
   .mk-row{display:flex;gap:6px;margin-bottom:7px}.mk-row:last-child{margin-bottom:0}
-  .mk-key{--key-top:#f8f8f8;--key-bottom:#dedee1;--key-ink:#29292c;flex:var(--w,1) 1 0;min-width:34px;height:48px;border:1px solid #b8b8bd;border-radius:6px;background:linear-gradient(180deg,var(--key-top),var(--key-bottom));color:var(--key-ink);cursor:pointer;position:relative;
-    box-shadow:0 5px 0 #9b9ba0,0 7px 8px rgba(0,0,0,.30),inset 0 2px 2px rgba(255,255,255,.88);font:500 14px "IBM Plex Sans",sans-serif;touch-action:manipulation;transform-origin:50% 100%}
-  .mk-key::after{content:"";position:absolute;left:8%;right:8%;top:2px;height:26%;border-radius:5px;background:linear-gradient(rgba(255,255,255,.60),transparent);pointer-events:none}
-  .mk-key.accent{--key-top:#e74848;--key-bottom:#8c0000;--key-ink:#fff;border-color:#810000;background:linear-gradient(180deg,var(--key-top),#CC0000 58%,var(--key-bottom));box-shadow:0 5px 0 #650000,0 7px 8px rgba(0,0,0,.34),inset 0 2px 2px rgba(255,255,255,.34)}
+  .mk-key{--key-ink:#29292c;flex:var(--w,1) 1 0;min-width:34px;height:48px;border:1px solid #b8b8bd;border-radius:6px;background:radial-gradient(ellipse at 50% 46%,#d7d7da 0%,#ececee 62%,#fbfbfc 100%);color:var(--key-ink);cursor:pointer;position:relative;
+    box-shadow:0 5px 0 #9b9ba0,0 7px 8px rgba(0,0,0,.30),inset 3px 4px 7px rgba(0,0,0,.13),inset -3px -4px 6px rgba(255,255,255,.52);font:500 14px "IBM Plex Sans",sans-serif;touch-action:manipulation;transform-origin:50% 100%}
+  .mk-key::after{display:none}
+  .mk-key.accent{--key-ink:#fff;border-color:#790000;background:radial-gradient(ellipse at 50% 46%,#a40000 0%,#CC0000 64%,#d52626 100%);box-shadow:0 5px 0 #650000,0 7px 8px rgba(0,0,0,.34),inset 3px 4px 7px rgba(0,0,0,.24),inset -2px -3px 5px rgba(255,255,255,.08)}
+  .mk-rig[data-finish="obsidian"] .mk-key:not(.accent){--key-ink:#f7f7f8;border-color:#08080a;background:radial-gradient(ellipse at 50% 46%,#101012 0%,#202024 62%,#343438 100%);
+    box-shadow:0 5px 0 #070708,0 7px 8px rgba(0,0,0,.46),inset 3px 4px 7px rgba(0,0,0,.58),inset -3px -4px 6px rgba(255,255,255,.09)}
   .mk-key[data-pressed="true"],.mk-key:active{transform:translateY(5px) scale(.985);box-shadow:0 0 0 #777,0 1px 2px rgba(0,0,0,.35),inset 0 3px 6px rgba(0,0,0,.24)}
   .mk-key:focus-visible{outline:3px solid #CC0000;outline-offset:2px;z-index:2}
   .mk-key[aria-pressed="true"]{box-shadow:0 2px 0 #650000,inset 0 3px 7px rgba(0,0,0,.28)}
@@ -474,14 +476,15 @@
 <div class="cap"><span>Mechanical Keyboard · tactile text input</span><span class="pill">POINTER / KEYBOARD</span></div>
 <div class="grid"><div class="card keyboard-card">
   <p class="component-copy">A compact mechanical board with deep key travel, Cinnabar modifier keys, and the UnCommon Core brandmark. Every key visibly bottoms out when tapped.</p>
+  <div class="rthemes" id="keyboardFinish" role="group" aria-label="Mechanical Keyboard finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
   <div class="mk-scroll">
-    <div class="mk-rig" id="mechanicalKeyboard" role="group" aria-label="UnCommon Core mechanical keyboard">
+    <div class="mk-rig" id="mechanicalKeyboard" data-finish="ivory" role="group" aria-label="UnCommon Core mechanical keyboard">
       <output class="mk-display" id="keyboardDisplay" aria-live="polite">UnCommon Core</output>
       <div class="mk-board" id="keyboardKeys"></div>
     </div>
   </div>
   <div class="readout"><b id="keyboardState">READY</b> · tap a key to type</div>
-  <div class="hint">Cinnabar replaces the reference orange · pointer tap or Space / Enter visibly depresses each key</div>
+  <div class="hint">matte concave Cinnabar keys · Ivory / Obsidian typing keys · pointer tap or Space / Enter visibly depresses each key</div>
 </div></div>
 
 <div class="cap"><span>Push Button · concave momentary control</span><span class="pill">PRESS / RELEASE</span></div>
@@ -555,6 +558,7 @@ bindFinish("choirFinish","stepDial");
 bindFinish("triuneFinish","triple");
 bindFinish("clockFinish","clockCase");
 bindFinish("codeVeilFinish","codeToggle");
+bindFinish("keyboardFinish","mechanicalKeyboard");
 
 /* tick-ring helpers (SVG) */
 const NS="http://www.w3.org/2000/svg";
@@ -1140,6 +1144,7 @@ function setKeyDown(key, down) {
   animate(key, down ? { y:5, scale:.985 } : { y:0, scale:1 }, keySpring);
 }
 // Render each key as a native button. Cinnabar keys use #CC0000.
+// data-finish="ivory|obsidian" swaps typing-key material and ink only.
 // Pointer and keyboard events share the same press/release path.`},
   {id:"concaveButton",title:"Push Button",code:String.raw`const pressSpring = { type:"spring", stiffness:720, damping:32, mass:.55 };
 function renderPress(down) {
