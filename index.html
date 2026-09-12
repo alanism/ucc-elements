@@ -49,6 +49,11 @@
   .light-knob{position:absolute;inset:52px;border-radius:50%;background:#fff;
     box-shadow:6px 8px 16px rgba(0,0,0,.16), 0 1px 2px rgba(0,0,0,.12);}
   .dot{position:absolute;left:50%;top:14%;width:15px;height:15px;border-radius:50%;background:var(--accent);transform:translateX(-50%)}
+  .dial .dark-base,.dial .dark-knob,.dial .light-base,.dial .light-knob{transition:background .22s ease,border-color .22s ease,box-shadow .22s ease}
+  .dial[data-finish="ivory"] .dark-base{background:#efefef;border-color:#dedee2;box-shadow:10px 15px 30px rgba(0,0,0,.10),-2px -2px 6px rgba(255,255,255,.9)}
+  .dial[data-finish="ivory"] .dark-knob{background:radial-gradient(circle at 35% 30%,#fff,#f7f7f8 72%);box-shadow:6px 8px 16px rgba(0,0,0,.16),0 1px 2px rgba(0,0,0,.12)}
+  .dial[data-finish="obsidian"] .light-base{background:radial-gradient(circle at 35% 30%,#3a3a3a,#232326 55%,#141416);border:2px solid #707075;box-shadow:10px 14px 26px rgba(0,0,0,.28)}
+  .dial[data-finish="obsidian"] .light-knob{background:radial-gradient(circle at 35% 30%,#363639,#1d1d20 70%);box-shadow:0 2px 0 rgba(255,255,255,.16) inset,6px 8px 14px rgba(0,0,0,.5)}
   /* stepper */
   .stepbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
   .stepbar button{font:12px "IBM Plex Mono",ui-monospace,monospace;border:1px solid #d0d0d0;background:#fff;border-radius:20px;padding:8px 14px;cursor:pointer}
@@ -73,6 +78,10 @@
     background:radial-gradient(circle at 50% 32%,#e2e3e6,#f6f6f7 72%);
     box-shadow:inset 3px 4px 8px rgba(0,0,0,.10),inset -3px -3px 6px #ffffff}
   .well+.well{margin-top:6px}
+  .triple[data-finish="obsidian"] .ttrack{background:#343438;box-shadow:inset 0 1px 3px rgba(0,0,0,.75)}
+  .triple[data-finish="obsidian"] .tthumb{background:linear-gradient(160deg,#37373b,#171719);box-shadow:7px 9px 18px rgba(0,0,0,.34),-2px -2px 7px rgba(255,255,255,.12)}
+  .triple[data-finish="obsidian"] .well{background:radial-gradient(circle at 50% 32%,#111113,#29292d 72%);box-shadow:inset 3px 4px 8px rgba(0,0,0,.58),inset -2px -2px 5px rgba(255,255,255,.08)}
+  .triple[data-finish="obsidian"] .tdot:not(.on){background:#5f5f66}
   /* rotary radio player — light / UCC red / black material themes */
   .radio{--r-body:#fdfdfd;--r-text:#111;--r-muted:#7d7d7d;--r-line:#e6e6e6;--r-grill:#111;
     --r-tick:#222;--r-led-off:#3a3a3a;--r-led-on:#CC0000;--r-power-off:#111;--r-power-on:#CC0000;--r-icon:#222;
@@ -147,6 +156,20 @@
   .clkstatus{position:absolute;left:0;right:0;bottom:30%;text-align:center;pointer-events:none}
   .clkstatus .s1{font:600 12px "IBM Plex Sans",-apple-system,Inter,sans-serif;color:#111}
   .clkstatus .s2{font:400 10px ui-monospace,SFMono-Regular,Menlo,monospace;color:#777;margin-top:3px} /* seconds readout: original mono kept */
+  .clkcase,.clkdial,.clkcase .corner,.clkcase .hub{transition:box-shadow .22s ease}
+  .clkcase[data-finish="obsidian"]{background:#101012;color:#f7f7f8;box-shadow:0 18px 42px rgba(0,0,0,.34),0 2px 8px rgba(0,0,0,.2)}
+  .clkcase[data-finish="obsidian"] .clkdial{background:#171719;box-shadow:inset 0 2px 8px rgba(0,0,0,.65),0 1px 1px rgba(255,255,255,.08)}
+  .clkcase[data-finish="obsidian"] #clkSvg line{stroke:#f7f7f8!important}
+  .clkcase[data-finish="obsidian"] #clkSvg text{fill:#f7f7f8!important}
+  .clkcase[data-finish="obsidian"] .h-hour,.clkcase[data-finish="obsidian"] .h-min{background:#f7f7f8}
+  .clkcase[data-finish="obsidian"] .hub{background:#171719;box-shadow:0 2px 7px rgba(0,0,0,.7),0 0 0 1px #f7f7f8}
+  .clkcase[data-finish="obsidian"] .clkbrand,.clkcase[data-finish="obsidian"] .clkbrand .b1{color:#f7f7f8}
+  .clkcase[data-finish="obsidian"] .clkbrand .b2,.clkcase[data-finish="obsidian"] .clkstatus .s2{color:#9a9aa0}
+  .clkcase[data-finish="obsidian"] .clkstatus .s1{color:#f7f7f8}
+  .clkcase[data-finish="obsidian"] .clkbrand svg circle{stroke:#f7f7f8!important}
+  .clkcase[data-finish="obsidian"] .clkbrand svg text{fill:#f7f7f8!important}
+  .clkcase[data-finish="obsidian"] .corner{background:#202024;color:#f7f7f8;box-shadow:0 3px 8px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.13)}
+  .clkcase[data-finish="obsidian"] .cspk{background-image:radial-gradient(#f7f7f8 1.1px,transparent 1.5px)}
   /* stopwatch-inspired countdown timer */
   .timercase{--timer-case:#fff;--timer-face:#fff;--timer-ink:#111;--timer-muted:#777;--timer-line:#d9d9dd;
     position:relative;width:340px;height:340px;border-radius:24px;background:var(--timer-case);color:var(--timer-ink);
@@ -267,7 +290,8 @@
 <div class="cap"><span>Obsidian Dial · rotary volume control</span><span class="pill">5% · CONTINUOUS · 80%</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">A dark, high-contrast dial with a signal-colored position marker. Use it when a value control should feel substantial and remain legible at a glance.</p>
-  <div class="dial" id="darkDial" role="slider" tabindex="0" aria-label="Obsidian Dial volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="5" aria-valuetext="5 percent">
+  <div class="rthemes" id="darkDialFinish" role="group" aria-label="Obsidian Dial finish"><button type="button" data-finish="ivory" aria-pressed="false">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="true">OBSIDIAN</button></div>
+  <div class="dial" id="darkDial" data-finish="obsidian" role="slider" tabindex="0" aria-label="Obsidian Dial volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="5" aria-valuetext="5 percent">
     <svg class="ticks" id="darkTicks" viewBox="0 0 220 220"></svg>
     <div class="dark-base"></div><div class="dark-knob" id="darkKnob"><div class="dash"></div></div>
   </div>
@@ -279,7 +303,8 @@
 <div class="cap"><span>Ivory Dial · light rotary control</span><span class="pill">0–100%</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">The same value model in a quieter finish. A single signal dot marks the current position without adding visual weight.</p>
-  <div class="dial" id="lightDial" role="slider" tabindex="0" aria-label="Ivory Dial volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50 percent">
+  <div class="rthemes" id="lightDialFinish" role="group" aria-label="Ivory Dial finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+  <div class="dial" id="lightDial" data-finish="ivory" role="slider" tabindex="0" aria-label="Ivory Dial volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50 percent">
     <div class="light-base"></div><div class="light-knob" id="lightKnob"><div class="dot"></div></div>
   </div>
   <div class="readout"><b id="lightVal">50%</b></div>
@@ -290,10 +315,11 @@
 <div class="cap"><span>Choir Dial · fixed-position rotary selector</span><span class="pill">3 · 5 · 7 · 10</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">For ordered choices where landing between values would be meaningless. Select the number of detents and the dial redraws its scale while preserving an explicit position.</p>
+  <div class="rthemes" id="choirFinish" role="group" aria-label="Choir Dial finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
   <div class="stepbar" id="nbar" role="group" aria-label="Number of steps">
     <button data-n="3">3</button><button data-n="5">5</button><button data-n="7" aria-pressed="true">7</button><button data-n="10">10</button>
   </div>
-  <div class="dial" id="stepDial" role="slider" tabindex="0" aria-label="Stepper" aria-valuemin="1" aria-valuemax="7" aria-valuenow="4" aria-valuetext="Step 4 of 7">
+  <div class="dial" id="stepDial" data-finish="ivory" role="slider" tabindex="0" aria-label="Choir Dial" aria-valuemin="1" aria-valuemax="7" aria-valuenow="4" aria-valuetext="Step 4 of 7">
     <svg class="ticks" id="stepTicks" viewBox="0 0 220 220"></svg>
     <div class="light-base"></div><div class="light-knob" id="stepKnob"><div class="dot"></div></div>
   </div>
@@ -316,7 +342,8 @@
 <div class="cap"><span>Triune Gate · three independent switches</span><span class="pill">UP = ON</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">Three binary decisions in one visible instrument. Each column moves independently while the readout exposes the complete configuration.</p>
-  <div class="triple" id="triple" role="group" aria-label="Triune Gate switches">
+  <div class="rthemes" id="triuneFinish" role="group" aria-label="Triune Gate finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+  <div class="triple" id="triple" data-finish="ivory" role="group" aria-label="Triune Gate switches">
     <div class="tunit"><div class="tdot"></div><div class="ttrack"><div class="tthumb" role="switch" tabindex="0" aria-checked="false" aria-label="Switch 1"><div class="well"></div><div class="well"></div></div></div></div>
     <div class="tunit"><div class="tdot"></div><div class="ttrack"><div class="tthumb" role="switch" tabindex="0" aria-checked="false" aria-label="Switch 2"><div class="well"></div><div class="well"></div></div></div></div>
     <div class="tunit"><div class="tdot"></div><div class="ttrack"><div class="tthumb" role="switch" tabindex="0" aria-checked="false" aria-label="Switch 3"><div class="well"></div><div class="well"></div></div></div></div>
@@ -358,7 +385,8 @@
 <div class="cap"><span>Horologion · live clock and playback state</span><span class="pill">IDENTITY × 3</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">A readable analog face with live digital time. The signal-colored second hand and arc make time visible without competing with the primary hands.</p>
-  <div class="clkcase" role="group" aria-label="Horologion clock and playback state">
+  <div class="rthemes" id="clockFinish" role="group" aria-label="Horologion finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+  <div class="clkcase" id="clockCase" data-finish="ivory" role="group" aria-label="Horologion clock and playback state">
     <div class="clkdial">
       <svg id="clkSvg" viewBox="0 0 272 272" style="position:absolute;inset:0"></svg>
       <div class="clkbrand" id="clkBrand"></div>
@@ -451,6 +479,21 @@ function paintAccent(){
 }
 $("accOrange").onclick = () => { ACCENT="#E76A2E"; paintAccent(); };
 $("accRed").onclick = () => { ACCENT="#cc0000"; paintAccent(); };
+
+/* paired material finishes: every instrument keeps its state while its shell changes */
+function bindFinish(groupId,targetId){
+  const group=$(groupId),target=$(targetId);
+  group.addEventListener("click",e=>{
+    const button=e.target.closest("button[data-finish]"); if(!button) return;
+    target.dataset.finish=button.dataset.finish;
+    group.querySelectorAll("button[data-finish]").forEach(b=>b.setAttribute("aria-pressed",String(b===button)));
+  });
+}
+bindFinish("darkDialFinish","darkDial");
+bindFinish("lightDialFinish","lightDial");
+bindFinish("choirFinish","stepDial");
+bindFinish("triuneFinish","triple");
+bindFinish("clockFinish","clockCase");
 
 /* tick-ring helpers (SVG) */
 const NS="http://www.w3.org/2000/svg";
@@ -922,18 +965,21 @@ const CODE_SNIPPETS=[
   {id:"darkDial",title:"Obsidian Dial",code:String.raw`const value = useMotionValue(0.05);
 const rotation = useTransform(value, [0, 1], [-135, 135]);
 <motion.div role="slider" aria-valuenow={Math.round(value.get()*100)}
-  drag="y" dragMomentum={false} style={{ rotate: rotation }} />`},
+  drag="y" dragMomentum={false} style={{ rotate: rotation }} />
+/* data-finish="obsidian|ivory" swaps materials without resetting value */`},
   {id:"lightDial",title:"Ivory Dial",code:String.raw`.light-base { background:#EFEFEF; border-radius:50%; }
 .light-knob {
   background:#FFF;
   box-shadow:6px 8px 16px rgba(0,0,0,.16);
 }
-.dot { background:#CC0000; }`},
+.dot { background:#CC0000; }
+.dial[data-finish="obsidian"] .light-knob { background:#1d1d20; }`},
   {id:"stepDial",title:"Choir Dial",code:String.raw`const stepWidth = trackWidth / (steps - 1);
 const index = clamp(Math.round(x.get() / stepWidth), 0, steps - 1);
 animate(x, index * stepWidth,
   { type:"spring", stiffness:600, damping:32, mass:.8 });
-// Arrow keys ±1 · PageUp/PageDown ±2 · Home/End`},
+// Arrow keys ±1 · PageUp/PageDown ±2 · Home/End
+// data-finish="ivory|obsidian" changes material only; detent stays selected.`},
   {id:"npill",title:"Ordinal Veil",code:String.raw`<LayoutGroup>
   {options.map(option => <button key={option}>
     {selected === option &&
@@ -945,7 +991,8 @@ animate(x, index * stepWidth,
 .tunit { width:56px; } /* absolute thumb needs a flex width */
 .tthumb { width:56px; height:100px; }
 const travel = (176 - 100) / 2;
-animate(thumb, { y: on ? -travel : travel }, snapSpring);`},
+animate(thumb, { y: on ? -travel : travel }, snapSpring);
+.triple[data-finish="obsidian"] .tthumb { background:#171719; }`},
   {id:"radio",title:"Aether Receiver",code:String.raw`<div className="radio" data-theme={theme}>
   <button role="switch" aria-checked={playing}>Power</button>
   <div className="grill" />
@@ -957,7 +1004,8 @@ animate(thumb, { y: on ? -travel : travel }, snapSpring);`},
   minuteHand.style.transform = "rotate(" + (now.getMinutes()*6 + now.getSeconds()*.1) + "deg)";
   secondHand.style.transform = "rotate(" + (now.getSeconds()*6) + "deg)";
   requestAnimationFrame(() => tickClock(new Date()));
-}`},
+}
+/* data-finish="ivory|obsidian" changes case, face, hands, marks, and corners. */`},
   {id:"timerCase",title:"Vigil Clock",code:String.raw`const presets = [60, 5*60, 10*60, 25*60];
 const endAt = Date.now() + remainingMs;
 const remaining = Math.max(0, endAt - Date.now());
