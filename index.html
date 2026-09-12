@@ -117,7 +117,7 @@
   .rrow{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
   .rbrand{display:flex;align-items:center;gap:7px;font:700 13px "IBM Plex Sans",-apple-system,Inter,sans-serif;letter-spacing:1px;color:var(--r-text)}
   .rbrand svg circle{stroke:currentColor!important}.rbrand svg text{fill:currentColor!important}
-  .rbrand .rb-t{line-height:1.1}
+  .rbrand .rb-t{font-size:9px;line-height:1.1;letter-spacing:.4px;white-space:nowrap}
   .rbrand span{display:block;font:400 6px "IBM Plex Mono",ui-monospace,monospace;letter-spacing:2px;color:var(--r-muted);margin-top:3px}
   .rknob{width:84px;height:84px;border-radius:50%;background:linear-gradient(160deg,#fff,#ededf0);
     border:1px solid rgba(0,0,0,.16);position:relative;touch-action:none;cursor:grab;
@@ -241,6 +241,8 @@
   .d37-knob{position:absolute;top:5px;left:5px;width:50px;height:50px;border-radius:50%;
     background:radial-gradient(circle at 35% 30%,#fff,#f4f4f4 70%,#ececec);
     box-shadow:0 10px 22px rgba(0,0,0,.22),0 2px 6px rgba(0,0,0,.18)}
+  .d37-track[data-finish="obsidian"]{box-shadow:inset 0 2px 7px rgba(0,0,0,.72),inset 0 -1px 2px rgba(255,255,255,.10)}
+  .d37-track[data-finish="obsidian"] .d37-knob{background:radial-gradient(circle at 35% 30%,#3b3b3f,#171719 72%);box-shadow:0 10px 22px rgba(0,0,0,.42),0 2px 0 rgba(255,255,255,.14) inset}
   .d37-label{min-width:118px;font:600 12px "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.8px;color:#666}
   .code-snippet{width:min(780px,100%);max-height:0;opacity:0;overflow:hidden;visibility:hidden;margin-top:0;
     border:1px solid #d8d8dc;border-radius:10px;background:#111;color:#eee;text-align:left;
@@ -277,8 +279,9 @@
 <div class="cap"><span>The Code Veil · reveal the implementation</span><span class="pill">CODE HIDDEN / VISIBLE</span></div>
 <div class="grid"><div class="card code-toggle-card">
   <p class="component-copy">The Code Veil turns the atlas from a visual catalogue into a practical reference. Switch it on to reveal a copyable implementation fragment beneath every control.</p>
+  <div class="rthemes" id="codeVeilFinish" role="group" aria-label="Code Veil finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
   <div class="d37-wrap">
-    <button class="d37-track" id="codeToggle" role="switch" aria-checked="false" aria-label="Show code snippets">
+    <button class="d37-track" id="codeToggle" data-finish="ivory" role="switch" aria-checked="false" aria-label="Show code snippets">
       <span class="d37-knob" aria-hidden="true"></span>
     </button>
     <span class="d37-label" id="codeToggleLabel" aria-live="polite">CODE HIDDEN</span>
@@ -354,7 +357,7 @@
 </div></div>
 
 <div class="section-title">Playback and time</div>
-<div class="cap"><span>Aether Receiver · rotary radio player</span><span class="pill">OFFLINE / ENOCHIAN BROADCAST</span></div>
+<div class="cap"><span>Aether Receiver · rotary radio player</span><span class="pill">OFFLINE / UNCOMMON CORE</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">Playback treated as a physical object. The grill, power control, signal LEDs, and volume dial each carry part of the state.</p>
   <div class="rthemes" id="radioThemes" role="group" aria-label="Radio finish">
@@ -371,7 +374,7 @@
     <div class="rfoot">
       <div class="rscale" id="rscale"></div>
       <div class="rrow">
-        <div class="rbrand"><svg viewBox="0 0 100 100" width="26" height="26" role="img" aria-label="Enochian sigil"><circle cx="50" cy="50" r="38" fill="none" stroke="#111" stroke-width="13" stroke-dasharray="209.4 29.4" stroke-dashoffset="-11.7"/><circle cx="50" cy="50" r="21" fill="none" stroke="#111" stroke-width="8" stroke-dasharray="116.5 15.4" stroke-dashoffset="-7.7"/><text x="50" y="58" text-anchor="middle" font-family="'IBM Plex Sans',-apple-system,Inter,sans-serif" font-weight="800" font-size="18" fill="#111">EN</text></svg><div class="rb-t">ENOCHIAN<span>RECEIVER</span></div></div>
+        <div class="rbrand"><svg viewBox="0 0 100 100" width="26" height="26" role="img" aria-label="UnCommon Core logo"><circle cx="50" cy="50" r="38" fill="none" stroke="#111" stroke-width="13" stroke-dasharray="209.4 29.4" stroke-dashoffset="-11.7"/><circle cx="50" cy="50" r="21" fill="none" stroke="#111" stroke-width="8" stroke-dasharray="116.5 15.4" stroke-dashoffset="-7.7"/><text x="50" y="58" text-anchor="middle" font-family="'IBM Plex Sans',-apple-system,Inter,sans-serif" font-weight="800" font-size="18" fill="#111">U</text></svg><div class="rb-t">UnCommon Core<span>RECEIVER</span></div></div>
         <div class="rknob" id="rknob" role="slider" tabindex="0" aria-label="Radio volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" aria-valuetext="Volume 25 percent"><div class="rgloss"></div><div class="rmarker" aria-hidden="true"></div></div>
         <div class="rled"><svg id="rledSvg" viewBox="0 0 56 8" width="56" height="8" aria-hidden="true"></svg><svg id="rspk" viewBox="0 0 34 26" width="34" height="26" aria-hidden="true"></svg></div>
       </div>
@@ -422,7 +425,7 @@
   <div class="timercase" id="timerCase" data-theme="white" data-progress="0" role="group" aria-label="Vigil Clock countdown timer">
     <div class="timerdial">
       <svg class="timer-svg" id="timerSvg" viewBox="0 0 304 304" aria-hidden="true"></svg>
-      <div class="timer-brand">ENOCHIAN · VIGIL</div>
+      <div class="timer-brand">UnCommon Core</div>
       <div class="timer-digital" id="timerDigital" role="timer" aria-label="1 minute remaining">01:00.0</div>
       <div class="timer-state" id="timerState" aria-live="polite">READY · 60 SECOND TEST</div>
     </div>
@@ -494,6 +497,7 @@ bindFinish("lightDialFinish","lightDial");
 bindFinish("choirFinish","stepDial");
 bindFinish("triuneFinish","triple");
 bindFinish("clockFinish","clockCase");
+bindFinish("codeVeilFinish","codeToggle");
 
 /* tick-ring helpers (SVG) */
 const NS="http://www.w3.org/2000/svg";
@@ -734,7 +738,7 @@ function renderRadio(instant=false){
   $("pwrBtn").setAttribute("aria-checked", String(radioOn));
   $("pdot").style.background=radioOn?palette.powerOn:palette.powerOff;
   $("pdot").style.boxShadow=radioOn?`0 0 7px ${palette.powerOn}`:"none";
-  $("rl1").textContent = radioOn ? "ENOCHIAN BROADCAST" : "OFFLINE";
+  $("rl1").textContent = radioOn ? "UNCOMMON CORE" : "OFFLINE";
   $("rl2").textContent = radioOn ? "17:48 Sep 11" : "17:40 Sep 11";
   const finishName={light:"IVORY",red:"CINNABAR",black:"OBSIDIAN"}[radioTheme];
   $("radioVal").textContent = finishName+" · "+(radioOn ? ("ON · "+Math.round(rvol*100)+"%") : "OFF");
@@ -957,8 +961,8 @@ const abUnits=[...document.querySelectorAll("#abtns .abunit")].map((unit)=>{
 const CODE_SPRING={type:"spring",stiffness:500,damping:32,mass:1};
 const CODE_SNIPPETS=[
   {id:"codeToggle",title:"The Code Veil",code:String.raw`const spring = { type: "spring", stiffness: 500, damping: 32 };
-<motion.button role="switch" aria-checked={showCode}
-  animate={{ backgroundColor: showCode ? "#CC0000" : "#EFEFEF" }}
+<motion.button role="switch" aria-checked={showCode} data-finish={finish}
+  animate={{ backgroundColor: showCode ? "#CC0000" : finish === "obsidian" ? "#171719" : "#EFEFEF" }}
   transition={spring} onClick={() => setShowCode(v => !v)}>
   <motion.span animate={{ x: showCode ? 72 : 0 }} transition={spring} />
 </motion.button>`},
@@ -1041,10 +1045,12 @@ function renderCodeLayer(instant=false){
   document.body.classList.toggle("show-code",codeVisible);
   document.querySelectorAll(".code-snippet").forEach(p=>{p.inert=!codeVisible;p.setAttribute("aria-hidden",String(!codeVisible));});
   const move=instant||reduce?{duration:0}:CODE_SPRING;
+  const offColor=codeToggle.dataset.finish==="obsidian"?"#171719":"#EFEFEF";
   animate(codeKnob,{x:codeVisible?72:0},move);
-  animate(codeToggle,{backgroundColor:codeVisible?"#CC0000":"#EFEFEF"},instant||reduce?{duration:0}:{...CODE_SPRING,stiffness:400,damping:34});
+  animate(codeToggle,{backgroundColor:codeVisible?"#CC0000":offColor},instant||reduce?{duration:0}:{...CODE_SPRING,stiffness:400,damping:34});
 }
 addCodePanels();
+$("codeVeilFinish").addEventListener("click",()=>renderCodeLayer());
 codeToggle.addEventListener("click",()=>{codeVisible=!codeVisible;renderCodeLayer();});
 codeToggle.addEventListener("pointerdown",()=>animate(codeToggle,{scale:.97},{duration:.1}));
 ["pointerup","pointercancel","pointerleave"].forEach(type=>codeToggle.addEventListener(type,()=>animate(codeToggle,{scale:1},CODE_SPRING)));
