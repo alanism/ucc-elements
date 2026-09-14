@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<base href="/learnvietnamese/" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>KDLI — LIVE round-trip (K54)</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 15px/1.55 ui-rounded, system-ui, -apple-system, sans-serif; margin: 0; padding: 18px; max-width: 58rem; }
+  h1 { font-size: 1.15rem; margin: 0 0 4px; }
+  .note, #audit { font-size: .82rem; color: #666; }
+  .card { border: 1px solid var(--line, #ddd); border-radius: 12px; padding: 12px 14px; margin: 12px 0; }
+  .stage { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: #888; margin-bottom: 6px; }
+  pre { white-space: pre-wrap; word-break: break-word; font-size: .76rem; margin: 8px 0 0; padding: 10px; border-radius: 8px; background: rgba(127,127,127,.12); max-height: 22rem; overflow: auto; }
+  button { font: inherit; padding: 9px 14px; border-radius: 10px; border: 1px solid #bbb; background: #fff; cursor: pointer; margin: 4px 6px 4px 0; }
+  .ok { color: #0a7d32; } .bad { color: #b00020; } .warn { color: #8a5a00; }
+</style>
+</head>
+<body>
+<h1>KDLI · LIVE round-trip (K54)</h1>
+<div class="note">Separate from the frozen Café page. Nothing here changes the dial or the PLAY turn.</div>
+
+<div class="card">
+  <div class="stage">The scene that will be sent</div>
+  <pre id="scene">loading…</pre>
+</div>
+
+<div class="card">
+  <div class="stage">The context LIVE will actually receive</div>
+  <pre id="context">loading…</pre>
+</div>
+
+<div class="card">
+  <div class="stage">Real round-trip to /api/live/session</div>
+  <div class="note">Sends the real context above with a real SDP offer. Reports the server's actual reply — including a refusal, if that is what it says.</div>
+  <div>
+    <button id="post">Post the context to the server</button>
+    <button id="mic">Try a full connect (needs microphone)</button>
+  </div>
+  <pre id="reply">not attempted yet</pre>
+  <div id="state" class="note"></div>
+</div>
+
+<div class="card">
+  <div class="stage">What this page proves, and what it does not</div>
+  <div class="note" id="audit"></div>
+</div>
+
+<script type="module">
+  const audit = document.getElementById('audit');
+  try {
+    const { loadAssetMap } = await import('./app/audio/kdli-adapter.js');
+    const { collectKdliScene, createKdliContextFn } = await import('./app/live/kdli-scene-context.js');
+    const { LiveClient } = await import('./app/live/client.js');
+
+    const RELEASE = 'kdli-20260914-cafe-r02';
+    const assetMap = await loadAssetMap({ release: RELEASE });
+
+    // A real, populated scene — the same shape the Café runtime will hold.
+    const kdliAssetMap = assetMap;
+    const kdliScene = {
+      assetMap,
+      situationId: '03.01',
+      profile: { name: 'child girl', learnerGender: 'female', learnerRelativeAge: 'younger', interlocutorGender: 'male' },
+      stage: 'MODEL',
+      revealed: false
+    };
+    document.getElementById('scene').textContent =
+      `release          ${RELEASE}\n` +
+      `situation        ${kdliScene.situationId} — ${assetMap.phrases['03.01.01']?.situation_title ?? '?'}\n` +
+      `review_state     ${assetMap.review_state}\n` +
+      `profile          ${kdliScene.profile.name} (${kdliScene.profile.learnerGender}/${kdliScene.profile.learnerRelativeAge} → ${kdliScene.profile.interlocutorGender})\n` +
+      `stage            ${kdliScene.stage}\n` +
+      `asset_map        ${Object.keys(assetMap.assets).length} assets / ${Object.keys(assetMap.phrases).length} phrases`;
+
+    const context = createKdliContextFn({
+      assetMap: kdliAssetMap,
+      getScene: () => kdliScene,
+      fallback: null
+    });
+    const payload = context();
+    document.getElementById('context').textContent = JSON.stringify(payload, null, 2);
+
+    const replyBox = document.getElementById('reply');
+    const stateBox = document.getElementById('state');
+
+    document.getElementById('post').onclick = async () => {
+      replyBox.textContent = 'posting…';
+      try {
+        // A real SDP offer would come from a peer connection; the server is the thing under
+        // test here, so send a syntactically valid offer and report its verdict verbatim.
+        const res = await fetch('/api/live/session', {
+          method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sdp: 'v=0\r\no=- 0 0 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na=group:BUNDLE 0\r\nm=audio 9 UDP/TLS/RTP/SAVPF 111\r\n', context: context() })
+        });
+        const text = await res.text();
+        replyBox.className = res.ok ? 'ok' : '';
+        replyBox.textContent = `HTTP ${res.status} ${res.statusText}\n\n${text.slice(0, 4000)}`;
+      } catch (error) {
+        replyBox.className = 'bad';
+        replyBox.textContent = `request failed: ${error.message}`;
+      }
+    };
+
+    document.getElementById('mic').onclick = async () => {
+      stateBox.textContent = 'connecting…';
+      const client = new LiveClient({
+        context,
+        waveform: () => null,
+        onState: (value, message) => { stateBox.textContent = `${value}${message ? ' — ' + message : ''}`; }
+      });
+      try {
+        await client.connect();
+      } catch (error) {
+        stateBox.textContent = `connect failed: ${error.message}`;
+      }
+    };
+
+    audit.textContent =
+      'Sends a real /api/live/session request carrying the real KDLI context built from the promoted asset map, ' +
+      'and shows the server reply verbatim. It does NOT prove a spoken exchange took place — that needs a microphone ' +
+      'and a reachable realtime provider, which the full connect button attempts separately.';
+    document.title = 'KDLI LIVE — ready';
+  } catch (error) {
+    audit.className = 'bad';
+    audit.textContent = `failed to initialise: ${error.message}`;
+    document.title = 'KDLI LIVE — failed';
+  }
+</script>
+</body>
+</html>

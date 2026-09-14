@@ -1,0 +1,8 @@
+{
+  "release_id": "kdli-20260914-cafe-r02",
+  "scope": "cafe",
+  "manifest_sha256": "29ba871434b04dfcf290e81720946f50ebf778400f623d17b3bc4fa75a7df70d",
+  "assets": 18,
+  "promoted_at": "2026-09-14T13:30:34.716Z",
+  "target": "public/audio/kdli/kdli-20260914-cafe-r02"
+}

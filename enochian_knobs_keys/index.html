@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;700&display=swap"/>
+<title>Enochian Elements — Control Atlas</title>
+<style>
+  :root{ --accent:#CC0000; --ink:#111; --muted:#6e6e6e; --tile:#f5f6f7; }
+  *{box-sizing:border-box} body{margin:0;font-family:"IBM Plex Sans",-apple-system,Inter,SF Pro Text,sans-serif;color:var(--ink);background:#fff}
+  header{padding:36px 32px 12px;max-width:980px} header h1{font-size:32px;margin:0 0 4px;letter-spacing:-.6px}
+  header h2{font-size:16px;font-weight:500;color:var(--muted);margin:0 0 22px}
+  header p{color:var(--muted);font-size:15px;line-height:1.65;max-width:860px}
+  .portable{border-left:3px solid var(--accent);padding:10px 14px;margin:20px 0;color:var(--ink);background:#f7f7f8;max-width:760px}
+  .atlas-map{margin-top:26px}.atlas-map h3{font-size:15px;margin:0 0 10px}.atlas-map ul{margin:0;padding-left:20px;color:var(--muted);font-size:14px;line-height:1.7}
+  .section-title{padding:36px 32px 2px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .component-copy{align-self:stretch;max-width:690px;margin:0 auto;color:var(--muted);font-size:13px;line-height:1.55;text-align:left}
+  .component-copy strong{color:var(--ink)}
+  .finish-line{margin:44px 32px 56px;padding:28px 0;border-top:1px solid #dedee2;max-width:860px}
+  .finish-line h2{font-size:18px;margin:0 0 10px}.finish-line p{color:var(--muted);font-size:14px;line-height:1.6}
+  .finish-line blockquote{margin:18px 0 0;padding-left:15px;border-left:3px solid var(--accent);font-weight:700}
+  .accentrow{display:flex;gap:10px;align-items:center;padding:12px 32px 0;font-size:13px;color:var(--muted)}
+  .accentrow button{font:12px "IBM Plex Mono",ui-monospace,monospace;border:1px solid #d0d0d0;background:#fff;border-radius:20px;padding:8px 14px;cursor:pointer}
+  .accentrow button[aria-pressed="true"]{background:#111;color:#fff;border-color:#111}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:20px;padding:20px 32px 10px}
+  .cap{display:flex;justify-content:space-between;align-items:center;padding:14px 32px 0;font-size:15px}
+  .pill{font-size:12px;background:#e9e9eb;color:#6e6e6e;border-radius:20px;padding:3px 10px}
+  .card{background:var(--tile);border-radius:4px;padding:40px 20px 28px;display:flex;flex-direction:column;align-items:center;gap:14px;min-height:340px}
+  .readout{font:13px "IBM Plex Mono",ui-monospace,monospace;color:var(--muted)}
+  .readout b{color:var(--ink);font-size:20px}
+  .hint{font-size:12px;color:#999}
+  /* shared dial */
+  .dial{position:relative;width:220px;height:220px;touch-action:none;cursor:grab}
+  .dial:active{cursor:grabbing} .dial:focus-visible{outline:3px solid #cc0000;outline-offset:8px;border-radius:50%}
+  .ticks{position:absolute;inset:0;pointer-events:none}
+  /* dark finish */
+  .dark-base{position:absolute;inset:18px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #3a3a3a, #232326 55%, #141416);
+    border:2px solid #c4c4c4; box-shadow:10px 14px 26px rgba(0,0,0,.28);}
+  .dark-knob{position:absolute;inset:52px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #333336, #1d1d20 70%);
+    box-shadow:0 2px 0 rgba(255,255,255,.18) inset, 6px 8px 14px rgba(0,0,0,.5);}
+  .dash{position:absolute;left:50%;top:12%;width:5px;height:22px;border-radius:3px;background:var(--accent);transform:translateX(-50%)}
+  /* light finish */
+  .light-base{position:absolute;inset:18px;border-radius:50%;background:#efefef;
+    box-shadow:10px 15px 30px rgba(0,0,0,.10), -2px -2px 6px rgba(255,255,255,.9);}
+  .light-knob{position:absolute;inset:52px;border-radius:50%;background:#fff;
+    box-shadow:6px 8px 16px rgba(0,0,0,.16), 0 1px 2px rgba(0,0,0,.12);}
+  .dot{position:absolute;left:50%;top:14%;width:15px;height:15px;border-radius:50%;background:var(--accent);transform:translateX(-50%)}
+  .dial .dark-base,.dial .dark-knob,.dial .light-base,.dial .light-knob{transition:background .22s ease,border-color .22s ease,box-shadow .22s ease}
+  .dial[data-finish="ivory"] .dark-base{background:#efefef;border-color:#dedee2;box-shadow:10px 15px 30px rgba(0,0,0,.10),-2px -2px 6px rgba(255,255,255,.9)}
+  .dial[data-finish="ivory"] .dark-knob{background:radial-gradient(circle at 35% 30%,#fff,#f7f7f8 72%);box-shadow:6px 8px 16px rgba(0,0,0,.16),0 1px 2px rgba(0,0,0,.12)}
+  .dial[data-finish="obsidian"] .light-base{background:radial-gradient(circle at 35% 30%,#3a3a3a,#232326 55%,#141416);border:2px solid #707075;box-shadow:10px 14px 26px rgba(0,0,0,.28)}
+  .dial[data-finish="obsidian"] .light-knob{background:radial-gradient(circle at 35% 30%,#363639,#1d1d20 70%);box-shadow:0 2px 0 rgba(255,255,255,.16) inset,6px 8px 14px rgba(0,0,0,.5)}
+  /* stepper */
+  .stepbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .stepbar button{font:12px "IBM Plex Mono",ui-monospace,monospace;border:1px solid #d0d0d0;background:#fff;border-radius:20px;padding:8px 14px;cursor:pointer}
+  .stepbar button[aria-pressed="true"]{background:#111;color:#fff;border-color:#111}
+  .npillwrap{position:relative;display:flex;background:#e9e9eb;border-radius:999px;padding:4px;max-width:100%}
+  .npillwrap button{position:relative;z-index:1;flex:1;border:0;background:transparent;font:12px "IBM Plex Mono",ui-monospace,monospace;padding:10px 12px;cursor:pointer;color:#555;white-space:nowrap}
+  .npillwrap button.is-active{color:#fff}
+  .npill{position:absolute;top:4px;bottom:4px;border-radius:999px;background:var(--accent);z-index:0}
+  .prevnext{display:flex;gap:10px}
+  .prevnext button{font:13px "IBM Plex Mono",ui-monospace,monospace;border:1px solid #d0d0d0;background:#fff;border-radius:8px;padding:10px 18px;cursor:pointer}
+  code{background:#f1f1f1;padding:2px 6px;border-radius:6px;font-size:12px}
+  /* triple switch — compact nodules, reference-weight spacing */
+  .triple{display:flex;gap:72px;justify-content:center}
+  .tunit{width:56px;display:flex;flex-direction:column;align-items:center;gap:24px}
+  .tdot{width:10px;height:10px;border-radius:50%;background:#c8c8c9}
+  .ttrack{position:relative;width:8px;height:176px;border-radius:999px;background:#e8e8ea}
+  .tthumb{position:absolute;left:50%;top:50%;width:56px;height:100px;margin:-50px 0 0 -28px;border-radius:28px;
+    background:linear-gradient(160deg,#ffffff,#f4f4f5);touch-action:none;cursor:grab;
+    box-shadow:7px 9px 18px rgba(0,0,0,.13),-3px -3px 10px rgba(255,255,255,.9)}
+  .tthumb:active{cursor:grabbing}.tthumb:focus-visible{outline:3px solid #cc0000;outline-offset:6px}
+  .well{width:40px;height:40px;border-radius:50%;margin:7px auto 0;
+    background:radial-gradient(circle at 50% 32%,#e2e3e6,#f6f6f7 72%);
+    box-shadow:inset 3px 4px 8px rgba(0,0,0,.10),inset -3px -3px 6px #ffffff}
+  .well+.well{margin-top:6px}
+  .triple[data-finish="obsidian"] .ttrack{background:#343438;box-shadow:inset 0 1px 3px rgba(0,0,0,.75)}
+  .triple[data-finish="obsidian"] .tthumb{background:linear-gradient(160deg,#37373b,#171719);box-shadow:7px 9px 18px rgba(0,0,0,.34),-2px -2px 7px rgba(255,255,255,.12)}
+  .triple[data-finish="obsidian"] .well{background:radial-gradient(circle at 50% 32%,#111113,#29292d 72%);box-shadow:inset 3px 4px 8px rgba(0,0,0,.58),inset -2px -2px 5px rgba(255,255,255,.08)}
+  .triple[data-finish="obsidian"] .tdot:not(.on){background:#5f5f66}
+  /* rotary radio player — light / UCC red / black material themes */
+  .radio{--r-body:#fdfdfd;--r-text:#111;--r-muted:#7d7d7d;--r-line:#e6e6e6;--r-grill:#111;
+    --r-tick:#222;--r-led-off:#3a3a3a;--r-led-on:#CC0000;--r-power-off:#111;--r-power-on:#CC0000;--r-icon:#222;
+    width:280px;background:var(--r-body);color:var(--r-text);border-radius:10px;overflow:hidden;
+    box-shadow:0 12px 30px rgba(0,0,0,.16),0 2px 8px rgba(0,0,0,.09)}
+  .radio[data-theme="red"]{--r-body:#CC0000;background:#CC0000;--r-text:#fff;--r-muted:rgba(255,255,255,.72);--r-line:rgba(255,255,255,.34);
+    --r-grill:#fff;--r-tick:#fff;--r-led-off:rgba(255,255,255,.28);--r-led-on:#fff;--r-power-off:#760000;--r-power-on:#fff;--r-icon:#fff;
+    box-shadow:0 14px 34px rgba(90,0,0,.28),0 2px 8px rgba(0,0,0,.15)}
+  .radio[data-theme="black"]{--r-body:#121214;background:#121214;--r-text:#fff;--r-muted:#a5a5aa;--r-line:#3b3b3f;
+    --r-grill:#8d8d93;--r-tick:#bdbdc2;--r-led-off:#55555a;--r-led-on:#fff;--r-power-off:#6f6f74;--r-power-on:#fff;--r-icon:#b9b9be;
+    box-shadow:0 16px 36px rgba(0,0,0,.32),0 2px 8px rgba(0,0,0,.22)}
+  .rthemes{display:flex;gap:8px;justify-content:center;margin:0 0 16px}
+  .rthemes button{min-width:62px;border:1px solid #d4d4d8;background:#fff;color:#222;padding:7px 11px;border-radius:999px;cursor:pointer;font:600 10px "IBM Plex Mono",monospace;letter-spacing:.7px}
+  .rthemes button[aria-pressed="true"]{background:#111;color:#fff;border-color:#111}
+  .rthemes button:focus-visible{outline:3px solid #CC0000;outline-offset:2px}
+  .rhead{display:flex;border-bottom:1px solid var(--r-line)}
+  .pwr{width:70px;height:72px;border:0;border-right:1px solid var(--r-line);background:transparent;cursor:pointer;
+    display:flex;align-items:center;justify-content:center}
+  .pwr:focus-visible{outline:3px solid #cc0000;outline-offset:-3px}
+  .pring{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.94);border:1px solid rgba(0,0,0,.09);
+    box-shadow:0 2px 6px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center}
+  .pdot{width:5px;height:5px;border-radius:50%;background:var(--r-power-off)}
+  .rdisp{padding:14px 14px;display:flex;flex-direction:column;justify-content:center}
+  .rl1{font:12px "IBM Plex Mono",ui-monospace,SFMono-Regular,monospace;letter-spacing:2px;color:var(--r-text)}
+  .rl2{font:10px "IBM Plex Mono",ui-monospace,SFMono-Regular,monospace;color:var(--r-muted);margin-top:5px}
+  .grill{height:250px;margin:14px 16px;
+    background-image:radial-gradient(var(--r-grill) 1.8px,transparent 2.3px);
+    background-size:10px 10px;background-position:center}
+  .rfoot{border-top:1px solid var(--r-line);padding:10px 14px 16px}
+  .rscale{position:relative;height:8px}
+  .rtick{position:absolute;top:2px;width:2px;height:3px;background:var(--r-tick)}
+  .rdash{position:absolute;top:2px;height:2px;width:8px;background:var(--r-led-on)}
+  .rrow{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+  .rbrand{display:flex;align-items:center;gap:7px;font:700 13px "IBM Plex Sans",-apple-system,Inter,sans-serif;letter-spacing:1px;color:var(--r-text)}
+  .rbrand svg circle{stroke:currentColor!important}.rbrand svg text{fill:currentColor!important}
+  .rbrand .rb-t{font-size:9px;line-height:1.1;letter-spacing:.4px;white-space:nowrap}
+  .rbrand span{display:block;font:400 6px "IBM Plex Mono",ui-monospace,monospace;letter-spacing:2px;color:var(--r-muted);margin-top:3px}
+  .rknob{width:84px;height:84px;border-radius:50%;background:linear-gradient(160deg,#fff,#ededf0);
+    border:1px solid rgba(0,0,0,.16);position:relative;touch-action:none;cursor:grab;
+    box-shadow:0 5px 13px rgba(0,0,0,.24),inset 0 2px 3px rgba(255,255,255,.9)}
+  .rknob:active{cursor:grabbing}.rknob:focus-visible{outline:3px solid #cc0000;outline-offset:4px}
+  .rgloss{position:absolute;left:50%;top:9%;width:30%;height:13%;transform:translateX(-50%);
+    border-radius:50%;background:rgba(255,255,255,.9);filter:blur(2px)}
+  .rmarker{position:absolute;left:50%;top:8px;width:9px;height:9px;margin-left:-4.5px;border-radius:50%;background:#CC0000;
+    box-shadow:0 1px 2px rgba(80,0,0,.45),inset 0 1px 1px rgba(255,255,255,.38)}
+  .rled{display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+  .radio #rspk circle{fill:var(--r-icon)!important}
+  /* square clock-radio, live hands */
+  .clkcase{position:relative;width:320px;height:320px;border-radius:22px;background:#fff;
+    box-shadow:0 14px 34px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.08);}
+  .clkdial{position:absolute;inset:24px;border-radius:50%;background:#fff;
+    box-shadow:inset 0 2px 6px rgba(0,0,0,.08);}
+  .corner{position:absolute;width:40px;height:40px;border-radius:50%;border:0;background:#fff;
+    box-shadow:0 1px 4px rgba(0,0,0,.10), inset 0 1px 2px rgba(255,255,255,.9);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;color:#bbb;font-size:15px}
+  .corner:focus-visible{outline:3px solid #cc0000;outline-offset:2px}
+  .c-tl{top:10px;left:10px} .c-tr{top:10px;right:10px} .c-bl{bottom:10px;left:10px} .c-br{bottom:10px;right:10px}
+  .cdot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .cspk{width:22px;height:22px;border-radius:50%;
+    background-image:radial-gradient(#111 1.1px, transparent 1.5px);background-size:5px 5px;background-position:center}
+  .hand{position:absolute;left:50%;bottom:50%;transform-origin:50% 100%;border-radius:3px;background:#111}
+  .h-hour{width:10px;height:62px;margin-left:-5px}
+  .h-min{width:7px;height:100px;margin-left:-3.5px}
+  .h-sec{width:3px;height:108px;margin-left:-1.5px;background:var(--accent)}
+  .h-sectail{position:absolute;left:50%;top:50%;width:3px;height:26px;margin-left:-1.5px;transform-origin:50% 0%;background:var(--accent);border-radius:3px}
+  .hub{position:absolute;left:50%;top:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;
+    background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center}
+  .hubdot{width:15px;height:15px;border-radius:50%;background:var(--accent)}
+  .clkbrand{position:absolute;left:0;right:0;top:28%;text-align:center;pointer-events:none}
+  .clkbrand .b1{font:700 13px "IBM Plex Sans",-apple-system,Inter,sans-serif;letter-spacing:3px;color:#111}
+  .clkbrand .b2{font:400 7px "IBM Plex Mono",ui-monospace,monospace;letter-spacing:2px;color:#888;margin-top:3px}
+  .clkstatus{position:absolute;left:0;right:0;bottom:30%;text-align:center;pointer-events:none}
+  .clkstatus .s1{font:600 12px "IBM Plex Sans",-apple-system,Inter,sans-serif;color:#111}
+  .clkstatus .s2{font:400 10px ui-monospace,SFMono-Regular,Menlo,monospace;color:#777;margin-top:3px} /* seconds readout: original mono kept */
+  .clkcase,.clkdial,.clkcase .corner,.clkcase .hub{transition:box-shadow .22s ease}
+  .clkcase[data-finish="obsidian"]{background:#101012;color:#f7f7f8;box-shadow:0 18px 42px rgba(0,0,0,.34),0 2px 8px rgba(0,0,0,.2)}
+  .clkcase[data-finish="obsidian"] .clkdial{background:#171719;box-shadow:inset 0 2px 8px rgba(0,0,0,.65),0 1px 1px rgba(255,255,255,.08)}
+  .clkcase[data-finish="obsidian"] #clkSvg line{stroke:#f7f7f8!important}
+  .clkcase[data-finish="obsidian"] #clkSvg text{fill:#f7f7f8!important}
+  .clkcase[data-finish="obsidian"] .h-hour,.clkcase[data-finish="obsidian"] .h-min{background:#f7f7f8}
+  .clkcase[data-finish="obsidian"] .hub{background:#171719;box-shadow:0 2px 7px rgba(0,0,0,.7),0 0 0 1px #f7f7f8}
+  .clkcase[data-finish="obsidian"] .clkbrand,.clkcase[data-finish="obsidian"] .clkbrand .b1{color:#f7f7f8}
+  .clkcase[data-finish="obsidian"] .clkbrand .b2,.clkcase[data-finish="obsidian"] .clkstatus .s2{color:#9a9aa0}
+  .clkcase[data-finish="obsidian"] .clkstatus .s1{color:#f7f7f8}
+  .clkcase[data-finish="obsidian"] .clkbrand svg circle{stroke:#f7f7f8!important}
+  .clkcase[data-finish="obsidian"] .clkbrand svg text{fill:#f7f7f8!important}
+  .clkcase[data-finish="obsidian"] .corner{background:#202024;color:#f7f7f8;box-shadow:0 3px 8px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.13)}
+  .clkcase[data-finish="obsidian"] .cspk{background-image:radial-gradient(#f7f7f8 1.1px,transparent 1.5px)}
+  /* stopwatch-inspired countdown timer */
+  .timercase{--timer-case:#fff;--timer-face:#fff;--timer-ink:#111;--timer-muted:#777;--timer-line:#d9d9dd;
+    position:relative;width:340px;height:340px;border-radius:24px;background:var(--timer-case);color:var(--timer-ink);
+    box-shadow:0 16px 38px rgba(0,0,0,.14),0 2px 8px rgba(0,0,0,.08);transition:background-color .2s ease,color .2s ease}
+  .timercase[data-theme="black"]{--timer-case:#101012;--timer-face:#171719;--timer-ink:#f7f7f8;--timer-muted:#9a9aa0;--timer-line:#3b3b40;
+    box-shadow:0 18px 42px rgba(0,0,0,.34),0 2px 8px rgba(0,0,0,.2)}
+  .timerdial{position:absolute;inset:18px;border-radius:50%;background:var(--timer-face);
+    box-shadow:inset 0 2px 8px rgba(0,0,0,.1),0 1px 2px rgba(255,255,255,.45)}
+  .timer-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+  .timer-svg .timer-tick,.timer-svg .timer-hand-min,.timer-svg .timer-subtick{stroke:var(--timer-ink)}
+  .timer-svg .timer-number,.timer-svg .timer-subnum{fill:var(--timer-ink)}
+  .timer-svg .timer-subface{fill:none;stroke:var(--timer-line)}
+  .timer-svg .timer-progress,.timer-svg .timer-hand-sec{stroke:#CC0000}
+  .timer-svg .timer-hub-outer{fill:var(--timer-face);stroke:var(--timer-ink)}
+  .timer-svg .timer-hub-inner{fill:#CC0000}
+  .timer-brand{position:absolute;left:0;right:0;top:57%;text-align:center;color:var(--timer-ink);
+    font:700 9px "IBM Plex Sans",sans-serif;letter-spacing:2.5px;pointer-events:none}
+  .timer-digital{position:absolute;left:0;right:0;top:65%;text-align:center;color:var(--timer-ink);
+    font:600 24px "IBM Plex Mono",ui-monospace,monospace;letter-spacing:1px;pointer-events:none}
+  .timer-state{position:absolute;left:0;right:0;top:75%;text-align:center;color:var(--timer-muted);
+    font:600 9px "IBM Plex Mono",ui-monospace,monospace;letter-spacing:1.6px;pointer-events:none}
+  .timer-presets{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .timer-presets button{border:1px solid #d0d0d4;background:#fff;color:#222;border-radius:999px;padding:8px 13px;cursor:pointer;
+    font:600 11px "IBM Plex Mono",ui-monospace,monospace}
+  .timer-presets button[aria-pressed="true"]{background:#111;color:#fff;border-color:#111}
+  .timer-presets button:focus-visible{outline:3px solid #CC0000;outline-offset:2px}
+  .timer-control{z-index:4;background:var(--timer-face);color:var(--timer-ink);border:1px solid var(--timer-line);
+    box-shadow:0 3px 7px rgba(0,0,0,.18),inset 0 1px 2px rgba(255,255,255,.72);font:700 15px "IBM Plex Sans",sans-serif;
+    transition:transform .08s ease,box-shadow .08s ease,background-color .2s ease,color .2s ease}
+  .timer-control:active{transform:translateY(2px);box-shadow:0 1px 2px rgba(0,0,0,.18),inset 0 2px 4px rgba(0,0,0,.14)}
+  .timer-start-glyph{color:#CC0000;font-size:13px;line-height:1;transform:translateX(1px)}
+  .timer-control[data-state="running"] .timer-start-glyph{transform:none;font-size:12px}
+  .timer-reset-glyph{font-size:20px;font-weight:500;line-height:1;margin-top:-1px}
+  @media(max-width:430px){.timercase{width:300px;height:300px}.timer-digital{font-size:21px}}
+  /* arcade push-buttons: glossy domes + LED dots */
+  .abtns{display:flex;gap:44px;justify-content:center}
+  .abunit{display:flex;flex-direction:column;align-items:center;gap:16px}
+  .aled{width:10px;height:10px;border-radius:50%;background:#d6d6d6}
+  .abtn{width:80px;height:80px;border-radius:50%;border:2px solid #0b0b0c;cursor:pointer;
+    position:relative;touch-action:none;
+    box-shadow:0 6px 12px rgba(0,0,0,.15), inset 0 2px 3px rgba(255,255,255,.8), inset 0 -4px 6px rgba(0,0,0,.2);}
+  .abtn:focus-visible{outline:3px solid #cc0000;outline-offset:4px}
+  .abtn::after{content:"";position:absolute;left:8%;right:8%;top:4%;height:42%;border-radius:50%;
+    background:linear-gradient(rgba(255,255,255,.75),rgba(255,255,255,0));pointer-events:none}
+  .ab-red{background:radial-gradient(circle at 50% 30%, #ef6060, #CC0000 60%, #8f0000)}
+  .ab-white{background:radial-gradient(circle at 50% 30%, #ffffff, #efefef 60%, #d8d8db)}
+  .ab-black{background:radial-gradient(circle at 50% 30%, #3a3a3d, #232324 60%, #101012)}
+  /* socket well the dome sits IN — this is the indentation */
+  .asocket{width:98px;height:98px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:#e9e9eb;
+    box-shadow:inset 3px 6px 12px rgba(0,0,0,.22), inset -3px -4px 8px rgba(255,255,255,.95), 0 1px 2px rgba(0,0,0,.08);}
+  .asocket .abtn{box-shadow:0 5px 10px rgba(0,0,0,.20), inset 0 2px 3px rgba(255,255,255,.8), inset 0 -6px 9px rgba(0,0,0,.30);}
+  /* realism pass: directional well wall, crescent seam, offset speculars */
+  .asocket{width:104px;height:104px;background:linear-gradient(180deg,#c4c4ca 0%,#dbdbe0 42%,#f3f3f5 100%);
+    border:1px solid #b6b6bc;
+    box-shadow:inset 0 8px 14px rgba(0,0,0,.32), inset 0 -7px 10px rgba(255,255,255,.95), 2px 5px 8px rgba(0,0,0,.14);}
+  .asocket .abtn{border:1px solid #1c1c1f;
+    box-shadow:0 -4px 6px -2px rgba(0,0,0,.55), 0 5px 9px rgba(0,0,0,.20), 0 4px 5px -2px rgba(255,255,255,.65), inset 0 2px 3px rgba(255,255,255,.7), inset 0 -6px 9px rgba(0,0,0,.30);}
+  .abtn::after{left:20%;right:auto;width:42%;top:7%;height:26%;
+    background:radial-gradient(closest-side, rgba(255,255,255,.85), rgba(255,255,255,0));}
+  .ab-white::after{background:radial-gradient(closest-side, rgba(255,255,255,.95), rgba(210,210,215,.55));}
+  .ab-black::after{background:radial-gradient(closest-side, rgba(230,230,235,.75), rgba(230,230,235,0));}
+  /* mechanical keyboard — deep deck, red modifiers, real key travel */
+  .keyboard-card{grid-column:1/-1;min-width:0}
+  .mk-scroll{width:100%;overflow-x:auto;padding:2px 0 10px}
+  .mk-rig{width:min(900px,100%);min-width:720px;margin:auto}
+  .mk-display{display:block;box-sizing:border-box;min-height:112px;margin:0 34px 22px;padding:18px 20px;border-radius:10px;background:#19191b;color:#f7f7f8;
+    box-shadow:0 10px 22px rgba(0,0,0,.20),inset 0 1px 1px rgba(255,255,255,.08);font:400 20px/1.45 "IBM Plex Mono",monospace;letter-spacing:.4px;white-space:pre-wrap}
+  .mk-board{background:#262628;border:1px solid #151516;border-radius:11px;padding:16px;box-shadow:0 7px 0 #111113,0 16px 28px rgba(0,0,0,.20),inset 0 1px 1px rgba(255,255,255,.10)}
+  .mk-row{display:flex;gap:6px;margin-bottom:7px}.mk-row:last-child{margin-bottom:0}
+  .mk-key{--key-ink:#29292c;flex:var(--w,1) 1 0;min-width:34px;height:48px;border:1px solid #b8b8bd;border-radius:6px;background:radial-gradient(ellipse at 50% 46%,#d7d7da 0%,#ececee 62%,#fbfbfc 100%);color:var(--key-ink);cursor:pointer;position:relative;
+    box-shadow:0 5px 0 #9b9ba0,0 7px 8px rgba(0,0,0,.30),inset 3px 4px 7px rgba(0,0,0,.13),inset -3px -4px 6px rgba(255,255,255,.52);font:500 14px "IBM Plex Sans",sans-serif;touch-action:manipulation;transform-origin:50% 100%}
+  .mk-key::after{display:none}
+  .mk-key.accent{--key-ink:#fff;border-color:#790000;background:radial-gradient(ellipse at 50% 46%,#a40000 0%,#CC0000 64%,#d52626 100%);box-shadow:0 5px 0 #650000,0 7px 8px rgba(0,0,0,.34),inset 3px 4px 7px rgba(0,0,0,.24),inset -2px -3px 5px rgba(255,255,255,.08)}
+  .mk-rig[data-finish="obsidian"] .mk-key:not(.accent){--key-ink:#f7f7f8;border-color:#08080a;background:radial-gradient(ellipse at 50% 46%,#101012 0%,#202024 62%,#343438 100%);
+    box-shadow:0 5px 0 #070708,0 7px 8px rgba(0,0,0,.46),inset 3px 4px 7px rgba(0,0,0,.58),inset -3px -4px 6px rgba(255,255,255,.09)}
+  .mk-key[data-pressed="true"],.mk-key:active{transform:translateY(5px) scale(.985);box-shadow:0 0 0 #777,0 1px 2px rgba(0,0,0,.35),inset 0 3px 6px rgba(0,0,0,.24)}
+  .mk-key:focus-visible{outline:3px solid #CC0000;outline-offset:2px;z-index:2}
+  .mk-key[aria-pressed="true"]{box-shadow:0 2px 0 #650000,inset 0 3px 7px rgba(0,0,0,.28)}
+  .ucc-key-mark{width:22px;height:22px;position:relative;display:inline-flex;align-items:center;justify-content:center;font:800 8px "IBM Plex Sans",sans-serif;color:#fff}
+  .ucc-key-mark::before,.ucc-key-mark::after{content:"";position:absolute;border:3px solid #fff;border-right-color:transparent;border-radius:50%}
+  .ucc-key-mark::before{inset:0}.ucc-key-mark::after{inset:5px;border-width:2px}.ucc-key-mark b{position:relative;z-index:1;font-size:7px}
+  @media(max-width:780px){.mk-rig{min-width:680px}.mk-display{margin-left:20px;margin-right:20px}.mk-key{height:44px;font-size:13px}.mk-board{padding:12px}}
+  /* single concave push button — dished cap sinks into a machined socket */
+  .concave-stage{width:360px;max-width:100%;min-height:270px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px}
+  .concave-led{width:14px;height:14px;border-radius:50%;background:#CC0000;box-shadow:0 0 0 4px rgba(204,0,0,.08),0 3px 7px rgba(100,0,0,.28)}
+  .concave-socket{width:166px;height:166px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#0b0b0d,#28282c 52%,#111113);
+    border:1px solid #09090a;box-shadow:inset 0 10px 16px rgba(0,0,0,.72),inset 0 -4px 7px rgba(255,255,255,.14),5px 12px 22px rgba(0,0,0,.24)}
+  .concave-button{width:146px;height:146px;border-radius:50%;border:1px solid #a9a9ae;padding:0;position:relative;cursor:pointer;touch-action:manipulation;background:linear-gradient(150deg,#fafafa,#d9d9dc 72%);
+    box-shadow:0 8px 11px rgba(0,0,0,.46),0 -3px 4px rgba(255,255,255,.95),inset 0 1px 2px #fff;transform-origin:50% 100%}
+  .concave-button:focus-visible{outline:3px solid #CC0000;outline-offset:5px}
+  .concave-top{position:absolute;inset:8px;border-radius:50%;background:radial-gradient(ellipse at 50% 58%,#c5c5c8 0%,#dadadd 48%,#f9f9f9 76%,#c9c9cd 100%);
+    box-shadow:inset 8px 10px 18px rgba(0,0,0,.22),inset -8px -10px 17px rgba(255,255,255,.88),0 1px 1px rgba(255,255,255,.9);pointer-events:none}
+  .concave-top::after{content:"";position:absolute;inset:10%;border-radius:50%;background:radial-gradient(ellipse at 35% 24%,rgba(255,255,255,.55),transparent 48%);mix-blend-mode:screen}
+  .concave-button[data-pressed="true"]{transform:translateY(9px) scale(.975)}
+  /* Drams—037 global code-reveal control */
+  .code-toggle-card{min-height:250px}
+  .d37-wrap{display:flex;align-items:center;gap:16px}
+  .d37-track{width:132px;height:60px;border:0;border-radius:999px;background:#efefef;position:relative;cursor:pointer;outline-offset:6px;
+    box-shadow:inset 0 2px 6px rgba(0,0,0,.08),inset 0 -1px 2px rgba(255,255,255,.9)}
+  .d37-track:focus-visible{outline:3px solid #CC0000}
+  .d37-knob{position:absolute;top:5px;left:5px;width:50px;height:50px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#fff,#f4f4f4 70%,#ececec);
+    box-shadow:0 10px 22px rgba(0,0,0,.22),0 2px 6px rgba(0,0,0,.18)}
+  .d37-track[data-finish="obsidian"]{box-shadow:inset 0 2px 7px rgba(0,0,0,.72),inset 0 -1px 2px rgba(255,255,255,.10)}
+  .d37-track[data-finish="obsidian"] .d37-knob{background:radial-gradient(circle at 35% 30%,#3b3b3f,#171719 72%);box-shadow:0 10px 22px rgba(0,0,0,.42),0 2px 0 rgba(255,255,255,.14) inset}
+  .d37-label{min-width:118px;font:600 12px "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.8px;color:#666}
+  .code-snippet{width:min(780px,100%);max-height:0;opacity:0;overflow:hidden;visibility:hidden;margin-top:0;
+    border:1px solid #d8d8dc;border-radius:10px;background:#111;color:#eee;text-align:left;
+    transition:max-height .32s ease,opacity .2s ease,margin-top .32s ease}
+  body.show-code .code-snippet{max-height:560px;opacity:1;visibility:visible;margin-top:18px}
+  .code-snippet-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #333;
+    color:#cfcfd4;font:600 11px "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.5px}
+  .copy-code{border:1px solid #555;border-radius:999px;background:#242426;color:#fff;padding:5px 10px;cursor:pointer;
+    font:600 10px "IBM Plex Mono",ui-monospace,monospace}
+  .copy-code:focus-visible{outline:3px solid #CC0000;outline-offset:2px}
+  .code-snippet pre{margin:0;padding:16px;overflow:auto;white-space:pre;tab-size:2;font:600 12px/1.55 "IBM Plex Mono",ui-monospace,monospace;color:#CC0000}
+  .code-snippet pre code{display:block;background:transparent;color:inherit;padding:0;border-radius:0;font:inherit}
+  @media (prefers-reduced-motion:reduce){.code-snippet{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Enochian Elements</h1>
+  <h2>A control atlas for touch, motion, and state</h2>
+  <p>These controls are designed to be felt before they are understood: dials that turn with weight, switches that settle into place, buttons that press into their sockets, and displays that make state visible.</p>
+  <p>Every element below is a working interaction study. Change its state, test its keyboard behavior, and reveal the implementation when you want to inspect the pattern behind the surface.</p>
+  <div class="portable"><strong>Portable by design.</strong> No hosted design service is required. The controls are self-contained, accessible, and ready to adapt.</div>
+  <nav class="atlas-map" aria-label="Control atlas guide">
+    <h3>Find the right pattern</h3>
+    <ul><li><strong>Tune a value</strong> with a rotary dial.</li><li><strong>Choose a fixed position</strong> with a detented dial or sliding ordinal control.</li><li><strong>Combine independent states</strong> with the Triune Gate.</li><li><strong>Control playback</strong> with the Aether Receiver or Horologion.</li><li><strong>Measure elapsed time</strong> with the Vigil Clock.</li><li><strong>Type with tactile feedback</strong> on the Mechanical Keyboard.</li><li><strong>Trigger an action</strong> with the Push Button or Three Keys.</li><li><strong>Inspect the construction</strong> by opening the Code Veil.</li></ul>
+  </nav>
+</header>
+<div class="accentrow">Signal accent:
+  <button id="accOrange" aria-pressed="false">EMBER</button>
+  <button id="accRed" aria-pressed="true">CINNABAR</button>
+</div>
+
+<div class="section-title">Inspect the construction</div>
+<div class="cap"><span>The Code Veil · reveal the implementation</span><span class="pill">CODE HIDDEN / VISIBLE</span></div>
+<div class="grid"><div class="card code-toggle-card">
+  <p class="component-copy">The Code Veil turns the atlas from a visual catalogue into a practical reference. Switch it on to reveal a copyable implementation fragment beneath every control.</p>
+  <div class="rthemes" id="codeVeilFinish" role="group" aria-label="Code Veil finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+  <div class="d37-wrap">
+    <button class="d37-track" id="codeToggle" data-finish="ivory" role="switch" aria-checked="false" aria-label="Show code snippets">
+      <span class="d37-knob" aria-hidden="true"></span>
+    </button>
+    <span class="d37-label" id="codeToggleLabel" aria-live="polite">CODE HIDDEN</span>
+  </div>
+  <div class="hint">pointer or keyboard · Space / Enter · every revealed pattern is copyable</div>
+</div></div>
+
+<div class="section-title">Value controls</div>
+<div class="cap"><span>Obsidian Dial · rotary volume control</span><span class="pill">5% · CONTINUOUS · 80%</span></div>
+<div class="grid"><div class="card">
+  <p class="component-copy">A dark, high-contrast dial with a signal-colored position marker. Use it when a value control should feel substantial and remain legible at a glance.</p>
+  <div class="rthemes" id="darkDialFinish" role="group" aria-label="Obsidian Dial finish"><button type="button" data-finish="ivory" aria-pressed="false">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="true">OBSIDIAN</button></div>
+  <div class="dial" id="darkDial" data-finish="obsidian" role="slider" tabindex="0" aria-label="Obsidian Dial volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="5" aria-valuetext="5 percent">
+    <svg class="ticks" id="darkTicks" viewBox="0 0 220 220"></svg>
+    <div class="dark-base"></div><div class="dark-knob" id="darkKnob"><div class="dash"></div></div>
+  </div>
+  <div class="readout"><b id="darkVal">5%</b> · MIN / HIGH presets below</div>
+  <div class="prevnext"><button id="darkMin">MIN state</button><button id="darkHigh">HIGH state</button></div>
+  <div class="hint">drag ↕ · ←/→ keys · Home/End</div>
+</div></div>
+
+<div class="cap"><span>Ivory Dial · light rotary control</span><span class="pill">0–100%</span></div>
+<div class="grid"><div class="card">
+  <p class="component-copy">The same value model in a quieter finish. A single signal dot marks the current position without adding visual weight.</p>
+  <div class="rthemes" id="lightDialFinish" role="group" aria-label="Ivory Dial finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+  <div class="dial" id="lightDial" data-finish="ivory" role="slider" tabindex="0" aria-label="Ivory Dial volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50 percent">
+    <div class="light-base"></div><div class="light-knob" id="lightKnob"><div class="dot"></div></div>
+  </div>
+  <div class="readout"><b id="lightVal">50%</b></div>
+  <div class="hint">drag ↕ · ←/→ keys · Home/End</div>
+</div></div>
+
+<div class="section-title">Discrete choice controls</div>
+<div class="cap"><span>Choir Dial · fixed-position rotary selector</span><span class="pill">3 · 5 · 7 · 10</span></div>
+<div class="grid"><div class="card">
+  <p class="component-copy">For ordered choices where landing between values would be meaningless. Select the number of detents and the dial redraws its scale while preserving an explicit position.</p>
+  <div class="rthemes" id="choirFinish" role="group" aria-label="Choir Dial finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+  <div class="stepbar" id="nbar" role="group" aria-label="Number of steps">
+    <button data-n="3">3</button><button data-n="5">5</button><button data-n="7" aria-pressed="true">7</button><button data-n="10">10</button>
+  </div>
+  <div class="dial" id="stepDial" data-finish="ivory" role="slider" tabindex="0" aria-label="Choir Dial" aria-valuemin="1" aria-valuemax="7" aria-valuenow="4" aria-valuetext="Step 4 of 7">
+    <svg class="ticks" id="stepTicks" viewBox="0 0 220 220"></svg>
+    <div class="light-base"></div><div class="light-knob" id="stepKnob"><div class="dot"></div></div>
+  </div>
+  <div class="readout"><b id="stepVal">Step 4 of 7</b></div>
+  <div class="prevnext"><button id="stepPrev">− prev</button><button id="stepNext">next +</button></div>
+  <div class="hint">drag ↕ · click a tick · ←/→ keys</div>
+</div></div>
+
+<div class="cap"><span>Ordinal Veil · sliding segmented control</span><span class="pill">3 · 5 · 7 · 10</span></div>
+<div class="grid"><div class="card">
+  <p class="component-copy">The Choir Dial's fixed-choice logic in a compact horizontal form. One active marker glides between options so a change in state never feels like a teleport.</p>
+  <div class="stepbar" id="nbar2" role="group" aria-label="Number of options">
+    <button data-n="3">3</button><button data-n="5" aria-pressed="true">5</button><button data-n="7">7</button><button data-n="10">10</button>
+  </div>
+  <div class="npillwrap" id="npill" role="radiogroup" aria-label="Options"></div>
+  <div class="readout"><b id="npillVal">Option 3 of 5</b></div>
+  <div class="hint">the sliding pill glides on one spring — same pattern as CALM/PRESSURE</div>
+</div></div>
+
+<div class="cap"><span>Triune Gate · three independent switches</span><span class="pill">UP = ON</span></div>
+<div class="grid"><div class="card">
+  <p class="component-copy">Three binary decisions in one visible instrument. Each column moves independently while the readout exposes the complete configuration.</p>
+  <div class="rthemes" id="triuneFinish" role="group" aria-label="Triune Gate finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+  <div class="triple" id="triple" data-finish="ivory" role="group" aria-label="Triune Gate switches">
+    <div class="tunit"><div class="tdot"></div><div class="ttrack"><div class="tthumb" role="switch" tabindex="0" aria-checked="false" aria-label="Switch 1"><div class="well"></div><div class="well"></div></div></div></div>
+    <div class="tunit"><div class="tdot"></div><div class="ttrack"><div class="tthumb" role="switch" tabindex="0" aria-checked="false" aria-label="Switch 2"><div class="well"></div><div class="well"></div></div></div></div>
+    <div class="tunit"><div class="tdot"></div><div class="ttrack"><div class="tthumb" role="switch" tabindex="0" aria-checked="false" aria-label="Switch 3"><div class="well"></div><div class="well"></div></div></div></div>
+  </div>
+  <div class="readout"><b id="tripleVal">OFF – OFF – OFF</b></div>
+  <div class="prevnext"><button id="triPreset1">OFF–ON–OFF</button><button id="triPreset2">ON–OFF–ON</button><button id="triPreset3">ON–OFF–OFF</button></div>
+  <div class="hint">three test presets · drag ↕ · click · Space / Enter · arrow keys</div>
+</div></div>
+
+<div class="section-title">Playback and time</div>
+<div class="cap"><span>Aether Receiver · rotary radio player</span><span class="pill">OFFLINE / UNCOMMON CORE</span></div>
+<div class="grid"><div class="card">
+  <p class="component-copy">Playback treated as a physical object. The grill, power control, signal LEDs, and volume dial each carry part of the state.</p>
+  <div class="rthemes" id="radioThemes" role="group" aria-label="Radio finish">
+    <button type="button" data-theme="light" aria-pressed="true">IVORY</button>
+    <button type="button" data-theme="red" aria-pressed="false">CINNABAR</button>
+    <button type="button" data-theme="black" aria-pressed="false">OBSIDIAN</button>
+  </div>
+  <div class="radio" id="radio" data-theme="light">
+    <div class="rhead">
+      <button class="pwr" id="pwrBtn" role="switch" aria-checked="false" aria-label="Radio power"><span class="pring"><span class="pdot" id="pdot"></span></span></button>
+      <div class="rdisp"><div class="rl1" id="rl1">OFFLINE</div><div class="rl2" id="rl2">17:40 Sep 11</div></div>
+    </div>
+    <div class="grill" aria-hidden="true"></div>
+    <div class="rfoot">
+      <div class="rscale" id="rscale"></div>
+      <div class="rrow">
+        <div class="rbrand"><svg viewBox="0 0 100 100" width="26" height="26" role="img" aria-label="UnCommon Core logo"><circle cx="50" cy="50" r="38" fill="none" stroke="#111" stroke-width="13" stroke-dasharray="209.4 29.4" stroke-dashoffset="-11.7"/><circle cx="50" cy="50" r="21" fill="none" stroke="#111" stroke-width="8" stroke-dasharray="116.5 15.4" stroke-dashoffset="-7.7"/><text x="50" y="58" text-anchor="middle" font-family="'IBM Plex Sans',-apple-system,Inter,sans-serif" font-weight="800" font-size="18" fill="#111">U</text></svg><div class="rb-t">UnCommon Core<span>RECEIVER</span></div></div>
+        <div class="rknob" id="rknob" role="slider" tabindex="0" aria-label="Radio volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" aria-valuetext="Volume 25 percent"><div class="rgloss"></div><div class="rmarker" aria-hidden="true"></div></div>
+        <div class="rled"><svg id="rledSvg" viewBox="0 0 56 8" width="56" height="8" aria-hidden="true"></svg><svg id="rspk" viewBox="0 0 34 26" width="34" height="26" aria-hidden="true"></svg></div>
+      </div>
+    </div>
+  </div>
+  <div class="readout"><b id="radioVal">OFF</b></div>
+  <div class="prevnext"><button id="radioOff">OFFLINE state</button><button id="radioOn">ON state</button></div>
+  <div class="hint">power click also starts a soft WebAudio static bed · knob = gain + meter</div>
+</div></div>
+
+<div class="cap"><span>Horologion · live clock and playback state</span><span class="pill">IDENTITY × 3</span></div>
+<div class="grid"><div class="card">
+  <p class="component-copy">A readable analog face with live digital time. The signal-colored second hand and arc make time visible without competing with the primary hands.</p>
+  <div class="rthemes" id="clockFinish" role="group" aria-label="Horologion finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+  <div class="clkcase" id="clockCase" data-finish="ivory" role="group" aria-label="Horologion clock and playback state">
+    <div class="clkdial">
+      <svg id="clkSvg" viewBox="0 0 272 272" style="position:absolute;inset:0"></svg>
+      <div class="clkbrand" id="clkBrand"></div>
+      <div class="clkstatus"><div class="s1" id="clkState">NOT PLAYING</div><div class="s2" id="clkDigital">--:--:--</div></div>
+      <div class="hand h-hour" id="hHour"></div>
+      <div class="hand h-min" id="hMin"></div>
+      <div class="hand h-sec" id="hSec"></div>
+      <div class="h-sectail" id="hTail"></div>
+      <div class="hub"><div class="hubdot"></div></div>
+    </div>
+    <button class="corner c-tl" aria-label="Status LED (decorative)"><span class="cdot" id="clkLed"></span></button>
+    <button class="corner c-tr" id="clkSpk" aria-label="Toggle playing"><span class="cspk"></span></button>
+    <button class="corner c-bl" id="brandPrev" aria-label="Previous brand">←</button>
+    <button class="corner c-br" id="brandNext" aria-label="Next brand">→</button>
+  </div>
+  <div class="readout"><b id="brandVal">Enochian sigil</b></div>
+  <div class="hint">live time · cinnabar arc = seconds · ←/→ changes identity · speaker toggles playback</div>
+</div></div>
+
+<div class="cap"><span>Vigil Clock · elapsed-time countdown</span><span class="pill">60 SEC · 5 / 10 / 25 MIN</span></div>
+<div class="grid"><div class="card">
+  <p class="component-copy">Duration made legible through three synchronized signals: a digital readout, an increasing elapsed-time arc, and a remaining-time subdial.</p>
+  <div class="rthemes" id="timerThemes" role="group" aria-label="Timer finish">
+    <button type="button" data-theme="white" aria-pressed="true">IVORY</button>
+    <button type="button" data-theme="black" aria-pressed="false">OBSIDIAN</button>
+  </div>
+  <div class="timer-presets" id="timerPresets" role="group" aria-label="Countdown duration">
+    <button type="button" data-seconds="60" aria-pressed="true">60 SEC</button>
+    <button type="button" data-seconds="300" aria-pressed="false">5 MIN</button>
+    <button type="button" data-seconds="600" aria-pressed="false">10 MIN</button>
+    <button type="button" data-seconds="1500" aria-pressed="false">25 MIN</button>
+  </div>
+  <div class="timercase" id="timerCase" data-theme="white" data-progress="0" role="group" aria-label="Vigil Clock countdown timer">
+    <div class="timerdial">
+      <svg class="timer-svg" id="timerSvg" viewBox="0 0 304 304" aria-hidden="true"></svg>
+      <div class="timer-brand">UnCommon Core</div>
+      <div class="timer-digital" id="timerDigital" role="timer" aria-label="1 minute remaining">01:00.0</div>
+      <div class="timer-state" id="timerState" aria-live="polite">READY · 60 SECOND TEST</div>
+    </div>
+    <button class="corner c-tl timer-control" type="button" id="timerStart" data-state="ready" aria-label="Start timer" title="Start / stop timer">
+      <span class="timer-start-glyph" id="timerStartGlyph" aria-hidden="true">▶</span>
+    </button>
+    <button class="corner c-tr timer-control" type="button" id="timerReset" aria-label="Reset timer" title="Reset timer">
+      <span class="timer-reset-glyph" aria-hidden="true">↻</span>
+    </button>
+  </div>
+  <div class="hint">top-left starts/stops · top-right resets · cinnabar arc increases with elapsed time · upper subdial tracks remaining minutes</div>
+</div></div>
+
+<div class="section-title">Trigger controls</div>
+<div class="cap"><span>Mechanical Keyboard · tactile text input</span><span class="pill">POINTER / KEYBOARD</span></div>
+<div class="grid"><div class="card keyboard-card">
+  <p class="component-copy">A compact mechanical board with deep key travel, Cinnabar modifier keys, and the UnCommon Core brandmark. Every key visibly bottoms out when tapped.</p>
+  <div class="rthemes" id="keyboardFinish" role="group" aria-label="Mechanical Keyboard finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+  <div class="mk-scroll">
+    <div class="mk-rig" id="mechanicalKeyboard" data-finish="ivory" role="group" aria-label="UnCommon Core mechanical keyboard">
+      <output class="mk-display" id="keyboardDisplay" aria-live="polite">UnCommon Core</output>
+      <div class="mk-board" id="keyboardKeys"></div>
+    </div>
+  </div>
+  <div class="readout"><b id="keyboardState">READY</b> · tap a key to type</div>
+  <div class="hint">matte concave Cinnabar keys · Ivory / Obsidian typing keys · pointer tap or Space / Enter visibly depresses each key</div>
+</div></div>
+
+<div class="cap"><span>Push Button · concave momentary control</span><span class="pill">PRESS / RELEASE</span></div>
+<div class="grid"><div class="card">
+  <p class="component-copy">A single-purpose actuator with a dished surface, a visible socket, and enough vertical travel to make the press unmistakable.</p>
+  <div class="concave-stage">
+    <div class="concave-led" aria-hidden="true"></div>
+    <div class="concave-socket" id="concaveSocket">
+      <button type="button" class="concave-button" id="concaveButton" aria-label="Concave push button" aria-pressed="false"><span class="concave-top" aria-hidden="true"></span></button>
+    </div>
+  </div>
+  <div class="readout"><b id="concaveState">READY</b> · <span id="concaveCount">0 presses</span></div>
+  <div class="hint">dished Ivory cap · Cinnabar signal · pointer or Space / Enter · momentary return</div>
+</div></div>
+
+<div class="cap"><span>The Three Keys · tactile action controls</span><span class="pill">MOMENTARY / LATCH</span></div>
+<div class="grid"><div class="card">
+  <p class="component-copy">Three arcade-style controls with a physical press, visible socket, and immediate signal response. Use momentary behavior for hold actions or latch behavior for persistent state.</p>
+  <div class="stepbar" id="abMode" role="group" aria-label="Button behavior">
+    <button data-m="moment" aria-pressed="true">momentary</button><button data-m="latch" aria-pressed="false">latch</button>
+  </div>
+  <div class="abtns" id="abtns" role="group" aria-label="The Three Keys">
+    <div class="abunit"><div class="aled"></div><div class="asocket"><button class="abtn ab-red" aria-label="Cinnabar key"></button></div></div>
+    <div class="abunit"><div class="aled"></div><div class="asocket"><button class="abtn ab-white" aria-label="Ivory key"></button></div></div>
+    <div class="abunit"><div class="aled"></div><div class="asocket"><button class="abtn ab-black" aria-label="Obsidian key"></button></div></div>
+  </div>
+  <div class="readout"><b id="abVal">all released</b></div>
+  <div class="hint">cinnabar · ivory · obsidian · pointer or keyboard · soft confirmation click</div>
+</div></div>
+
+<footer class="finish-line">
+  <h2>The Enochian finish line</h2>
+  <p>A good control does more than respond to input. It tells the user what changed, what is possible next, and why the control belongs there.</p>
+  <blockquote>Choose the instrument. Change the state. See the result. Reuse the pattern.</blockquote>
+</footer>
+
+<script type="module">
+import { animate } from "https://cdn.jsdelivr.net/npm/motion@11/+esm";
+const SNAP = { type:"spring", stiffness:700, damping:35, mass:0.8 };
+const HEAVY = { type:"spring", stiffness:300, damping:30, mass:1.2 };
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const T = (s) => reduce ? { duration:0 } : s;
+let ACCENT = "#cc0000";
+const $ = id => document.getElementById(id);
+const ang = v => -135 + v * 270;           // 0..1 → -135..+135deg
+const clamp01 = v => Math.min(1, Math.max(0, v));
+
+/* accent switch */
+function paintAccent(){
+  document.documentElement.style.setProperty("--accent", ACCENT);
+  [ ["accOrange","#E76A2E"], ["accRed","#cc0000"] ].forEach(([id,c]) =>
+    $(id).setAttribute("aria-pressed", String(ACCENT===c)));
+  drawStepTicks(); // recolor active ticks
+  document.querySelectorAll(".tdot.on").forEach(d=>d.style.background=ACCENT);
+}
+$("accOrange").onclick = () => { ACCENT="#E76A2E"; paintAccent(); };
+$("accRed").onclick = () => { ACCENT="#cc0000"; paintAccent(); };
+
+/* paired material finishes: every instrument keeps its state while its shell changes */
+function bindFinish(groupId,targetId){
+  const group=$(groupId),target=$(targetId);
+  group.addEventListener("click",e=>{
+    const button=e.target.closest("button[data-finish]"); if(!button) return;
+    target.dataset.finish=button.dataset.finish;
+    group.querySelectorAll("button[data-finish]").forEach(b=>b.setAttribute("aria-pressed",String(b===button)));
+  });
+}
+bindFinish("darkDialFinish","darkDial");
+bindFinish("lightDialFinish","lightDial");
+bindFinish("choirFinish","stepDial");
+bindFinish("triuneFinish","triple");
+bindFinish("clockFinish","clockCase");
+bindFinish("codeVeilFinish","codeToggle");
+bindFinish("keyboardFinish","mechanicalKeyboard");
+
+/* tick-ring helpers (SVG) */
+const NS="http://www.w3.org/2000/svg";
+function polar(cx,cy,r,deg){ const a=(deg-90)*Math.PI/180; return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; }
+function drawDarkTicks(){
+  const svg=$("darkTicks"); svg.innerHTML="";
+  for(let i=0;i<15;i++){ const d=-135+i*(270/16);
+    const [x,y]=polar(110,110,96,d);
+    const c=document.createElementNS(NS,"circle");
+    c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r",2.4);c.setAttribute("fill","#111");svg.appendChild(c);
+  }
+  [[-135],[135]].forEach(([d])=>{ const [x1,y1]=polar(110,110,88,d),[x2,y2]=polar(110,110,102,d);
+    const l=document.createElementNS(NS,"line");
+    l.setAttribute("x1",x1);l.setAttribute("y1",y1);l.setAttribute("x2",x2);l.setAttribute("y2",y2);
+    l.setAttribute("stroke","#111");l.setAttribute("stroke-width","2.4");svg.appendChild(l); });
+}
+
+/* generic continuous dial driver */
+function driveDial(el, knob, valEl, fmt){
+  let v = parseFloat(el.dataset.v ?? el.getAttribute("aria-valuenow"))/100 || 0;
+  function render(instant=false){
+    const a=ang(v);
+    if(instant||reduce) knob.style.transform=`rotate(${a}deg)`;
+    else animate(knob, { rotate:a }, HEAVY);
+    el.setAttribute("aria-valuenow", Math.round(v*100));
+    el.setAttribute("aria-valuetext", Math.round(v*100)+" percent");
+    valEl.textContent = fmt(v);
+  }
+  function bind(){
+    let sy=0, sv=0, dragging=false;
+    el.addEventListener("pointerdown", e=>{ dragging=true; sy=e.clientY; sv=v; el.setPointerCapture(e.pointerId); });
+    el.addEventListener("pointermove", e=>{ if(!dragging) return;
+      v=clamp01(sv+(sy-e.clientY)/150); knob.style.transform=`rotate(${ang(v)}deg)`;
+      el.setAttribute("aria-valuenow", Math.round(v*100)); valEl.textContent=fmt(v); });
+    el.addEventListener("pointerup", ()=>{ dragging=false; render(); });
+    el.addEventListener("keydown", e=>{
+      if(e.key==="ArrowRight"||e.key==="ArrowUp"){ v=clamp01(v+.02); render(); e.preventDefault(); }
+      if(e.key==="ArrowLeft"||e.key==="ArrowDown"){ v=clamp01(v-.02); render(); e.preventDefault(); }
+      if(e.key==="Home"){ v=0; render(); e.preventDefault(); }
+      if(e.key==="End"){ v=1; render(); e.preventDefault(); } });
+  }
+  return { render, bind, get:()=>v, set:(nv,instant)=>{ v=clamp01(nv); render(instant); } };
+}
+
+/* dark dial: states MIN 5% / HIGH 80% */
+drawDarkTicks();
+const dark = driveDial($("darkDial"), $("darkKnob"), $("darkVal"), v=>Math.round(v*100)+"%");
+dark.bind(); $("darkDial").dataset.v=0.05; dark.set(0.05,true);
+$("darkMin").onclick=()=>dark.set(0.05);
+$("darkHigh").onclick=()=>dark.set(0.80);
+
+/* light dial */
+const light = driveDial($("lightDial"), $("lightKnob"), $("lightVal"), v=>Math.round(v*100)+"%");
+light.bind(); $("lightDial").dataset.v=0.5; light.set(0.5,true);
+
+/* stepper: N detents */
+let N=7, idx=3; // 0-based
+function drawStepTicks(){
+  const svg=$("stepTicks"); svg.innerHTML="";
+  for(let i=0;i<N;i++){ const d = N===1?0:-135+i*(270/(N-1));
+    const [x,y]=polar(110,110,96,d);
+    const passed = i<idx, active = i===idx;
+    const c=document.createElementNS(NS,"circle");
+    c.setAttribute("cx",x);c.setAttribute("cy",y);
+    c.setAttribute("r",active?4.4:2.6);
+    c.setAttribute("fill", active?ACCENT:(passed?ACCENT:"#bbb"));
+    if(passed) c.setAttribute("opacity","0.45");
+    c.style.cursor="pointer"; c.style.pointerEvents="all";
+    c.addEventListener("click", ()=>{ idx=i; renderStep(); });
+    // invisible fat hit area
+    const h=document.createElementNS(NS,"circle");
+    h.setAttribute("cx",x);h.setAttribute("cy",y);h.setAttribute("r",11);h.setAttribute("fill","transparent");
+    h.style.cursor="pointer"; h.style.pointerEvents="all";
+    h.addEventListener("click", ()=>{ idx=i; renderStep(); });
+    svg.appendChild(h); svg.appendChild(c);
+  }
+}
+function renderStep(instant=false){
+  const v = N===1?0.5:idx/(N-1), a=ang(v);
+  if(instant||reduce) $("stepKnob").style.transform=`rotate(${a}deg)`;
+  else animate($("stepKnob"), { rotate:a }, SNAP);
+  drawStepTicks();
+  $("stepVal").textContent=`Step ${idx+1} of ${N}`;
+  const d=$("stepDial");
+  d.setAttribute("aria-valuemax",N); d.setAttribute("aria-valuenow",idx+1);
+  d.setAttribute("aria-valuetext",`Step ${idx+1} of ${N}`);
+}
+$("nbar").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  N=+b.dataset.n; idx=Math.min(idx,N-1);
+  [...$("nbar").children].forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+  renderStep();
+});
+$("stepPrev").onclick=()=>{ idx=(idx-1+N)%N; renderStep(); };
+$("stepNext").onclick=()=>{ idx=(idx+1)%N; renderStep(); };
+(function(){
+  const el=$("stepDial"); let sy=0, si=0, dragging=false;
+  el.addEventListener("pointerdown", e=>{ dragging=true; sy=e.clientY; si=idx; el.setPointerCapture(e.pointerId); });
+  el.addEventListener("pointermove", e=>{ if(!dragging) return;
+    const dv=(sy-e.clientY)/40, ni=Math.min(N-1,Math.max(0,Math.round(si+dv)));
+    if(ni!==idx){ idx=ni; renderStep(); } });
+  el.addEventListener("pointerup", ()=>dragging=false);
+  el.addEventListener("keydown", e=>{
+    if(e.key==="ArrowRight"||e.key==="ArrowUp"){ idx=Math.min(N-1,idx+1); renderStep(); e.preventDefault(); }
+    if(e.key==="ArrowLeft"||e.key==="ArrowDown"){ idx=Math.max(0,idx-1); renderStep(); e.preventDefault(); }
+    if(e.key==="PageUp"){ idx=Math.min(N-1,idx+2); renderStep(); e.preventDefault(); }
+    if(e.key==="PageDown"){ idx=Math.max(0,idx-2); renderStep(); e.preventDefault(); }
+    if(e.key==="Home"){ idx=0; renderStep(); e.preventDefault(); }
+    if(e.key==="End"){ idx=N-1; renderStep(); e.preventDefault(); } });
+})();
+[...$("nbar").children].forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.n==="7")));
+renderStep(true);
+
+/* N-pill bar */
+let M=5, mi=2;
+function renderPill(instant=false){
+  const wrap=$("npill"); wrap.innerHTML="";
+  const names = M<=5 ? ["I","II","III","IV","V"].slice(0,M) : Array.from({length:M},(_,i)=>"0"+(i+1));
+  names.forEach((n,i)=>{
+    const b=document.createElement("button");
+    b.type="button"; b.setAttribute("role","radio");
+    b.setAttribute("aria-checked", String(i===mi));
+    b.className=i===mi?"is-active":"";
+    b.innerHTML=`<span style="position:relative;z-index:1">${n}</span>`;
+    b.onclick=()=>{ mi=i; renderPill(); };
+    wrap.appendChild(b);
+  });
+  let pill=wrap.querySelector(".npill");
+  if(!pill){ pill=document.createElement("div"); pill.className="npill"; wrap.appendChild(pill); }
+  const btns=[...wrap.querySelectorAll("button")];
+  const target=btns[mi];
+  const move=()=>{ pill.style.left=target.offsetLeft+"px"; pill.style.width=target.offsetWidth+"px"; };
+  const toL=target.offsetLeft, toW=target.offsetWidth;
+  if(instant||reduce){ move(); }
+  else { // glide: Motion interpolates left/width on one spring
+    animate(pill, { left:toL+"px", width:toW+"px" }, SNAP);
+  }
+  $("npillVal").textContent=`Option ${mi+1} of ${M}`;
+}
+$("nbar2").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  M=+b.dataset.n; mi=Math.min(mi,M-1);
+  [...$("nbar2").children].forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+  renderPill(true);
+});
+[...$("nbar2").children].forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.n==="5")));
+renderPill(true);
+addEventListener("resize", ()=>renderPill(true));
+
+/* triple switch: 3 independent vertical binaries, spring y-snap + dot cross-fade */
+const TRAVEL = 38; // (176 - 100) / 2
+const tripleUnits = [...document.querySelectorAll("#triple .tunit")].map((unit) => {
+  const thumb = unit.querySelector(".tthumb"), dot = unit.querySelector(".tdot");
+  let on = false;
+  function render(instant=false){
+    thumb.setAttribute("aria-checked", String(on));
+    dot.classList.toggle("on", on);
+    if(instant||reduce){
+      thumb.style.transform=`translateY(${on?-TRAVEL:TRAVEL}px)`;
+      dot.style.background=on?ACCENT:"#c8c8c9";
+    } else {
+      animate(thumb, { y:on?-TRAVEL:TRAVEL }, SNAP);
+      animate(dot, { backgroundColor:on?ACCENT:"#c8c8c9" }, { duration:.2 });
+    }
+    $("tripleVal").textContent = tripleUnits.map(u=>u.isOn()?"ON":"OFF").join(" – ");
+  }
+  let sy=0, y0=0, dragging=false, moved=false;
+  thumb.addEventListener("pointerdown", e=>{ dragging=true; moved=false; sy=e.clientY; y0=on?-TRAVEL:TRAVEL; thumb.setPointerCapture(e.pointerId); });
+  thumb.addEventListener("pointermove", e=>{ if(!dragging) return;
+    const dy=e.clientY-sy; if(Math.abs(dy)>4) moved=true;
+    const y=Math.min(TRAVEL,Math.max(-TRAVEL,y0+dy));
+    thumb.style.transform=`translateY(${y}px)`; });
+  thumb.addEventListener("pointerup", e=>{ if(!dragging) return; dragging=false;
+    if(!moved){ on=!on; } else { on=(e.clientY-sy)<0; }
+    render(); });
+  thumb.addEventListener("keydown", e=>{
+    if(e.key===" "||e.key==="Enter"){ on=!on; render(); e.preventDefault(); }
+    else if(e.key==="ArrowUp"||e.key==="ArrowRight"){ on=true; render(); e.preventDefault(); }
+    else if(e.key==="ArrowDown"||e.key==="ArrowLeft"){ on=false; render(); e.preventDefault(); } });
+  thumb.setAttribute("aria-checked","false");
+  thumb.style.transform=`translateY(${TRAVEL}px)`;
+  return { render, isOn:()=>on, set:(v,instant)=>{ on=v; render(instant); } };
+});
+tripleUnits.forEach(u=>u.render(true));
+function triSet(pattern){ tripleUnits.forEach((u,i)=>u.set(pattern[i],false)); }
+$("triPreset1").onclick=()=>triSet([false,true,false]);   // your shot 1: OFF–ON–OFF
+$("triPreset2").onclick=()=>triSet([true,false,true]);    // your shot 2: ON–OFF–ON
+$("triPreset3").onclick=()=>triSet([true,false,false]);   // your shot 3: ON–OFF–OFF
+
+/* rotary radio player: grill + OFFLINE/ON power + WebAudio bed + volume */
+let radioOn=false, rvol=0.25, radioTheme="light";
+const radioPalettes={
+  light:{ledOn:"#CC0000",ledOff:"#3a3a3a",powerOn:"#CC0000",powerOff:"#111111"},
+  red:{ledOn:"#ffffff",ledOff:"rgba(255,255,255,.28)",powerOn:"#ffffff",powerOff:"#760000"},
+  black:{ledOn:"#ffffff",ledOff:"#55555a",powerOn:"#ffffff",powerOff:"#6f6f74"}
+};
+const rscale=$("rscale"), rknob=$("rknob");
+for(let i=0;i<19;i++){ const t=document.createElement("div"); t.className="rtick";
+  t.style.left=(i*(100/18))+"%"; rscale.appendChild(t); }
+const rdash=document.createElement("div"); rdash.className="rdash"; rscale.appendChild(rdash);
+const ledDots=[];
+(function(){ const svg=$("rledSvg");
+  for(let i=0;i<13;i++){ const c=document.createElementNS(NS,"circle");
+    c.setAttribute("cx",3+i*4.3); c.setAttribute("cy",4); c.setAttribute("r",1.8);
+    c.setAttribute("fill","#3a3a3a"); svg.appendChild(c); ledDots.push(c); }
+})();
+(function(){ const svg=$("rspk"); // halftone horn, pointing right
+  for(let r=0;r<8;r++){ const n=8-r;
+    for(let x=0;x<n;x++){ const c=document.createElementNS(NS,"circle");
+      c.setAttribute("cx",4+x*3.6); c.setAttribute("cy",3+r*2.9); c.setAttribute("r",1.3);
+      c.setAttribute("fill","#222"); svg.appendChild(c); } }
+})();
+/* WebAudio: soft static bed while ON (user-gesture started, gain follows knob) */
+let AC=null, bedGain=null;
+function ensureAudio(){
+  if(AC) return;
+  AC=new (window.AudioContext||window.webkitAudioContext)();
+  const len=AC.sampleRate*2, buf=AC.createBuffer(1,len,AC.sampleRate), d=buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*0.12;
+  const src=AC.createBufferSource(); src.buffer=buf; src.loop=true;
+  const f=AC.createBiquadFilter(); f.type="lowpass"; f.frequency.value=750;
+  bedGain=AC.createGain(); bedGain.gain.value=0;
+  src.connect(f); f.connect(bedGain); bedGain.connect(AC.destination); src.start();
+}
+function blip(freq){
+  if(!AC) return; const t=AC.currentTime;
+  const o=AC.createOscillator(), g=AC.createGain();
+  o.type="sine"; o.frequency.value=freq;
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.12,t+0.015);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+0.12);
+  o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t+0.14);
+}
+function renderRadio(instant=false){
+  const palette=radioPalettes[radioTheme];
+  $("radio").dataset.theme=radioTheme;
+  $("radio").setAttribute("aria-label", ({light:"Ivory",red:"Cinnabar",black:"Obsidian"}[radioTheme])+" Aether Receiver");
+  document.querySelectorAll("#radioThemes button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.theme===radioTheme)));
+  $("pwrBtn").setAttribute("aria-checked", String(radioOn));
+  $("pdot").style.background=radioOn?palette.powerOn:palette.powerOff;
+  $("pdot").style.boxShadow=radioOn?`0 0 7px ${palette.powerOn}`:"none";
+  $("rl1").textContent = radioOn ? "UNCOMMON CORE" : "OFFLINE";
+  $("rl2").textContent = radioOn ? "17:48 Sep 11" : "17:40 Sep 11";
+  const finishName={light:"IVORY",red:"CINNABAR",black:"OBSIDIAN"}[radioTheme];
+  $("radioVal").textContent = finishName+" · "+(radioOn ? ("ON · "+Math.round(rvol*100)+"%") : "OFF");
+  const lit = radioOn ? Math.round(rvol*13) : 0;
+  ledDots.forEach((c,i)=>c.setAttribute("fill",i<lit?palette.ledOn:palette.ledOff));
+  rdash.style.left=(rvol*100)+"%";
+  const a=ang(rvol);
+  if(instant||reduce) rknob.style.transform=`rotate(${a}deg)`;
+  else animate(rknob, { rotate:a }, HEAVY);
+  rknob.setAttribute("aria-valuenow", Math.round(rvol*100));
+  rknob.setAttribute("aria-valuetext", "Volume "+Math.round(rvol*100)+" percent");
+  if(bedGain&&AC){
+    const t=AC.currentTime;
+    bedGain.gain.cancelScheduledValues(t);
+    bedGain.gain.setTargetAtTime(radioOn?rvol*0.06:0, t, 0.15);
+  }
+}
+function setPower(on){
+  radioOn=on;
+  if(on){ ensureAudio(); AC.resume(); blip(880); } else { blip(440); }
+  renderRadio();
+}
+$("radioThemes").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-theme]"); if(!b) return;
+  radioTheme=b.dataset.theme; renderRadio();
+});
+$("pwrBtn").onclick=()=>setPower(!radioOn);
+$("radioOff").onclick=()=>setPower(false);
+$("radioOn").onclick=()=>{ setPower(true); rvol=0.25; renderRadio(); };
+(function(){ let sy=0, sv=0, dragging=false;
+  rknob.addEventListener("pointerdown", e=>{ dragging=true; sy=e.clientY; sv=rvol; rknob.setPointerCapture(e.pointerId); });
+  rknob.addEventListener("pointermove", e=>{ if(!dragging) return;
+    rvol=clamp01(sv+(sy-e.clientY)/150); renderRadio(true);
+    rknob.style.transform=`rotate(${ang(rvol)}deg)`; });
+  rknob.addEventListener("pointerup", ()=>{ dragging=false; renderRadio(); });
+  rknob.addEventListener("keydown", e=>{
+    if(e.key==="ArrowRight"||e.key==="ArrowUp"){ rvol=clamp01(rvol+.05); renderRadio(); e.preventDefault(); }
+    if(e.key==="ArrowLeft"||e.key==="ArrowDown"){ rvol=clamp01(rvol-.05); renderRadio(); e.preventDefault(); }
+    if(e.key==="Home"){ rvol=0; renderRadio(); e.preventDefault(); }
+    if(e.key==="End"){ rvol=1; renderRadio(); e.preventDefault(); } });
+})();
+renderRadio(true);
+
+/* square clock-radio: generated dial, live hands, 3 brand options */
+const clkSvg=$("clkSvg"), CX=136, CY=136;
+function clkEl(n,attrs){ const e=document.createElementNS(NS,n);
+  for(const k in attrs) e.setAttribute(k,attrs[k]); clkSvg.appendChild(e); return e; }
+(function buildDial(){
+  for(let m=0;m<60;m++){ const a=m*6, maj=m%5===0, q=m%15===0;
+    const r1=maj?100:103, r2=108;
+    const [x1,y1]=polar(CX,CY,r1,a), [x2,y2]=polar(CX,CY,r2,a);
+    clkEl("line",{x1,y1,x2,y2,stroke:"#111","stroke-width":q?3.4:(maj?2.4:1.2)});
+  }
+  const hourN={12:0,3:90,6:180,9:270};
+  for(const n in hourN){ const [x,y]=polar(CX,CY,78,hourN[n]);
+    const t=clkEl("text",{x,y:y+9,"text-anchor":"middle",fill:"#111","font-size":26,
+      "font-family":"'IBM Plex Sans',-apple-system,Inter,sans-serif","font-weight":500}); t.textContent=n; }
+  const minN={60:0,15:90,20:120,25:150,30:180,35:210,40:240,45:270,50:300,55:330};
+  for(const n in minN){ const [x,y]=polar(CX,CY,120,minN[n]);
+    const t=clkEl("text",{x,y:y+3,"text-anchor":"middle",fill:"#111","font-size":9,
+      "font-family":"'IBM Plex Mono',ui-monospace,monospace"}); t.textContent=n; }
+})();
+const ARC_R=93, ARC_C=2*Math.PI*ARC_R;
+const arc=clkEl("circle",{cx:CX,cy:CY,r:ARC_R,fill:"none",stroke:ACCENT,"stroke-width":9,
+  "stroke-dasharray":ARC_C,"stroke-dashoffset":ARC_C,"stroke-linecap":"round",
+  transform:`rotate(-90 ${CX} ${CY})`,opacity:.9});
+/* Enochian identity sigil: nested open rings + EN monogram */
+function enochianSigilSVG(){
+  const C1=(2*Math.PI*38), C2=(2*Math.PI*21), gap1=C1*35/360, gap2=C2*42/360;
+  return `<svg viewBox="0 0 100 100" width="39" height="39" role="img" aria-label="Enochian sigil">`
+    +`<circle cx="50" cy="50" r="38" fill="none" stroke="#111" stroke-width="13" stroke-dasharray="${C1-gap1} ${gap1}" stroke-dashoffset="${-C1*17.5/360}"/>`
+    +`<circle cx="50" cy="50" r="21" fill="none" stroke="#111" stroke-width="8" stroke-dasharray="${C2-gap2} ${gap2}" stroke-dashoffset="${-C2*21/360}"/>`
+    +`<text x="50" y="58" text-anchor="middle" font-family="'IBM Plex Sans',-apple-system,Inter,sans-serif" font-weight="800" font-size="18" fill="#111">EN</text></svg>`;
+}
+const brands=[
+  { name:"Enochian sigil", html:enochianSigilSVG() },
+  { name:"“ENOCHIAN” wordmark", html:`<div class="b1">ENOCHIAN</div><div class="b2">HOROLOGION</div>` },
+  { name:"“EN” initialism", html:`<div class="b1" style="font-size:22px;letter-spacing:6px">EN</div><div class="b2">HOROLOGION</div>` },
+];
+let bi=0;
+function renderBrand(){ $("clkBrand").innerHTML=brands[bi].html; $("brandVal").textContent=brands[bi].name; }
+$("brandPrev").onclick=()=>{ bi=(bi-1+brands.length)%brands.length; renderBrand(); };
+$("brandNext").onclick=()=>{ bi=(bi+1)%brands.length; renderBrand(); };
+renderBrand();
+let playing=false;
+$("clkSpk").onclick=()=>{ playing=!playing;
+  $("clkState").textContent=playing?"PLAYING":"NOT PLAYING";
+  ensureAudio(); if(AC){ AC.resume(); blip(playing?990:440); } };
+function tickClock(){
+  const d=new Date(), s=d.getSeconds()+d.getMilliseconds()/1000,
+        m=d.getMinutes()+s/60, h=(d.getHours()%12)+m/60;
+  $("hSec").style.transform=`rotate(${s*6}deg)`;
+  $("hTail").style.transform=`rotate(${s*6+180}deg)`;
+  $("hMin").style.transform=`rotate(${m*6}deg)`;
+  $("hHour").style.transform=`rotate(${h*30}deg)`;
+  arc.setAttribute("stroke-dashoffset", ARC_C*(1-s/60));
+  arc.setAttribute("stroke", ACCENT);
+  const p=n=>String(n).padStart(2,"0");
+  $("clkDigital").textContent=`${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+  requestAnimationFrame(tickClock);
+}
+tickClock();
+
+/* stopwatch timer: real elapsed time, increasing red arc, 60s/5m/10m/25m */
+const timerSvg=$("timerSvg"),TCX=152,TCY=152;
+function timerEl(name,attrs,parent=timerSvg){const e=document.createElementNS(NS,name);for(const k in attrs)e.setAttribute(k,attrs[k]);parent.appendChild(e);return e;}
+const TIMER_R=137,TIMER_C=2*Math.PI*TIMER_R;
+const timerProgress=timerEl("circle",{cx:TCX,cy:TCY,r:TIMER_R,fill:"none",class:"timer-progress","stroke-width":7,
+  "stroke-dasharray":TIMER_C,"stroke-dashoffset":TIMER_C,"stroke-linecap":"round",transform:`rotate(-90 ${TCX} ${TCY})`});
+(function buildTimerFace(){
+  timerEl("circle",{cx:TCX,cy:TCY,r:142,fill:"none",class:"timer-subface","stroke-width":1});
+  for(let s=0;s<60;s++){
+    const major=s%5===0,quarter=s%15===0,a=s*6,r1=quarter?123:(major?127:131),r2=138;
+    const [x1,y1]=polar(TCX,TCY,r1,a),[x2,y2]=polar(TCX,TCY,r2,a);
+    timerEl("line",{x1,y1,x2,y2,class:"timer-tick","stroke-width":quarter?3:(major?2:1)});
+    if(major){const [x,y]=polar(TCX,TCY,112,a);const t=timerEl("text",{x,y:y+7,"text-anchor":"middle",class:"timer-number",
+      "font-size":s===0?25:20,"font-family":"'IBM Plex Sans',sans-serif","font-weight":600});t.textContent=s===0?"60":String(s);}
+  }
+  const SCY=103,SR=39;
+  timerEl("circle",{cx:TCX,cy:SCY,r:SR,class:"timer-subface","stroke-width":1.5});
+  for(let m=0;m<30;m++){
+    const major=m%5===0,a=m*12,r1=major?31:34,r2=38;
+    const [x1,y1]=polar(TCX,SCY,r1,a),[x2,y2]=polar(TCX,SCY,r2,a);
+    timerEl("line",{x1,y1,x2,y2,class:"timer-subtick","stroke-width":major?1.5:.7});
+    if(major){const [x,y]=polar(TCX,SCY,24,a);const t=timerEl("text",{x,y:y+4,"text-anchor":"middle",class:"timer-subnum",
+      "font-size":9,"font-family":"'IBM Plex Mono',monospace","font-weight":600});t.textContent=m===0?"30":String(m);}
+  }
+})();
+const timerSubHand=timerEl("line",{x1:TCX,y1:103,x2:TCX,y2:76,class:"timer-hand-min","stroke-width":3,"stroke-linecap":"round"});
+const timerSecHand=timerEl("line",{x1:TCX,y1:TCY+18,x2:TCX,y2:TCY-116,class:"timer-hand-sec","stroke-width":3,"stroke-linecap":"round"});
+timerEl("circle",{cx:TCX,cy:103,r:5,class:"timer-hub-outer","stroke-width":2});
+timerEl("circle",{cx:TCX,cy:TCY,r:12,class:"timer-hub-outer","stroke-width":2});
+timerEl("circle",{cx:TCX,cy:TCY,r:5,class:"timer-hub-inner"});
+let timerDuration=60000,timerRemaining=60000,timerEnd=0,timerMode="ready",timerTheme="white",timerPresetLabel="60 SECOND TEST",timerAlarmed=false;
+function timerFormat(ms){const tenths=Math.max(0,Math.ceil(ms/100)),mins=Math.floor(tenths/600),secs=Math.floor((tenths%600)/10),tenth=tenths%10;return `${String(mins).padStart(2,"0")}:${String(secs).padStart(2,"0")}.${tenth}`;}
+function setTimerLine(line,cx,cy,r,angle){const [x,y]=polar(cx,cy,r,angle);line.setAttribute("x2",x);line.setAttribute("y2",y);}
+function renderTimer(){
+  if(timerMode==="running")timerRemaining=Math.max(0,timerEnd-Date.now());
+  const progress=clamp01(1-timerRemaining/timerDuration),elapsed=(timerDuration-timerRemaining)/1000;
+  $("timerCase").dataset.progress=progress.toFixed(3);
+  timerProgress.setAttribute("stroke-dashoffset",TIMER_C*(1-progress));
+  setTimerLine(timerSecHand,TCX,TCY,116,(elapsed%60)*6);
+  setTimerLine(timerSubHand,TCX,103,27,((timerRemaining/60000)%30)*12);
+  const display=timerFormat(timerRemaining);$("timerDigital").textContent=display;
+  $("timerDigital").setAttribute("aria-label",display.replace(":"," minutes ").replace("."," point ")+" seconds remaining");
+  const startLabel=timerMode==="running"?"Stop timer":(timerMode==="done"?"Start timer again":"Start timer");
+  $("timerStart").dataset.state=timerMode;
+  $("timerStart").setAttribute("aria-label",startLabel);
+  $("timerStartGlyph").textContent=timerMode==="running"?"■":"▶";
+  $("timerState").textContent=timerMode==="ready"?`READY · ${timerPresetLabel}`:timerMode.toUpperCase();
+  if(timerMode==="running"&&timerRemaining<=0){
+    timerMode="done";$("timerState").textContent="DONE";$("timerStart").dataset.state="done";
+    $("timerStart").setAttribute("aria-label","Start timer again");$("timerStartGlyph").textContent="▶";
+    if(!timerAlarmed){timerAlarmed=true;blip(880);setTimeout(()=>blip(1100),150);}
+  }
+}
+$("timerPresets").addEventListener("click",e=>{const b=e.target.closest("button[data-seconds]");if(!b)return;
+  timerDuration=Number(b.dataset.seconds)*1000;timerRemaining=timerDuration;timerMode="ready";timerAlarmed=false;
+  timerPresetLabel=b.textContent==="60 SEC"?"60 SECOND TEST":b.textContent+" TEST";
+  document.querySelectorAll("#timerPresets button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));renderTimer();});
+$("timerThemes").addEventListener("click",e=>{const b=e.target.closest("button[data-theme]");if(!b)return;timerTheme=b.dataset.theme;
+  $("timerCase").dataset.theme=timerTheme;document.querySelectorAll("#timerThemes button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));});
+$("timerStart").onclick=()=>{ensureAudio();if(AC)AC.resume();
+  if(timerMode==="running"){timerRemaining=Math.max(0,timerEnd-Date.now());timerMode="paused";blip(440);}
+  else{if(timerMode==="done"||timerRemaining<=0)timerRemaining=timerDuration;timerEnd=Date.now()+timerRemaining;timerMode="running";timerAlarmed=false;blip(660);}renderTimer();};
+$("timerReset").onclick=()=>{timerRemaining=timerDuration;timerMode="ready";timerAlarmed=false;renderTimer();};
+(function timerLoop(){renderTimer();requestAnimationFrame(timerLoop);})();
+
+/* mechanical keyboard: semantic keys, visible bottom-out, lightweight typing model */
+const keyboardRows=[
+  [["Esc",1.1,"accent"],...[1,2,3,4,5,6,7,8,9,10,11,12].map(n=>[`F${n}`,1,"accent"])],
+  [["`",1,"accent"],...["1","2","3","4","5","6","7","8","9","0","-","="].map(k=>[k]),["⌫",2.1,"accent","Backspace"]],
+  [["Tab",1.55,"accent"],...["Q","W","E","R","T","Y","U","I","O","P","[","]","\\"].map(k=>[k])],
+  [["Caps",1.75,"accent","CapsLock"],...["A","S","D","F","G","H","J","K","L",";","'"].map(k=>[k]),["Enter",2.1,"accent","Enter"]],
+  [["Shift",2.15,"accent","Shift"],...["Z","X","C","V","B","N","M",",",".","/"].map(k=>[k]),["Shift",2.15,"accent","Shift"]],
+  [["Ctrl",1.25,"accent","Control"],["UCC",1.25,"accent","Brand"],["Alt",1.25,"accent","Alt"],["Space",6.8,""," "],["Alt",1.25,"accent","Alt"],["UCC",1.25,"accent","Brand"],["Menu",1.35,"accent","Menu"],["Ctrl",1.25,"accent","Control"]]
+];
+const keyboardKeys=$("keyboardKeys"),keyboardDisplay=$("keyboardDisplay"),keyboardState=$("keyboardState");
+let typed="",caps=false,shifted=false;
+function keyLegend(label,key){
+  if(key!=="Brand") return document.createTextNode(label);
+  const mark=document.createElement("span");mark.className="ucc-key-mark";mark.setAttribute("aria-hidden","true");mark.innerHTML="<b>U</b>";return mark;
+}
+function setKeyDown(button,down){
+  button.dataset.pressed=String(down);
+  animate(button,down?{y:5,scale:.985}:{y:0,scale:1},T({type:"spring",stiffness:780,damping:34,mass:.45}));
+}
+function typeFromKey(button){
+  const key=button.dataset.key,label=button.dataset.label;
+  if(key==="Backspace") typed=typed.slice(0,-1);
+  else if(key==="Enter") typed+="\n";
+  else if(key==="Tab") typed+="\t";
+  else if(key==="CapsLock"){caps=!caps;button.setAttribute("aria-pressed",String(caps));}
+  else if(key==="Shift"){shifted=!shifted;document.querySelectorAll('.mk-key[data-key="Shift"]').forEach(k=>k.setAttribute("aria-pressed",String(shifted)));}
+  else if(key===" "||key.length===1){const upper=caps!==shifted;typed+=/^[a-z]$/i.test(label)?(upper?label.toUpperCase():label.toLowerCase()):label;shifted=false;document.querySelectorAll('.mk-key[data-key="Shift"]').forEach(k=>k.setAttribute("aria-pressed","false"));}
+  keyboardDisplay.textContent=typed||"UnCommon Core";
+  keyboardState.textContent=key==="Brand"?"UCC BRANDMARK":key+" PRESSED";
+}
+keyboardRows.forEach(rowData=>{
+  const row=document.createElement("div");row.className="mk-row";
+  rowData.forEach(([label,width=1,tone="",key=label])=>{
+    const button=document.createElement("button");button.type="button";button.className="mk-key"+(tone?" "+tone:"");button.style.setProperty("--w",width);button.dataset.key=key;button.dataset.label=label;button.dataset.pressed="false";button.setAttribute("aria-label",key==="Brand"?"UnCommon Core brandmark key":label+" key");if(key==="CapsLock"||key==="Shift")button.setAttribute("aria-pressed","false");button.appendChild(keyLegend(label,key));
+    button.addEventListener("pointerdown",()=>setKeyDown(button,true));["pointerup","pointercancel","pointerleave"].forEach(type=>button.addEventListener(type,()=>setKeyDown(button,false)));
+    button.addEventListener("keydown",e=>{if(!e.repeat&&(e.key===" "||e.key==="Enter"))setKeyDown(button,true)});button.addEventListener("keyup",e=>{if(e.key===" "||e.key==="Enter")setKeyDown(button,false)});
+    button.addEventListener("click",()=>typeFromKey(button));row.appendChild(button);
+  });keyboardKeys.appendChild(row);
+});
+
+/* concave push button: cap, dish, and socket move as one tactile system */
+const concaveButton=$("concaveButton"),concaveSocket=$("concaveSocket"),concaveTop=concaveButton.querySelector(".concave-top");
+let concavePresses=0,concaveHeld=false;
+const CONCAVE_SOCKET_REST="inset 0 10px 16px rgba(0,0,0,.72), inset 0 -4px 7px rgba(255,255,255,.14), 5px 12px 22px rgba(0,0,0,.24)";
+const CONCAVE_SOCKET_DOWN="inset 0 14px 22px rgba(0,0,0,.82), inset 0 -2px 5px rgba(255,255,255,.10), 2px 5px 10px rgba(0,0,0,.18)";
+const CONCAVE_DISH_REST="inset 8px 10px 18px rgba(0,0,0,.22), inset -8px -10px 17px rgba(255,255,255,.88), 0 1px 1px rgba(255,255,255,.9)";
+const CONCAVE_DISH_DOWN="inset 10px 13px 20px rgba(0,0,0,.32), inset -5px -7px 12px rgba(255,255,255,.66), 0 0 0 rgba(0,0,0,0)";
+function renderConcave(down,instant=false){
+  concaveHeld=down;concaveButton.dataset.pressed=String(down);concaveButton.setAttribute("aria-pressed",String(down));$("concaveState").textContent=down?"DEPRESSED":"READY";
+  const transition=instant||reduce?{duration:0}:{type:"spring",stiffness:720,damping:32,mass:.55};
+  animate(concaveButton,down?{y:9,scale:.975}:{y:0,scale:1},transition);
+  animate(concaveSocket,{boxShadow:down?CONCAVE_SOCKET_DOWN:CONCAVE_SOCKET_REST},{duration:instant?0:.11});
+  concaveTop.style.boxShadow=down?CONCAVE_DISH_DOWN:CONCAVE_DISH_REST;
+}
+concaveButton.addEventListener("pointerdown",()=>renderConcave(true));
+["pointerup","pointercancel","pointerleave"].forEach(type=>concaveButton.addEventListener(type,()=>renderConcave(false)));
+concaveButton.addEventListener("keydown",e=>{if(!e.repeat&&(e.key===" "||e.key==="Enter"))renderConcave(true)});
+concaveButton.addEventListener("keyup",e=>{if(e.key===" "||e.key==="Enter")renderConcave(false)});
+concaveButton.addEventListener("click",()=>{concavePresses++;$("concaveCount").textContent=concavePresses+" "+(concavePresses===1?"press":"presses");});
+renderConcave(false,true);
+
+/* arcade push-buttons: momentary press + latch, LED follows, click sound */
+const PRESS_SHADOW="0 -2px 4px -2px rgba(0,0,0,.50), 0 1px 2px rgba(0,0,0,.20), 0 0 0 4px rgba(0,0,0,.40), inset 0 2px 3px rgba(255,255,255,.4), inset 0 6px 12px rgba(0,0,0,.45)";
+const REST_SHADOW="0 -4px 6px -2px rgba(0,0,0,.55), 0 5px 9px rgba(0,0,0,.20), 0 4px 5px -2px rgba(255,255,255,.65), inset 0 2px 3px rgba(255,255,255,.7), inset 0 -6px 9px rgba(0,0,0,.30)";
+const SOCKET_REST="inset 0 8px 14px rgba(0,0,0,.32), inset 0 -7px 10px rgba(255,255,255,.95), 2px 5px 8px rgba(0,0,0,.14)";
+const SOCKET_DEEP="inset 0 11px 18px rgba(0,0,0,.44), inset 0 -5px 8px rgba(255,255,255,.9), 1px 3px 5px rgba(0,0,0,.10)";
+let abMode="moment";
+$("abMode").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return; abMode=b.dataset.m;
+  [...$("abMode").children].forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+  abUnits.forEach(u=>u.set(false,true));
+});
+const abUnits=[...document.querySelectorAll("#abtns .abunit")].map((unit)=>{
+  const btn=unit.querySelector(".abtn"), led=unit.querySelector(".aled"), sock=unit.querySelector(".asocket");
+  let held=false, latched=false;
+  const lit=()=>held||latched;
+  function render(instant=false){
+    btn.setAttribute("aria-pressed", String(lit()));
+    if(instant||reduce){
+      btn.style.transform=lit()?"translateY(6px) scale(.94)":"";
+      btn.style.boxShadow=lit()?PRESS_SHADOW:"";
+      sock.style.boxShadow=lit()?SOCKET_DEEP:"";
+      led.style.background=lit()?ACCENT:"#d6d6d6";
+      led.style.boxShadow=lit()?`0 0 8px ${ACCENT}`:"";
+    } else {
+      animate(btn, lit()?{ y:6, scale:.94 }:{ y:0, scale:1 }, { type:"spring", stiffness:650, damping:26, mass:.6 });
+      animate(btn, { boxShadow: lit()?PRESS_SHADOW:REST_SHADOW }, { duration:.12 });
+      animate(sock, { boxShadow: lit()?SOCKET_DEEP:SOCKET_REST }, { duration:.12 });
+      animate(led, { backgroundColor: lit()?ACCENT:"#d6d6d6" }, { duration:.15 });
+      led.style.boxShadow=lit()?`0 0 8px ${ACCENT}`:"";
+    }
+    const states=abUnits.map(u=>u.lit()?"ON":"off").join(" · ");
+    $("abVal").textContent = abUnits.every(u=>!u.lit()) ? "all released" : states;
+  }
+  btn.addEventListener("pointerdown", e=>{ held=true; ensureAudio(); if(AC){ AC.resume(); blip(660); } render(); });
+  const release=()=>{ if(!held) return; held=false;
+    if(abMode==="latch"&&!latched){ /* click without drag latches on pointerup */ }
+    render(); };
+  btn.addEventListener("pointerup", ()=>{ held=false; if(abMode==="moment") render(); });
+  btn.addEventListener("click", ()=>{ if(abMode!=="latch") return;
+    latched=!latched; ensureAudio(); if(AC){ AC.resume(); blip(latched?880:440); } render(); });
+  btn.addEventListener("pointerleave", release);
+  btn.addEventListener("keydown", e=>{ if(e.repeat) return;
+    if(e.key===" "||e.key==="Enter"){ e.preventDefault();
+      if(abMode==="latch"){ latched=!latched; ensureAudio(); if(AC){ AC.resume(); blip(latched?880:440); } }
+      else { held=true; ensureAudio(); if(AC){ AC.resume(); blip(660); } }
+      render(); } });
+  btn.addEventListener("keyup", e=>{ if(e.key===" "||e.key==="Enter"){ held=false; render(); } });
+  return { render, lit, set:(v,instant)=>{ latched=v; held=false; render(instant); } };
+});
+
+/* Drams—037 drives a page-wide, copyable code layer */
+const CODE_SPRING={type:"spring",stiffness:500,damping:32,mass:1};
+const CODE_SNIPPETS=[
+  {id:"codeToggle",title:"The Code Veil",code:String.raw`const spring = { type: "spring", stiffness: 500, damping: 32 };
+<motion.button role="switch" aria-checked={showCode} data-finish={finish}
+  animate={{ backgroundColor: showCode ? "#CC0000" : finish === "obsidian" ? "#171719" : "#EFEFEF" }}
+  transition={spring} onClick={() => setShowCode(v => !v)}>
+  <motion.span animate={{ x: showCode ? 72 : 0 }} transition={spring} />
+</motion.button>`},
+  {id:"darkDial",title:"Obsidian Dial",code:String.raw`const value = useMotionValue(0.05);
+const rotation = useTransform(value, [0, 1], [-135, 135]);
+<motion.div role="slider" aria-valuenow={Math.round(value.get()*100)}
+  drag="y" dragMomentum={false} style={{ rotate: rotation }} />
+/* data-finish="obsidian|ivory" swaps materials without resetting value */`},
+  {id:"lightDial",title:"Ivory Dial",code:String.raw`.light-base { background:#EFEFEF; border-radius:50%; }
+.light-knob {
+  background:#FFF;
+  box-shadow:6px 8px 16px rgba(0,0,0,.16);
+}
+.dot { background:#CC0000; }
+.dial[data-finish="obsidian"] .light-knob { background:#1d1d20; }`},
+  {id:"stepDial",title:"Choir Dial",code:String.raw`const stepWidth = trackWidth / (steps - 1);
+const index = clamp(Math.round(x.get() / stepWidth), 0, steps - 1);
+animate(x, index * stepWidth,
+  { type:"spring", stiffness:600, damping:32, mass:.8 });
+// Arrow keys ±1 · PageUp/PageDown ±2 · Home/End
+// data-finish="ivory|obsidian" changes material only; detent stays selected.`},
+  {id:"npill",title:"Ordinal Veil",code:String.raw`<LayoutGroup>
+  {options.map(option => <button key={option}>
+    {selected === option &&
+      <motion.span layoutId="active-pill" transition={spring} />}
+    <span>{option}</span>
+  </button>)}
+</LayoutGroup>`},
+  {id:"triple",title:"Triune Gate",code:String.raw`.triple { display:flex; gap:72px; }
+.tunit { width:56px; } /* absolute thumb needs a flex width */
+.tthumb { width:56px; height:100px; }
+const travel = (176 - 100) / 2;
+animate(thumb, { y: on ? -travel : travel }, snapSpring);
+.triple[data-finish="obsidian"] .tthumb { background:#171719; }`},
+  {id:"radio",title:"Aether Receiver",code:String.raw`<div className="radio" data-theme={theme}>
+  <button role="switch" aria-checked={playing}>Power</button>
+  <div className="grill" />
+  <div role="slider" aria-valuenow={volume} className="rknob" />
+</div>
+/* light · #CC0000 red · #121214 black theme tokens */`},
+  {id:"clkBrand",title:"Horologion",code:String.raw`function tickClock(now = new Date()) {
+  hourHand.style.transform = "rotate(" + ((now.getHours()%12)*30 + now.getMinutes()*.5) + "deg)";
+  minuteHand.style.transform = "rotate(" + (now.getMinutes()*6 + now.getSeconds()*.1) + "deg)";
+  secondHand.style.transform = "rotate(" + (now.getSeconds()*6) + "deg)";
+  requestAnimationFrame(() => tickClock(new Date()));
+}
+/* data-finish="ivory|obsidian" changes case, face, hands, marks, and corners. */`},
+  {id:"timerCase",title:"Vigil Clock",code:String.raw`const presets = [60, 5*60, 10*60, 25*60];
+const endAt = Date.now() + remainingMs;
+const remaining = Math.max(0, endAt - Date.now());
+const elapsedRatio = 1 - remaining / durationMs;
+progressCircle.setAttribute("stroke-dashoffset", circumference * (1-elapsedRatio));
+// Derive every frame from wall time so background tabs do not lose time.`},
+  {id:"mechanicalKeyboard",title:"Mechanical Keyboard",code:String.raw`const keySpring = { type:"spring", stiffness:780, damping:34, mass:.45 };
+function setKeyDown(key, down) {
+  key.dataset.pressed = String(down);
+  animate(key, down ? { y:5, scale:.985 } : { y:0, scale:1 }, keySpring);
+}
+// Render each key as a native button. Cinnabar keys use #CC0000.
+// data-finish="ivory|obsidian" swaps typing-key material and ink only.
+// Pointer and keyboard events share the same press/release path.`},
+  {id:"concaveButton",title:"Push Button",code:String.raw`const pressSpring = { type:"spring", stiffness:720, damping:32, mass:.55 };
+function renderPress(down) {
+  button.setAttribute("aria-pressed", String(down));
+  animate(button, down ? { y:9, scale:.975 } : { y:0, scale:1 }, pressSpring);
+  animate(socket, { boxShadow: down ? SOCKET_DOWN : SOCKET_REST });
+  dish.style.boxShadow = down ? DISH_DOWN : DISH_REST;
+}
+// The radial-gradient cap and inset shadows create the concavity.`},
+  {id:"abtns",title:"The Three Keys",code:String.raw`const press = { type:"spring", stiffness:650, damping:26, mass:.6 };
+animate(button, pressed ? { y:6, scale:.94 } : { y:0, scale:1 }, press);
+animate(socket, { boxShadow: pressed ? SOCKET_DEEP : SOCKET_REST });
+// Native <button>; latch changes on click, momentary follows hold.`}
+];
+function addCodePanels(){
+  CODE_SNIPPETS.forEach(item=>{
+    const anchor=$(item.id),host=anchor&&anchor.closest(".card"); if(!host) return;
+    const panel=document.createElement("section"); panel.className="code-snippet"; panel.inert=true; panel.setAttribute("aria-hidden","true");
+    const head=document.createElement("div"); head.className="code-snippet-head";
+    const title=document.createElement("span"); title.textContent=item.title;
+    const copy=document.createElement("button"); copy.type="button"; copy.className="copy-code"; copy.textContent="COPY";
+    const pre=document.createElement("pre"); const code=document.createElement("code"); code.textContent=item.code; pre.appendChild(code);
+    copy.addEventListener("click",async()=>{
+      try{ await navigator.clipboard.writeText(item.code); }
+      catch(_){ const ta=document.createElement("textarea");ta.value=item.code;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove(); }
+      copy.textContent="COPIED"; setTimeout(()=>copy.textContent="COPY",900);
+    });
+    head.append(title,copy); panel.append(head,pre); host.appendChild(panel);
+  });
+}
+let codeVisible=false;
+const codeToggle=$("codeToggle"),codeKnob=codeToggle.querySelector(".d37-knob");
+function renderCodeLayer(instant=false){
+  codeToggle.setAttribute("aria-checked",String(codeVisible));
+  $("codeToggleLabel").textContent=codeVisible?"CODE VISIBLE":"CODE HIDDEN";
+  document.body.classList.toggle("show-code",codeVisible);
+  document.querySelectorAll(".code-snippet").forEach(p=>{p.inert=!codeVisible;p.setAttribute("aria-hidden",String(!codeVisible));});
+  const move=instant||reduce?{duration:0}:CODE_SPRING;
+  const offColor=codeToggle.dataset.finish==="obsidian"?"#171719":"#EFEFEF";
+  animate(codeKnob,{x:codeVisible?72:0},move);
+  animate(codeToggle,{backgroundColor:codeVisible?"#CC0000":offColor},instant||reduce?{duration:0}:{...CODE_SPRING,stiffness:400,damping:34});
+}
+addCodePanels();
+$("codeVeilFinish").addEventListener("click",()=>renderCodeLayer());
+codeToggle.addEventListener("click",()=>{codeVisible=!codeVisible;renderCodeLayer();});
+codeToggle.addEventListener("pointerdown",()=>animate(codeToggle,{scale:.97},{duration:.1}));
+["pointerup","pointercancel","pointerleave"].forEach(type=>codeToggle.addEventListener(type,()=>animate(codeToggle,{scale:1},CODE_SPRING)));
+renderCodeLayer(true);
+</script>
+</body>
+</html>

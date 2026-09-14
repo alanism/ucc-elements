@@ -1,0 +1,326 @@
+/**
+ * UCC Vietnamese Radio — Ivory Learning Card & Pedagogical Surface
+ * Matches approved design in media_1789300376123.jpg
+ */
+
+.ivory-card-shell {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 24px 28px;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  color: var(--ink, #111111);
+  font-family: var(--font-sans, -apple-system, sans-serif);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* Card Header Lockup: Station Topic + Phrase Counter */
+.panel-header,
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.panel-topic-title,
+.card-topic-title {
+  font-family: var(--font-mono, monospace);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #333338;
+}
+
+.panel-stage-badge,
+.card-counter {
+  font-family: var(--font-mono, monospace);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #777780;
+}
+
+/* Card Hero Section: Prompt + Large Target English Quote + Play Button */
+.card-hero-prompt {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin: 12px 0 18px;
+}
+
+.hero-prompt-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-situation-cue {
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: #666670;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.hero-target-english {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111111;
+  letter-spacing: -0.3px;
+  line-height: 1.25;
+}
+
+.hero-play-btn {
+  width: 48px;
+  height: 48px;
+  min-width: var(--min-touch-target, 44px);
+  min-height: var(--min-touch-target, 44px);
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  flex-shrink: 0;
+  touch-action: manipulation;
+}
+
+.hero-play-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+  background: #fdfdfd;
+}
+
+.hero-play-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+}
+
+.hero-play-btn svg {
+  margin-left: 2px;
+}
+
+/* 3-Column Table Section */
+.phrase-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-top: 1px solid #eaeaea;
+  margin-top: 4px;
+}
+
+.phrase-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-family: var(--font-sans, sans-serif);
+}
+
+.phrase-table th {
+  padding: 12px 10px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #888890;
+  text-align: left;
+}
+
+.phrase-table td {
+  padding: 10px 10px;
+  border-top: 1px solid #f0f0f4;
+  font-size: 13.5px;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+
+.phrase-table tr.phrase-table-row {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.phrase-table tr.phrase-table-row:hover:not(.active-row) {
+  background: #f0f0f5;
+}
+
+.phrase-table tr.active-row {
+  background: #f8f8fb;
+}
+
+.phrase-table tr.active-row td:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-left: 3px solid var(--accent, #CC0000);
+  font-weight: 600;
+}
+
+.phrase-table tr.active-row td:last-child {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.phrase-table .col-english {
+  color: #111111;
+  font-weight: 500;
+  width: 35%;
+}
+
+.phrase-table .col-phonetic {
+  color: #555562;
+  font-family: var(--font-mono, monospace);
+  font-size: 12.5px;
+  width: 32%;
+}
+
+.phrase-table .col-vietnamese {
+  color: #111111;
+  font-weight: 600;
+  width: 33%;
+}
+
+/* Intentional Pedagogical Concealment Treatment */
+.intentional-veil {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #f1f1f4;
+  border: 1px solid #dedee3;
+  border-radius: 5px;
+  padding: 3px 8px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+  vertical-align: middle;
+  user-select: none;
+}
+
+.intentional-veil .veil-badge {
+  font-family: var(--font-mono, monospace);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  color: #72727e;
+  background: #e2e2e7;
+  padding: 1.5px 5px;
+  border-radius: 3px;
+  line-height: 1.2;
+}
+
+.intentional-veil .veil-dots {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #888894;
+  line-height: 1;
+}
+
+.card-target-text.concealed,
+.concealed-dots {
+  user-select: none;
+}
+
+.card-target-text.revealed {
+  color: #111111;
+  font-weight: 600;
+  animation: cardFadeIn 0.2s ease-out;
+}
+
+.card-phonetic-guide {
+  font-family: var(--font-mono, monospace);
+  font-size: 12.5px;
+  color: #555562;
+  margin-top: 4px;
+}
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Action Controls & Footer Buttons */
+.panel-actions,
+.card-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  border-top: 1px solid #eaeaea;
+  padding-top: 14px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.panel-action-btn,
+.card-action-btn {
+  min-height: var(--min-touch-target, 44px);
+  min-width: var(--min-touch-target, 44px);
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  touch-action: manipulation;
+}
+
+.panel-action-btn.primary,
+.card-action-btn.primary {
+  background: var(--accent, #CC0000);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(204, 0, 0, 0.35);
+}
+
+.panel-action-btn.primary:hover,
+.card-action-btn.primary:hover {
+  background: var(--accent-hover, #b30000);
+}
+
+.panel-action-btn.secondary,
+.card-action-btn.secondary {
+  background: #f4f4f6;
+  border-color: #dcdce0;
+  color: #222228;
+}
+
+.panel-action-btn.secondary:hover,
+.card-action-btn.secondary:hover {
+  background: #eaebee;
+  color: #111111;
+}
+
+.card-action-btn.help-escape {
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: #666670;
+}
+
+.card-action-btn.help-escape:hover {
+  color: #111111;
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 1024px) {
+  .ivory-card-shell {
+    padding: 16px 20px;
+  }
+  .phrase-table th,
+  .phrase-table td {
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+}

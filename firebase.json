@@ -1,0 +1,98 @@
+{
+  "hosting": [
+    {
+      "site": "uncommoncore",
+      "public": ".",
+      "ignore": [
+        "firebase.json",
+        ".firebaserc",
+        ".git/**",
+        ".firebase/**",
+        "**/.*",
+        "README.md",
+        "coding-reference.md",
+        "LICENSE"
+      ],
+      "cleanUrls": true,
+      "trailingSlash": false,
+      "redirects": [
+        {
+          "source": "/toggle",
+          "destination": "/enochian_knobs_keys/toggle",
+          "type": 301
+        }
+      ],
+      "rewrites": [
+        {
+          "source": "/api/live/**",
+          "run": {
+            "serviceId": "viet-radio-live",
+            "region": "asia-southeast1"
+          }
+        },
+        {
+          "source": "/learnvietnamese",
+          "destination": "/learnvietnamese/index.html"
+        }
+      ],
+      "headers": [
+        {
+          "source": "**/*.@(js|css|html)",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, must-revalidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "104kdli",
+      "public": ".",
+      "ignore": [
+        "firebase.json",
+        ".firebaserc",
+        ".git/**",
+        ".firebase/**",
+        "**/.*",
+        "README.md",
+        "coding-reference.md",
+        "LICENSE"
+      ],
+      "cleanUrls": true,
+      "trailingSlash": false,
+      "redirects": [
+        {
+          "source": "/",
+          "destination": "/learnvietnamese/",
+          "type": 302
+        }
+      ],
+      "rewrites": [
+        {
+          "source": "/api/live/**",
+          "run": {
+            "serviceId": "viet-radio-live",
+            "region": "asia-southeast1"
+          }
+        },
+        {
+          "source": "/learnvietnamese",
+          "destination": "/learnvietnamese/index.html"
+        }
+      ],
+      "headers": [
+        {
+          "source": "**/*.@(js|css|html)",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, must-revalidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

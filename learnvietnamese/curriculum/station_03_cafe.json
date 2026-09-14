@@ -1,0 +1,70 @@
+{
+  "stationId": "STATION_03_CAFE",
+  "stationName": "At a Café",
+  "curriculumVersion": "cafe-source-v1",
+  "sourceDocument": "vietnamese_phrase_sets.md",
+  "sourceSha256": "edde66fc4f4d99e6ecf8da4a43079aba1e70a9979c718e75189125845b9e43e7",
+  "scoringDenominator": 5,
+  "phrases": [
+    {
+      "id": "cafe_01",
+      "vietnamese": "Cho tôi một cà phê đá.",
+      "english": "One iced coffee, please.",
+      "pronunciationAid": "choh toy mot kah-feh dah",
+      "situationPrompt": "You want to order an iced black coffee at a café.",
+      "cues": {
+        "level1": "Cho…",
+        "level2": "Cho tôi…",
+        "level3": "Cho tôi một cà phê đá."
+      }
+    },
+    {
+      "id": "cafe_02",
+      "vietnamese": "Ít đường thôi.",
+      "english": "Less sugar, please.",
+      "pronunciationAid": "eet doong toy",
+      "situationPrompt": "You prefer your coffee not too sweet.",
+      "cues": {
+        "level1": "Ít…",
+        "level2": "Ít đường…",
+        "level3": "Ít đường thôi."
+      }
+    },
+    {
+      "id": "cafe_03",
+      "vietnamese": "Không sữa.",
+      "english": "No milk, please.",
+      "pronunciationAid": "khong soo-ah",
+      "situationPrompt": "You want to make sure there is no condensed milk in your drink.",
+      "cues": {
+        "level1": "Không…",
+        "level2": "Không…",
+        "level3": "Không sữa."
+      }
+    },
+    {
+      "id": "cafe_04",
+      "vietnamese": "Cho tôi xin ít nước.",
+      "english": "Can I have some water?",
+      "pronunciationAid": "choh toy sin eet nook",
+      "situationPrompt": "You feel thirsty and would like a glass of water.",
+      "cues": {
+        "level1": "Cho…",
+        "level2": "Cho tôi xin…",
+        "level3": "Cho tôi xin ít nước."
+      }
+    },
+    {
+      "id": "cafe_05",
+      "vietnamese": "Tôi ngồi đây được không?",
+      "english": "Can I sit here?",
+      "pronunciationAid": "toy ngoy dai DOOK khong?",
+      "situationPrompt": "You find an empty table and ask politely if you can sit down.",
+      "cues": {
+        "level1": "Tôi…",
+        "level2": "Tôi ngồi đây…",
+        "level3": "Tôi ngồi đây được không?"
+      }
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+/**
+ * UCC Vietnamese Radio — Design Tokens
+ * Source: Enochian Knobs & Keys Control Atlas + Build Plan §3, §6.1, §6.4
+ */
+
+:root {
+  /* --- UCC Core Color Palette --- */
+  --accent: #CC0000;             /* Cinnabar signal red */
+  --accent-hover: #b30000;
+  --accent-dim: rgba(204, 0, 0, 0.15);
+  --ink: #111111;                /* Primary text ink */
+  --muted: #6e6e6e;              /* Secondary / metadata text */
+  --subtle: #999999;             /* Tertiary captions / hints */
+  --tile: #f5f6f7;               /* Neutral fixture background */
+  --track-off: #efefef;          /* Off-state switch track */
+  --track-border: #dedee2;
+
+  /* --- Substrate Canvas --- */
+  --bg-canvas: #0c0d10;          /* Dark substrate */
+  --bg-canvas-light: #f7f7f8;    /* Light / Ivory substrate */
+  --dot-color: rgba(255, 255, 255, 0.12);
+  --dot-color-light: rgba(0, 0, 0, 0.08);
+
+  /* --- Learning Card & Dark Reference Panel --- */
+  --card-bg: #fbfbf8;
+  --card-border: #dedee2;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --card-radius: 8px;
+  --panel-dark-bg: #19191b;
+  --panel-dark-border: rgba(255, 255, 255, 0.08);
+  --panel-dark-shadow: 0 16px 38px rgba(0, 0, 0, 0.26), 0 2px 8px rgba(0, 0, 0, 0.14);
+  --panel-dark-radius: 16px;
+
+  /* --- Typography --- */
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* --- Motion Springs (Atlas Reference Tokens) --- */
+  --spring-snap-stiffness: 500;
+  --spring-snap-damping: 32;
+  --spring-snap-mass: 1;
+
+  --spring-tactile-stiffness: 400;
+  --spring-tactile-damping: 30;
+  --spring-tactile-mass: 1;
+
+  --spring-glide-stiffness: 260;
+  --spring-glide-damping: 26;
+  --spring-glide-mass: 1;
+
+  --spring-heavy-stiffness: 180;
+  --spring-heavy-damping: 24;
+  --spring-heavy-mass: 1.2;
+
+  --spring-gentle-stiffness: 120;
+  --spring-gentle-damping: 20;
+  --spring-gentle-mass: 1;
+
+  /* --- Minimum Touch Target --- */
+  --min-touch-target: 44px;
+
+  /* --- Receiver Grille Geometry Tokens (STRICTLY DISTINCT from page canvas) --- */
+  --r-grill-dot-size: 1.8px;
+  --r-grill-space-size: 2.3px;
+  --r-grill-pitch: 10px;
+
+  /* --- Material Finishes --- */
+  --r-body-ivory: #fdfdfd;
+  --r-text-ivory: #111111;
+  --r-muted-ivory: #7d7d7d;
+  --r-line-ivory: #e6e6e6;
+  --r-grill-ivory: #111111;
+  --r-tick-ivory: #222222;
+  --r-led-off-ivory: #3a3a3a;
+  --r-led-on-ivory: #CC0000;
+  --r-power-off-ivory: #111111;
+  --r-power-on-ivory: #CC0000;
+
+  --r-body-red: #CC0000;
+  --r-text-red: #ffffff;
+  --r-muted-red: rgba(255, 255, 255, 0.72);
+  --r-line-red: rgba(255, 255, 255, 0.34);
+  --r-grill-red: #ffffff;
+  --r-tick-red: #ffffff;
+  --r-led-off-red: rgba(255, 255, 255, 0.28);
+  --r-led-on-red: #ffffff;
+  --r-power-off-red: #760000;
+  --r-power-on-red: #ffffff;
+
+  --r-body-black: #121214;
+  --r-text-black: #ffffff;
+  --r-muted-black: #a5a5aa;
+  --r-line-black: #3b3b3f;
+  --r-grill-black: #8d8d93;
+  --r-tick-black: #bdbdc2;
+  --r-led-off-black: #55555a;
+  --r-led-on-black: #ffffff;
+  --r-power-off-black: #6f6f74;
+  --r-power-on-black: #ffffff;
+}

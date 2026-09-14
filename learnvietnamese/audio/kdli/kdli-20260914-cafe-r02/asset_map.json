@@ -1,0 +1,1092 @@
+{
+  "schema_version": "kdli-runtime-asset-map-v1",
+  "release_id": "kdli-20260914-cafe-r02",
+  "curriculum_version": "kdli-v1",
+  "scope": "cafe",
+  "manifest_sha256": "29ba871434b04dfcf290e81720946f50ebf778400f623d17b3bc4fa75a7df70d",
+  "review_state": "PROVISIONAL",
+  "generated_from_audio_manifest": true,
+  "assets": {
+    "03.01.01.f1.v01": {
+      "asset_id": "03.01.01.f1.v01",
+      "phrase_id": "03.01.01",
+      "situation_id": "03.01",
+      "variant_id": "v01",
+      "slot": "MODEL",
+      "speaker_role": "learner_model",
+      "voice_code": "f1",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p01_f1_v01.mp3",
+      "sha256": "bf3458853576fcefd32327d90a157e622ec99930f69f258e8750797d9ea946ff",
+      "bytes": 24703,
+      "duration_s": 1.486077,
+      "loudness": {
+        "integrated_lufs": -23.9,
+        "not_measurable": false,
+        "true_peak_dbtp": -9.4
+      },
+      "flagged": false
+    },
+    "03.01.01.f2.v03": {
+      "asset_id": "03.01.01.f2.v03",
+      "phrase_id": "03.01.01",
+      "situation_id": "03.01",
+      "variant_id": "v03",
+      "slot": "MODEL",
+      "speaker_role": "learner_model",
+      "voice_code": "f2",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p01_f2_v03.mp3",
+      "sha256": "96fdfc7efe87f490acbaca7abfe00b41d11044f9c9ebafb187df7c86c055895c",
+      "bytes": 27211,
+      "duration_s": 1.625397,
+      "loudness": {
+        "integrated_lufs": -16,
+        "not_measurable": false,
+        "true_peak_dbtp": -1.2
+      },
+      "flagged": false
+    },
+    "03.01.01.m1.v02": {
+      "asset_id": "03.01.01.m1.v02",
+      "phrase_id": "03.01.01",
+      "situation_id": "03.01",
+      "variant_id": "v02",
+      "slot": "MODEL",
+      "speaker_role": "learner_model",
+      "voice_code": "m1",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p01_m1_v02.mp3",
+      "sha256": "fb69b1daefcca1b76229ff925644259fa51d78e850f8d3b00d378cbbd044259e",
+      "bytes": 27629,
+      "duration_s": 1.671837,
+      "loudness": {
+        "integrated_lufs": -14.2,
+        "not_measurable": false,
+        "true_peak_dbtp": -0.9
+      },
+      "flagged": false
+    },
+    "03.01.01.m2.v04": {
+      "asset_id": "03.01.01.m2.v04",
+      "phrase_id": "03.01.01",
+      "situation_id": "03.01",
+      "variant_id": "v04",
+      "slot": "MODEL",
+      "speaker_role": "learner_model",
+      "voice_code": "m2",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p01_m2_v04.mp3",
+      "sha256": "90e359c49e5a27d544eac4d9f803a5879c466deebca2e613ee9cfcf4a48fdf32",
+      "bytes": 19688,
+      "duration_s": 1.160998,
+      "loudness": {
+        "integrated_lufs": -23.5,
+        "not_measurable": false,
+        "true_peak_dbtp": -5.6
+      },
+      "flagged": false
+    },
+    "03.01.02.f1.v01": {
+      "asset_id": "03.01.02.f1.v01",
+      "phrase_id": "03.01.02",
+      "situation_id": "03.01",
+      "variant_id": "v01",
+      "slot": "HEAR",
+      "speaker_role": "interlocutor",
+      "voice_code": "f1",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p02_f1_v01.mp3",
+      "sha256": "dfe4831da7e4793a5f1d0281a2e543a731e5ad94688860f3439e4e55eae6af3f",
+      "bytes": 22613,
+      "duration_s": 1.346757,
+      "loudness": {
+        "integrated_lufs": -17.2,
+        "not_measurable": false,
+        "true_peak_dbtp": -2.7
+      },
+      "flagged": false
+    },
+    "03.01.02.f1.v02": {
+      "asset_id": "03.01.02.f1.v02",
+      "phrase_id": "03.01.02",
+      "situation_id": "03.01",
+      "variant_id": "v02",
+      "slot": "HEAR",
+      "speaker_role": "interlocutor",
+      "voice_code": "f1",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p02_f1_v02.mp3",
+      "sha256": "821570a303cc3070a66bd87364684b3e243c20d69ce926bcdf98a91ff39b1281",
+      "bytes": 22613,
+      "duration_s": 1.346757,
+      "loudness": {
+        "integrated_lufs": -28,
+        "not_measurable": false,
+        "true_peak_dbtp": -12.7
+      },
+      "flagged": false
+    },
+    "03.01.03.f1.v01": {
+      "asset_id": "03.01.03.f1.v01",
+      "phrase_id": "03.01.03",
+      "situation_id": "03.01",
+      "variant_id": "v01",
+      "slot": "RESPOND",
+      "speaker_role": "learner_model",
+      "voice_code": "f1",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p03_f1_v01.mp3",
+      "sha256": "d475d3b932877b0781d03dac424bb2c024bee745d99ea53e3583a034a8763ada",
+      "bytes": 26375,
+      "duration_s": 1.578957,
+      "loudness": {
+        "integrated_lufs": -20.4,
+        "not_measurable": false,
+        "true_peak_dbtp": -6.9
+      },
+      "flagged": false
+    },
+    "03.01.03.f2.v03": {
+      "asset_id": "03.01.03.f2.v03",
+      "phrase_id": "03.01.03",
+      "situation_id": "03.01",
+      "variant_id": "v03",
+      "slot": "RESPOND",
+      "speaker_role": "learner_model",
+      "voice_code": "f2",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p03_f2_v03.mp3",
+      "sha256": "285008b3420d3d7a677a881e33eed64104f7103228c6401238f1e4bdf9b930f5",
+      "bytes": 28465,
+      "duration_s": 1.718277,
+      "loudness": {
+        "integrated_lufs": -14.7,
+        "not_measurable": false,
+        "true_peak_dbtp": -1.2
+      },
+      "flagged": false
+    },
+    "03.01.03.m1.v02": {
+      "asset_id": "03.01.03.m1.v02",
+      "phrase_id": "03.01.03",
+      "situation_id": "03.01",
+      "variant_id": "v02",
+      "slot": "RESPOND",
+      "speaker_role": "learner_model",
+      "voice_code": "m1",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p03_m1_v02.mp3",
+      "sha256": "df33f62d6e22ac3fea409b6566dbc2e0289f61dcb15a132a8c125cb15bb24966",
+      "bytes": 34316,
+      "duration_s": 2.089796,
+      "loudness": {
+        "integrated_lufs": -13.1,
+        "not_measurable": false,
+        "true_peak_dbtp": -1.5
+      },
+      "flagged": false
+    },
+    "03.01.03.m2.v04": {
+      "asset_id": "03.01.03.m2.v04",
+      "phrase_id": "03.01.03",
+      "situation_id": "03.01",
+      "variant_id": "v04",
+      "slot": "RESPOND",
+      "speaker_role": "learner_model",
+      "voice_code": "m2",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p03_m2_v04.mp3",
+      "sha256": "e1961f1a6872c9e50c8362f45933a7a71aa1258dc25c488c9e35f9ba7cacd2fc",
+      "bytes": 24703,
+      "duration_s": 1.486077,
+      "loudness": {
+        "integrated_lufs": -24.4,
+        "not_measurable": false,
+        "true_peak_dbtp": -3.7
+      },
+      "flagged": false
+    },
+    "03.01.04.f1.v01": {
+      "asset_id": "03.01.04.f1.v01",
+      "phrase_id": "03.01.04",
+      "situation_id": "03.01",
+      "variant_id": "v01",
+      "slot": "CHANGE",
+      "speaker_role": "learner_model",
+      "voice_code": "f1",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p04_f1_v01.mp3",
+      "sha256": "2cec4677792136cc0f49d2c8eb79301d976df559fc760b205f4d8ef79c2929ab",
+      "bytes": 23449,
+      "duration_s": 1.393197,
+      "loudness": {
+        "integrated_lufs": -23.4,
+        "not_measurable": false,
+        "true_peak_dbtp": -9.1
+      },
+      "flagged": false
+    },
+    "03.01.04.f2.v03": {
+      "asset_id": "03.01.04.f2.v03",
+      "phrase_id": "03.01.04",
+      "situation_id": "03.01",
+      "variant_id": "v03",
+      "slot": "CHANGE",
+      "speaker_role": "learner_model",
+      "voice_code": "f2",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p04_f2_v03.mp3",
+      "sha256": "eb5f94bb417a59751191cdb6d0c6f361bdcef7bd7474130cadc3158b11c27c93",
+      "bytes": 23449,
+      "duration_s": 1.393197,
+      "loudness": {
+        "integrated_lufs": -14.3,
+        "not_measurable": false,
+        "true_peak_dbtp": -1
+      },
+      "flagged": false
+    },
+    "03.01.04.m1.v02": {
+      "asset_id": "03.01.04.m1.v02",
+      "phrase_id": "03.01.04",
+      "situation_id": "03.01",
+      "variant_id": "v02",
+      "slot": "CHANGE",
+      "speaker_role": "learner_model",
+      "voice_code": "m1",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p04_m1_v02.mp3",
+      "sha256": "f91de57fa6c8e387da639e9d4dca78230361018f5ffe6ff6ddfb22ebe8dd966b",
+      "bytes": 24703,
+      "duration_s": 1.486077,
+      "loudness": {
+        "integrated_lufs": -11.4,
+        "not_measurable": false,
+        "true_peak_dbtp": -0.8
+      },
+      "flagged": false
+    },
+    "03.01.04.m2.v04": {
+      "asset_id": "03.01.04.m2.v04",
+      "phrase_id": "03.01.04",
+      "situation_id": "03.01",
+      "variant_id": "v04",
+      "slot": "CHANGE",
+      "speaker_role": "learner_model",
+      "voice_code": "m2",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p04_m2_v04.mp3",
+      "sha256": "8a4c955a9cc524e9729add7056bfbc6914518ff7d6d3a7e18d78c4d0ccf89864",
+      "bytes": 20942,
+      "duration_s": 1.253878,
+      "loudness": {
+        "integrated_lufs": -25.4,
+        "not_measurable": false,
+        "true_peak_dbtp": -6.8
+      },
+      "flagged": false
+    },
+    "03.01.05.f1.v01": {
+      "asset_id": "03.01.05.f1.v01",
+      "phrase_id": "03.01.05",
+      "situation_id": "03.01",
+      "variant_id": "v01",
+      "slot": "CONTINUE",
+      "speaker_role": "learner_model",
+      "voice_code": "f1",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p05_f1_v01.mp3",
+      "sha256": "a866790431e1fead185491b46c1415f0729c175b8bbd79c439e0a4e35f6f3513",
+      "bytes": 21777,
+      "duration_s": 1.300317,
+      "loudness": {
+        "integrated_lufs": -17.2,
+        "not_measurable": false,
+        "true_peak_dbtp": -3.8
+      },
+      "flagged": false
+    },
+    "03.01.05.f2.v03": {
+      "asset_id": "03.01.05.f2.v03",
+      "phrase_id": "03.01.05",
+      "situation_id": "03.01",
+      "variant_id": "v03",
+      "slot": "CONTINUE",
+      "speaker_role": "learner_model",
+      "voice_code": "f2",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p05_f2_v03.mp3",
+      "sha256": "6d18816ab6670f87ed402062edc0f31e0d0d7537c128f3cd1f6297afebd6b286",
+      "bytes": 18016,
+      "duration_s": 1.068118,
+      "loudness": {
+        "integrated_lufs": -14.7,
+        "not_measurable": false,
+        "true_peak_dbtp": -0.5
+      },
+      "flagged": false
+    },
+    "03.01.05.m1.v02": {
+      "asset_id": "03.01.05.m1.v02",
+      "phrase_id": "03.01.05",
+      "situation_id": "03.01",
+      "variant_id": "v02",
+      "slot": "CONTINUE",
+      "speaker_role": "learner_model",
+      "voice_code": "m1",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p05_m1_v02.mp3",
+      "sha256": "0a8ba13055a9fc76c2e5f4fe8e1c3e9c47f9a79c1fef0053174a0de1b60677bd",
+      "bytes": 20942,
+      "duration_s": 1.253878,
+      "loudness": {
+        "integrated_lufs": -19.9,
+        "not_measurable": false,
+        "true_peak_dbtp": -2.1
+      },
+      "flagged": false
+    },
+    "03.01.05.m2.v04": {
+      "asset_id": "03.01.05.m2.v04",
+      "phrase_id": "03.01.05",
+      "situation_id": "03.01",
+      "variant_id": "v04",
+      "slot": "CONTINUE",
+      "speaker_role": "learner_model",
+      "voice_code": "m2",
+      "public_path": "audio/kdli/kdli-20260914-cafe-r02/audio/vi/03-eat-drink/01-cafe/p05_m2_v04.mp3",
+      "sha256": "dcb454f0d82650ef1571d53224e5843ab7a2986bc6e233cb2db06db0ee02b927",
+      "bytes": 18852,
+      "duration_s": 1.114558,
+      "loudness": {
+        "integrated_lufs": -18.7,
+        "not_measurable": false,
+        "true_peak_dbtp": -4.2
+      },
+      "flagged": false
+    }
+  },
+  "phrases": {
+    "03.01.01": {
+      "phrase_id": "03.01.01",
+      "situation_id": "03.01",
+      "situation_title": "Café",
+      "slot": "MODEL",
+      "speaker_role": "learner_model",
+      "vietnamese_baseline": "Cho tôi một cà phê đá.",
+      "english_gloss": "One iced coffee, please.",
+      "model_ref": "03.01.01",
+      "substitution_refs": [],
+      "vocabulary_refs": [
+        "verb.cho",
+        "num.một",
+        "noun.cà-phê-đá",
+        "self.tôi",
+        "self.em"
+      ],
+      "structure_refs": [
+        "frame.cho-me-quantity-noun"
+      ],
+      "review_state": "PROVISIONAL",
+      "variants": [
+        {
+          "variant_id": "v01",
+          "vietnamese_text": "Cho em một cà phê đá.",
+          "meaning": "One iced coffee, please. (child girl speaker)",
+          "speaker": {
+            "role": "learner_model",
+            "gender": "female",
+            "age_band": "younger"
+          },
+          "required_voice_codes": [
+            "f1"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "female",
+              "listenerGender": "male",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "female",
+              "listenerGender": "female",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        },
+        {
+          "variant_id": "v02",
+          "vietnamese_text": "Cho em một cà phê đá.",
+          "meaning": "One iced coffee, please. (child boy speaker)",
+          "speaker": {
+            "role": "learner_model",
+            "gender": "male",
+            "age_band": "younger"
+          },
+          "required_voice_codes": [
+            "m1"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "male",
+              "listenerGender": "male",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "male",
+              "listenerGender": "female",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        },
+        {
+          "variant_id": "v03",
+          "vietnamese_text": "Cho tôi một cà phê đá.",
+          "meaning": "One iced coffee, please. (adult woman speaker)",
+          "speaker": {
+            "role": "learner_model",
+            "gender": "female",
+            "age_band": "older"
+          },
+          "required_voice_codes": [
+            "f2"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "female",
+              "listenerGender": "male",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "female",
+              "listenerGender": "female",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        },
+        {
+          "variant_id": "v04",
+          "vietnamese_text": "Cho tôi một cà phê đá.",
+          "meaning": "One iced coffee, please. (adult man speaker)",
+          "speaker": {
+            "role": "learner_model",
+            "gender": "male",
+            "age_band": "older"
+          },
+          "required_voice_codes": [
+            "m2"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "male",
+              "listenerGender": "male",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "male",
+              "listenerGender": "female",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        }
+      ],
+      "assets": [
+        "03.01.01.f1.v01",
+        "03.01.01.f2.v03",
+        "03.01.01.m1.v02",
+        "03.01.01.m2.v04"
+      ]
+    },
+    "03.01.02": {
+      "phrase_id": "03.01.02",
+      "situation_id": "03.01",
+      "situation_title": "Café",
+      "slot": "HEAR",
+      "speaker_role": "interlocutor",
+      "vietnamese_baseline": "Dạ, anh dùng gì ạ?",
+      "english_gloss": "Yes, what would you like?",
+      "model_ref": "03.01.01",
+      "substitution_refs": [],
+      "vocabulary_refs": [
+        "particle.dạ",
+        "verb.dùng",
+        "q.gì",
+        "particle.ạ",
+        "address.anh"
+      ],
+      "structure_refs": [
+        "frame.address-dùng-gì-ạ",
+        "particle.service-register"
+      ],
+      "review_state": "PROVISIONAL",
+      "variants": [
+        {
+          "variant_id": "v01",
+          "vietnamese_text": "Dạ, anh dùng gì ạ?",
+          "meaning": "Yes, what would you like? (customer is male)",
+          "speaker": {
+            "role": "interlocutor",
+            "gender": "female",
+            "age_band": "younger"
+          },
+          "required_voice_codes": [
+            "f1"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "male",
+              "listenerGender": "male",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "male",
+              "listenerGender": "male",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        },
+        {
+          "variant_id": "v02",
+          "vietnamese_text": "Dạ, chị dùng gì ạ?",
+          "meaning": "Yes, what would you like? (customer is female)",
+          "speaker": {
+            "role": "interlocutor",
+            "gender": "female",
+            "age_band": "younger"
+          },
+          "required_voice_codes": [
+            "f1"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "female",
+              "listenerGender": "female",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "female",
+              "listenerGender": "female",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        }
+      ],
+      "assets": [
+        "03.01.02.f1.v01",
+        "03.01.02.f1.v02"
+      ]
+    },
+    "03.01.03": {
+      "phrase_id": "03.01.03",
+      "situation_id": "03.01",
+      "situation_title": "Café",
+      "slot": "RESPOND",
+      "speaker_role": "learner_model",
+      "vietnamese_baseline": "Dạ, cho tôi một cà phê đá.",
+      "english_gloss": "Yes, one iced coffee, please.",
+      "model_ref": "03.01.01",
+      "substitution_refs": [],
+      "vocabulary_refs": [
+        "particle.dạ"
+      ],
+      "structure_refs": [
+        "frame.cho-me-quantity-noun",
+        "discourse.answer-with-dạ"
+      ],
+      "review_state": "PROVISIONAL",
+      "variants": [
+        {
+          "variant_id": "v01",
+          "vietnamese_text": "Dạ, cho em một cà phê đá.",
+          "meaning": "Yes, one iced coffee, please. (child girl speaker)",
+          "speaker": {
+            "role": "learner_model",
+            "gender": "female",
+            "age_band": "younger"
+          },
+          "required_voice_codes": [
+            "f1"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "female",
+              "listenerGender": "male",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "female",
+              "listenerGender": "female",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        },
+        {
+          "variant_id": "v02",
+          "vietnamese_text": "Dạ, cho em một cà phê đá.",
+          "meaning": "Yes, one iced coffee, please. (child boy speaker)",
+          "speaker": {
+            "role": "learner_model",
+            "gender": "male",
+            "age_band": "younger"
+          },
+          "required_voice_codes": [
+            "m1"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "male",
+              "listenerGender": "male",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "male",
+              "listenerGender": "female",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        },
+        {
+          "variant_id": "v03",
+          "vietnamese_text": "Dạ, cho tôi một cà phê đá.",
+          "meaning": "Yes, one iced coffee, please. (adult woman speaker)",
+          "speaker": {
+            "role": "learner_model",
+            "gender": "female",
+            "age_band": "older"
+          },
+          "required_voice_codes": [
+            "f2"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "female",
+              "listenerGender": "male",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "female",
+              "listenerGender": "female",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        },
+        {
+          "variant_id": "v04",
+          "vietnamese_text": "Dạ, cho tôi một cà phê đá.",
+          "meaning": "Yes, one iced coffee, please. (adult man speaker)",
+          "speaker": {
+            "role": "learner_model",
+            "gender": "male",
+            "age_band": "older"
+          },
+          "required_voice_codes": [
+            "m2"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "male",
+              "listenerGender": "male",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "male",
+              "listenerGender": "female",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        }
+      ],
+      "assets": [
+        "03.01.03.f1.v01",
+        "03.01.03.f2.v03",
+        "03.01.03.m1.v02",
+        "03.01.03.m2.v04"
+      ]
+    },
+    "03.01.04": {
+      "phrase_id": "03.01.04",
+      "situation_id": "03.01",
+      "situation_title": "Café",
+      "slot": "CHANGE",
+      "speaker_role": "learner_model",
+      "vietnamese_baseline": "Cho tôi một trà đá.",
+      "english_gloss": "One iced tea, please.",
+      "model_ref": "03.01.01",
+      "substitution_refs": [
+        "sub.drink-instance"
+      ],
+      "vocabulary_refs": [
+        "noun.trà-đá"
+      ],
+      "structure_refs": [
+        "frame.cho-me-quantity-noun"
+      ],
+      "review_state": "PROVISIONAL",
+      "variants": [
+        {
+          "variant_id": "v01",
+          "vietnamese_text": "Cho em một trà đá.",
+          "meaning": "One iced tea, please. (child girl speaker)",
+          "speaker": {
+            "role": "learner_model",
+            "gender": "female",
+            "age_band": "younger"
+          },
+          "required_voice_codes": [
+            "f1"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "female",
+              "listenerGender": "male",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "female",
+              "listenerGender": "female",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        },
+        {
+          "variant_id": "v02",
+          "vietnamese_text": "Cho em một trà đá.",
+          "meaning": "One iced tea, please. (child boy speaker)",
+          "speaker": {
+            "role": "learner_model",
+            "gender": "male",
+            "age_band": "younger"
+          },
+          "required_voice_codes": [
+            "m1"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "male",
+              "listenerGender": "male",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "male",
+              "listenerGender": "female",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        },
+        {
+          "variant_id": "v03",
+          "vietnamese_text": "Cho tôi một trà đá.",
+          "meaning": "One iced tea, please. (adult woman speaker)",
+          "speaker": {
+            "role": "learner_model",
+            "gender": "female",
+            "age_band": "older"
+          },
+          "required_voice_codes": [
+            "f2"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "female",
+              "listenerGender": "male",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "female",
+              "listenerGender": "female",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        },
+        {
+          "variant_id": "v04",
+          "vietnamese_text": "Cho tôi một trà đá.",
+          "meaning": "One iced tea, please. (adult man speaker)",
+          "speaker": {
+            "role": "learner_model",
+            "gender": "male",
+            "age_band": "older"
+          },
+          "required_voice_codes": [
+            "m2"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "male",
+              "listenerGender": "male",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "male",
+              "listenerGender": "female",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        }
+      ],
+      "assets": [
+        "03.01.04.f1.v01",
+        "03.01.04.f2.v03",
+        "03.01.04.m1.v02",
+        "03.01.04.m2.v04"
+      ]
+    },
+    "03.01.05": {
+      "phrase_id": "03.01.05",
+      "situation_id": "03.01",
+      "situation_title": "Café",
+      "slot": "CONTINUE",
+      "speaker_role": "learner_model",
+      "vietnamese_baseline": "Ít đường thôi.",
+      "english_gloss": "Less sugar, please.",
+      "model_ref": "03.01.01",
+      "substitution_refs": [],
+      "vocabulary_refs": [
+        "amount.ít",
+        "noun.đường",
+        "particle.thôi"
+      ],
+      "structure_refs": [
+        "frame.amount-noun-thôi",
+        "ellipsis.bare-request"
+      ],
+      "review_state": "PROVISIONAL",
+      "variants": [
+        {
+          "variant_id": "v01",
+          "vietnamese_text": "Ít đường thôi.",
+          "meaning": "Less sugar, please. (child girl speaker)",
+          "speaker": {
+            "role": "learner_model",
+            "gender": "female",
+            "age_band": "younger"
+          },
+          "required_voice_codes": [
+            "f1"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "female",
+              "listenerGender": "male",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "female",
+              "listenerGender": "female",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        },
+        {
+          "variant_id": "v02",
+          "vietnamese_text": "Ít đường thôi.",
+          "meaning": "Less sugar, please. (child boy speaker)",
+          "speaker": {
+            "role": "learner_model",
+            "gender": "male",
+            "age_band": "younger"
+          },
+          "required_voice_codes": [
+            "m1"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "male",
+              "listenerGender": "male",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "male",
+              "listenerGender": "female",
+              "learnerRelativeAge": "younger",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        },
+        {
+          "variant_id": "v03",
+          "vietnamese_text": "Ít đường thôi.",
+          "meaning": "Less sugar, please. (adult woman speaker)",
+          "speaker": {
+            "role": "learner_model",
+            "gender": "female",
+            "age_band": "older"
+          },
+          "required_voice_codes": [
+            "f2"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "female",
+              "listenerGender": "male",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "female",
+              "listenerGender": "female",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        },
+        {
+          "variant_id": "v04",
+          "vietnamese_text": "Ít đường thôi.",
+          "meaning": "Less sugar, please. (adult man speaker)",
+          "speaker": {
+            "role": "learner_model",
+            "gender": "male",
+            "age_band": "older"
+          },
+          "required_voice_codes": [
+            "m2"
+          ],
+          "contexts": [
+            {
+              "learnerGender": "male",
+              "listenerGender": "male",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            },
+            {
+              "learnerGender": "male",
+              "listenerGender": "female",
+              "learnerRelativeAge": "older",
+              "audience": "one",
+              "relationship": "customer and café server",
+              "learner_role": "customer",
+              "interlocutor_role": "café server"
+            }
+          ]
+        }
+      ],
+      "assets": [
+        "03.01.05.f1.v01",
+        "03.01.05.f2.v03",
+        "03.01.05.m1.v02",
+        "03.01.05.m2.v04"
+      ]
+    }
+  }
+}
