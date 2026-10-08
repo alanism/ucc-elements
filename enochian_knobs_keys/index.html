@@ -7,7 +7,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;700&display=swap"/>
 <title>Enochian Elements — Control Atlas</title>
+<script>if(new URLSearchParams(location.search).has("embedded"))document.documentElement.classList.add("embedded");</script>
 <style>
+  html.embedded body > header, html.embedded body > .accentrow, html.embedded footer.finish-line{display:none}
+  html.embedded .section-title:first-of-type{padding-top:18px}
+
   :root{ --accent:#CC0000; --ink:#111; --muted:#6e6e6e; --tile:#f5f6f7; }
   *{box-sizing:border-box} body{margin:0;font-family:"IBM Plex Sans",-apple-system,Inter,SF Pro Text,sans-serif;color:var(--ink);background:#fff}
   header{padding:36px 32px 12px;max-width:980px} header h1{font-size:32px;margin:0 0 4px;letter-spacing:-.6px}
@@ -82,7 +86,7 @@
   .triple[data-finish="obsidian"] .tthumb{background:linear-gradient(160deg,#37373b,#171719);box-shadow:7px 9px 18px rgba(0,0,0,.34),-2px -2px 7px rgba(255,255,255,.12)}
   .triple[data-finish="obsidian"] .well{background:radial-gradient(circle at 50% 32%,#111113,#29292d 72%);box-shadow:inset 3px 4px 8px rgba(0,0,0,.58),inset -2px -2px 5px rgba(255,255,255,.08)}
   .triple[data-finish="obsidian"] .tdot:not(.on){background:#5f5f66}
-  /* rotary radio player — light / UCC red / black material themes */
+  /* rotary radio player — light / Cinnabar / black material themes */
   .radio{--r-body:#fdfdfd;--r-text:#111;--r-muted:#7d7d7d;--r-line:#e6e6e6;--r-grill:#111;
     --r-tick:#222;--r-led-off:#3a3a3a;--r-led-on:#CC0000;--r-power-off:#111;--r-power-on:#CC0000;--r-icon:#222;
     width:280px;background:var(--r-body);color:var(--r-text);border-radius:10px;overflow:hidden;
@@ -249,9 +253,9 @@
   .mk-key[data-pressed="true"],.mk-key:active{transform:translateY(5px) scale(.985);box-shadow:0 0 0 #777,0 1px 2px rgba(0,0,0,.35),inset 0 3px 6px rgba(0,0,0,.24)}
   .mk-key:focus-visible{outline:3px solid #CC0000;outline-offset:2px;z-index:2}
   .mk-key[aria-pressed="true"]{box-shadow:0 2px 0 #650000,inset 0 3px 7px rgba(0,0,0,.28)}
-  .ucc-key-mark{width:22px;height:22px;position:relative;display:inline-flex;align-items:center;justify-content:center;font:800 8px "IBM Plex Sans",sans-serif;color:#fff}
-  .ucc-key-mark::before,.ucc-key-mark::after{content:"";position:absolute;border:3px solid #fff;border-right-color:transparent;border-radius:50%}
-  .ucc-key-mark::before{inset:0}.ucc-key-mark::after{inset:5px;border-width:2px}.ucc-key-mark b{position:relative;z-index:1;font-size:7px}
+  .enochian-key-mark{width:22px;height:22px;position:relative;display:inline-flex;align-items:center;justify-content:center;font:800 8px "IBM Plex Sans",sans-serif;color:#fff}
+  .enochian-key-mark::before,.enochian-key-mark::after{content:"";position:absolute;border:3px solid #fff;border-right-color:transparent;border-radius:50%}
+  .enochian-key-mark::before{inset:0}.enochian-key-mark::after{inset:5px;border-width:2px}.enochian-key-mark b{position:relative;z-index:1;font-size:7px}
   @media(max-width:780px){.mk-rig{min-width:680px}.mk-display{margin-left:20px;margin-right:20px}.mk-key{height:44px;font-size:13px}.mk-board{padding:12px}}
   /* single concave push button — dished cap sinks into a machined socket */
   .concave-stage{width:360px;max-width:100%;min-height:270px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px}
@@ -265,7 +269,7 @@
     box-shadow:inset 8px 10px 18px rgba(0,0,0,.22),inset -8px -10px 17px rgba(255,255,255,.88),0 1px 1px rgba(255,255,255,.9);pointer-events:none}
   .concave-top::after{content:"";position:absolute;inset:10%;border-radius:50%;background:radial-gradient(ellipse at 35% 24%,rgba(255,255,255,.55),transparent 48%);mix-blend-mode:screen}
   .concave-button[data-pressed="true"]{transform:translateY(9px) scale(.975)}
-  /* Drams—037 global code-reveal control */
+  /* Code Veil global code-reveal control */
   .code-toggle-card{min-height:250px}
   .d37-wrap{display:flex;align-items:center;gap:16px}
   .d37-track{width:132px;height:60px;border:0;border-radius:999px;background:#efefef;position:relative;cursor:pointer;outline-offset:6px;
@@ -304,7 +308,6 @@
   </nav>
 </header>
 <div class="accentrow">Signal accent:
-  <button id="accOrange" aria-pressed="false">EMBER</button>
   <button id="accRed" aria-pressed="true">CINNABAR</button>
 </div>
 
@@ -390,7 +393,7 @@
 </div></div>
 
 <div class="section-title">Playback and time</div>
-<div class="cap"><span>Aether Receiver · rotary radio player</span><span class="pill">OFFLINE / UNCOMMON CORE</span></div>
+<div class="cap"><span>Aether Receiver · rotary radio player</span><span class="pill">OFFLINE / ENOCHIAN</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">Playback treated as a physical object. The grill, power control, signal LEDs, and volume dial each carry part of the state.</p>
   <div class="rthemes" id="radioThemes" role="group" aria-label="Radio finish">
@@ -407,7 +410,7 @@
     <div class="rfoot">
       <div class="rscale" id="rscale"></div>
       <div class="rrow">
-        <div class="rbrand"><svg viewBox="0 0 100 100" width="26" height="26" role="img" aria-label="UnCommon Core logo"><circle cx="50" cy="50" r="38" fill="none" stroke="#111" stroke-width="13" stroke-dasharray="209.4 29.4" stroke-dashoffset="-11.7"/><circle cx="50" cy="50" r="21" fill="none" stroke="#111" stroke-width="8" stroke-dasharray="116.5 15.4" stroke-dashoffset="-7.7"/><text x="50" y="58" text-anchor="middle" font-family="'IBM Plex Sans',-apple-system,Inter,sans-serif" font-weight="800" font-size="18" fill="#111">U</text></svg><div class="rb-t">UnCommon Core<span>RECEIVER</span></div></div>
+        <div class="rbrand"><svg viewBox="0 0 100 100" width="26" height="26" role="img" aria-label="Enochian logo"><circle cx="50" cy="50" r="38" fill="none" stroke="#111" stroke-width="13" stroke-dasharray="209.4 29.4" stroke-dashoffset="-11.7"/><circle cx="50" cy="50" r="21" fill="none" stroke="#111" stroke-width="8" stroke-dasharray="116.5 15.4" stroke-dashoffset="-7.7"/><text x="50" y="58" text-anchor="middle" font-family="'IBM Plex Sans',-apple-system,Inter,sans-serif" font-weight="800" font-size="18" fill="#111">E</text></svg><div class="rb-t">Enochian<span>RECEIVER</span></div></div>
         <div class="rknob" id="rknob" role="slider" tabindex="0" aria-label="Radio volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" aria-valuetext="Volume 25 percent"><div class="rgloss"></div><div class="rmarker" aria-hidden="true"></div></div>
         <div class="rled"><svg id="rledSvg" viewBox="0 0 56 8" width="56" height="8" aria-hidden="true"></svg><svg id="rspk" viewBox="0 0 34 26" width="34" height="26" aria-hidden="true"></svg></div>
       </div>
@@ -435,8 +438,8 @@
     </div>
     <button class="corner c-tl" aria-label="Status LED (decorative)"><span class="cdot" id="clkLed"></span></button>
     <button class="corner c-tr" id="clkSpk" aria-label="Toggle playing"><span class="cspk"></span></button>
-    <button class="corner c-bl" id="brandPrev" aria-label="Previous brand">←</button>
-    <button class="corner c-br" id="brandNext" aria-label="Next brand">→</button>
+    <button class="corner c-bl" id="brandPrev" aria-label="Previous mark">←</button>
+    <button class="corner c-br" id="brandNext" aria-label="Next mark">→</button>
   </div>
   <div class="readout"><b id="brandVal">Enochian sigil</b></div>
   <div class="hint">live time · cinnabar arc = seconds · ←/→ changes identity · speaker toggles playback</div>
@@ -458,7 +461,7 @@
   <div class="timercase" id="timerCase" data-theme="white" data-progress="0" role="group" aria-label="Vigil Clock countdown timer">
     <div class="timerdial">
       <svg class="timer-svg" id="timerSvg" viewBox="0 0 304 304" aria-hidden="true"></svg>
-      <div class="timer-brand">UnCommon Core</div>
+      <div class="timer-brand">Enochian</div>
       <div class="timer-digital" id="timerDigital" role="timer" aria-label="1 minute remaining">01:00.0</div>
       <div class="timer-state" id="timerState" aria-live="polite">READY · 60 SECOND TEST</div>
     </div>
@@ -475,11 +478,11 @@
 <div class="section-title">Trigger controls</div>
 <div class="cap"><span>Mechanical Keyboard · tactile text input</span><span class="pill">POINTER / KEYBOARD</span></div>
 <div class="grid"><div class="card keyboard-card">
-  <p class="component-copy">A compact mechanical board with deep key travel, Cinnabar modifier keys, and the UnCommon Core brandmark. Every key visibly bottoms out when tapped.</p>
+  <p class="component-copy">A compact mechanical board with deep key travel, Cinnabar modifier keys, and the Enochian brandmark. Every key visibly bottoms out when tapped.</p>
   <div class="rthemes" id="keyboardFinish" role="group" aria-label="Mechanical Keyboard finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
   <div class="mk-scroll">
-    <div class="mk-rig" id="mechanicalKeyboard" data-finish="ivory" role="group" aria-label="UnCommon Core mechanical keyboard">
-      <output class="mk-display" id="keyboardDisplay" aria-live="polite">UnCommon Core</output>
+    <div class="mk-rig" id="mechanicalKeyboard" data-finish="ivory" role="group" aria-label="Enochian mechanical keyboard">
+      <output class="mk-display" id="keyboardDisplay" aria-live="polite">Enochian</output>
       <div class="mk-board" id="keyboardKeys"></div>
     </div>
   </div>
@@ -535,12 +538,11 @@ const clamp01 = v => Math.min(1, Math.max(0, v));
 /* accent switch */
 function paintAccent(){
   document.documentElement.style.setProperty("--accent", ACCENT);
-  [ ["accOrange","#E76A2E"], ["accRed","#cc0000"] ].forEach(([id,c]) =>
+  [ ["accRed","#cc0000"] ].forEach(([id,c]) =>
     $(id).setAttribute("aria-pressed", String(ACCENT===c)));
   drawStepTicks(); // recolor active ticks
   document.querySelectorAll(".tdot.on").forEach(d=>d.style.background=ACCENT);
 }
-$("accOrange").onclick = () => { ACCENT="#E76A2E"; paintAccent(); };
 $("accRed").onclick = () => { ACCENT="#cc0000"; paintAccent(); };
 
 /* paired material finishes: every instrument keeps its state while its shell changes */
@@ -784,7 +786,7 @@ function ensureAudio(){
   src.connect(f); f.connect(bedGain); bedGain.connect(AC.destination); src.start();
 }
 function blip(freq){
-  if(!AC) return; const t=AC.currentTime;
+  if(!AC||globalThis.__enochianSoundEnabled===false) return; const t=AC.currentTime;
   const o=AC.createOscillator(), g=AC.createGain();
   o.type="sine"; o.frequency.value=freq;
   g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.12,t+0.015);
@@ -799,7 +801,7 @@ function renderRadio(instant=false){
   $("pwrBtn").setAttribute("aria-checked", String(radioOn));
   $("pdot").style.background=radioOn?palette.powerOn:palette.powerOff;
   $("pdot").style.boxShadow=radioOn?`0 0 7px ${palette.powerOn}`:"none";
-  $("rl1").textContent = radioOn ? "UNCOMMON CORE" : "OFFLINE";
+  $("rl1").textContent = radioOn ? "ENOCHIAN" : "OFFLINE";
   $("rl2").textContent = radioOn ? "17:48 Sep 11" : "17:40 Sep 11";
   const finishName={light:"IVORY",red:"CINNABAR",black:"OBSIDIAN"}[radioTheme];
   $("radioVal").textContent = finishName+" · "+(radioOn ? ("ON · "+Math.round(rvol*100)+"%") : "OFF");
@@ -814,9 +816,10 @@ function renderRadio(instant=false){
   if(bedGain&&AC){
     const t=AC.currentTime;
     bedGain.gain.cancelScheduledValues(t);
-    bedGain.gain.setTargetAtTime(radioOn?rvol*0.06:0, t, 0.15);
+    bedGain.gain.setTargetAtTime(radioOn&&globalThis.__enochianSoundEnabled!==false?rvol*0.06:0, t, 0.15);
   }
 }
+globalThis.addEventListener('enochian-sound-change',()=>renderRadio(true));
 function setPower(on){
   radioOn=on;
   if(on){ ensureAudio(); AC.resume(); blip(880); } else { blip(440); }
@@ -975,13 +978,13 @@ const keyboardRows=[
   [["Tab",1.55,"accent"],...["Q","W","E","R","T","Y","U","I","O","P","[","]","\\"].map(k=>[k])],
   [["Caps",1.75,"accent","CapsLock"],...["A","S","D","F","G","H","J","K","L",";","'"].map(k=>[k]),["Enter",2.1,"accent","Enter"]],
   [["Shift",2.15,"accent","Shift"],...["Z","X","C","V","B","N","M",",",".","/"].map(k=>[k]),["Shift",2.15,"accent","Shift"]],
-  [["Ctrl",1.25,"accent","Control"],["UCC",1.25,"accent","Brand"],["Alt",1.25,"accent","Alt"],["Space",6.8,""," "],["Alt",1.25,"accent","Alt"],["UCC",1.25,"accent","Brand"],["Menu",1.35,"accent","Menu"],["Ctrl",1.25,"accent","Control"]]
+  [["Ctrl",1.25,"accent","Control"],["EN",1.25,"accent","Brand"],["Alt",1.25,"accent","Alt"],["Space",6.8,""," "],["Alt",1.25,"accent","Alt"],["EN",1.25,"accent","Brand"],["Menu",1.35,"accent","Menu"],["Ctrl",1.25,"accent","Control"]]
 ];
 const keyboardKeys=$("keyboardKeys"),keyboardDisplay=$("keyboardDisplay"),keyboardState=$("keyboardState");
 let typed="",caps=false,shifted=false;
 function keyLegend(label,key){
   if(key!=="Brand") return document.createTextNode(label);
-  const mark=document.createElement("span");mark.className="ucc-key-mark";mark.setAttribute("aria-hidden","true");mark.innerHTML="<b>U</b>";return mark;
+  const mark=document.createElement("span");mark.className="enochian-key-mark";mark.setAttribute("aria-hidden","true");mark.innerHTML="<b>E</b>";return mark;
 }
 function setKeyDown(button,down){
   button.dataset.pressed=String(down);
@@ -995,13 +998,13 @@ function typeFromKey(button){
   else if(key==="CapsLock"){caps=!caps;button.setAttribute("aria-pressed",String(caps));}
   else if(key==="Shift"){shifted=!shifted;document.querySelectorAll('.mk-key[data-key="Shift"]').forEach(k=>k.setAttribute("aria-pressed",String(shifted)));}
   else if(key===" "||key.length===1){const upper=caps!==shifted;typed+=/^[a-z]$/i.test(label)?(upper?label.toUpperCase():label.toLowerCase()):label;shifted=false;document.querySelectorAll('.mk-key[data-key="Shift"]').forEach(k=>k.setAttribute("aria-pressed","false"));}
-  keyboardDisplay.textContent=typed||"UnCommon Core";
-  keyboardState.textContent=key==="Brand"?"UCC BRANDMARK":key+" PRESSED";
+  keyboardDisplay.textContent=typed||"Enochian";
+  keyboardState.textContent=key==="Brand"?"ENOCHIAN BRANDMARK":key+" PRESSED";
 }
 keyboardRows.forEach(rowData=>{
   const row=document.createElement("div");row.className="mk-row";
   rowData.forEach(([label,width=1,tone="",key=label])=>{
-    const button=document.createElement("button");button.type="button";button.className="mk-key"+(tone?" "+tone:"");button.style.setProperty("--w",width);button.dataset.key=key;button.dataset.label=label;button.dataset.pressed="false";button.setAttribute("aria-label",key==="Brand"?"UnCommon Core brandmark key":label+" key");if(key==="CapsLock"||key==="Shift")button.setAttribute("aria-pressed","false");button.appendChild(keyLegend(label,key));
+    const button=document.createElement("button");button.type="button";button.className="mk-key"+(tone?" "+tone:"");button.style.setProperty("--w",width);button.dataset.key=key;button.dataset.label=label;button.dataset.pressed="false";button.setAttribute("aria-label",key==="Brand"?"Enochian brandmark key":label+" key");if(key==="CapsLock"||key==="Shift")button.setAttribute("aria-pressed","false");button.appendChild(keyLegend(label,key));
     button.addEventListener("pointerdown",()=>setKeyDown(button,true));["pointerup","pointercancel","pointerleave"].forEach(type=>button.addEventListener(type,()=>setKeyDown(button,false)));
     button.addEventListener("keydown",e=>{if(!e.repeat&&(e.key===" "||e.key==="Enter"))setKeyDown(button,true)});button.addEventListener("keyup",e=>{if(e.key===" "||e.key==="Enter")setKeyDown(button,false)});
     button.addEventListener("click",()=>typeFromKey(button));row.appendChild(button);
@@ -1079,7 +1082,7 @@ const abUnits=[...document.querySelectorAll("#abtns .abunit")].map((unit)=>{
   return { render, lit, set:(v,instant)=>{ latched=v; held=false; render(instant); } };
 });
 
-/* Drams—037 drives a page-wide, copyable code layer */
+/* Code Veil drives a page-wide, copyable code layer */
 const CODE_SPRING={type:"spring",stiffness:500,damping:32,mass:1};
 const CODE_SNIPPETS=[
   {id:"codeToggle",title:"The Code Veil",code:String.raw`const spring = { type: "spring", stiffness: 500, damping: 32 };
