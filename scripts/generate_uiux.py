@@ -5,6 +5,7 @@ styles scoped while rendering each control exactly once in the public page.
 """
 
 from pathlib import Path
+import hashlib
 import re
 
 from bs4 import BeautifulSoup
@@ -121,6 +122,14 @@ def scoped_css(css, key):
     css = re.sub(r"^\s*html\.embedded[^\n]*\n", "", css, flags=re.M)
     css = css.replace(":root", ":scope").replace("body.show-code", ":scope.show-code")
     css = re.sub(r"(?<![-\w])body\{", ":scope{", css)
+    if key == "instruments":
+        # Aemeth carries its seal as an embedded image mask. Keep its authored
+        # rules intact and outside the broad @scope wrapper so browsers don't
+        # discard the combined stylesheet when parsing that large declaration.
+        marker = "/* ── Aemeth · angel voice channel (Sigillum Dei Aemeth, Sloane MS 3188) ── */"
+        start = css.find(marker)
+        if start >= 0:
+            return f"@scope (.source-{key}) {{\n{css[:start].rstrip()}\n}}\n\n{css[start:].rstrip()}\n"
     return f"@scope (.source-{key}) {{\n{css}\n}}\n"
 
 
@@ -150,11 +159,15 @@ def main():
         raise ValueError(f"Catalog mismatch: missing={expected-found}, extra={found-expected}, count={len(found)}")
     markup = "".join(source_markup(key, soup) for key, (soup, _, _) in records.items())
     nav, headings = category_nav()
+    controls_css = "\n".join(scoped_css(css, key) for key, (_, css, _) in records.items())
+    css_version = hashlib.sha256(controls_css.encode()).hexdigest()[:12]
     shell = (UIUX / "shell.html").read_text()
     shell = shell.replace("<!-- CATEGORY_NAV -->", nav).replace("<!-- GROUP_HEADINGS -->", headings)
     shell = shell.replace("<!-- CONTROL_MARKUP -->", markup)
+    shell = shell.replace("{{CONTROL_COUNT}}", str(sum(len(names) for _, _, names in GROUPS) + 1))
+    shell = shell.replace("{{CSS_VERSION}}", css_version)
     (UIUX / "index.html").write_text(shell)
-    (UIUX / "controls.css").write_text("\n".join(scoped_css(css, key) for key, (_, css, _) in records.items()))
+    (UIUX / "controls.css").write_text(controls_css)
     prefix = (UIUX / "controls-prefix.js").read_text()
     script = [prefix]
     for key in ("compact", "instruments", "foundation"):
