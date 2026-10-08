@@ -44,11 +44,11 @@ GROUPS = [
     ]),
     ("Signal & feedback", "Read conditions, levels, and outcomes.", [
         "Lumen VU", "Cantor Ladder", "Excursion Pair", "Lodestar",
-        "Climate", "Velocity", "Triad", "Departures", "Manifest",
+        "Climate", "Velocity", "Triad", "Departures", "Manifest", "Aemeth",
     ]),
 ]
 FEATURED = "Obsidian Dial"
-WIDE = {"Mechanical Keyboard", "Cadence Pads", "Penumbra Deck", "Departures", "Manifest"}
+WIDE = {"Mechanical Keyboard", "Cadence Pads", "Penumbra Deck", "Departures", "Manifest", "Aemeth"}
 
 
 def split_source(path):
@@ -146,7 +146,7 @@ def main():
         selectors = ".cap" if key == "foundation" else "article.unit .cap"
         found.update(cap.select_one("span").get_text(" ", strip=True).split("·")[0].strip() for cap in soup.select(selectors))
     expected = {FEATURED, "The Code Veil", *(name for _, _, names in GROUPS for name in names)}
-    if found != expected or len(found) != 56:
+    if found != expected or len(found) != 57:
         raise ValueError(f"Catalog mismatch: missing={expected-found}, extra={found-expected}, count={len(found)}")
     markup = "".join(source_markup(key, soup) for key, (soup, _, _) in records.items())
     nav, headings = category_nav()
@@ -165,7 +165,7 @@ def main():
                       f'const document=scopedDocument(root);\nconst addEventListener=scopedListener(root);\n{logic}\n}}')
     script.append('import("./atlas.js");\n')
     (UIUX / "controls.js").write_text("\n".join(script))
-    print("Generated one page with 55 controls in six functional groups")
+    print("Generated one page with 56 controls in six functional groups")
 
 
 if __name__ == "__main__":

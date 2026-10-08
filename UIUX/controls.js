@@ -2507,6 +2507,133 @@ $("mfForm").addEventListener("submit", e=>{
 bindFinish("mfFinish","mf");
 mfRender();
 
+/* ═════════ Aemeth · angel voice channel ═════════ */
+(() => {
+  const ae=$("ae"), ORDER=["off","idle","ready","listening","speaking"];
+  const LABEL={ off:"OFF", idle:"MINIMAL", ready:"READY", listening:"LISTENING", speaking:"ANGEL SPEAKING" };
+  const A={ state:"ready", session:60, left:60, level:0, hist:[], demo:true, demoT:0, demoEnd:0, thinkT:0, ext:0, listeners:{}, readAt:0, voice:null, armed:false };
+
+  /* dial: Vigil-style ring, 60 ticks, numbers every 5, session arc, listening outline */
+  (() => {
+    const svg=$("aeDial"), C=150, pt=(r,a)=>[C+r*Math.sin(a*Math.PI/180), C-r*Math.cos(a*Math.PI/180)];
+    for(let i=0;i<60;i++){ const a=i*6, maj=i%5===0, [x1,y1]=pt(maj?120:123,a), [x2,y2]=pt(129,a); svgEl("line",{ x1,y1,x2,y2, class:"d-tick", "stroke-width":maj?2.2:.9, "stroke-linecap":"round" }, svg); }
+    for(let i=0;i<12;i++){ const a=i*30, [x,y]=pt(141,a); svgEl("text",{ x, y, "text-anchor":"middle", "dominant-baseline":"central", class:"d-num" }, svg).textContent = i===0?60:i*5; }
+    const Cc=2*Math.PI*126; A.arc=svgEl("circle",{ cx:C, cy:C, r:126, class:"d-arc", "stroke-width":3, "stroke-dasharray":`0 ${Cc}`, transform:`rotate(-90 ${C} ${C})`, "stroke-linecap":"round" }, svg); A.arcC=Cc;
+    svgEl("circle",{ cx:C, cy:C, r:115.5, class:"d-out" }, svg);
+  })();
+
+  /* minimal: the seal's real structure, redrawn with Hilfiker's bars and disc */
+  (() => {
+    const svg=$("aeMin"), C=100, R=100, pt=(r,a)=>[C+r*Math.sin(a*Math.PI/180), C-r*Math.cos(a*Math.PI/180)];
+    const poly=(r,n,rot,step=1)=>{ const p=[]; for(let k=0,i=0;k<n;k++,i=(i+step)%n){ p.push(pt(r,rot+i*360/n).map(v=>v.toFixed(2)).join(",")); } return p.join(" "); };
+    svgEl("circle",{ cx:C, cy:C, r:R*.975, class:"m-l", "stroke-width":3.4 }, svg);
+    svgEl("circle",{ cx:C, cy:C, r:R*.875, class:"m-l", "stroke-width":1.4 }, svg);
+    for(let i=0;i<40;i++){ const a=i*9, [x1,y1]=pt(R*.895,a), [x2,y2]=pt(R*.945,a); svgEl("line",{ x1,y1,x2,y2, class:"m-l", "stroke-width":i%5===0?3.2:2, "stroke-linecap":"butt" }, svg); }
+    svgEl("polygon",{ points:poly(R*.875,7,0), class:"m-l", "stroke-width":2.4, "stroke-linejoin":"miter" }, svg);
+    svgEl("polygon",{ points:poly(R*.663,7,0,2), class:"m-l", "stroke-width":2.4, "stroke-linejoin":"miter" }, svg);
+    svgEl("polygon",{ points:poly(R*.30,7,180/7), class:"m-l", "stroke-width":1.6 }, svg);
+    svgEl("polygon",{ points:poly(R*.27,5,0,2), class:"m-l", "stroke-width":2.2, "stroke-linejoin":"miter" }, svg);
+    [[0,1],[90,1]].forEach(([a])=>{ const [x1,y1]=pt(R*.13,a), [x2,y2]=pt(R*.13,a+180); svgEl("line",{ x1,y1,x2,y2, class:"m-l", "stroke-width":1.2 }, svg); });
+  })();
+
+  const emit=(e,...a)=>(A.listeners[e]||[]).forEach(f=>{ try{ f(...a); }catch(err){ console.error(err); } });
+  function setState(s, quiet){
+    if(!ORDER.includes(s) || s===A.state) return;
+    if(!quiet) A.armed=true;
+    const prev=A.state; A.state=s; ae.dataset.state=s;
+    $("aePower").setAttribute("aria-pressed",String(s!=="off"));
+    $$(".ae-st").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.st===s || (s==="listening" && b.dataset.st==="ready"))));
+    $("aeTalk").disabled = s==="off";
+    if((s==="ready"||s==="listening"||s==="speaking") && (prev==="idle"||prev==="off")) A.left=A.session;
+    if(s!=="speaking"){ A.level=0; }
+    if(!quiet){ s==="off"?clack():s==="speaking"?thock():tick(); }
+    aeVoice(s==="speaking");
+    emit("state", s, prev); render(true); addLoop(aeTick);
+  }
+  function render(force){
+    const now=performance.now(); if(!force && now-A.readAt<120) return; A.readAt=now;
+    const m=Math.floor(A.left/60), s=Math.floor(A.left%60), t=`${m}:${String(s).padStart(2,"0")}`;
+    const live=["ready","listening","speaking"].includes(A.state);
+    A.arc.setAttribute("stroke-dasharray", `${live?(A.arcC*(1-A.left/A.session)).toFixed(1):0} ${A.arcC}`);
+    A.arc.style.opacity = live && A.left<A.session ? 1 : 0;
+    const tail={ off:"press power to wake", idle:"tap the disc to open a session", ready: A.thinking ? "the angel is composing a reply" : "hold to speak", listening:"listening · release to send", speaking:"the angel is answering" }[A.state];
+    $("aeRead").innerHTML=`<b>${LABEL[A.state]}</b>${live?` · session ${t}`:""} · ${tail}`;
+    ae.setAttribute("aria-label",`Angel channel, ${LABEL[A.state].toLowerCase()}. Hold Space to speak, left and right arrows change state, P toggles power.`);
+  }
+  /* push to talk */
+  function pttStart(){
+    if(A.state==="off") return;
+    if(A.state==="speaking"){ setState("ready",true); }
+    A.thinking=false; clearTimeout(A.thinkT);
+    setState("listening"); emit("pttstart");
+  }
+  function pttEnd(){
+    if(A.state!=="listening") return;
+    setState("ready"); emit("pttend");
+    if(A.demo){ A.thinking=true; render(true); A.thinkT=setTimeout(()=>{ A.thinking=false; A.demoT=performance.now(); A.demoEnd=A.demoT+3800+Math.random()*2200; setState("speaking"); }, 750); }
+  }
+  [$("aePtt"),$("aeTalk")].forEach(b=>{
+    b.addEventListener("pointerdown", e=>{ e.preventDefault(); try{ b.setPointerCapture(e.pointerId); }catch(_){} b.dataset.down="true";
+      if(A.state==="idle" && b===$("aePtt")){ setState("ready"); return; } pttStart(); });
+    ["pointerup","pointercancel"].forEach(ev=>b.addEventListener(ev, ()=>{ b.dataset.down="false"; pttEnd(); }));
+    b.addEventListener("keydown", e=>{ if((e.key===" "||e.key==="Enter") && !e.repeat){ e.preventDefault(); e.stopPropagation(); b.dataset.down="true"; if(A.state==="idle"){ setState("ready"); return; } pttStart(); } });
+    b.addEventListener("keyup", e=>{ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); e.stopPropagation(); b.dataset.down="false"; pttEnd(); } });
+    b.addEventListener("click", e=>e.preventDefault());
+  });
+  ae.addEventListener("keydown", e=>{
+    if(e.target!==ae) return;
+    if(e.key===" " && !e.repeat){ e.preventDefault(); if(A.state==="idle") setState("ready"); else pttStart(); }
+    else if(e.key==="ArrowRight"){ e.preventDefault(); step(1); } else if(e.key==="ArrowLeft"){ e.preventDefault(); step(-1); }
+    else if(e.key==="p"||e.key==="P"){ e.preventDefault(); $("aePower").click(); }
+  });
+  ae.addEventListener("keyup", e=>{ if(e.target===ae && e.key===" "){ e.preventDefault(); pttEnd(); } });
+  const STEP=["off","idle","ready","speaking"];
+  function step(d){ const i=Math.max(0,STEP.indexOf(A.state==="listening"?"ready":A.state)); const n=STEP[clamp(i+d,0,STEP.length-1)]; if(n==="speaking"){ A.demoT=performance.now(); A.demoEnd=A.demoT+6000; } setState(n); }
+  $("aePrev").onclick=()=>step(-1); $("aeNext").onclick=()=>step(1);
+  $("aePower").onclick=()=>setState(A.state==="off"?"idle":"off");
+  $("aeSpk").onclick=()=>{ if(A.state==="off") return; A.demoT=performance.now(); A.demoEnd=A.demoT+4200; setState("speaking"); };
+  $$(".ae-st").forEach(b=>b.onclick=()=>{ if(b.dataset.st==="speaking"){ A.demoT=performance.now(); A.demoEnd=A.demoT+6000; } setState(b.dataset.st); });
+  $$("[data-ses]").forEach(b=>b.onclick=()=>{ A.session=+b.dataset.ses; A.left=A.session; $$("[data-ses]").forEach(x=>x.setAttribute("aria-pressed",String(x===b))); tick(); render(true); });
+
+  /* demo voice: a soft two-voice pad whose loudness follows the syllable envelope */
+  function aeVoice(on){
+    const a=audio();
+    if(on && a && MASTER){
+      if(!A.voice){ const g=a.createGain(); g.gain.value=0; const f=a.createBiquadFilter(); f.type="lowpass"; f.frequency.value=1400;
+        const o1=a.createOscillator(), o2=a.createOscillator(), o3=a.createOscillator(); o1.type="sine"; o2.type="triangle"; o3.type="sine";
+        o1.frequency.value=220; o2.frequency.value=329.6; o3.frequency.value=440*1.003;
+        [o1,o2,o3].forEach(o=>{ o.connect(f); o.start(); }); f.connect(g); g.connect(MASTER); A.voice={ g, f, o2 }; }
+    } else if(A.voice && AC){ A.voice.g.gain.setTargetAtTime(0, AC.currentTime, .12); }
+  }
+  /* illumination: centre first, then outward, each ring a little behind the one inside it */
+  const rings=$$("#ae .ae-g");
+  function aeTick(dt, now){
+    const live=["ready","listening","speaking"].includes(A.state);
+    if(live && A.armed){ A.left=Math.max(0, A.left-dt); if(A.left<=0){ clack(); setState("idle"); return false; } }
+    if(A.state==="speaking"){
+      let lv;
+      if(A.demo && !A.ext){ const t=(now-A.demoT)/1000; const syl=Math.pow(Math.abs(Math.sin(t*5.3)),1.6)*(.55+.45*Math.sin(t*1.7+1)); lv=clamp(.15+syl*.85+(Math.random()-.5)*.08,0,1);
+        if(now>A.demoEnd){ setState("ready"); return true; } }
+      else lv=A.level;
+      A.hist.push(lv); if(A.hist.length>40) A.hist.shift();
+      rings.forEach((r,i)=>{ const h=A.hist[Math.max(0,A.hist.length-1-i*4)]??0; r.style.opacity=(reduce?.85:clamp(.25+h*.95-i*.04,0,1)).toFixed(3); });
+      if(A.voice && AC){ A.voice.g.gain.setTargetAtTime(soundOn?lv*.05:0, AC.currentTime, .05); A.voice.f.frequency.setTargetAtTime(700+lv*1600, AC.currentTime, .05); }
+    } else rings.forEach(r=>r.style.opacity=0);
+    render();
+    return live;
+  }
+  /* public API for wiring a real voice service */
+  window.Aemeth={
+    get state(){ return A.state; },
+    setState:s=>{ if(s==="speaking"){ A.ext=1; } setState(s); },
+    setLevel:v=>{ A.ext=1; A.demo=false; A.level=clamp(+v||0,0,1); },
+    on:(e,f)=>{ (A.listeners[e]=A.listeners[e]||[]).push(f); return ()=>{ A.listeners[e]=A.listeners[e].filter(x=>x!==f); }; },
+    set demo(v){ A.demo=!!v; if(v) A.ext=0; }, get demo(){ return A.demo; }
+  };
+  bindFinish("aeFinish","ae");
+  render(true); addLoop(aeTick);
+})();
+
 paintAccent();
 })();
 
