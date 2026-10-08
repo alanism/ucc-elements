@@ -122,14 +122,6 @@ def scoped_css(css, key):
     css = re.sub(r"^\s*html\.embedded[^\n]*\n", "", css, flags=re.M)
     css = css.replace(":root", ":scope").replace("body.show-code", ":scope.show-code")
     css = re.sub(r"(?<![-\w])body\{", ":scope{", css)
-    if key == "instruments":
-        # Aemeth carries its seal as an embedded image mask. Keep its authored
-        # rules intact and outside the broad @scope wrapper so browsers don't
-        # discard the combined stylesheet when parsing that large declaration.
-        marker = "/* ── Aemeth · angel voice channel (Sigillum Dei Aemeth, Sloane MS 3188) ── */"
-        start = css.find(marker)
-        if start >= 0:
-            return f"@scope (.source-{key}) {{\n{css[:start].rstrip()}\n}}\n\n{css[start:].rstrip()}\n"
     return f"@scope (.source-{key}) {{\n{css}\n}}\n"
 
 
@@ -160,14 +152,6 @@ def main():
     markup = "".join(source_markup(key, soup) for key, (soup, _, _) in records.items())
     nav, headings = category_nav()
     controls_css = "\n".join(scoped_css(css, key) for key, (_, css, _) in records.items())
-    css_version = hashlib.sha256(controls_css.encode()).hexdigest()[:12]
-    shell = (UIUX / "shell.html").read_text()
-    shell = shell.replace("<!-- CATEGORY_NAV -->", nav).replace("<!-- GROUP_HEADINGS -->", headings)
-    shell = shell.replace("<!-- CONTROL_MARKUP -->", markup)
-    shell = shell.replace("{{CONTROL_COUNT}}", str(sum(len(names) for _, _, names in GROUPS) + 1))
-    shell = shell.replace("{{CSS_VERSION}}", css_version)
-    (UIUX / "index.html").write_text(shell)
-    (UIUX / "controls.css").write_text(controls_css)
     prefix = (UIUX / "controls-prefix.js").read_text()
     script = [prefix]
     for key in ("compact", "instruments", "foundation"):
@@ -176,8 +160,23 @@ def main():
             script.append('try{animate=(await motionPromise).animate;}catch(error){console.warn("Motion unavailable; controls use immediate transitions",error);}')
         script.append(f'{{\nconst root=globalThis.document.getElementById("source-{key}");\n'
                       f'const document=scopedDocument(root);\nconst addEventListener=scopedListener(root);\n{logic}\n}}')
-    script.append('import("./atlas.js");\n')
-    (UIUX / "controls.js").write_text("\n".join(script))
+    atlas_js_version = hashlib.sha256((UIUX / "atlas.js").read_bytes()).hexdigest()[:12]
+    script.append(f'import("./atlas.js?v={atlas_js_version}");\n')
+    controls_js = "\n".join(script)
+    shell = (UIUX / "shell.html").read_text()
+    shell = shell.replace("<!-- CATEGORY_NAV -->", nav).replace("<!-- GROUP_HEADINGS -->", headings)
+    shell = shell.replace("<!-- CONTROL_MARKUP -->", markup)
+    shell = shell.replace("{{CONTROL_COUNT}}", str(sum(len(names) for _, _, names in GROUPS) + 1))
+    assets = {
+        "CSS_VERSION": controls_css.encode(),
+        "JS_VERSION": controls_js.encode(),
+        "ATLAS_CSS_VERSION": (UIUX / "atlas.css").read_bytes(),
+    }
+    for placeholder, content in assets.items():
+        shell = shell.replace("{{" + placeholder + "}}", hashlib.sha256(content).hexdigest()[:12])
+    (UIUX / "index.html").write_text(shell)
+    (UIUX / "controls.css").write_text(controls_css)
+    (UIUX / "controls.js").write_text(controls_js)
     print("Generated one page with 56 controls in six functional groups")
 
 

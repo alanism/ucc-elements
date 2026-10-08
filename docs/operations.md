@@ -22,7 +22,7 @@ The public payload is five files under `.uiux-dist`: the page and four CSS/JS as
 
 ## Monitor
 
-Check `https://uiux-nonhumanintelligence.web.app/UIUX` for HTTP 200 and a rendered catalog of 55 controls. In a browser, verify search, Light/Dark, one open code panel, a slider and a switch. On the custom domain, also verify HTTPS and the same page. Watch Firebase Hosting release and custom-domain status in the GCP/Firebase console. The expected healthy state is a successful Hosting release, working interactions, no console errors from the page, and `HOST_ACTIVE` / `OWNERSHIP_ACTIVE` / `CERT_ACTIVE` for the custom domain.
+Check `https://uiux-nonhumanintelligence.web.app/UIUX` for HTTP 200 and a rendered catalog of 56 controls. In a browser, verify search, Light/Dark, one open code panel, a slider and a switch. On the custom domain, also verify HTTPS and the same page. Watch Firebase Hosting release and custom-domain status in the GCP/Firebase console. The expected healthy state is a successful Hosting release, working interactions, no console errors from the page, and `HOST_ACTIVE` / `OWNERSHIP_ACTIVE` / `CERT_ACTIVE` for the custom domain.
 
 Hosting normalizes `/UIUX/` to `/UIUX`; keep page assets rooted at `/UIUX/` and check that all four CSS/JS asset requests return HTTP 200 after every release.
 
@@ -33,3 +33,9 @@ If generation fails, compare the control names in the three source pages against
 ## Security and known limits
 
 Search results use DOM text nodes for user input. Do not commit credentials, access tokens, or generated service-account files. Motion and IBM Plex load from external CDNs; the page retains an immediate-transition fallback for Motion. Browser audio starts only after a user gesture. Wide physical controls may scroll horizontally within their cards on small screens.
+
+## Aemeth release check
+
+All four local CSS/JS assets have content hashes in their URLs, including the dynamically imported atlas script. The canonical HTML routes require cache revalidation. Regenerate after editing either atlas asset so its hash updates. Verify the canonical `/UIUX` URL in a previously used browser tab, without a page query string: Aemeth must have 60 clock tick lines, a state-specific accessible label, four working state choices, readable selected/hover cards in both page themes, and working Ivory/Obsidian finishes. Compare the original Volume II page before changing integration; preserve its authored source.
+
+If the seal appears but the clock ring or controls do not work, inspect the script URL and initialization before changing the seal CSS. A partial asset refresh can combine new HTML with stale JavaScript.

@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&display=swap">
   <link rel="stylesheet" href="/UIUX/controls.css?v={{CSS_VERSION}}">
-  <link rel="stylesheet" href="/UIUX/atlas.css">
+  <link rel="stylesheet" href="/UIUX/atlas.css?v={{ATLAS_CSS_VERSION}}">
 </head>
 <body>
   <a class="skip-link" href="#catalog">Skip to controls</a>
@@ -33,7 +33,7 @@
   </aside>
 
   <main id="top">
-    <div class="catalog" id="catalog">
+    <div class="catalog" id="catalog" data-control-count="{{CONTROL_COUNT}}">
       <div class="hero-copy" style="--item-order:0">
         <div class="hero-kicker">A working control atlas</div>
         <h1>Enochian<br><span>Elements</span></h1>
@@ -48,6 +48,6 @@
   </main>
 
   <footer class="site-footer"><div><strong>Enochian Elements</strong><p>Choose the instrument. Change its state. See the result.</p></div><a href="#top">Back to top ↑</a></footer>
-  <script type="module" src="/UIUX/controls.js"></script>
+  <script type="module" src="/UIUX/controls.js?v={{JS_VERSION}}"></script>
 </body>
 </html>
