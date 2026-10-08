@@ -1,0 +1,4 @@
+.DS_Store
+.firebase/
+.uiux-dist/
+firebase-debug.log

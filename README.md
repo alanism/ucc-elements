@@ -1,70 +1,36 @@
-# Enochian Elements — Control Atlas
+# Enochian Elements
 
-A shareable atlas of tactile, hardware-inspired UI/UX controls built with semantic HTML, CSS, JavaScript, and [Motion](https://motion.dev/)—without a hosted design service.
+One interactive showcase of 55 Enochian controls for mini-apps and AI-guided device interfaces. The public page is [`UIUX/index.html`](UIUX/index.html); controls appear once, ordered by action, state, choice and value, navigation, time and playback, then signal and feedback. The top bar owns search, Light/Dark, sound, and the single Code mode.
 
-## Repository
-
-Browse the source, copy the patterns, or clone it from:
-
-**https://github.com/alanism/ucc-elements**
-
-## Components
-
-- **The Code Veil** — page-wide implementation reveal
-- **Obsidian Dial** — dark continuous rotary control
-- **Ivory Dial** — light continuous rotary control
-- **Choir Dial** — `3`, `5`, `7`, or `10` detent selector
-- **Ordinal Veil** — variable-length segmented control
-- **Triune Gate** — three independent binary switches
-- **Aether Receiver** — rotary radio in Ivory, Cinnabar, and Obsidian
-- **Horologion** — live clock and playback-state instrument
-- **Vigil Clock** — stopwatch-inspired countdown timer
-  - 60 seconds, 5 minutes, 10 minutes, or 25 minutes
-  - Ivory and Obsidian finishes
-  - Wall-clock-accurate countdown
-  - Increasing Cinnabar elapsed indicator
-  - Integrated start/stop and reset controls
-- **Mechanical Keyboard** — 74 tactile keys with matte concave Cinnabar modifiers, UCC brandmarks, visible key travel, a working text display, and Ivory/Obsidian typing-key finishes
-- **Push Button** — single concave momentary control with a dished Ivory cap, recessed socket, and Cinnabar signal
-- **The Three Keys** — tactile momentary or latched action controls
-
-## Try it locally
-
-No build step is required:
+## Local preview
 
 ```bash
 python3 -m http.server 8080
 ```
 
-Then open <http://localhost:8080>.
+Open <http://localhost:8080/UIUX/>. The page uses IBM Plex web fonts and Motion from a CDN; controls retain an immediate-transition fallback if Motion is unavailable.
 
-You can also open `index.html` directly. Motion is loaded as an ES module from jsDelivr, so an internet connection is required unless you vendor that dependency.
+## Source and build
 
-## Reusing a component
+- `enochian_knobs_keys/index.html` — foundation controls
+- `enochian_knobs_keys/volume-3/index.html` — compact controls
+- `enochian_knobs_keys/volume-2/index.html` — instrument controls
+- `scripts/generate_uiux.py` — extracts and scopes all 55 controls into one page; requires Python 3 and Beautiful Soup 4
+- `UIUX/shell.html`, `UIUX/atlas.css`, `UIUX/atlas.js` — showcase layout and global behavior
 
-1. Open the atlas.
-2. Turn on **The Code Veil**.
-3. Use the **COPY** control beneath the instrument you want.
-4. Adapt the colors and labels while preserving semantic controls and synchronized ARIA state.
+Regenerate after editing a source control:
 
-The primary Cinnabar signal accent is `#CC0000`; Ember is the warmer alternate.
+```bash
+python3 scripts/generate_uiux.py
+python3 scripts/build_uiux.py
+```
 
-## Accessibility and behavior
+The second command creates the standalone `.uiux-dist` payload. See [`docs/operations.md`](docs/operations.md) for release and monitoring steps.
 
-- Native buttons wherever possible
-- `role="switch"`, slider semantics, and synchronized ARIA state where appropriate
-- Keyboard control for detented and rotary inputs
-- Visible focus rings
-- Reduced-motion handling
-- WebAudio created or resumed only after a direct user gesture
-- Timer countdown derived from `Date.now()` so background-tab throttling does not introduce drift
+## Design language
 
-## Files
-
-- `index.html` — complete component showcase and copyable snippets
-- `toggle.html` — standalone Drams—037 toggle study
-- `coding-reference.md` — Motion patterns and implementation notes
+Black and white are the page modes; Cinnabar `#CC0000` is the signal color. Individual instruments retain Ivory and Obsidian material finishes. Controls expose state through their physical motion, readout, and ARIA attributes.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+See the license files in the repository and source folder for the terms that apply to each asset.

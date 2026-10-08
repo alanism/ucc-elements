@@ -1,0 +1,12 @@
+{
+  "hosting": {
+    "site": "uiux-nonhumanintelligence",
+    "public": ".uiux-dist",
+    "ignore": ["**/.*"],
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "redirects": [
+      {"source": "/", "destination": "/UIUX", "type": 302}
+    ]
+  }
+}
