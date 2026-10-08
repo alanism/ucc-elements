@@ -19,3 +19,12 @@
 - Validation: Deterministic generation twice; content-hash assertions for all four assets; source preservation assertion; both JS syntax checks; standalone build; `git diff --check`; successful Firebase Hosting release; live HTTP 200 and cache header; 60 clock ticks and state-specific label in the user's canonical Chrome tab; all four live state transitions; push-to-talk composing reply; Light/Dark and Ivory/Obsidian screenshots; 390px layout with no page horizontal overflow; no warnings/errors in the user's refreshed Chrome tab.
 - Prevention / suggested harness update: Compare the source and gallery in a real browser, then test the canonical deployed page in a previously used tab after normal reload. Verify initialization and interaction, not just a static seal. Require fingerprints for every asset and a dynamic catalog count.
 - Remaining risks: Existing tabs need one reload to replace previously cached HTML. The authored voice response is a simulation, as before; no voice API was added. Custom-domain activation was not changed or reverified.
+
+## 2026-10-08 — Atlas top-level copy refresh
+
+- Changed: Applied the supplied rewrite preview's top-level Enochian positioning, purpose/use/how brief, and family descriptions to the source template and generator. Preserved the existing Aemeth element and hashed asset pipeline.
+- Failure: The preview was a static export from an older gallery state, so copying it wholesale would have regressed the current element count and asset paths.
+- Root cause: The preview and live atlas were generated from different revisions.
+- Fix: Ported only the copy and its small responsive styling addition, regenerated the page, and verified the rendered hero, search, theme controls, and zero browser warnings/errors locally before release.
+- Prevention: Treat static preview files as copy references unless their generated asset versions and control inventory match the current source.
+- Suggested harness update: Add a generated-copy smoke check for the hero kicker, purpose/use/how labels, and all six family descriptions.

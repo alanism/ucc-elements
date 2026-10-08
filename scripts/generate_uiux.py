@@ -20,30 +20,30 @@ SOURCES = {
 }
 
 GROUPS = [
-    ("Action", "Press, latch, and commit.", [
+    ("Action", "Press, latch, and commit. Reach for these when the user starts, holds, or confirms an action.", [
         "Push Button", "Cinnabar Key", "The Three Keys", "Triad Action Keys",
         "Hollow Gate", "Pulse Grid", "Canticle Keys", "Aether Orb",
         "Cadence Pads", "Augur",
     ]),
-    ("State", "Make on, off, and mode visible.", [
+    ("State", "Make on, off, and mode visible. Reach for these when a setting has to read at a glance — in the dark, or across the room.", [
         "Binary Gate", "Cinnabar Switch", "Beacon Switch", "Glyph Switch",
         "Pinch Gate", "Pinch Track", "Triune Gate", "Triune Switch",
         "Triune Beacon", "Lantern Row", "Interlock Bank", "Orbit Gate",
     ]),
-    ("Choice & value", "Tune continuous and stepped values.", [
+    ("Choice & value", "Tune continuous and stepped values. Reach for these when a value is chosen, not typed.", [
         "Ivory Dial", "Choir Dial", "Ordinal Veil", "Signal Slider",
         "Quadrant Slider", "Dimple Slider", "Meridian Fader", "Regie Bank",
         "Aperture Scale", "Penumbra Deck",
     ]),
-    ("Navigation", "Search, move focus, and enter.", [
+    ("Navigation", "Search, move focus, and enter. Reach for these when the surface holds more than one thing.", [
         "Seeker Orb", "Mechanical Keyboard", "Tally Keypad", "Sigil Controller",
         "Sigil Remote", "Orbit Wheel", "Lumen Pad",
     ]),
-    ("Time & playback", "Control duration, transport, and sound.", [
+    ("Time & playback", "Control duration, transport, and sound. Reach for these when something runs, counts, or plays.", [
         "Aether Receiver", "Horologion", "Vigil Clock", "Strobe Platter",
         "Transport Bank", "Monitor Pair",
     ]),
-    ("Signal & feedback", "Read conditions, levels, and outcomes.", [
+    ("Signal & feedback", "Read conditions, levels, and outcomes. Reach for these when the system reports rather than asks.", [
         "Lumen VU", "Cantor Ladder", "Excursion Pair", "Lodestar",
         "Climate", "Velocity", "Triad", "Departures", "Manifest", "Aemeth",
     ]),
