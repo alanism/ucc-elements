@@ -208,6 +208,17 @@
   .timer-control[data-state="running"] .timer-start-glyph{transform:none;font-size:12px}
   .timer-reset-glyph{font-size:20px;font-weight:500;line-height:1;margin-top:-1px}
   @media(max-width:430px){.timercase{width:300px;height:300px}.timer-digital{font-size:21px}}
+  /* Vigil family: 90-second interval face and Pomodoro cycle face */
+  .timer-svg .timer-band{fill:none;stroke:var(--timer-line)}
+  .timer-svg .timer-brk{stroke:var(--timer-ink)}
+  .timer-svg .timer-bandlbl{fill:var(--timer-muted);font:600 7px "IBM Plex Mono",monospace;letter-spacing:1.6px}
+  .timer-svg .timer-dot{fill:none;stroke:var(--timer-ink)}
+  .timer-svg .timer-dot.on{fill:#CC0000;stroke:#CC0000}
+  .timer-control[aria-pressed="true"] span{color:#CC0000}
+  .timercase[data-pressure="hot"] .timer-digital{color:#CC0000;animation:pressurePulse 1s steps(2) infinite}
+  .timercase[data-pressure="hot"] .timer-state{color:#CC0000}
+  @keyframes pressurePulse{50%{opacity:.55}}
+  @media (prefers-reduced-motion:reduce){.timercase[data-pressure="hot"] .timer-digital{animation:none}}
   /* arcade push-buttons: glossy domes + LED dots */
   .abtns{display:flex;gap:44px;justify-content:center}
   .abunit{display:flex;flex-direction:column;align-items:center;gap:16px}
@@ -304,7 +315,7 @@
   <div class="portable"><strong>Portable by design.</strong> No hosted design service is required. The controls are self-contained, accessible, and ready to adapt.</div>
   <nav class="atlas-map" aria-label="Control atlas guide">
     <h3>Find the right pattern</h3>
-    <ul><li><strong>Tune a value</strong> with a rotary dial.</li><li><strong>Choose a fixed position</strong> with a detented dial or sliding ordinal control.</li><li><strong>Combine independent states</strong> with the Triune Gate.</li><li><strong>Control playback</strong> with the Aether Receiver or Horologion.</li><li><strong>Measure elapsed time</strong> with the Vigil Clock.</li><li><strong>Type with tactile feedback</strong> on the Mechanical Keyboard.</li><li><strong>Trigger an action</strong> with the Push Button or Three Keys.</li><li><strong>Inspect the construction</strong> by opening the Code Veil.</li></ul>
+    <ul><li><strong>Tune a value</strong> with a rotary dial.</li><li><strong>Choose a fixed position</strong> with a detented dial or sliding ordinal control.</li><li><strong>Combine independent states</strong> with the Triune Gate.</li><li><strong>Control playback</strong> with the Aether Receiver or Horologion.</li><li><strong>Measure elapsed time</strong> with the Vigil Clock, <strong>run 90-second intervals</strong> with Vigil 90, or <strong>work in Pomodoro cycles</strong> with Pomodoro Vigil.</li><li><strong>Type with tactile feedback</strong> on the Mechanical Keyboard.</li><li><strong>Trigger an action</strong> with the Push Button or Three Keys.</li><li><strong>Inspect the construction</strong> by opening the Code Veil.</li></ul>
   </nav>
 </header>
 <div class="accentrow">Signal accent:
@@ -457,6 +468,7 @@
     <button type="button" data-seconds="300" aria-pressed="false">5 MIN</button>
     <button type="button" data-seconds="600" aria-pressed="false">10 MIN</button>
     <button type="button" data-seconds="1500" aria-pressed="false">25 MIN</button>
+    <button type="button" id="timerPressure" aria-pressed="false">PRESSURE SOUND · OFF</button>
   </div>
   <div class="timercase" id="timerCase" data-theme="white" data-progress="0" role="group" aria-label="Vigil Clock countdown timer">
     <div class="timerdial">
@@ -473,6 +485,72 @@
     </button>
   </div>
   <div class="hint">top-left starts/stops · top-right resets · cinnabar arc increases with elapsed time · upper subdial tracks remaining minutes</div>
+</div></div>
+
+<div class="cap"><span>Vigil 90 · ninety-second interval timer</span><span class="pill">90 SEC · ONCE / ×4 / LOOP</span></div>
+<div class="grid"><div class="card">
+  <p class="component-copy">The Vigil Clock on a 90-second face. One sweep of the red hand is the whole interval, so the hand's position tells you the time left without reading the digits. Use it for rest between sets, a 90-second pitch, or the ninety-second rule for letting a feeling pass. Repeat it and the upper subdial counts rounds. The last three seconds tick so you don't need to look.</p>
+  <div class="rthemes" id="v90Themes" role="group" aria-label="Vigil 90 finish">
+    <button type="button" data-theme="white" aria-pressed="true">IVORY</button>
+    <button type="button" data-theme="black" aria-pressed="false">OBSIDIAN</button>
+  </div>
+  <div class="timer-presets" id="v90Presets" role="group" aria-label="Repeat">
+    <button type="button" data-rounds="1" aria-pressed="true">ONCE</button>
+    <button type="button" data-rounds="4" aria-pressed="false">× 4 ROUNDS</button>
+    <button type="button" data-rounds="0" aria-pressed="false">LOOP</button>
+    <button type="button" id="v90Pressure" aria-pressed="false">PRESSURE SOUND · OFF</button>
+  </div>
+  <div class="timercase" id="v90Case" data-theme="white" role="group" aria-label="Vigil 90 interval timer">
+    <div class="timerdial">
+      <svg class="timer-svg" id="v90Svg" viewBox="0 0 304 304" aria-hidden="true"></svg>
+      <div class="timer-brand">Enochian</div>
+      <div class="timer-digital" id="v90Digital" role="timer" aria-label="90 seconds remaining">01:30.0</div>
+      <div class="timer-state" id="v90State" aria-live="polite">READY · 90 SECONDS</div>
+    </div>
+    <button class="corner c-tl timer-control" type="button" id="v90Start" data-state="ready" aria-label="Start timer" title="Start / stop timer">
+      <span class="timer-start-glyph" id="v90Glyph" aria-hidden="true">▶</span>
+    </button>
+    <button class="corner c-tr timer-control" type="button" id="v90Reset" aria-label="Reset timer" title="Reset timer">
+      <span class="timer-reset-glyph" aria-hidden="true">↻</span>
+    </button>
+  </div>
+  <div class="hint">top-left starts/stops · top-right resets · one sweep of the red hand = 90 seconds · upper subdial counts rounds · soft ticks in the last three seconds</div>
+</div></div>
+
+<div class="cap"><span>Pomodoro Vigil · focus and break cycles</span><span class="pill">25 + 5 · 50 + 10 · LONG BREAK AFTER 4</span></div>
+<div class="grid"><div class="card">
+  <p class="component-copy">One whole Pomodoro cycle on one face. The ring is 30 minutes long and the last five minutes are shaded as the break. The red arc fills while you focus and an ink arc continues into the break, so the face shows where you are in the cycle as well as how long is left. The upper subdial fills one dot per completed focus session. After four, a 15-minute long break follows.</p>
+  <div class="rthemes" id="pomoThemes" role="group" aria-label="Pomodoro finish">
+    <button type="button" data-theme="white" aria-pressed="true">IVORY</button>
+    <button type="button" data-theme="black" aria-pressed="false">OBSIDIAN</button>
+  </div>
+  <div class="timer-presets" id="pomoPresets" role="group" aria-label="Focus and break length">
+    <button type="button" data-focus="25" data-break="5" aria-pressed="true">25 + 5 MIN</button>
+    <button type="button" data-focus="50" data-break="10" aria-pressed="false">50 + 10 MIN</button>
+    <button type="button" id="pomoLong" aria-pressed="true">LONG BREAK AFTER 4</button>
+    <button type="button" id="pomoSpeed" aria-pressed="false">DEMO 60×</button>
+  </div>
+  <div class="timercase" id="pomoCase" data-theme="white" role="group" aria-label="Pomodoro timer">
+    <div class="timerdial">
+      <svg class="timer-svg" id="pomoSvg" viewBox="0 0 304 304" aria-hidden="true"></svg>
+      <div class="timer-brand">Enochian</div>
+      <div class="timer-digital" id="pomoDigital" role="timer" aria-label="25 minutes remaining">25:00.0</div>
+      <div class="timer-state" id="pomoState" aria-live="polite">READY · FOCUS 1 OF 4</div>
+    </div>
+    <button class="corner c-tl timer-control" type="button" id="pomoStart" data-state="ready" aria-label="Start focus" title="Start / pause">
+      <span class="timer-start-glyph" id="pomoGlyph" aria-hidden="true">▶</span>
+    </button>
+    <button class="corner c-tr timer-control" type="button" id="pomoReset" aria-label="Reset the whole set" title="Reset">
+      <span class="timer-reset-glyph" aria-hidden="true">↻</span>
+    </button>
+    <button class="corner c-bl timer-control" type="button" id="pomoSkip" aria-label="Skip to the next phase" title="Skip phase">
+      <span class="timer-reset-glyph" aria-hidden="true" style="font-size:16px">»</span>
+    </button>
+    <button class="corner c-br timer-control" type="button" id="pomoAuto" aria-pressed="true" aria-label="Auto-continue to the next phase" title="Auto-continue">
+      <span aria-hidden="true" style="font:700 8px 'IBM Plex Mono',monospace;letter-spacing:.6px">AUTO</span>
+    </button>
+  </div>
+  <div class="hint">top-left starts/pauses · top-right resets the set · bottom-left skips to the next phase · bottom-right AUTO carries on into the next phase · red = focus, ink = break</div>
 </div></div>
 
 <div class="section-title">Trigger controls</div>
@@ -971,6 +1049,171 @@ $("timerStart").onclick=()=>{ensureAudio();if(AC)AC.resume();
 $("timerReset").onclick=()=>{timerRemaining=timerDuration;timerMode="ready";timerAlarmed=false;renderTimer();};
 (function timerLoop(){renderTimer();requestAnimationFrame(timerLoop);})();
 
+/* Pressure sound: an original synthesized countdown in the spirit of TV-thriller clocks (no recorded audio).
+   Every second: a hard electronic tick over a low thump. Last 10 s: double time, higher, digits red. Zero: a low boom. */
+function pressureVoice(t,freq,gain,thump){
+  if(!AC||globalThis.__enochianSoundEnabled===false) return;
+  const o=AC.createOscillator(),o2=AC.createOscillator(),bp=AC.createBiquadFilter(),g=AC.createGain();
+  o.type="square";o.frequency.setValueAtTime(freq,t);o2.type="square";o2.frequency.setValueAtTime(freq*1.498,t);
+  bp.type="bandpass";bp.frequency.value=freq*1.6;bp.Q.value=2.2;
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(gain,t+.003);g.gain.exponentialRampToValueAtTime(.0001,t+.085);
+  o.connect(bp);o2.connect(bp);bp.connect(g);g.connect(AC.destination);o.start(t);o2.start(t);o.stop(t+.1);o2.stop(t+.1);
+  if(thump){const s=AC.createOscillator(),sg=AC.createGain();s.type="sine";s.frequency.setValueAtTime(130,t);s.frequency.exponentialRampToValueAtTime(52,t+.11);
+    sg.gain.setValueAtTime(.0001,t);sg.gain.exponentialRampToValueAtTime(thump,t+.004);sg.gain.exponentialRampToValueAtTime(.0001,t+.16);s.connect(sg);sg.connect(AC.destination);s.start(t);s.stop(t+.18);}
+}
+function pressureTick(secLeft){
+  if(!AC) return; const t=AC.currentTime+.005, hot=secLeft<=10, last=secLeft<=3;
+  pressureVoice(t, hot?1180:940, last?.16:hot?.12:.09, hot?.22:.14);
+  if(hot) pressureVoice(t+.5, hot?1320:1050, last?.12:.08, 0);   // the second, off-beat tick of the final ten
+}
+function pressureBoom(){
+  if(!AC||globalThis.__enochianSoundEnabled===false) return; const t=AC.currentTime+.01;
+  const o=AC.createOscillator(),g=AC.createGain();o.type="sine";o.frequency.setValueAtTime(70,t);o.frequency.exponentialRampToValueAtTime(34,t+1.1);
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.38,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+1.4);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+1.5);
+  const len=AC.sampleRate*.6|0,b=AC.createBuffer(1,len,AC.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);
+  const n=AC.createBufferSource(),f=AC.createBiquadFilter(),ng=AC.createGain();n.buffer=b;f.type="lowpass";f.frequency.value=420;ng.gain.value=.3;n.connect(f);f.connect(ng);ng.connect(AC.destination);n.start(t);
+}
+function pressureToggle(btnId,caseId,get,set){
+  $(btnId).onclick=()=>{ensureAudio();if(AC)AC.resume();const on=!get();set(on);$(btnId).setAttribute("aria-pressed",String(on));
+    $(btnId).textContent=on?"PRESSURE SOUND · ON":"PRESSURE SOUND · OFF";if(!on)$(caseId).dataset.pressure="";if(on)pressureTick(30);};
+}
+/* Vigil Clock (60 s and up): watch its countdown from outside, so the original timer code stays untouched */
+(function(){
+  let on=false,lastSec=-1,lastMode="ready";
+  pressureToggle("timerPressure","timerCase",()=>on,v=>on=v);
+  (function watch(){
+    const sec=Math.ceil(timerRemaining/1000);
+    if(on&&timerMode==="running"&&sec!==lastSec&&sec>0){pressureTick(sec);}
+    if(on&&lastMode==="running"&&timerMode==="done")pressureBoom();
+    $("timerCase").dataset.pressure = on&&timerMode==="running"&&sec<=10 ? "hot" : "";
+    lastSec=sec;lastMode=timerMode;requestAnimationFrame(watch);
+  })();
+})();
+
+/* shared builders for the Vigil family: face ring, progress arc, hands, hubs */
+function vigilEl(svg,name,attrs){const e=document.createElementNS(NS,name);for(const k in attrs)e.setAttribute(k,attrs[k]);svg.appendChild(e);return e;}
+function vigilArcPath(cx,cy,r,a0,a1){const [x0,y0]=polar(cx,cy,r,a0),[x1,y1]=polar(cx,cy,r,a1);return `M${x0.toFixed(2)} ${y0.toFixed(2)}A${r} ${r} 0 ${a1-a0>180?1:0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;}
+function vigilThemes(groupId,caseId){$(groupId).addEventListener("click",e=>{const b=e.target.closest("button[data-theme]");if(!b)return;$(caseId).dataset.theme=b.dataset.theme;
+  document.querySelectorAll("#"+groupId+" button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));});}
+function vigilFormat(ms){const tenths=Math.max(0,Math.ceil(ms/100)),mins=Math.floor(tenths/600),secs=Math.floor((tenths%600)/10),tenth=tenths%10;return `${String(mins).padStart(2,"0")}:${String(secs).padStart(2,"0")}.${tenth}`;}
+
+/* Vigil 90: one sweep of the red hand is the whole 90-second interval */
+(function(){
+  const svg=$("v90Svg"),CX=152,CY=152,R=137,C=2*Math.PI*R,SCY=103;
+  const prog=vigilEl(svg,"circle",{cx:CX,cy:CY,r:R,fill:"none",class:"timer-progress","stroke-width":7,"stroke-dasharray":C,"stroke-dashoffset":C,"stroke-linecap":"round",transform:`rotate(-90 ${CX} ${CY})`});
+  vigilEl(svg,"circle",{cx:CX,cy:CY,r:142,fill:"none",class:"timer-subface","stroke-width":1});
+  for(let s=0;s<90;s++){
+    const major=s%10===0,quarter=s%30===0,a=s*4,r1=quarter?123:(major?127:132);
+    const [x1,y1]=polar(CX,CY,r1,a),[x2,y2]=polar(CX,CY,138,a);
+    vigilEl(svg,"line",{x1,y1,x2,y2,class:"timer-tick","stroke-width":quarter?3:(major?2:1)});
+    if(major){const [x,y]=polar(CX,CY,112,a);vigilEl(svg,"text",{x,y:y+7,"text-anchor":"middle",class:"timer-number","font-size":s===0?25:20,"font-family":"'IBM Plex Sans',sans-serif","font-weight":600}).textContent=s===0?"90":String(s);}
+  }
+  vigilEl(svg,"circle",{cx:CX,cy:SCY,r:39,class:"timer-subface","stroke-width":1.5});
+  for(let i=0;i<12;i++){const major=i%3===0,a=i*30,[x1,y1]=polar(CX,SCY,major?31:34,a),[x2,y2]=polar(CX,SCY,38,a);
+    vigilEl(svg,"line",{x1,y1,x2,y2,class:"timer-subtick","stroke-width":major?1.5:.7});
+    if(major){const [x,y]=polar(CX,SCY,24,a);vigilEl(svg,"text",{x,y:y+4,"text-anchor":"middle",class:"timer-subnum","font-size":9,"font-family":"'IBM Plex Mono',monospace","font-weight":600}).textContent=i===0?"12":String(i);}}
+  vigilEl(svg,"text",{x:CX,y:SCY+14,"text-anchor":"middle",class:"timer-subnum","font-size":5.5,"font-family":"'IBM Plex Mono',monospace","font-weight":600,"letter-spacing":1}).textContent="ROUNDS";
+  const sub=vigilEl(svg,"line",{x1:CX,y1:SCY,x2:CX,y2:SCY-27,class:"timer-hand-min","stroke-width":3,"stroke-linecap":"round"});
+  const hand=vigilEl(svg,"line",{x1:CX,y1:CY+18,x2:CX,y2:CY-116,class:"timer-hand-sec","stroke-width":3,"stroke-linecap":"round"});
+  vigilEl(svg,"circle",{cx:CX,cy:SCY,r:5,class:"timer-hub-outer","stroke-width":2});
+  vigilEl(svg,"circle",{cx:CX,cy:CY,r:12,class:"timer-hub-outer","stroke-width":2});
+  vigilEl(svg,"circle",{cx:CX,cy:CY,r:5,class:"timer-hub-inner"});
+  const V={dur:90000,rem:90000,end:0,mode:"ready",rounds:1,round:1,done:0,tickAt:-1,pressure:false,pSec:-1};
+  pressureToggle("v90Pressure","v90Case",()=>V.pressure,v=>V.pressure=v);
+  const setLine=(l,cx,cy,r,a)=>{const [x,y]=polar(cx,cy,r,a);l.setAttribute("x2",x);l.setAttribute("y2",y);};
+  const roundsText=()=>V.rounds===1?"":V.rounds?` · ROUND ${V.round} OF ${V.rounds}`:` · ROUND ${V.round}`;
+  function render(){
+    if(V.mode==="running"){V.rem=Math.max(0,V.end-Date.now());
+      const s=Math.ceil(V.rem/1000);
+      if(V.pressure){if(s>0&&s!==V.pSec){V.pSec=s;pressureTick(s);}}
+      else if(s<=3&&s>0&&s!==V.tickAt){V.tickAt=s;blip(1320);}
+      if(V.rem<=0){V.done++;
+        if(V.rounds===0||V.round<V.rounds){V.round++;V.rem=V.dur;V.end=Date.now()+V.dur;V.tickAt=-1;blip(880);setTimeout(()=>blip(1100),140);}
+        else{V.mode="done";if(V.pressure)pressureBoom();else{blip(880);setTimeout(()=>blip(1100),150);setTimeout(()=>blip(1320),300);}}}}
+    $("v90Case").dataset.pressure = V.pressure&&V.mode==="running"&&Math.ceil(V.rem/1000)<=10 ? "hot" : "";
+    const p=clamp01(1-V.rem/V.dur);
+    prog.setAttribute("stroke-dashoffset",C*(1-p));
+    setLine(hand,CX,CY,116,p*360);setLine(sub,CX,SCY,27,(V.done%12)*30);
+    const d=vigilFormat(V.rem);$("v90Digital").textContent=d;$("v90Digital").setAttribute("aria-label",`${Math.ceil(V.rem/1000)} seconds remaining`);
+    $("v90Start").dataset.state=V.mode;$("v90Glyph").textContent=V.mode==="running"?"■":"▶";
+    $("v90Start").setAttribute("aria-label",V.mode==="running"?"Stop timer":V.mode==="done"?"Start again":"Start timer");
+    $("v90State").textContent=V.mode==="ready"?`READY · ${V.rounds===1?"90 SECONDS":V.rounds?`${V.rounds} ROUNDS × 90 SEC`:"LOOPING 90 SEC"}`
+      :V.mode==="done"?`DONE · ${V.done} ROUND${V.done===1?"":"S"}`:(V.mode==="paused"?"PAUSED":"RUNNING")+roundsText();
+  }
+  $("v90Presets").addEventListener("click",e=>{const b=e.target.closest("button[data-rounds]");if(!b)return;V.rounds=+b.dataset.rounds;V.round=1;V.done=0;V.rem=V.dur;V.mode="ready";
+    document.querySelectorAll("#v90Presets button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));render();});
+  vigilThemes("v90Themes","v90Case");
+  $("v90Start").onclick=()=>{ensureAudio();if(AC)AC.resume();
+    if(V.mode==="running"){V.rem=Math.max(0,V.end-Date.now());V.mode="paused";blip(440);}
+    else{if(V.mode==="done"){V.rem=V.dur;V.round=1;V.done=0;}V.end=Date.now()+V.rem;V.mode="running";V.tickAt=-1;blip(660);}render();};
+  $("v90Reset").onclick=()=>{V.rem=V.dur;V.mode="ready";V.round=1;V.done=0;render();};
+  (function loop(){render();requestAnimationFrame(loop);})();
+})();
+
+/* Pomodoro Vigil: one face is one cycle; focus in red, break in ink, a dot per finished focus */
+(function(){
+  const svg=$("pomoSvg"),CX=152,CY=152,R=137,SCY=103;
+  const P={focus:25,brk:5,long:15,longOn:true,auto:true,speed:1,phase:"focus",count:0,rem:25*60000,mode:"ready",last:0};
+  let face=null;
+  function build(){
+    svg.innerHTML="";const cyc=P.focus+P.brk,deg=360/cyc,step=cyc<=30?.5:1;
+    const fAng=P.focus*deg;
+    vigilEl(svg,"path",{d:vigilArcPath(CX,CY,146,fAng,359.9),class:"timer-band","stroke-width":7});
+    const [lx,ly]=polar(CX,CY,146,fAng+(360-fAng)/2);
+    vigilEl(svg,"circle",{cx:CX,cy:CY,r:142,fill:"none",class:"timer-subface","stroke-width":1});
+    for(let m=0;m<cyc-1e-9;m+=step){const major=Math.abs(m%5)<1e-9,quarter=major&&Math.abs(m%(cyc/2))<1e-9,a=m*deg,r1=quarter?123:(major?127:131);
+      const [x1,y1]=polar(CX,CY,r1,a),[x2,y2]=polar(CX,CY,138,a);vigilEl(svg,"line",{x1,y1,x2,y2,class:"timer-tick","stroke-width":quarter?3:(major?2:1)});
+      if(major){const [x,y]=polar(CX,CY,112,a);vigilEl(svg,"text",{x,y:y+7,"text-anchor":"middle",class:"timer-number","font-size":m===0?25:20,"font-family":"'IBM Plex Sans',sans-serif","font-weight":600}).textContent=m===0?String(cyc):String(m);}}
+    const [bx,by]=polar(CX,CY,94,fAng+(360-fAng)/2);
+    vigilEl(svg,"text",{x:bx,y:by+3,"text-anchor":"middle",class:"timer-bandlbl"}).textContent="BREAK";
+    const fArc=vigilEl(svg,"path",{fill:"none",class:"timer-progress","stroke-width":7,"stroke-linecap":"round"});
+    const bArc=vigilEl(svg,"path",{fill:"none",class:"timer-brk","stroke-width":7,"stroke-linecap":"round"});
+    vigilEl(svg,"circle",{cx:CX,cy:SCY,r:39,class:"timer-subface","stroke-width":1.5});
+    const dots=[0,90,180,270].map(a=>{const [x,y]=polar(CX,SCY,24,a);return vigilEl(svg,"circle",{cx:x,cy:y,r:5,class:"timer-dot","stroke-width":1.5});});
+    vigilEl(svg,"text",{x:CX,y:SCY+3,"text-anchor":"middle",class:"timer-subnum","font-size":7,"font-family":"'IBM Plex Mono',monospace","font-weight":600,"letter-spacing":1}).textContent="SET";
+    const hand=vigilEl(svg,"line",{x1:CX,y1:CY+18,x2:CX,y2:CY-116,class:"timer-hand-sec","stroke-width":3,"stroke-linecap":"round"});
+    vigilEl(svg,"circle",{cx:CX,cy:CY,r:12,class:"timer-hub-outer","stroke-width":2});
+    vigilEl(svg,"circle",{cx:CX,cy:CY,r:5,class:"timer-hub-inner"});
+    face={deg,fAng,fArc,bArc,dots,hand};
+  }
+  const len=ph=>(ph==="focus"?P.focus:ph==="break"?P.brk:P.long)*60000;
+  const nextFocusNo=()=>P.count%4+1;
+  function endPhase(natural){
+    if(P.phase==="focus"){if(natural)P.count++;P.phase=(P.longOn&&P.count>0&&P.count%4===0&&natural)?"long":"break";blip(660);setTimeout(()=>blip(440),170);}
+    else{P.phase="focus";blip(440);setTimeout(()=>blip(660),150);setTimeout(()=>blip(880),300);}
+    P.rem=len(P.phase);
+    if(!(P.auto&&P.mode==="running"))P.mode="ready";
+  }
+  function render(){
+    const now=performance.now();
+    if(P.mode==="running"){P.rem-=(now-P.last)*P.speed;if(P.rem<=0)endPhase(true);}
+    P.last=now;
+    const L=len(P.phase),frac=clamp01(1-P.rem/L);
+    const pos = P.phase==="focus" ? frac*P.focus : P.focus+frac*P.brk;   // minutes into the cycle (a long break is drawn across the break band)
+    const a=pos*face.deg;
+    face.fArc.setAttribute("d", P.phase==="focus" ? (a>.3?vigilArcPath(CX,CY,R,0,a):"") : vigilArcPath(CX,CY,R,0,face.fAng));
+    face.bArc.setAttribute("d", P.phase!=="focus" && a-face.fAng>.3 ? vigilArcPath(CX,CY,R,face.fAng,Math.min(a,359.9)) : "");
+    const [hx,hy]=polar(CX,CY,116,a);face.hand.setAttribute("x2",hx);face.hand.setAttribute("y2",hy);
+    const done=P.phase==="long"?4:P.count%4;face.dots.forEach((d,i)=>d.classList.toggle("on",i<done));
+    $("pomoDigital").textContent=vigilFormat(P.rem);$("pomoDigital").setAttribute("aria-label",`${Math.ceil(P.rem/60000)} minutes remaining in ${P.phase==="focus"?"focus":"the break"}`);
+    $("pomoStart").dataset.state=P.mode;$("pomoGlyph").textContent=P.mode==="running"?"■":"▶";
+    $("pomoStart").setAttribute("aria-label",P.mode==="running"?"Pause":`Start ${P.phase==="focus"?"focus":"break"}`);
+    const label=P.phase==="focus"?`FOCUS ${nextFocusNo()} OF 4`:P.phase==="long"?"LONG BREAK · SET COMPLETE":`BREAK · NEXT FOCUS ${nextFocusNo()}`;
+    $("pomoState").textContent=(P.mode==="ready"?"READY · ":P.mode==="paused"?"PAUSED · ":"")+label+(P.speed>1?" · 60×":"");
+  }
+  $("pomoPresets").addEventListener("click",e=>{const b=e.target.closest("button[data-focus]");if(!b)return;
+    P.focus=+b.dataset.focus;P.brk=+b.dataset.break;P.phase="focus";P.count=0;P.rem=len("focus");P.mode="ready";
+    document.querySelectorAll("#pomoPresets button[data-focus]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));build();render();});
+  $("pomoLong").onclick=()=>{P.longOn=!P.longOn;$("pomoLong").setAttribute("aria-pressed",String(P.longOn));};
+  $("pomoSpeed").onclick=()=>{P.speed=P.speed>1?1:60;$("pomoSpeed").setAttribute("aria-pressed",String(P.speed>1));};
+  vigilThemes("pomoThemes","pomoCase");
+  $("pomoStart").onclick=()=>{ensureAudio();if(AC)AC.resume();if(P.mode==="running"){P.mode="paused";blip(440);}else{P.mode="running";P.last=performance.now();blip(660);}render();};
+  $("pomoReset").onclick=()=>{P.phase="focus";P.count=0;P.rem=len("focus");P.mode="ready";render();};
+  $("pomoSkip").onclick=()=>{ensureAudio();const wasRunning=P.mode==="running";endPhase(false);if(wasRunning&&P.auto)P.mode="running";render();};
+  $("pomoAuto").onclick=()=>{P.auto=!P.auto;$("pomoAuto").setAttribute("aria-pressed",String(P.auto));};
+  build();(function loop(){render();requestAnimationFrame(loop);})();
+})();
+
 /* mechanical keyboard: semantic keys, visible bottom-out, lightweight typing model */
 const keyboardRows=[
   [["Esc",1.1,"accent"],...[1,2,3,4,5,6,7,8,9,10,11,12].map(n=>[`F${n}`,1,"accent"])],
@@ -1160,7 +1403,29 @@ function renderPress(down) {
   {id:"abtns",title:"The Three Keys",code:String.raw`const press = { type:"spring", stiffness:650, damping:26, mass:.6 };
 animate(button, pressed ? { y:6, scale:.94 } : { y:0, scale:1 }, press);
 animate(socket, { boxShadow: pressed ? SOCKET_DEEP : SOCKET_REST });
-// Native <button>; latch changes on click, momentary follows hold.`}
+// Native <button>; latch changes on click, momentary follows hold.`},
+  {id:"v90Case",title:"Vigil 90",code:String.raw`// One sweep = 90 seconds: 4° per second, labels every 10 s, 90 at the top.
+const angle = (1 - remainingMs / 90000) * 360;
+secondHand.setAttribute("transform", "rotate(" + angle + " 152 152)");
+// Soft ticks for the last three seconds, a chime pair between rounds.
+const s = Math.ceil(remainingMs / 1000);
+if (s <= 3 && s > 0 && s !== lastTick) { lastTick = s; blip(1320); }
+if (remainingMs <= 0 && (loop || round < rounds)) { round++; endAt = Date.now() + 90000; }`},
+  {id:"timerPressure",title:"Pressure sound",code:String.raw`// Original synthesized countdown, no recorded audio: tick + thump each second,
+// double time and higher pitch in the last ten, a low boom at zero.
+function pressureTick(secLeft) {
+  const hot = secLeft <= 10, t = ctx.currentTime;
+  voice(t, hot ? 1180 : 940, hot ? .12 : .09, hot ? .22 : .14);   // square pair → band-pass + sine thump
+  if (hot) voice(t + .5, 1320, .08, 0);                           // off-beat tick
+}
+timerCase.dataset.pressure = running && secLeft <= 10 ? "hot" : ""; // digits go red`},
+  {id:"pomoCase",title:"Pomodoro Vigil",code:String.raw`// One face is one cycle: focus + break minutes around 360°.
+const deg = 360 / (focus + brk);
+const pos = phase === "focus" ? frac * focus : focus + frac * brk;   // minutes into the cycle
+focusArc.setAttribute("d", arc(0, Math.min(pos, focus) * deg));      // red
+breakArc.setAttribute("d", phase !== "focus" ? arc(focus * deg, pos * deg) : "");  // ink
+// After every fourth completed focus session, the break is long.
+next = phase === "focus" ? (++count % 4 === 0 && longOn ? "long" : "break") : "focus";`},
 ];
 function addCodePanels(){
   CODE_SNIPPETS.forEach(item=>{

@@ -40,16 +40,18 @@ GROUPS = [
         "Sigil Remote", "Orbit Wheel", "Lumen Pad",
     ]),
     ("Time & playback", "Control duration, transport, and sound. Reach for these when something runs, counts, or plays.", [
-        "Aether Receiver", "Horologion", "Vigil Clock", "Strobe Platter",
+        "Aether Receiver", "Horologion", "Vigil Clock", "Vigil 90", "Pomodoro Vigil", "Strobe Platter",
         "Transport Bank", "Monitor Pair",
     ]),
     ("Signal & feedback", "Read conditions, levels, and outcomes. Reach for these when the system reports rather than asks.", [
-        "Lumen VU", "Cantor Ladder", "Excursion Pair", "Lodestar",
-        "Climate", "Velocity", "Triad", "Departures", "Manifest", "Aemeth",
+        "Lumen VU", "Lumen Context", "Cantor Ladder", "Cantor Agents", "Excursion Pair", "Lodestar",
+        "Climate", "Velocity", "Velocity Context", "Triad", "Triad Context", "Triad Quota",
+        "Departures", "Manifest", "Aemeth",
     ]),
 ]
 FEATURED = "Obsidian Dial"
-WIDE = {"Mechanical Keyboard", "Cadence Pads", "Penumbra Deck", "Departures", "Manifest", "Aemeth"}
+WIDE = {"Mechanical Keyboard", "Cadence Pads", "Penumbra Deck", "Departures", "Manifest", "Aemeth",
+        "Lumen Context", "Cantor Agents", "Triad Quota"}
 
 
 def split_source(path):
@@ -147,7 +149,7 @@ def main():
         selectors = ".cap" if key == "foundation" else "article.unit .cap"
         found.update(cap.select_one("span").get_text(" ", strip=True).split("·")[0].strip() for cap in soup.select(selectors))
     expected = {FEATURED, "The Code Veil", *(name for _, _, names in GROUPS for name in names)}
-    if found != expected or len(found) != 57:
+    if found != expected:
         raise ValueError(f"Catalog mismatch: missing={expected-found}, extra={found-expected}, count={len(found)}")
     markup = "".join(source_markup(key, soup) for key, (soup, _, _) in records.items())
     nav, headings = category_nav()
@@ -177,7 +179,7 @@ def main():
     (UIUX / "index.html").write_text(shell)
     (UIUX / "controls.css").write_text(controls_css)
     (UIUX / "controls.js").write_text(controls_js)
-    print("Generated one page with 56 controls in six functional groups")
+    print(f"Generated one page with {len(expected) - 1} controls in six functional groups")
 
 
 if __name__ == "__main__":

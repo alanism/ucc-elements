@@ -2634,6 +2634,351 @@ mfRender();
   render(true); addLoop(aeTick);
 })();
 
+/* ═════════ Context and agents: one simulated two-model session ═════════ */
+(() => {
+  const PAIRS=[["FABLE 5.1","SONNET 5.5"],["OPUS 5.5","SONNET 5.5"],["OPUS 5.5","HAIKU 5.5"]];
+  const ADVISE=.40, RED=.85, SUBWIN=200000;
+  const TASKS=["tests","refactor","docs","lint","migrate","review","search","types","bench","fixtures"];
+  const S={ pair:1, win:1e6, run:true, speed:1, t:0,
+    a:{ used:286000, rate:0, inst:0, burst:0 }, b:{ used:118000, rate:0, inst:0, burst:0 },
+    agents:[], nextSpawn:6, seq:0, msg:"", msgUntil:0, test:0 };
+  const views=[], short=n=>n.split(" ")[0];
+  const kfmt=n=>n>=999500?`${(n/1e6).toFixed(n%1e6?2:0)}M`:`${Math.round(n/1000)}K`;
+  const frac=m=>m.used/S.win;
+  const say=m=>{ S.msg=m; S.msgUntil=performance.now()+2600; };
+  function compact(w){ const m=S[w]; const before=m.used; m.used=Math.max(12000, Math.round(m.used*.12+15000)); say(`${short(PAIRS[S.pair][w==="a"?0:1])} COMPACTED ${kfmt(before)} → ${kfmt(m.used)}`); thock(); paintAll(true); }
+  function newThread(){ S.a.used=9000; S.b.used=6000; S.agents.forEach(g=>g.done=true); say("NEW THREAD · BOTH CONTEXTS CLEARED"); clack(); paintAll(true); }
+  function spawn(){ const live=S.agents.filter(g=>!g.done); if(live.length>=4){ say("FOUR SUB-AGENTS IS THE LIMIT HERE"); return; }
+    S.seq++; S.agents.push({ id:S.seq, task:TASKS[(S.seq-1)%TASKS.length], used:4000, rate:0, inst:0, life:8+Math.random()*14, age:0, needsOk:false, asked:false, done:false, goneAt:0, peak:0, peakAt:0 }); tick(); paintAll(true); }
+  function step(dt){
+    const sp=dt*S.speed; S.t+=sp;
+    const rA = 380 + S.a.burst, rB = (S.pair===2?1150:900) + S.b.burst;
+    S.a.burst = Math.max(0, S.a.burst*Math.exp(-sp*1.4) + (Math.random()<sp*.25 ? 1800+Math.random()*2600 : 0));
+    S.b.burst = Math.max(0, S.b.burst*Math.exp(-sp*1.1) + (Math.random()<sp*.35 ? 3000+Math.random()*7000 : 0));
+    S.a.inst=rA*(.8+Math.random()*.4); S.b.inst=rB*(.7+Math.random()*.6);
+    S.a.used+=S.a.inst*sp; S.b.used+=S.b.inst*sp;
+    ["a","b"].forEach(w=>{ const m=S[w]; m.rate+=(m.inst-m.rate)*(1-Math.exp(-dt/1.2)); if(m.used>=S.win){ const b=m.used; m.used=Math.round(S.win*.18); say(`${short(PAIRS[S.pair][w==="a"?0:1])} HIT THE WINDOW · AUTO-COMPACTED`); } });
+    S.nextSpawn-=sp; if(S.nextSpawn<=0){ S.nextSpawn=10+Math.random()*14; if(S.agents.filter(g=>!g.done).length<3) spawn(); }
+    S.agents.forEach(g=>{ if(g.done) return;
+      if(g.needsOk){ g.inst=0; }
+      else { g.age+=sp; g.inst=(1400+Math.random()*4200)*(g.age<1?g.age:1); g.used+=g.inst*sp*.6;
+        if(!g.asked && g.age>g.life*.45 && Math.random()<.18){ g.asked=true; g.needsOk=true; }
+        if(g.age>=g.life){ g.done=true; g.goneAt=S.t; const add=3000+Math.round(Math.random()*4000); S.a.used+=add; say(`SUB-${g.id} ${g.task.toUpperCase()} DONE · +${kfmt(add)} TO ORCHESTRATOR`); } }
+      g.rate+=(g.inst-g.rate)*(1-Math.exp(-dt/.8)); });
+    S.agents.forEach(g=>{ if(g.done){ g.rate*=Math.exp(-dt*3); } });
+    S.agents=S.agents.filter(g=>!(g.done && S.t-g.goneAt>4*Math.max(1,S.speed)));
+  }
+  function anyVisible(){ return views.some(v=>visible.get(v.el)); }
+  function ctxTick(dt, now){
+    if(S.run) step(dt);
+    else { ["a","b"].forEach(w=>S[w].rate*=Math.exp(-dt*2)); S.agents.forEach(g=>g.rate*=Math.exp(-dt*2)); }
+    views.forEach(v=>{ if(visible.get(v.el)) v.frame(dt, now); });
+    return anyVisible();
+  }
+  function paintAll(force){ views.forEach(v=>v.paint && v.paint(force)); syncControls(); }
+  function syncControls(){
+    $$("[data-cpair]").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.cpair===S.pair)));
+    $$("[data-cwin]").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.cwin===S.win)));
+    $$(".ctx-run").forEach(b=>{ b.setAttribute("aria-pressed",String(S.run)); b.textContent=S.run?"RUNNING":"PAUSED"; });
+    $$("[data-cspeed]").forEach(b=>{ b.setAttribute("aria-pressed",String(S.speed>1)); b.textContent=`SPEED ${S.speed}×`; });
+    $("cxWin").innerHTML=`<i${S.win<1e6?' class="on"':""}></i>${kfmt(S.win)}`;
+  }
+  $$("[data-cpair]").forEach(b=>b.onclick=()=>{ S.pair=+b.dataset.cpair; tick(); views.forEach(v=>v.rebuild&&v.rebuild()); paintAll(true); });
+  $$("[data-cwin]").forEach(b=>b.onclick=()=>{ const r=+b.dataset.cwin/S.win; S.win=+b.dataset.cwin; S.a.used=Math.min(S.a.used*r,S.win*.95); S.b.used=Math.min(S.b.used*r,S.win*.95); tick(); views.forEach(v=>v.rebuild&&v.rebuild()); paintAll(true); });
+  $$(".ctx-run").forEach(b=>b.onclick=()=>{ S.run=!S.run; thock(); paintAll(true); addLoop(ctxTick); });
+  $$("[data-cspeed]").forEach(b=>b.onclick=()=>{ S.speed=S.speed>1?1:10; tick(); paintAll(true); });
+  $$("[data-ccompact]").forEach(b=>b.onclick=()=>compact(b.dataset.ccompact));
+  $$("[data-cnew]").forEach(b=>b.onclick=newThread);
+
+  /* ── Lumen Context: twin VU faces on a compressed scale ── */
+  (() => {
+    const el=$("cv"), K=Math.log(.708)/Math.log(ADVISE), pos=u=>Math.pow(clamp(u/S.win,0,1.02),K), ang=p=>-44+clamp(p,-.02,1.04)*88;
+    const N={ a:{ p:pos(S.a.used), v:0 }, b:{ p:pos(S.b.used), v:0 } }, parts={};
+    function build(svg, w){
+      svg.innerHTML=""; const cx=110, cy=150, R=110, pt=(r,a)=>[cx+r*Math.sin(a*Math.PI/180), cy-r*Math.cos(a*Math.PI/180)];
+      const arc=(r,a0,a1)=>{ const [x0,y0]=pt(r,a0),[x1,y1]=pt(r,a1); return `M${x0.toFixed(2)} ${y0.toFixed(2)}A${r} ${r} 0 0 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`; };
+      svgEl("path",{ d:arc(R,ang(0),ang(pos(ADVISE*S.win))), class:"vu-line", fill:"none", "stroke-width":1.1 }, svg);
+      svgEl("path",{ d:arc(R+3,ang(pos(ADVISE*S.win)),ang(1)), class:"vu-hot", fill:"none", "stroke-width":6 }, svg);
+      const LBL=new Set([0,.1,.2,.8,1]);
+      [0,.05,.1,.2,.3,.4,.5,.6,.7,.8,.9,1].forEach(f=>{ const a=ang(pos(f*S.win)), hot=f>ADVISE, maj=LBL.has(f)||f===ADVISE;
+        const [x1,y1]=pt(R,a), [x2,y2]=pt(R+(maj?9:6),a); svgEl("line",{ x1,y1,x2,y2, class:hot?"vu-hot":"vu-line", "stroke-width":1.3 }, svg);
+        if(LBL.has(f)){ const [tx,ty]=pt(R+18,a); const t=svgEl("text",{ x:tx.toFixed(1), y:(ty+3).toFixed(1), "text-anchor":"middle", class:f===ADVISE?"vu-adv":hot?"vu-num vu-num-hot sm":"vu-num sm" }, svg); t.textContent = f===0?"0":kfmt(f*S.win); } });
+      const [ax,ay]=pt(R+18,ang(pos(ADVISE*S.win))); svgEl("text",{ x:ax.toFixed(1), y:(ay+3).toFixed(1), "text-anchor":"middle", class:"vu-adv" }, svg).textContent=kfmt(ADVISE*S.win);
+      svgEl("text",{ x:110, y:86, "text-anchor":"middle", class:"vu-big", style:"font-size:12px;letter-spacing:2px" }, svg).textContent="CONTEXT";
+      parts[w]={};
+      parts[w].count=svgEl("text",{ x:110, y:99, "text-anchor":"middle", class:"vu-tiny", style:"font-size:7px" }, svg);
+      parts[w].name=svgEl("text",{ x:12, y:106, class:"vu-tiny" }, svg);
+      svgEl("text",{ x:190, y:16, "text-anchor":"end", class:"vu-tiny" }, svg).textContent="COMPACT";
+      parts[w].lamp=svgEl("circle",{ cx:200, cy:13.5, r:3.6, class:"vu-peak" }, svg);
+      parts[w].g=svgEl("g",{ class:"vu-needle" }, svg);
+      svgEl("line",{ x1:cx, y1:cy, x2:cx, y2:cy-R-8, "stroke-width":1.4, "stroke-linecap":"round" }, parts[w].g);
+      svgEl("rect",{ x:0, y:110, width:220, height:18, class:"vu-shroud" }, svg);
+      svgEl("path",{ d:"M0 110.5H220", stroke:"rgba(0,0,0,.25)", "stroke-width":1 }, svg);
+    }
+    const rebuild=()=>{ build($("cvA"),"a"); build($("cvB"),"b"); paint(true); };
+    let readAt=0;
+    function paint(force){
+      ["a","b"].forEach(w=>{ const f=frac(S[w]);
+        parts[w].name.textContent=`${w==="a"?"THINK":"BUILD"} · ${PAIRS[S.pair][w==="a"?0:1]}`;
+        parts[w].count.textContent=`${kfmt(S[w].used)} / ${kfmt(S.win)} TOKENS`;
+        parts[w].lamp.classList.toggle("on", f>=ADVISE); parts[w].lamp.classList.toggle("blink", f>=RED);
+        $(w==="a"?"cvA":"cvB").setAttribute("aria-valuenow",Math.round(f*100)); $(w==="a"?"cvA":"cvB").setAttribute("aria-valuetext",`${kfmt(S[w].used)} of ${kfmt(S.win)} tokens`); });
+      const now=performance.now(); if(!force && now-readAt<200) return; readAt=now;
+      const fa=frac(S.a), advice = fa>=RED ? "start a new thread now" : fa>=ADVISE ? "compact or start a new thread" : `advice at ${kfmt(ADVISE*S.win)}`;
+      $("cvRead").innerHTML = now<S.msgUntil ? `<b>${S.msg}</b>` : `<b>${short(PAIRS[S.pair][0])} ${kfmt(S.a.used)}</b> · ${short(PAIRS[S.pair][1])} ${kfmt(S.b.used)} · ${advice}`;
+    }
+    function frame(dt){
+      ["a","b"].forEach(w=>{ const n=N[w], target=pos(S[w].used);
+        if(reduce){ n.p=target; n.v=0; } else { let h=dt; while(h>0){ const s=Math.min(1/240,h); n.v+=(-110*(n.p-target)-15*n.v)*s; n.p+=n.v*s; h-=s; } }
+        if(n.p>1.04){ n.p=1.04; n.v*=-.3; }
+        parts[w].g.setAttribute("transform",`rotate(${ang(n.p).toFixed(2)} 110 150)`); });
+      paint();
+    }
+    rebuild(); views.push({ el, frame, paint, rebuild }); bindFinish("cvFinish","cv");
+  })();
+
+  /* ── Cantor Agents: one ladder row per agent ── */
+  (() => {
+    const el=$("ca"), rowsEl=$("caRows"), rowCache=new Map();
+    const lit=r=>Math.round(clamp(Math.log10(Math.max(r,1)/100)/Math.log10(200),0,1)*20);
+    function rowFor(key){
+      if(rowCache.has(key)) return rowCache.get(key);
+      const row=document.createElement("div"); row.className="agl-row";
+      row.innerHTML=`<span class="agl-name"></span><div class="lad-segs"></div><span class="agl-st"></span>`;
+      const segs=[]; for(let i=0;i<20;i++){ const s=document.createElement("i"); if(i>=17) s.classList.add("hot"); row.children[1].appendChild(s); segs.push(s); }
+      const r={ row, segs, name:row.children[0], st:row.children[2], lit:-1, hold:-1, peak:0, peakAt:0 };
+      row.addEventListener("click", ()=>approve(key)); row.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); approve(key); } });
+      rowCache.set(key,r); return r;
+    }
+    function approve(key){ const g=S.agents.find(x=>"s"+x.id===key); if(g && g.needsOk){ g.needsOk=false; thock(); say(`SUB-${g.id} APPROVED · ${g.task.toUpperCase()} CONTINUES`); paint(true); } }
+    let readAt=0;
+    function paint(force){
+      const list=[{ key:"a", name:`<b>ORCH</b> · ${short(PAIRS[S.pair][0])}`, rate:S.a.rate, st:S.run?(S.a.rate>60?"WORKING":"IDLE"):"PAUSED" },
+                  { key:"b", name:`<b>BUILD</b> · ${short(PAIRS[S.pair][1])}`, rate:S.b.rate, st:S.run?(S.b.rate>60?"WORKING":"IDLE"):"PAUSED" },
+                  ...S.agents.map(g=>({ key:"s"+g.id, name:`<b>SUB-${g.id}</b> · ${g.task}`, rate:g.rate, st:g.needsOk?"NEEDS OK":g.done?"DONE":S.run?"WORKING":"PAUSED", gone:g.done, ask:g.needsOk }))];
+      const keep=new Set(list.map(x=>x.key));
+      [...rowCache.keys()].forEach(k=>{ if(!keep.has(k)){ rowCache.get(k).row.remove(); rowCache.delete(k); } });
+      const now=performance.now();
+      list.forEach((x,i)=>{ const r=rowFor(x.key); if(rowsEl.children[i]!==r.row) rowsEl.insertBefore(r.row, rowsEl.children[i]||null);
+        r.name.innerHTML=x.name; r.st.textContent=x.st; r.st.className="agl-st"+(x.ask?" ask":x.st==="WORKING"?" work":x.st==="DONE"?" done":"");
+        r.row.classList.toggle("gone", !!x.gone);
+        if(x.ask){ r.row.setAttribute("role","button"); r.row.tabIndex=0; r.row.setAttribute("aria-label",`Sub-agent ${x.key.slice(1)} needs approval. Press Enter to approve.`); } else { r.row.removeAttribute("role"); r.row.removeAttribute("tabindex"); r.row.removeAttribute("aria-label"); }
+        let L=lit(x.rate); if(S.test){ const e=(now-S.test)/1200; if(e>=1) S.test=0; else L=Math.round((1-Math.abs(e*2-1))*20); }
+        if(L>=r.peak){ r.peak=L; r.peakAt=now; } else if(now-r.peakAt>1200) r.peak=Math.max(L, r.peak-1);
+        const hold=S.test?-1:r.peak-1;
+        if(L!==r.lit || hold!==r.hold){ r.segs.forEach((s,j)=>{ s.classList.toggle("on", j<L); s.classList.toggle("hold", j===hold && j>=L); }); r.lit=L; r.hold=hold; } });
+      if(!force && now-readAt<250) return; readAt=now;
+      const work=list.filter(x=>x.st==="WORKING").length, ask=list.filter(x=>x.ask).length, total=Math.round(S.a.rate+S.b.rate+S.agents.reduce((s,g)=>s+g.rate,0));
+      $("caRead").innerHTML = now<S.msgUntil ? `<b>${S.msg}</b>` : `<b>${work} working</b>${ask?` · <b style="color:var(--accent)">${ask} need${ask>1?"":"s"} OK</b>`:""} · ${S.agents.filter(g=>!g.done).length} sub-agents · ${(total/1000).toFixed(1)}K tok/s`;
+    }
+    $("caSpawn").onclick=()=>{ spawn(); addLoop(ctxTick); };
+    $("caHalt").onclick=()=>{ S.agents.forEach(g=>{ if(!g.done){ g.done=true; g.goneAt=S.t; } }); clack(); say("SUB-AGENTS HALTED"); paint(true); };
+    $("caTest").onclick=()=>{ S.test=performance.now(); thock(); addLoop(ctxTick); };
+    views.push({ el, frame:()=>paint(), paint }); bindFinish("caFinish","ca"); paint(true);
+  })();
+
+  /* ── Triad Context: think, build, agents ── */
+  (() => {
+    const el=$("ct"), svg=$("ctSvg"), R={ a:98, b:82, g:66 }, arcs={}; let sel="a";
+    Object.entries(R).forEach(([k,r])=>{ const C=2*Math.PI*r;
+      svgEl("circle",{ cx:120, cy:120, r, fill:"none", stroke:"#26262a", "stroke-width":9, "stroke-linecap":"round", "stroke-dasharray":`${C*.75} ${C}`, transform:"rotate(135 120 120)" }, svg);
+      arcs[k]=svgEl("circle",{ cx:120, cy:120, r, fill:"none", stroke:"#f2f2f4", "stroke-width":9, "stroke-linecap":"round", "stroke-dasharray":`0 ${C}`, transform:"rotate(135 120 120)", style:"transition:stroke-dasharray .45s ease,stroke .3s" }, svg); arcs[k].C=C;
+      const a=(135+ADVISE*270)*Math.PI/180; svgEl("line",{ x1:120+(r-7)*Math.cos(a), y1:120+(r-7)*Math.sin(a), x2:120+(r+7)*Math.cos(a), y2:120+(r+7)*Math.sin(a), stroke:"#F4A934", "stroke-width":2.2 }, svg);
+      svgEl("text",{ x:120, y:120+r+3, "text-anchor":"middle", class:"g-lbl" }, svg).textContent={a:"THINK",b:"BUILD",g:"AGENTS"}[k]; });
+    const tL=svgEl("text",{ x:120, y:90, "text-anchor":"middle", class:"g-lbl" }, svg), tB=svgEl("text",{ x:120, y:130, "text-anchor":"middle", class:"g-big", style:"font-size:34px" }, svg),
+      tD1=svgEl("text",{ x:120, y:148, "text-anchor":"middle", class:"g-small", style:"font-size:7.2px" }, svg), tD2=svgEl("text",{ x:120, y:161, "text-anchor":"middle", class:"g-lbl", style:"font-size:7px" }, svg);
+    const col=f=>f>=RED?"var(--accent)":f>=ADVISE?"#F4A934":"#f2f2f4";
+    const agentsFrac=()=>{ const live=S.agents.filter(g=>!g.done); return live.length ? live.reduce((s,g)=>s+g.used,0)/live.length/SUBWIN : 0; };
+    let readAt=0;
+    function paint(force){
+      const now=performance.now(); if(!force && now-readAt<400) return; readAt=now;
+      const F={ a:frac(S.a), b:frac(S.b), g:agentsFrac() };
+      Object.keys(R).forEach(k=>{ const f=clamp(F[k],0,1); arcs[k].setAttribute("stroke-dasharray",`${(arcs[k].C*.75*f).toFixed(1)} ${arcs[k].C}`); arcs[k].style.stroke=col(f); });
+      const f=F[sel];
+      tL.textContent = sel==="g" ? `${S.agents.filter(g=>!g.done).length} SUB-AGENTS · AVG` : `${PAIRS[S.pair][sel==="a"?0:1]} · ${sel==="a"?"THINKING":"BUILDING"}`;
+      tB.textContent = sel==="g" ? `${Math.round(f*100)}%` : kfmt(S[sel].used); tB.style.fill = f>=ADVISE ? col(f) : "";
+      tD1.textContent = sel==="g" ? `OF ${kfmt(SUBWIN)} EACH` : `${Math.round(f*100)}% OF ${kfmt(S.win)} · ${(S[sel].rate/1000).toFixed(1)}K TOK/S`;
+      tD2.textContent = f>=RED ? "NEW THREAD NOW" : f>=ADVISE ? "COMPACT ADVISED" : `ADVICE AT ${sel==="g"?"40%":kfmt(ADVISE*S.win)}`;
+      $("ctRead").innerHTML=["a","b","g"].map(k=>{ const t=`${{a:"THINK",b:"BUILD",g:"AGENTS"}[k]} ${Math.round(F[k]*100)}%`; return k===sel?`<b>${t}</b>`:t; }).join(" · ");
+    }
+    $$("[data-cring]").forEach(b=>b.onclick=()=>{ sel=b.dataset.cring; $$("[data-cring]").forEach(x=>{ x.setAttribute("aria-pressed",String(x===b)); x.querySelector("i").classList.toggle("on",x===b); }); tick(); paint(true); });
+    $("ctCompact").onclick=()=>{ if(sel==="g"){ say("SUB-AGENTS COMPACT THEMSELVES WHEN THEY REPORT BACK"); tick(); paint(true); return; } compact(sel); };
+    views.push({ el, frame:()=>paint(), paint }); bindFinish("ctFinish","ct"); paint(true);
+  })();
+
+  /* ── Velocity Context: two needles, 0 to the window ── */
+  (() => {
+    const el=$("cx"), C=120, pt=(r,a)=>[C+r*Math.sin(a*Math.PI/180), C-r*Math.cos(a*Math.PI/180)];
+    const ang=u=>-120+clamp(u/S.win,0,1.02)*240; let p={}, nA=S.a.used, nB=S.b.used;
+    function build(){
+      const svg=$("cxSvg"); svg.innerHTML=""; const step=S.win/10;
+      for(let i=0;i<=40;i++){ const u=i*S.win/40, a=ang(u), maj=i%4===0, f=u/S.win; const [x1,y1]=pt(112,a), [x2,y2]=pt(maj?98:104,a);
+        svgEl("line",{ x1,y1,x2,y2, class:"g-tick"+(maj?" maj":""), "stroke-width":maj?2.2:1.4, "stroke-linecap":"round", style:f>=RED?"stroke:var(--accent)":f>=ADVISE?"stroke:#F4A934":"" }, svg);
+        if(maj){ const [tx,ty]=pt(84,a); svgEl("text",{ x:tx, y:ty, "text-anchor":"middle", "dominant-baseline":"central", class:"g-num", style:"font-size:9px"+(f>=RED?";fill:var(--accent)":f>=ADVISE?";fill:#F4A934":"") }, svg).textContent=Math.round(u/1000); } }
+      p.big=svgEl("text",{ x:C, y:180, "text-anchor":"middle", class:"g-big", style:"font-size:32px" }, svg);
+      p.unit=svgEl("text",{ x:C, y:194, "text-anchor":"middle", class:"g-lbl" }, svg);
+      p.l1=svgEl("text",{ x:C, y:209, "text-anchor":"middle", class:"g-small", style:"font-size:8.5px" }, svg);
+      p.l2=svgEl("text",{ x:C, y:222, "text-anchor":"middle", class:"g-lbl", style:"font-size:7px" }, svg);
+      p.nB=svgEl("g",{}, svg); svgEl("line",{ x1:C, y1:C+10, x2:C, y2:C-92, stroke:"#f2f2f4", "stroke-width":1.8, "stroke-linecap":"round" }, p.nB);
+      p.nA=svgEl("g",{}, svg); svgEl("line",{ x1:C, y1:C+16, x2:C, y2:C-100, style:"stroke:var(--accent)", "stroke-width":3, "stroke-linecap":"round" }, p.nA);
+      svgEl("circle",{ cx:C, cy:C, r:7, fill:"#1c1c1f", stroke:"#5a5a60", "stroke-width":1.5 }, svg);
+      svgEl("text",{ x:C, y:62, "text-anchor":"middle", class:"g-lbl", style:"font-size:7px" }, svg).textContent="K TOKENS";
+    }
+    let readAt=0;
+    function paint(force){
+      const now=performance.now(); if(!force && now-readAt<150) return; readAt=now;
+      const fa=frac(S.a), toAdv=(ADVISE*S.win-S.a.used)/Math.max(S.a.rate*S.speed,1);
+      p.big.textContent=Math.round(S.a.used/1000); p.big.style.fill = fa>=RED?"var(--accent)":fa>=ADVISE?"#F4A934":"";
+      p.unit.textContent=`K · THINK · ${short(PAIRS[S.pair][0])}`;
+      p.l1.textContent=`BUILD ${kfmt(S.b.used)} · ${short(PAIRS[S.pair][1])} · ${((S.a.rate+S.b.rate)/1000).toFixed(1)}K TOK/S`;
+      p.l2.textContent = fa>=RED ? "WINDOW NEARLY FULL · NEW THREAD" : fa>=ADVISE ? "COMPACT ADVISED" : S.run ? `COMPACT IN ~${Math.max(1,Math.ceil(toAdv/60))} MIN` : "PAUSED";
+      $("cxScreen").setAttribute("aria-valuenow",Math.round(S.a.used/1000)); $("cxScreen").setAttribute("aria-valuetext",`${kfmt(S.a.used)} of ${kfmt(S.win)} tokens, thinking model`);
+      $("cxRead").innerHTML = now<S.msgUntil ? `<b>${S.msg}</b>` : `<b>${kfmt(S.a.used)}</b> think · ${kfmt(S.b.used)} build · ${PAIRS[S.pair].map(short).join(" + ")}`;
+    }
+    function frame(dt){
+      const k=reduce?1:1-Math.exp(-dt/.25); nA+=(S.a.used-nA)*k; nB+=(S.b.used-nB)*k;
+      p.nA.setAttribute("transform",`rotate(${ang(nA).toFixed(2)} ${C} ${C})`); p.nB.setAttribute("transform",`rotate(${ang(nB).toFixed(2)} ${C} ${C})`); paint();
+    }
+    $("cxPair").onclick=()=>{ S.pair=(S.pair+1)%PAIRS.length; tick(); views.forEach(v=>v.rebuild&&v.rebuild()); paintAll(true); };
+    $("cxWin").onclick=()=>{ $$("[data-cwin]").find(b=>+b.dataset.cwin!==S.win).click(); };
+    $("cxCompact").onclick=()=>compact("a"); $("cxNew").onclick=newThread;
+    build(); views.push({ el, frame, paint, rebuild:()=>{ build(); paint(true); } }); bindFinish("cxFinish","cx"); paint(true);
+  })();
+
+  views.forEach(v=>watch(v.el, ()=>addLoop(ctxTick)));
+  syncControls();
+  window.ContextGauges={ get state(){ return { pair:PAIRS[S.pair], window:S.win, think:S.a.used, build:S.b.used, agents:S.agents.length }; },
+    set(think, build){ if(think!=null) S.a.used=+think; if(build!=null) S.b.used=+build; paintAll(true); }, pause(){ S.run=false; paintAll(true); } };
+})();
+
+/* ═════════ Triad Quota: session / weekly / model cap with week pacing ═════════ */
+(() => {
+  const PROV=[{ name:"CLAUDE", model:"OPUS", modelLong:"Opus weekly" },{ name:"CHATGPT", model:"REASONING", modelLong:"reasoning models" },{ name:"OTHER", model:"PREMIUM", modelLong:"premium model" }];
+  const STYLE=[{ name:"light", rate:.95, p:.55, share:.3 },{ name:"steady", rate:1.55, p:.75, share:.45 },{ name:"heavy", rate:2.6, p:.9, share:.62 }];
+  const WEEK=168, SCAP=15, MCAP=50, DAYS=["MON","TUE","WED","THU","FRI","SAT","SUN"];
+  const Q={ prov:0, style:1, t:0, w:0, m:0, sStart:-99, sUsed:0, log:[], hist:[], speed:1/30, sel:"s", manual:null, lastHist:-1, readAt:0, wasBlocked:"" };
+  const hourOf=t=>(9+t)%24, dayOf=t=>Math.floor(t/24)%7;
+  const when=t=>{ const h=9+t, d=Math.floor(h/24)%7, hh=Math.floor(h%24), mm=Math.floor((h%1)*60); return `${DAYS[d][0]+DAYS[d].slice(1).toLowerCase()} ${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}`; };
+  const dur=h=>{ h=Math.max(0,h); const d=Math.floor(h/24), r=h-d*24, hh=Math.floor(r), mm=Math.round((r-hh)*60); return d?`${d}d ${hh}h`:`${hh}h ${String(mm).padStart(2,"0")}m`; };
+  /* session: starts at the first message, resets in full five hours later */
+  const sess=()=>Q.t<Q.sStart+5 ? Q.sUsed/SCAP*100 : 0;
+  const sResetIn=()=>Q.t<Q.sStart+5 ? Q.sStart+5-Q.t : 0;
+  const used24=()=>Q.log.filter(e=>e.t>Q.t-24).reduce((s,e)=>s+e.a,0);
+  function stepSim(dh){
+    const st=STYLE[Q.style], h=hourOf(Q.t), day=dayOf(Q.t);
+    const active = h>=9 && h<19 && !(day>=5 && Math.random()<.6);
+    if(Q.w>=100 || sess()>=99.5) return;
+    if(active && Math.random()<st.p+.2){ if(Q.t>=Q.sStart+5){ Q.sStart=Q.t; Q.sUsed=0; } const a=Math.min(st.rate*dh*(.5+Math.random()), SCAP-Q.sUsed); if(a<=0) return; Q.sUsed+=a; Q.log.push({ t:Q.t, a }); Q.w=Math.min(100,Q.w+a); Q.m=Math.min(MCAP,Q.m+a*st.share*(MCAP/100)*2); }
+  }
+  function advance(dh){
+    let left=dh; while(left>0){ const s=Math.min(.05,left); Q.t+=s; left-=s; if(Q.t>=WEEK){ newWeek(); return; } stepSim(s);
+      if(Q.t-Q.lastHist>=.5){ Q.hist.push({ t:Q.t, w:Q.w }); Q.lastHist=Q.t; } }
+    Q.log=Q.log.filter(e=>e.t>Q.t-24.5);
+  }
+  function newWeek(){ Q.t=0; Q.w=0; Q.m=0; Q.sStart=-99; Q.sUsed=0; Q.log=[]; Q.hist=[{ t:0, w:0 }]; Q.lastHist=0; }
+  function seed(){
+    newWeek(); const keep=Q.speed; for(let i=0;i<53/.05;i++){ Q.t+=.05; stepSim(.05); if(Q.t-Q.lastHist>=.5){ Q.hist.push({ t:Q.t, w:Q.w }); Q.lastHist=Q.t; } }
+    const k=Q.w>0?38/Q.w:1; Q.w=38; Q.sStart=Q.t-2.9; Q.sUsed=SCAP*.61; Q.hist.forEach(p=>p.w*=k); Q.log.forEach(e=>e.a*=k); Q.log=Q.log.filter(e=>e.t>Q.t-24.5); Q.m=MCAP*.55; Q.speed=keep;
+  }
+  function forecast(){
+    const t=Math.max(Q.t,.5), weekRate=Q.w/t, recent=Q.t>=24 ? used24()/24 : weekRate, hist=.6*recent+.4*weekRate;
+    // the usage style is the plan for the rest of the week: blend it with history (real data uses history only)
+    const st=STYLE[Q.style], planRate=st.rate*Math.min(1,st.p+.2)*(10/24)*((5+2*.4)/7);
+    const rate=Math.max(.01, Q.manual ? hist : .5*hist+.5*planRate);
+    const projected=Q.w+rate*(WEEK-Q.t), out=projected>100 ? Q.t+(100-Q.w)/rate : null;
+    return { rate, projected, out, ideal:Q.t/WEEK*100 };
+  }
+
+  /* rings */
+  const svg=$("qtSvg"), R={ s:98, w:82, m:66 }, arcs={}; const lbls={};
+  Object.entries(R).forEach(([k,r])=>{ const C=2*Math.PI*r;
+    svgEl("circle",{ cx:120, cy:120, r, fill:"none", stroke:"#26262a", "stroke-width":9, "stroke-linecap":"round", "stroke-dasharray":`${C*.75} ${C}`, transform:"rotate(135 120 120)" }, svg);
+    arcs[k]=svgEl("circle",{ cx:120, cy:120, r, fill:"none", stroke:"#f2f2f4", "stroke-width":9, "stroke-linecap":"round", "stroke-dasharray":`0 ${C}`, transform:"rotate(135 120 120)", style:"transition:stroke-dasharray .45s ease,stroke .3s" }, svg); arcs[k].C=C;
+    lbls[k]=svgEl("text",{ x:120, y:120+r+3, "text-anchor":"middle", class:"g-lbl" }, svg); });
+  const proj=svgEl("path",{ fill:"none", "stroke-width":3, "stroke-dasharray":"4 4", "stroke-linecap":"butt" }, svg);
+  const notch=svgEl("line",{ x1:120, y1:120-82-8, x2:120, y2:120-82+8, stroke:"#f2f2f4", "stroke-width":2.4 }, svg);
+  const tL=svgEl("text",{ x:120, y:90, "text-anchor":"middle", class:"g-lbl" }, svg), tB=svgEl("text",{ x:120, y:130, "text-anchor":"middle", class:"g-big", style:"font-size:34px" }, svg),
+    tD1=svgEl("text",{ x:120, y:148, "text-anchor":"middle", class:"g-small", style:"font-size:7.2px" }, svg), tD2=svgEl("text",{ x:120, y:161, "text-anchor":"middle", class:"g-lbl", style:"font-size:7px" }, svg);
+  const angAt=f=>135+clamp(f,0,1)*270;
+  const arcPath=(r,f0,f1)=>{ const a0=angAt(f0)*Math.PI/180, a1=angAt(f1)*Math.PI/180; const large=(a1-a0)>Math.PI?1:0;
+    return `M${(120+r*Math.cos(a0)).toFixed(2)} ${(120+r*Math.sin(a0)).toFixed(2)}A${r} ${r} 0 ${large} 1 ${(120+r*Math.cos(a1)).toFixed(2)} ${(120+r*Math.sin(a1)).toFixed(2)}`; };
+
+  /* week chart */
+  const ch=$("qtChart"), X0=36, X1=410, Y0=14, Y1=144, x=t=>X0+t/WEEK*(X1-X0), y=p=>Y1-clamp(p,0,112)/112*(Y1-Y0);
+  const g={};
+  (() => {
+    for(let d=0;d<=7;d++) svgEl("line",{ x1:x(d*24), y1:Y0, x2:x(d*24), y2:Y1, class:"c-grid" }, ch);
+    for(let d=0;d<7;d++) svgEl("text",{ x:x(d*24+12), y:160, "text-anchor":"middle", class:"c-day" }, ch).textContent=DAYS[d];
+    [0,50,100].forEach(p=>{ svgEl("line",{ x1:X0, y1:y(p), x2:X1, y2:y(p), class:"c-grid" }, ch); svgEl("text",{ x:X0-6, y:y(p)+3, "text-anchor":"end", class:"c-pct" }, ch).textContent=p+"%"; });
+    svgEl("line",{ x1:X0, y1:y(100), x2:X1, y2:y(100), class:"c-cap" }, ch);
+    svgEl("path",{ d:`M${x(0)} ${y(0)}L${x(WEEK)} ${y(100)}`, class:"c-ideal" }, ch);
+    g.fill=svgEl("path",{ class:"c-fill" }, ch); g.used=svgEl("path",{ class:"c-used" }, ch); g.proj=svgEl("path",{ class:"c-proj" }, ch);
+    g.now=svgEl("line",{ y1:Y0, y2:Y1, class:"c-now" }, ch); g.dot=svgEl("circle",{ r:3.5, fill:"#f2f2f4" }, ch);
+    g.out=svgEl("circle",{ r:4, style:"fill:var(--accent)" }, ch); g.outT=svgEl("text",{ "text-anchor":"middle", class:"c-pct", style:"fill:var(--accent);font-weight:600" }, ch);
+  })();
+
+  function colS(f){ return f>=.9?"var(--accent)":f>=.7?"#F4A934":"#f2f2f4"; }
+  function paint(force){
+    const now=performance.now(); if(!force && now-Q.readAt<350) return; Q.readAt=now;
+    const P=PROV[Q.prov], fc=forecast(), S=sess(), F={ s:S/100, w:Q.w/100, m:Q.m/MCAP };
+    const colW = fc.projected>100||F.w>=.9 ? "var(--accent)" : (Q.w-fc.ideal>10||F.w>=.7) ? "#F4A934" : "#f2f2f4";
+    Object.keys(R).forEach(k=>{ const f=clamp(F[k],0,1); arcs[k].setAttribute("stroke-dasharray",`${(arcs[k].C*.75*f).toFixed(1)} ${arcs[k].C}`); arcs[k].style.stroke = k==="w"?colW:colS(f); });
+    lbls.s.textContent="SESSION"; lbls.w.textContent="WEEKLY"; lbls.m.textContent=P.model;
+    const pf=Math.min(fc.projected,100)/100;
+    if(pf>F.w+.005){ proj.setAttribute("d",arcPath(82,F.w,pf)); proj.style.stroke = fc.projected>100?"var(--accent)":fc.projected>90?"#F4A934":"rgba(242,242,244,.45)"; proj.style.display=""; } else proj.style.display="none";
+    notch.setAttribute("transform",`rotate(${(angAt(fc.ideal/100)+90).toFixed(2)} 120 120)`);
+    const sRe=sResetIn();
+    const sel=Q.sel, f=F[sel];
+    tL.textContent = sel==="s" ? "SESSION · 5 H" : sel==="w" ? "WEEKLY" : `${P.model} CAP`;
+    tB.textContent = Math.round(clamp(f,0,1)*100)+"%"; tB.style.fill = sel==="w" ? (colW==="#f2f2f4"?"":colW) : (f>=.7?colS(f):"");
+    tD1.textContent = sel==="s" ? (S>=100?"SESSION LIMIT REACHED":`${Math.round(100-S)}% LEFT THIS SESSION`) : sel==="w" ? `${Math.round(fc.projected)}% PROJECTED AT RESET` : `${(Q.m).toFixed(1)} / ${MCAP} · ${P.modelLong.toUpperCase()}`;
+    tD2.textContent = sel==="s" ? (sRe>0?`RESETS IN ${dur(sRe).toUpperCase()}`:"STARTS WITH YOUR NEXT MESSAGE") : sel==="w" ? `RESETS MON 09:00 · IN ${dur(WEEK-Q.t).toUpperCase()}` : (F.m>=.9?"SWITCH TO A LIGHTER MODEL":"SHARE OF WEEKLY TOP MODEL");
+    /* chart */
+    const pts=[...Q.hist,{ t:Q.t, w:Q.w }];
+    const d=pts.map((p,i)=>`${i?"L":"M"}${x(p.t).toFixed(1)} ${y(p.w).toFixed(1)}`).join("");
+    g.used.setAttribute("d",d); g.fill.setAttribute("d",`${d}L${x(Q.t).toFixed(1)} ${y(0)}L${x(0)} ${y(0)}Z`);
+    g.now.setAttribute("x1",x(Q.t)); g.now.setAttribute("x2",x(Q.t)); g.dot.setAttribute("cx",x(Q.t)); g.dot.setAttribute("cy",y(Q.w));
+    const endT = fc.out ?? WEEK, endP = fc.out ? 100 : fc.projected;
+    g.proj.setAttribute("d",`M${x(Q.t).toFixed(1)} ${y(Q.w).toFixed(1)}L${x(endT).toFixed(1)} ${y(endP).toFixed(1)}`);
+    g.proj.style.stroke = fc.out ? "var(--accent)" : fc.projected>90 ? "#F4A934" : "rgba(242,242,244,.55)";
+    g.out.style.display=g.outT.style.display = fc.out ? "" : "none";
+    if(fc.out){ g.out.setAttribute("cx",x(fc.out)); g.out.setAttribute("cy",y(100)); g.outT.setAttribute("x",clamp(x(fc.out),X0+30,X1-30)); g.outT.setAttribute("y",y(100)-8); g.outT.textContent=`OUT ${when(fc.out).toUpperCase()}`; }
+    /* verdict and details */
+    const v=$("qtVerdict");
+    if(Q.w>=100){ v.className="qt-verdict over"; v.innerHTML=`Weekly limit reached<small>access returns Mon 09:00 · in ${dur(WEEK-Q.t)}</small>`; }
+    else if(fc.out){ v.className="qt-verdict over"; v.innerHTML=`Runs out ${when(fc.out)}<small>then ~${dur(WEEK-fc.out)} without access · ease off by ~${Math.round((1-(100-Q.w)/(fc.rate*(WEEK-Q.t)))*100)}% to make it</small>`; }
+    else if(fc.projected>90){ v.className="qt-verdict near"; v.innerHTML=`Tight finish<small>~${Math.round(fc.projected)}% used by the reset · little room for heavy days</small>`; }
+    else { v.className="qt-verdict"; const left=Math.round(100-fc.projected); v.innerHTML=`~${left}% left at the reset<small>${left>35?"room to lean on the top model more":"on pace for the week"}</small>`; }
+    $("qtS").textContent = S>=99.5 ? `100% · session limit, resets in ${dur(sRe)}` : `${Math.round(S)}% · ${sRe>0?`resets in ${dur(sRe)}`:"starts with your next message"}`;
+    $("qtW").textContent = `${Math.round(Q.w)}% · resets Mon 09:00, in ${dur(WEEK-Q.t)}`;
+    $("qtM").textContent = `${Math.round(F.m*100)}% · ${P.modelLong}`;
+    const diff=Math.round(Q.w-fc.ideal);
+    $("qtP").textContent = `ideal ${Math.round(fc.ideal)}% by ${when(Q.t)} · you're ${Math.abs(diff)} pts ${diff>=0?"ahead":"behind"} · ${fc.rate.toFixed(2)}%/h`;
+    $("qtRead").innerHTML=[["s","SESSION",S],["w","WEEKLY",Q.w],["m",P.model,F.m*100]].map(([k,n,p])=>k===Q.sel?`<b>${n} ${Math.round(p)}%</b>`:`${n} ${Math.round(p)}%`).join(" · ");
+    const blocked = Q.w>=100 ? "weekly" : S>=99.5 ? "session" : "";
+    if(blocked && blocked!==Q.wasBlocked) clack(); Q.wasBlocked=blocked;
+  }
+  function qtTick(dt){ if(!Q.manual) advance(dt*Q.speed); paint(); return visible.get($("qt")); }
+  $$("[data-qring]").forEach(b=>b.onclick=()=>{ Q.sel=b.dataset.qring; $$("[data-qring]").forEach(x=>{ x.setAttribute("aria-pressed",String(x===b)); x.querySelector("i").classList.toggle("on",x===b); }); tick(); paint(true); });
+  const setProv=i=>{ Q.prov=i; $$("[data-qprov]").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.qprov===i))); tick(); paint(true); };
+  $$("[data-qprov]").forEach(b=>b.onclick=()=>setProv(+b.dataset.qprov));
+  $("qtProv").onclick=()=>setProv((Q.prov+1)%PROV.length);
+  $$("[data-qstyle]").forEach(b=>b.onclick=()=>{ Q.style=+b.dataset.qstyle; $$("[data-qstyle]").forEach(x=>x.setAttribute("aria-pressed",String(x===b))); tick(); paint(true); });
+  $$("[data-qspeed]").forEach(b=>b.onclick=()=>{ const fast=Q.speed<1; Q.speed=fast?1:1/30; b.setAttribute("aria-pressed",String(fast)); tick(); });
+  $("qtWeek").onclick=()=>{ Q.manual=null; newWeek(); clack(); paint(true); };
+  window.QuotaGauge={
+    set({ session, weekly, model, elapsedHours, provider, sessionResetsInHours }={}){ Q.manual=true;
+      if(elapsedHours!=null){ Q.t=clamp(+elapsedHours,0,WEEK); }
+      if(weekly!=null){ Q.w=clamp(+weekly,0,100); Q.hist.push({ t:Q.t, w:Q.w }); }
+      if(session!=null){ Q.sUsed=clamp(+session,0,100)/100*SCAP; Q.sStart=Q.t-(5-clamp(+(sessionResetsInHours??5),0,5)); }
+      if(model!=null){ Q.m=clamp(+model,0,100)/100*MCAP; }
+      if(provider!=null){ const i=PROV.findIndex(p=>p.name===String(provider).toUpperCase()); if(i>=0) setProv(i); }
+      paint(true); },
+    simulate(){ Q.manual=null; }
+  };
+  seed(); bindFinish("qtFinish","qt"); watch($("qt"), ()=>addLoop(qtTick)); paint(true);
+})();
+
 paintAccent();
 })();
 
@@ -3088,6 +3433,171 @@ $("timerStart").onclick=()=>{ensureAudio();if(AC)AC.resume();
 $("timerReset").onclick=()=>{timerRemaining=timerDuration;timerMode="ready";timerAlarmed=false;renderTimer();};
 (function timerLoop(){renderTimer();requestAnimationFrame(timerLoop);})();
 
+/* Pressure sound: an original synthesized countdown in the spirit of TV-thriller clocks (no recorded audio).
+   Every second: a hard electronic tick over a low thump. Last 10 s: double time, higher, digits red. Zero: a low boom. */
+function pressureVoice(t,freq,gain,thump){
+  if(!AC||globalThis.__enochianSoundEnabled===false) return;
+  const o=AC.createOscillator(),o2=AC.createOscillator(),bp=AC.createBiquadFilter(),g=AC.createGain();
+  o.type="square";o.frequency.setValueAtTime(freq,t);o2.type="square";o2.frequency.setValueAtTime(freq*1.498,t);
+  bp.type="bandpass";bp.frequency.value=freq*1.6;bp.Q.value=2.2;
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(gain,t+.003);g.gain.exponentialRampToValueAtTime(.0001,t+.085);
+  o.connect(bp);o2.connect(bp);bp.connect(g);g.connect(AC.destination);o.start(t);o2.start(t);o.stop(t+.1);o2.stop(t+.1);
+  if(thump){const s=AC.createOscillator(),sg=AC.createGain();s.type="sine";s.frequency.setValueAtTime(130,t);s.frequency.exponentialRampToValueAtTime(52,t+.11);
+    sg.gain.setValueAtTime(.0001,t);sg.gain.exponentialRampToValueAtTime(thump,t+.004);sg.gain.exponentialRampToValueAtTime(.0001,t+.16);s.connect(sg);sg.connect(AC.destination);s.start(t);s.stop(t+.18);}
+}
+function pressureTick(secLeft){
+  if(!AC) return; const t=AC.currentTime+.005, hot=secLeft<=10, last=secLeft<=3;
+  pressureVoice(t, hot?1180:940, last?.16:hot?.12:.09, hot?.22:.14);
+  if(hot) pressureVoice(t+.5, hot?1320:1050, last?.12:.08, 0);   // the second, off-beat tick of the final ten
+}
+function pressureBoom(){
+  if(!AC||globalThis.__enochianSoundEnabled===false) return; const t=AC.currentTime+.01;
+  const o=AC.createOscillator(),g=AC.createGain();o.type="sine";o.frequency.setValueAtTime(70,t);o.frequency.exponentialRampToValueAtTime(34,t+1.1);
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.38,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+1.4);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+1.5);
+  const len=AC.sampleRate*.6|0,b=AC.createBuffer(1,len,AC.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);
+  const n=AC.createBufferSource(),f=AC.createBiquadFilter(),ng=AC.createGain();n.buffer=b;f.type="lowpass";f.frequency.value=420;ng.gain.value=.3;n.connect(f);f.connect(ng);ng.connect(AC.destination);n.start(t);
+}
+function pressureToggle(btnId,caseId,get,set){
+  $(btnId).onclick=()=>{ensureAudio();if(AC)AC.resume();const on=!get();set(on);$(btnId).setAttribute("aria-pressed",String(on));
+    $(btnId).textContent=on?"PRESSURE SOUND · ON":"PRESSURE SOUND · OFF";if(!on)$(caseId).dataset.pressure="";if(on)pressureTick(30);};
+}
+/* Vigil Clock (60 s and up): watch its countdown from outside, so the original timer code stays untouched */
+(function(){
+  let on=false,lastSec=-1,lastMode="ready";
+  pressureToggle("timerPressure","timerCase",()=>on,v=>on=v);
+  (function watch(){
+    const sec=Math.ceil(timerRemaining/1000);
+    if(on&&timerMode==="running"&&sec!==lastSec&&sec>0){pressureTick(sec);}
+    if(on&&lastMode==="running"&&timerMode==="done")pressureBoom();
+    $("timerCase").dataset.pressure = on&&timerMode==="running"&&sec<=10 ? "hot" : "";
+    lastSec=sec;lastMode=timerMode;requestAnimationFrame(watch);
+  })();
+})();
+
+/* shared builders for the Vigil family: face ring, progress arc, hands, hubs */
+function vigilEl(svg,name,attrs){const e=document.createElementNS(NS,name);for(const k in attrs)e.setAttribute(k,attrs[k]);svg.appendChild(e);return e;}
+function vigilArcPath(cx,cy,r,a0,a1){const [x0,y0]=polar(cx,cy,r,a0),[x1,y1]=polar(cx,cy,r,a1);return `M${x0.toFixed(2)} ${y0.toFixed(2)}A${r} ${r} 0 ${a1-a0>180?1:0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;}
+function vigilThemes(groupId,caseId){$(groupId).addEventListener("click",e=>{const b=e.target.closest("button[data-theme]");if(!b)return;$(caseId).dataset.theme=b.dataset.theme;
+  document.querySelectorAll("#"+groupId+" button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));});}
+function vigilFormat(ms){const tenths=Math.max(0,Math.ceil(ms/100)),mins=Math.floor(tenths/600),secs=Math.floor((tenths%600)/10),tenth=tenths%10;return `${String(mins).padStart(2,"0")}:${String(secs).padStart(2,"0")}.${tenth}`;}
+
+/* Vigil 90: one sweep of the red hand is the whole 90-second interval */
+(function(){
+  const svg=$("v90Svg"),CX=152,CY=152,R=137,C=2*Math.PI*R,SCY=103;
+  const prog=vigilEl(svg,"circle",{cx:CX,cy:CY,r:R,fill:"none",class:"timer-progress","stroke-width":7,"stroke-dasharray":C,"stroke-dashoffset":C,"stroke-linecap":"round",transform:`rotate(-90 ${CX} ${CY})`});
+  vigilEl(svg,"circle",{cx:CX,cy:CY,r:142,fill:"none",class:"timer-subface","stroke-width":1});
+  for(let s=0;s<90;s++){
+    const major=s%10===0,quarter=s%30===0,a=s*4,r1=quarter?123:(major?127:132);
+    const [x1,y1]=polar(CX,CY,r1,a),[x2,y2]=polar(CX,CY,138,a);
+    vigilEl(svg,"line",{x1,y1,x2,y2,class:"timer-tick","stroke-width":quarter?3:(major?2:1)});
+    if(major){const [x,y]=polar(CX,CY,112,a);vigilEl(svg,"text",{x,y:y+7,"text-anchor":"middle",class:"timer-number","font-size":s===0?25:20,"font-family":"'IBM Plex Sans',sans-serif","font-weight":600}).textContent=s===0?"90":String(s);}
+  }
+  vigilEl(svg,"circle",{cx:CX,cy:SCY,r:39,class:"timer-subface","stroke-width":1.5});
+  for(let i=0;i<12;i++){const major=i%3===0,a=i*30,[x1,y1]=polar(CX,SCY,major?31:34,a),[x2,y2]=polar(CX,SCY,38,a);
+    vigilEl(svg,"line",{x1,y1,x2,y2,class:"timer-subtick","stroke-width":major?1.5:.7});
+    if(major){const [x,y]=polar(CX,SCY,24,a);vigilEl(svg,"text",{x,y:y+4,"text-anchor":"middle",class:"timer-subnum","font-size":9,"font-family":"'IBM Plex Mono',monospace","font-weight":600}).textContent=i===0?"12":String(i);}}
+  vigilEl(svg,"text",{x:CX,y:SCY+14,"text-anchor":"middle",class:"timer-subnum","font-size":5.5,"font-family":"'IBM Plex Mono',monospace","font-weight":600,"letter-spacing":1}).textContent="ROUNDS";
+  const sub=vigilEl(svg,"line",{x1:CX,y1:SCY,x2:CX,y2:SCY-27,class:"timer-hand-min","stroke-width":3,"stroke-linecap":"round"});
+  const hand=vigilEl(svg,"line",{x1:CX,y1:CY+18,x2:CX,y2:CY-116,class:"timer-hand-sec","stroke-width":3,"stroke-linecap":"round"});
+  vigilEl(svg,"circle",{cx:CX,cy:SCY,r:5,class:"timer-hub-outer","stroke-width":2});
+  vigilEl(svg,"circle",{cx:CX,cy:CY,r:12,class:"timer-hub-outer","stroke-width":2});
+  vigilEl(svg,"circle",{cx:CX,cy:CY,r:5,class:"timer-hub-inner"});
+  const V={dur:90000,rem:90000,end:0,mode:"ready",rounds:1,round:1,done:0,tickAt:-1,pressure:false,pSec:-1};
+  pressureToggle("v90Pressure","v90Case",()=>V.pressure,v=>V.pressure=v);
+  const setLine=(l,cx,cy,r,a)=>{const [x,y]=polar(cx,cy,r,a);l.setAttribute("x2",x);l.setAttribute("y2",y);};
+  const roundsText=()=>V.rounds===1?"":V.rounds?` · ROUND ${V.round} OF ${V.rounds}`:` · ROUND ${V.round}`;
+  function render(){
+    if(V.mode==="running"){V.rem=Math.max(0,V.end-Date.now());
+      const s=Math.ceil(V.rem/1000);
+      if(V.pressure){if(s>0&&s!==V.pSec){V.pSec=s;pressureTick(s);}}
+      else if(s<=3&&s>0&&s!==V.tickAt){V.tickAt=s;blip(1320);}
+      if(V.rem<=0){V.done++;
+        if(V.rounds===0||V.round<V.rounds){V.round++;V.rem=V.dur;V.end=Date.now()+V.dur;V.tickAt=-1;blip(880);setTimeout(()=>blip(1100),140);}
+        else{V.mode="done";if(V.pressure)pressureBoom();else{blip(880);setTimeout(()=>blip(1100),150);setTimeout(()=>blip(1320),300);}}}}
+    $("v90Case").dataset.pressure = V.pressure&&V.mode==="running"&&Math.ceil(V.rem/1000)<=10 ? "hot" : "";
+    const p=clamp01(1-V.rem/V.dur);
+    prog.setAttribute("stroke-dashoffset",C*(1-p));
+    setLine(hand,CX,CY,116,p*360);setLine(sub,CX,SCY,27,(V.done%12)*30);
+    const d=vigilFormat(V.rem);$("v90Digital").textContent=d;$("v90Digital").setAttribute("aria-label",`${Math.ceil(V.rem/1000)} seconds remaining`);
+    $("v90Start").dataset.state=V.mode;$("v90Glyph").textContent=V.mode==="running"?"■":"▶";
+    $("v90Start").setAttribute("aria-label",V.mode==="running"?"Stop timer":V.mode==="done"?"Start again":"Start timer");
+    $("v90State").textContent=V.mode==="ready"?`READY · ${V.rounds===1?"90 SECONDS":V.rounds?`${V.rounds} ROUNDS × 90 SEC`:"LOOPING 90 SEC"}`
+      :V.mode==="done"?`DONE · ${V.done} ROUND${V.done===1?"":"S"}`:(V.mode==="paused"?"PAUSED":"RUNNING")+roundsText();
+  }
+  $("v90Presets").addEventListener("click",e=>{const b=e.target.closest("button[data-rounds]");if(!b)return;V.rounds=+b.dataset.rounds;V.round=1;V.done=0;V.rem=V.dur;V.mode="ready";
+    document.querySelectorAll("#v90Presets button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));render();});
+  vigilThemes("v90Themes","v90Case");
+  $("v90Start").onclick=()=>{ensureAudio();if(AC)AC.resume();
+    if(V.mode==="running"){V.rem=Math.max(0,V.end-Date.now());V.mode="paused";blip(440);}
+    else{if(V.mode==="done"){V.rem=V.dur;V.round=1;V.done=0;}V.end=Date.now()+V.rem;V.mode="running";V.tickAt=-1;blip(660);}render();};
+  $("v90Reset").onclick=()=>{V.rem=V.dur;V.mode="ready";V.round=1;V.done=0;render();};
+  (function loop(){render();requestAnimationFrame(loop);})();
+})();
+
+/* Pomodoro Vigil: one face is one cycle; focus in red, break in ink, a dot per finished focus */
+(function(){
+  const svg=$("pomoSvg"),CX=152,CY=152,R=137,SCY=103;
+  const P={focus:25,brk:5,long:15,longOn:true,auto:true,speed:1,phase:"focus",count:0,rem:25*60000,mode:"ready",last:0};
+  let face=null;
+  function build(){
+    svg.innerHTML="";const cyc=P.focus+P.brk,deg=360/cyc,step=cyc<=30?.5:1;
+    const fAng=P.focus*deg;
+    vigilEl(svg,"path",{d:vigilArcPath(CX,CY,146,fAng,359.9),class:"timer-band","stroke-width":7});
+    const [lx,ly]=polar(CX,CY,146,fAng+(360-fAng)/2);
+    vigilEl(svg,"circle",{cx:CX,cy:CY,r:142,fill:"none",class:"timer-subface","stroke-width":1});
+    for(let m=0;m<cyc-1e-9;m+=step){const major=Math.abs(m%5)<1e-9,quarter=major&&Math.abs(m%(cyc/2))<1e-9,a=m*deg,r1=quarter?123:(major?127:131);
+      const [x1,y1]=polar(CX,CY,r1,a),[x2,y2]=polar(CX,CY,138,a);vigilEl(svg,"line",{x1,y1,x2,y2,class:"timer-tick","stroke-width":quarter?3:(major?2:1)});
+      if(major){const [x,y]=polar(CX,CY,112,a);vigilEl(svg,"text",{x,y:y+7,"text-anchor":"middle",class:"timer-number","font-size":m===0?25:20,"font-family":"'IBM Plex Sans',sans-serif","font-weight":600}).textContent=m===0?String(cyc):String(m);}}
+    const [bx,by]=polar(CX,CY,94,fAng+(360-fAng)/2);
+    vigilEl(svg,"text",{x:bx,y:by+3,"text-anchor":"middle",class:"timer-bandlbl"}).textContent="BREAK";
+    const fArc=vigilEl(svg,"path",{fill:"none",class:"timer-progress","stroke-width":7,"stroke-linecap":"round"});
+    const bArc=vigilEl(svg,"path",{fill:"none",class:"timer-brk","stroke-width":7,"stroke-linecap":"round"});
+    vigilEl(svg,"circle",{cx:CX,cy:SCY,r:39,class:"timer-subface","stroke-width":1.5});
+    const dots=[0,90,180,270].map(a=>{const [x,y]=polar(CX,SCY,24,a);return vigilEl(svg,"circle",{cx:x,cy:y,r:5,class:"timer-dot","stroke-width":1.5});});
+    vigilEl(svg,"text",{x:CX,y:SCY+3,"text-anchor":"middle",class:"timer-subnum","font-size":7,"font-family":"'IBM Plex Mono',monospace","font-weight":600,"letter-spacing":1}).textContent="SET";
+    const hand=vigilEl(svg,"line",{x1:CX,y1:CY+18,x2:CX,y2:CY-116,class:"timer-hand-sec","stroke-width":3,"stroke-linecap":"round"});
+    vigilEl(svg,"circle",{cx:CX,cy:CY,r:12,class:"timer-hub-outer","stroke-width":2});
+    vigilEl(svg,"circle",{cx:CX,cy:CY,r:5,class:"timer-hub-inner"});
+    face={deg,fAng,fArc,bArc,dots,hand};
+  }
+  const len=ph=>(ph==="focus"?P.focus:ph==="break"?P.brk:P.long)*60000;
+  const nextFocusNo=()=>P.count%4+1;
+  function endPhase(natural){
+    if(P.phase==="focus"){if(natural)P.count++;P.phase=(P.longOn&&P.count>0&&P.count%4===0&&natural)?"long":"break";blip(660);setTimeout(()=>blip(440),170);}
+    else{P.phase="focus";blip(440);setTimeout(()=>blip(660),150);setTimeout(()=>blip(880),300);}
+    P.rem=len(P.phase);
+    if(!(P.auto&&P.mode==="running"))P.mode="ready";
+  }
+  function render(){
+    const now=performance.now();
+    if(P.mode==="running"){P.rem-=(now-P.last)*P.speed;if(P.rem<=0)endPhase(true);}
+    P.last=now;
+    const L=len(P.phase),frac=clamp01(1-P.rem/L);
+    const pos = P.phase==="focus" ? frac*P.focus : P.focus+frac*P.brk;   // minutes into the cycle (a long break is drawn across the break band)
+    const a=pos*face.deg;
+    face.fArc.setAttribute("d", P.phase==="focus" ? (a>.3?vigilArcPath(CX,CY,R,0,a):"") : vigilArcPath(CX,CY,R,0,face.fAng));
+    face.bArc.setAttribute("d", P.phase!=="focus" && a-face.fAng>.3 ? vigilArcPath(CX,CY,R,face.fAng,Math.min(a,359.9)) : "");
+    const [hx,hy]=polar(CX,CY,116,a);face.hand.setAttribute("x2",hx);face.hand.setAttribute("y2",hy);
+    const done=P.phase==="long"?4:P.count%4;face.dots.forEach((d,i)=>d.classList.toggle("on",i<done));
+    $("pomoDigital").textContent=vigilFormat(P.rem);$("pomoDigital").setAttribute("aria-label",`${Math.ceil(P.rem/60000)} minutes remaining in ${P.phase==="focus"?"focus":"the break"}`);
+    $("pomoStart").dataset.state=P.mode;$("pomoGlyph").textContent=P.mode==="running"?"■":"▶";
+    $("pomoStart").setAttribute("aria-label",P.mode==="running"?"Pause":`Start ${P.phase==="focus"?"focus":"break"}`);
+    const label=P.phase==="focus"?`FOCUS ${nextFocusNo()} OF 4`:P.phase==="long"?"LONG BREAK · SET COMPLETE":`BREAK · NEXT FOCUS ${nextFocusNo()}`;
+    $("pomoState").textContent=(P.mode==="ready"?"READY · ":P.mode==="paused"?"PAUSED · ":"")+label+(P.speed>1?" · 60×":"");
+  }
+  $("pomoPresets").addEventListener("click",e=>{const b=e.target.closest("button[data-focus]");if(!b)return;
+    P.focus=+b.dataset.focus;P.brk=+b.dataset.break;P.phase="focus";P.count=0;P.rem=len("focus");P.mode="ready";
+    document.querySelectorAll("#pomoPresets button[data-focus]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));build();render();});
+  $("pomoLong").onclick=()=>{P.longOn=!P.longOn;$("pomoLong").setAttribute("aria-pressed",String(P.longOn));};
+  $("pomoSpeed").onclick=()=>{P.speed=P.speed>1?1:60;$("pomoSpeed").setAttribute("aria-pressed",String(P.speed>1));};
+  vigilThemes("pomoThemes","pomoCase");
+  $("pomoStart").onclick=()=>{ensureAudio();if(AC)AC.resume();if(P.mode==="running"){P.mode="paused";blip(440);}else{P.mode="running";P.last=performance.now();blip(660);}render();};
+  $("pomoReset").onclick=()=>{P.phase="focus";P.count=0;P.rem=len("focus");P.mode="ready";render();};
+  $("pomoSkip").onclick=()=>{ensureAudio();const wasRunning=P.mode==="running";endPhase(false);if(wasRunning&&P.auto)P.mode="running";render();};
+  $("pomoAuto").onclick=()=>{P.auto=!P.auto;$("pomoAuto").setAttribute("aria-pressed",String(P.auto));};
+  build();(function loop(){render();requestAnimationFrame(loop);})();
+})();
+
 /* mechanical keyboard: semantic keys, visible bottom-out, lightweight typing model */
 const keyboardRows=[
   [["Esc",1.1,"accent"],...[1,2,3,4,5,6,7,8,9,10,11,12].map(n=>[`F${n}`,1,"accent"])],
@@ -3277,7 +3787,29 @@ function renderPress(down) {
   {id:"abtns",title:"The Three Keys",code:String.raw`const press = { type:"spring", stiffness:650, damping:26, mass:.6 };
 animate(button, pressed ? { y:6, scale:.94 } : { y:0, scale:1 }, press);
 animate(socket, { boxShadow: pressed ? SOCKET_DEEP : SOCKET_REST });
-// Native <button>; latch changes on click, momentary follows hold.`}
+// Native <button>; latch changes on click, momentary follows hold.`},
+  {id:"v90Case",title:"Vigil 90",code:String.raw`// One sweep = 90 seconds: 4° per second, labels every 10 s, 90 at the top.
+const angle = (1 - remainingMs / 90000) * 360;
+secondHand.setAttribute("transform", "rotate(" + angle + " 152 152)");
+// Soft ticks for the last three seconds, a chime pair between rounds.
+const s = Math.ceil(remainingMs / 1000);
+if (s <= 3 && s > 0 && s !== lastTick) { lastTick = s; blip(1320); }
+if (remainingMs <= 0 && (loop || round < rounds)) { round++; endAt = Date.now() + 90000; }`},
+  {id:"timerPressure",title:"Pressure sound",code:String.raw`// Original synthesized countdown, no recorded audio: tick + thump each second,
+// double time and higher pitch in the last ten, a low boom at zero.
+function pressureTick(secLeft) {
+  const hot = secLeft <= 10, t = ctx.currentTime;
+  voice(t, hot ? 1180 : 940, hot ? .12 : .09, hot ? .22 : .14);   // square pair → band-pass + sine thump
+  if (hot) voice(t + .5, 1320, .08, 0);                           // off-beat tick
+}
+timerCase.dataset.pressure = running && secLeft <= 10 ? "hot" : ""; // digits go red`},
+  {id:"pomoCase",title:"Pomodoro Vigil",code:String.raw`// One face is one cycle: focus + break minutes around 360°.
+const deg = 360 / (focus + brk);
+const pos = phase === "focus" ? frac * focus : focus + frac * brk;   // minutes into the cycle
+focusArc.setAttribute("d", arc(0, Math.min(pos, focus) * deg));      // red
+breakArc.setAttribute("d", phase !== "focus" ? arc(focus * deg, pos * deg) : "");  // ink
+// After every fourth completed focus session, the break is long.
+next = phase === "focus" ? (++count % 4 === 0 && longOn ? "long" : "break") : "focus";`},
 ];
 function addCodePanels(){
   CODE_SNIPPETS.forEach(item=>{

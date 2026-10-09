@@ -22,7 +22,7 @@ The public payload is five files under `.uiux-dist`: the page and four CSS/JS as
 
 ## Monitor
 
-Check `https://uiux-nonhumanintelligence.web.app/UIUX` for HTTP 200 and a rendered catalog of 56 controls. In a browser, verify search, Light/Dark, one open code panel, a slider and a switch. On the custom domain, also verify HTTPS and the same page. Watch Firebase Hosting release and custom-domain status in the GCP/Firebase console. The expected healthy state is a successful Hosting release, working interactions, no console errors from the page, and `HOST_ACTIVE` / `OWNERSHIP_ACTIVE` / `CERT_ACTIVE` for the custom domain.
+Check `https://uiux-nonhumanintelligence.web.app/UIUX` for HTTP 200 and a rendered catalog of 63 controls. In a browser, verify search, Light/Dark, one open code panel, a slider and a switch. On the custom domain, also verify HTTPS and the same page. Watch Firebase Hosting release and custom-domain status in the GCP/Firebase console. The expected healthy state is a successful Hosting release, working interactions, no console errors from the page, and `HOST_ACTIVE` / `OWNERSHIP_ACTIVE` / `CERT_ACTIVE` for the custom domain.
 
 Hosting normalizes `/UIUX/` to `/UIUX`; keep page assets rooted at `/UIUX/` and check that all four CSS/JS asset requests return HTTP 200 after every release.
 
@@ -39,3 +39,9 @@ Search results use DOM text nodes for user input. Do not commit credentials, acc
 All four local CSS/JS assets have content hashes in their URLs, including the dynamically imported atlas script. The canonical HTML routes require cache revalidation. Regenerate after editing either atlas asset so its hash updates. Verify the canonical `/UIUX` URL in a previously used browser tab, without a page query string: Aemeth must have 60 clock tick lines, a state-specific accessible label, four working state choices, readable selected/hover cards in both page themes, and working Ivory/Obsidian finishes. Compare the original Volume II page before changing integration; preserve its authored source.
 
 If the seal appears but the clock ring or controls do not work, inspect the script URL and initialization before changing the seal CSS. A partial asset refresh can combine new HTML with stale JavaScript.
+
+## Timer and AI gauge release check
+
+The foundation and instrument sources were imported from `alanism/Enochian-UI-UX-Elements` revision `f1c7e8f`. Vigil 90 and Pomodoro Vigil belong to Time & playback; Lumen Context, Cantor Agents, Velocity Context, Triad Context, and Triad Quota belong to Signal & feedback beside their original instrument counterparts. Verify all seven appear in search and the single code drawer. Exercise timer start/pause/reset, Pomodoro phase skipping, context compaction/window selection, agent spawn/halt, and quota provider/ring selection.
+
+Triad Quota's authored auto grid track collapses the gauge at desktop widths. The atlas reserves a 340px track above 900px and retains the source's stacked layout below that breakpoint. Verify both the rings and chart render together at desktop width, and that the white verdict panel remains readable in dark mode. The context and quota readouts are simulations, not live account usage.
