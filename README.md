@@ -1,6 +1,6 @@
 # Enochian Elements
 
-One interactive showcase of 55 Enochian controls for mini-apps and AI-guided device interfaces. The public page is [`UIUX/index.html`](UIUX/index.html); controls appear once, ordered by action, state, choice and value, navigation, time and playback, then signal and feedback. The top bar owns search, Light/Dark, sound, and the single Code mode.
+One interactive showcase of 63 Enochian controls for mini-apps and AI-guided device interfaces. The public page is [`UIUX/index.html`](UIUX/index.html); controls appear once, ordered by action, state, choice and value, navigation, time and playback, then signal and feedback. The top bar owns search, Light/Dark, sound, and the single Code mode.
 
 ## Local preview
 
@@ -15,7 +15,7 @@ Open <http://localhost:8080/UIUX/>. The page uses IBM Plex web fonts and Motion 
 - `enochian_knobs_keys/index.html` — foundation controls
 - `enochian_knobs_keys/volume-3/index.html` — compact controls
 - `enochian_knobs_keys/volume-2/index.html` — instrument controls
-- `scripts/generate_uiux.py` — extracts and scopes all 55 controls into one page; requires Python 3 and Beautiful Soup 4
+- `scripts/generate_uiux.py` — extracts and scopes all 63 controls into one page; requires Python 3 and Beautiful Soup 4
 - `UIUX/shell.html`, `UIUX/atlas.css`, `UIUX/atlas.js` — showcase layout and global behavior
 
 Regenerate after editing a source control:

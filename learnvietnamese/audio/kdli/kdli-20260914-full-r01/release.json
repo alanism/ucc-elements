@@ -1,0 +1,8 @@
+{
+  "release_id": "kdli-20260914-full-r01",
+  "scope": "full",
+  "manifest_sha256": "7d5ab4b6064f8d99ef574a94755c54c736bbdd0f90eab4be41e78d6c31230275",
+  "assets": 1769,
+  "promoted_at": "2026-09-14T15:45:56.924Z",
+  "target": "public/audio/kdli/kdli-20260914-full-r01"
+}

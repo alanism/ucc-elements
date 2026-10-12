@@ -1,0 +1,50 @@
+{
+  "version": "v1",
+  "stationId": "STATION_03_CAFE",
+  "description": "Reviewed acceptable contextual and Southern Vietnamese variants for recognition and semantic evaluation, without altering canonical phrase IDs",
+  "variants": [
+    {
+      "canonicalId": "cafe_01",
+      "acceptedPhrases": [
+        "Cho em một cà phê đá.",
+        "Cho tôi một ly cà phê đá.",
+        "Cho em một ly cà phê đá."
+      ],
+      "context": "Colloquial pronoun 'em' used by junior customer; classifier 'ly' (glass) commonly added in Southern cafés"
+    },
+    {
+      "canonicalId": "cafe_02",
+      "acceptedPhrases": [
+        "Ít đường thôi nha.",
+        "Bớt đường giùm tôi.",
+        "Cho ít đường thôi."
+      ],
+      "context": "Southern pragmatic particles 'nha', 'giùm' (please help)"
+    },
+    {
+      "canonicalId": "cafe_03",
+      "acceptedPhrases": [
+        "Đừng bỏ sữa.",
+        "Không lấy sữa."
+      ],
+      "context": "Synonymous functional meaning for ordering black coffee"
+    },
+    {
+      "canonicalId": "cafe_04",
+      "acceptedPhrases": [
+        "Cho em xin ít nước.",
+        "Cho tôi xin ly nước đá.",
+        "Cho em xin miếng nước."
+      ],
+      "context": "Southern vernacular 'miếng nước' or 'ly nước đá'"
+    },
+    {
+      "canonicalId": "cafe_05",
+      "acceptedPhrases": [
+        "Em ngồi đây được không?",
+        "Ngồi đây được không ạ?"
+      ],
+      "context": "Polite particle 'ạ' or pronoun 'em'"
+    }
+  ]
+}

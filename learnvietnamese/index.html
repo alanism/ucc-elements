@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <base href="/learnvietnamese/"/>
+  <title>UCC Vietnamese Radio — Station 03: At a Café</title>
+  <!-- Local tokens, substrate, and card styles: strictly zero external CDN font requests -->
+  <link rel="stylesheet" href="./app/styles/tokens.css?v=20260913_contextual5"/>
+  <link rel="stylesheet" href="./app/styles/substrate.css?v=20260913_contextual5"/>
+  <link rel="stylesheet" href="./app/styles/card.css?v=20260913_contextual5"/>
+</head>
+<body class="dot-grid" data-testid="canvas">
+  <div id="failure-container"></div>
+
+
+  <!-- Main 3-Column Tabletop Instrument Console -->
+  <main class="tabletop-instrument" role="main">
+    <!-- Left Column: Vietnamese Radio + Who's Talking? Conversation Calibrator -->
+    <section class="left-column left-cluster" aria-label="Radio Hardware Console">
+      <div id="receiver-container"></div>
+      <div id="calibrator-container"></div>
+    </section>
+
+    <!-- Center Column: Flexible Instructional Card + Station Navigation & Signal Scope Housing -->
+    <section class="center-column" aria-label="Learning Surface">
+      <div id="card-container" class="phrase-panel-wrapper"></div>
+      
+      <div class="station-waveform-housing">
+        <div class="station-selector-wrapper">
+          <div id="veil-container"></div>
+          <div class="control-sublabel">
+            <strong>Station Selector</strong> · 03 Café Active
+          </div>
+        </div>
+        <div id="waveform-container"></div>
+      </div>
+
+      <!-- Hidden accessibility / auxiliary hooks -->
+      <div id="captions-container" style="display: none;"></div>
+      <div id="dial-container" style="display: none;"></div>
+    </section>
+
+    <!-- Right Column: Vigil Clock + Unified Mai Interaction Console -->
+    <section class="right-column right-cluster" aria-label="Session & Tutor Controls">
+      <div class="timer-wrapper">
+        <div id="clock-container"></div>
+        <div class="control-sublabel">
+          <strong>Vigil Clock</strong> · 10-Minute Session
+        </div>
+      </div>
+
+      <div id="mai-console-container" style="width: 100%;"></div>
+    </section>
+  </main>
+
+  <!-- Ambient Canvas Footer -->
+  <footer class="canvas-footer" role="contentinfo">
+    <div class="footer-left">© 2024 UnCommon Core · <a href="./kdli-run.html" style="color:inherit;text-decoration:underline;">KDLI 104.5 FM (104 Situations)</a> · <a href="./kdli-cafe.html" style="color:inherit;text-decoration:underline;">Café Reference</a></div>
+    <div class="footer-right">KDLI 104.5 FM · UCC Vietnamese Radio v1.0</div>
+  </footer>
+
+  <!-- Parent Review & Discovery Modal / Overlay -->
+  <aside id="parent-container" aria-label="Parent Review & Progress" style="display: none;"></aside>
+  <div id="parent-toggle-container" style="display: none;"></div>
+
+  <script type="module" src="./app/main.js?v=20260913_contextual5"></script>
+</body>
+</html>

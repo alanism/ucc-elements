@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<base href="/learnvietnamese/" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>KDLI — Café (03.01) reference turn</title>
+<style>
+  :root { --bg:#f7f3ec; --ink:#241f1a; --muted:#6b6157; --accent:#a8442a; --card:#fffdf9; --line:#e3d9c9; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { margin:0; padding:20px; background:var(--bg); color:var(--ink);
+         font:16px/1.5 ui-rounded, -apple-system, system-ui, sans-serif; }
+  h1 { font-size:1.25rem; margin:0 0 2px; }
+  .sub { color:var(--muted); font-size:.85rem; margin-bottom:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; margin-bottom:14px; }
+  .stage { font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:700; }
+  .vn { font-size:1.5rem; margin:10px 0 6px; min-height:2.2em; }
+  .vn.veiled { color:var(--muted); font-style:italic; font-size:1rem; }
+  .gloss { color:var(--muted); min-height:1.4em; }
+  .row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  button { font:inherit; font-weight:600; padding:12px 16px; min-height:48px; min-width:48px;
+           border-radius:12px; border:1px solid var(--line); background:#fff; color:var(--ink); }
+  button.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  button:active { transform:translateY(1px); }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; }
+  .chip { font-size:.85rem; padding:8px 12px; border-radius:999px; border:1px solid var(--line); background:#fff; }
+  .chip[aria-pressed="true"] { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .note { color:var(--muted); font-size:.8rem; }
+  .gap { color:#a8200a; font-weight:700; }
+  .audit { font-size:.85rem; }
+  .audit.pass { color:#1d6b3a; font-weight:700; }
+  .audit.fail { color:#a8200a; font-weight:700; }
+</style>
+</head>
+<body>
+  <h1>Café — 03.01</h1>
+  <div class="sub">PLAY reference turn · release kdli-20260914-cafe-r02 · content is <b>provisional</b>, not human-approved</div>
+
+  <div class="card">
+    <div class="stage" id="stage">—</div>
+    <div class="vn" id="vn">Tap “Start” to hear the café line.</div>
+    <div class="gloss" id="gloss"></div>
+    <div class="row">
+      <button class="primary" id="start">Start</button>
+      <button id="again">Again</button>
+      <button id="next">Next</button>
+      <button id="back">Back</button>
+      <button id="model">Model</button>
+      <button id="reveal">Show text</button>
+    </div>
+    <div class="row"><div class="gap" id="gap"></div></div>
+  </div>
+
+  <div class="card">
+    <div class="stage">Who is learning</div>
+    <div class="row chips" id="profiles"></div>
+    <div class="note">Four profiles means four different actors, not four social states. Switching re-veils and starts a fresh turn.</div>
+  </div>
+
+  <div class="card">
+    <div class="stage">The dial (K51)</div>
+    <div class="row" style="align-items:center;gap:16px">
+      <div id="dial" style="width:132px;height:132px;border-radius:50%;border:2px solid var(--line);background:#fff;display:grid;place-items:center;touch-action:none;user-select:none">
+        <div style="text-align:center">
+          <div id="dial-stage" style="font-weight:700">HEAR</div>
+          <div class="note" style="font-size:.7rem">drag to turn<br>tap to play<br>hold for MODEL</div>
+        </div>
+      </div>
+      <div class="note" style="max-width:22rem">
+        One dial: rotate to move through HEAR → ECHO → MODEL → CHANGE → RETRIEVE → APPLY, tap to play or replay,
+        hold to return to MODEL. The world and situation controls stay separate. No timer or button release ever advances.
+      </div>
+    </div>
+    <div class="row"><button id="dial-reset">Play / replay</button></div>
+    <div class="note" id="dial-note"></div>
+  </div>
+
+  <div class="card">
+    <div class="stage">Why this line (K57 · D7_D8)</div>
+    <div class="audit" id="resolution">Not resolved yet.</div>
+    <div class="note" id="suggestion"></div>
+  </div>
+
+  <div class="card">
+    <div class="stage">Hidden-answer check (K58)</div>
+    <div class="audit" id="audit">Not run yet.</div>
+    <div class="row"><button id="run-audit">Audit the live DOM</button></div>
+    <div class="note">Searches the entire rendered document — text, attributes and aria — for any of the five canonical strings. While veiled it must find none.</div>
+  </div>
+
+  <audio id="el" preload="auto"></audio>
+
+<script type="module">
+  import { loadAssetMap, createKdliPlayer, createAudioSink } from './app/audio/kdli-adapter.js';
+  import { createCafeView } from './app/ui/kdli-cafe-view.js';
+  import { tuningView } from './app/pedagogy/kdli-context.js';
+  import { createDialController } from './app/ui/kdli-dial.js';
+
+  const RELEASE = 'kdli-20260914-cafe-r02';
+  const SITUATION = '03.01';
+  const PROFILES = {
+    'child girl':  { learnerGender:'female', learnerRelativeAge:'younger', interlocutorGender:'male' },
+    'child boy':   { learnerGender:'male',   learnerRelativeAge:'younger', interlocutorGender:'male' },
+    'adult woman': { learnerGender:'female', learnerRelativeAge:'older',   interlocutorGender:'male' },
+    'adult man':   { learnerGender:'male',   learnerRelativeAge:'older',   interlocutorGender:'male' }
+  };
+
+  const el = document.getElementById('el');
+  const audit = document.getElementById('audit');
+
+  try {
+    const assetMap = await loadAssetMap({ release: RELEASE });
+    const player = createKdliPlayer({
+      assetMap, basePath: '/', audio: createAudioSink({ audioElement: el }),
+      onGap: g => view.setGap(`no audio for ${g.slot} — reported, nothing substituted`)
+    });
+    const view = createCafeView({
+      document, root: document.body, player, assetMap, profiles: PROFILES,
+      situationId: SITUATION, audioElement: el,
+      // D7_D8: the valid-context resolution is shown, and an untuned context reports itself
+      // subtly with a proposal. Never an error dialog, never a mastery claim.
+      onState: state => {
+        const knob = document.getElementById('dial-stage');
+        if (knob) knob.textContent = state.stage ?? '—';
+        const tuning = tuningView({ assetMap, situationId: SITUATION, profile: PROFILES[state.profileName], slot: state.slot ?? 'MODEL', seed: state.profileName });
+        const res = document.getElementById('resolution');
+        const sug = document.getElementById('suggestion');
+        if (tuning.context.state === 'RESOLVED') {
+          const r = tuning.context.resolution;
+          res.className = 'audit pass';
+          res.textContent = `${r.phrase_id} · ${r.slot} · ${r.variant_id} · voice ${r.voice_code} · audio ${r.has_audio ? 'available' : 'MISSING'} · ${r.review_state}`;
+          sug.textContent = `matched context: ${r.matched_context ? [r.matched_context.learnerGender, r.matched_context.learnerRelativeAge, r.matched_context.listenerGender].join('/') : '—'}`;
+        } else {
+          // Subtle, per D7_D8: a quiet line, no dialog, nothing blocking.
+          res.className = 'audit';
+          res.textContent = `${tuning.context.state} — ${tuning.context.reason} (subtle feedback, no dialog)`;
+          sug.textContent = tuning.suggestion.suggestion
+            ? `suggestion: ${tuning.suggestion.suggestion.situation_id} ${tuning.suggestion.suggestion.situation_title ?? ''} — not applied until you accept it`
+            : '';
+        }
+      }
+    });
+
+    // The K58 audit, runnable on demand and visible to whoever is reviewing this.
+    const canonical = Object.values(assetMap.phrases).flatMap(p => [
+      p.vietnamese_baseline, ...p.variants.map(v => v.vietnamese_text), p.english_gloss
+    ]);
+    document.getElementById('run-audit').onclick = () => {
+      const haystack = document.documentElement.outerHTML;
+      const leaked = [...new Set(canonical)].filter(text => haystack.includes(text));
+      const veiled = !view.model().revealed;
+      if (leaked.length === 0) {
+        audit.className = 'audit pass';
+        audit.textContent = veiled
+          ? `Clean — no canonical string anywhere in the document while veiled.`
+          : `Clean — text is on screen because it is revealed, which is expected.`;
+      } else {
+        audit.className = 'audit fail';
+        audit.textContent = `LEAK: ${leaked.length} string(s) present: ${leaked.join(' | ')}`;
+      }
+    };
+
+    // The dial drives the same reducer the buttons do.
+    const dial = createDialController({
+      view, doc: document, root: document.body,
+      rotationSurface: document.getElementById('dial')
+    });
+    document.getElementById('dial-reset').onclick = () => dial.press();
+
+    document.title = 'KDLI Café — ready';
+  } catch (error) {
+    audit.className = 'audit fail';
+    audit.textContent = `Could not start: ${error.message}`;
+    document.title = 'KDLI Café — failed';
+  }
+</script>
+</body>
+</html>

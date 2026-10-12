@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<base href="/learnvietnamese/" />
+<title>KDLI — 104 situations (K53)</title>
+<style>
+  :root { color-scheme: light dark; --line: #d8d8dd; }
+  body { font: 15px/1.55 ui-rounded, system-ui, -apple-system, sans-serif; margin: 0; padding: 18px; max-width: 60rem; }
+  h1 { font-size: 1.15rem; margin: 0 0 4px; }
+  .note, .audit { font-size: .82rem; color: #666; }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin: 12px 0; }
+  .stage { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: #888; margin-bottom: 6px; }
+  .big { font-size: 1.5rem; font-weight: 700; min-height: 2rem; }
+  .veiled { color: #aaa; font-style: italic; font-weight: 400; font-size: 1rem; }
+  button { font: inherit; padding: 9px 14px; border-radius: 10px; border: 1px solid #bbb; background: #fff; color: #111; cursor: pointer; margin: 4px 6px 4px 0; }
+  select { font: inherit; padding: 8px; border-radius: 8px; border: 1px solid #bbb; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .chip[aria-pressed="true"] { background: #111; color: #fff; border-color: #111; }
+  .audit { margin-top: 6px; }
+  .ok { color: #0a7d32; } .bad { color: #b00020; }
+</style>
+</head>
+<body>
+<h1>KDLI · the validated Café architecture, across all 104 situations</h1>
+<div class="note">Same turn grammar, veiling, dial and selection as the frozen Café reference. Switching situation rebuilds the turn; the reference page is untouched.</div>
+
+<div class="card">
+  <div class="stage">Navigate</div>
+  <div class="row">
+    <select id="world"></select>
+    <select id="situation"></select>
+    <button id="nav-prev" type="button">◀ Previous situation</button>
+    <button id="nav-next" type="button">Next situation ▶</button>
+  </div>
+  <div class="audit" id="catalog">loading…</div>
+</div>
+
+<div class="card">
+  <div class="stage" id="stage">—</div>
+  <div class="big" id="vn">—</div>
+  <div class="note" id="gloss"></div>
+  <div class="audit" id="gap"></div>
+  <div class="row" id="controls">
+    <button id="start" type="button">Start</button>
+    <button id="again" type="button">Again</button>
+    <button id="next" type="button">Next stage</button>
+    <button id="back" type="button">Back</button>
+    <button id="model" type="button">Model</button>
+    <button id="reveal" type="button">Show text</button>
+  </div>
+  <div class="row" id="profiles"></div>
+</div>
+
+<div class="card">
+  <div class="stage">The dial (K51)</div>
+  <div class="row">
+    <div id="dial" style="width:120px;height:120px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;touch-action:none;user-select:none">
+      <div style="text-align:center">
+        <div id="dial-stage" style="font-weight:700">—</div>
+        <div class="audit" style="font-size:.68rem">drag to turn<br>tap to play<br>hold for MODEL</div>
+      </div>
+    </div>
+    <div class="note" style="max-width:24rem">Rotate to move through the stages, tap to play or replay, hold to return to MODEL. World and situation selection stay on the controls above. No timer advances.</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="stage">Why this line</div>
+  <div class="audit" id="resolution">Not resolved yet.</div>
+</div>
+
+<audio id="el" preload="auto"></audio>
+
+<script type="module">
+  const el = document.getElementById('el');
+  const catBox = document.getElementById('catalog');
+  try {
+    const { loadAssetMap, createKdliPlayer, createAudioSink } = await import('./app/audio/kdli-adapter.js');
+    const { createCafeView } = await import('./app/ui/kdli-cafe-view.js');
+    const { createDialController } = await import('./app/ui/kdli-dial.js');
+    const { tuningView } = await import('./app/pedagogy/kdli-context.js');
+    const { buildCatalog, findSituation, neighbour, LEARNER_PROFILES } = await import('./app/pedagogy/kdli-catalog.js');
+
+    const RELEASE = 'kdli-20260914-full-r01';
+    const assetMap = await loadAssetMap({ release: RELEASE });
+    const WORLD_TITLES = { '01': 'Connect', '02': 'Daily life', '03': 'Eat & drink', '04': 'Shop & pay', '05': 'Go & navigate', '06': 'Home & belongings', '07': 'Learn & make', '08': 'Play & explore', '09': 'People & plans', '10': 'Body & care', '11': 'Weather & outdoors', '12': 'Think & explain' };
+    const catalog = buildCatalog(assetMap, { worldTitles: WORLD_TITLES });
+    const PROFILES = LEARNER_PROFILES;
+
+    const baseSummary = `${catalog.counts.worlds} worlds · ${catalog.counts.situations} situations · ${catalog.counts.slots} slots · `
+      + `${catalog.counts.complete_situations}/${catalog.counts.situations} complete · release ${catalog.release_id} · ${catalog.review_state}`;
+    catBox.textContent = baseSummary;
+
+    const worldSel = document.getElementById('world');
+    const sitSel = document.getElementById('situation');
+    for (const world of catalog.worlds) {
+      const option = document.createElement('option');
+      option.value = world.world_id;
+      option.textContent = `${world.world_id} — ${world.title ?? ''} (${world.situations.length})`;
+      worldSel.appendChild(option);
+    }
+    const fillSituations = worldId => {
+      sitSel.innerHTML = '';
+      for (const situation of (catalog.worlds.find(world => world.world_id === worldId)?.situations ?? [])) {
+        const option = document.createElement('option');
+        option.value = situation.situation_id;
+        option.textContent = `${situation.situation_id} — ${situation.title ?? 'untitled'}`;
+        sitSel.appendChild(option);
+      }
+    };
+
+    const sink = createAudioSink({ audioElement: el });
+    let player = null; let view = null; let dial = null; let current = null;
+
+    const paintResolution = state => {
+      const situation = findSituation(catalog, current);
+      const profile = PROFILES.find(item => item.name === state.profileName) ?? PROFILES[0];
+      const tuning = tuningView({ assetMap, situationId: current, profile, slot: state.slot ?? 'MODEL', seed: `${current}:${state.profileName}` });
+      const box = document.getElementById('resolution');
+      if (tuning.context.state === 'RESOLVED') {
+        const r = tuning.context.resolution;
+        box.textContent = `${r.phrase_id} · ${r.slot} · ${r.variant_id} · voice ${r.voice_code} · audio ${r.has_audio ? 'available' : 'MISSING'} · ${r.review_state}`;
+      } else {
+        box.textContent = `${tuning.context.state} — ${tuning.context.reason} (subtle feedback, no dialog)`;
+      }
+      document.getElementById('dial-stage').textContent = state.stage ?? '—';
+      document.getElementById('catalog').textContent = baseSummary
+        + `  ·  now: ${situation?.situation_id} ${situation?.title ?? ''}${situation && !situation.complete ? ` (missing ${situation.missing_slots.join(', ')})` : ''}`;
+    };
+
+    const mount = situationId => {
+      if (dial) { dial.destroy(); dial = null; }
+      if (view) { view.destroy(); view = null; }
+      current = situationId;
+      player = createKdliPlayer({ assetMap, basePath: '', audio: sink });
+      view = createCafeView({
+        document, root: document.body, player, assetMap, profiles: PROFILES,
+        situationId, audioElement: el,
+        onGap: message => { document.getElementById('gap').textContent = `unavailable — ${message}`; },
+        onState: paintResolution
+      });
+      dial = createDialController({ view, doc: document, root: document.body, rotationSurface: document.getElementById('dial') });
+    };
+
+    const selectSituation = situationId => {
+      const situation = findSituation(catalog, situationId);
+      if (!situation) return;
+      if (worldSel.value !== situation.world_id) { worldSel.value = situation.world_id; fillSituations(situation.world_id); }
+      sitSel.value = situation.situation_id;
+      mount(situation.situation_id);
+    };
+
+    worldSel.addEventListener('change', () => { fillSituations(worldSel.value); mount(sitSel.value || catalog.situations[0].situation_id); });
+    sitSel.addEventListener('change', () => mount(sitSel.value));
+    document.getElementById('nav-prev').addEventListener('click', () => { const id = neighbour(catalog, current, 'previous'); if (id) selectSituation(id); });
+    document.getElementById('nav-next').addEventListener('click', () => { const id = neighbour(catalog, current, 'next'); if (id) selectSituation(id); });
+
+    worldSel.value = catalog.worlds[0].world_id;
+    fillSituations(catalog.worlds[0].world_id);
+    mount(catalog.situations[0].situation_id);
+    document.title = 'KDLI — 104 situations — ready';
+  } catch (error) {
+    catBox.className = 'audit bad';
+    catBox.textContent = `failed to initialise: ${error.message}`;
+    document.title = 'KDLI 104 — failed';
+  }
+</script>
+</body>
+</html>

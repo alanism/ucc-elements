@@ -5,6 +5,7 @@ styles scoped while rendering each control exactly once in the public page.
 """
 
 from pathlib import Path
+import hashlib
 import re
 
 from bs4 import BeautifulSoup
@@ -19,36 +20,38 @@ SOURCES = {
 }
 
 GROUPS = [
-    ("Action", "Press, latch, and commit.", [
+    ("Action", "Press, latch, and commit. Reach for these when the user starts, holds, or confirms an action.", [
         "Push Button", "Cinnabar Key", "The Three Keys", "Triad Action Keys",
         "Hollow Gate", "Pulse Grid", "Canticle Keys", "Aether Orb",
         "Cadence Pads", "Augur",
     ]),
-    ("State", "Make on, off, and mode visible.", [
+    ("State", "Make on, off, and mode visible. Reach for these when a setting has to read at a glance — in the dark, or across the room.", [
         "Binary Gate", "Cinnabar Switch", "Beacon Switch", "Glyph Switch",
         "Pinch Gate", "Pinch Track", "Triune Gate", "Triune Switch",
         "Triune Beacon", "Lantern Row", "Interlock Bank", "Orbit Gate",
     ]),
-    ("Choice & value", "Tune continuous and stepped values.", [
+    ("Choice & value", "Tune continuous and stepped values. Reach for these when a value is chosen, not typed.", [
         "Ivory Dial", "Choir Dial", "Ordinal Veil", "Signal Slider",
         "Quadrant Slider", "Dimple Slider", "Meridian Fader", "Regie Bank",
         "Aperture Scale", "Penumbra Deck",
     ]),
-    ("Navigation", "Search, move focus, and enter.", [
+    ("Navigation", "Search, move focus, and enter. Reach for these when the surface holds more than one thing.", [
         "Seeker Orb", "Mechanical Keyboard", "Tally Keypad", "Sigil Controller",
         "Sigil Remote", "Orbit Wheel", "Lumen Pad",
     ]),
-    ("Time & playback", "Control duration, transport, and sound.", [
-        "Aether Receiver", "Horologion", "Vigil Clock", "Strobe Platter",
+    ("Time & playback", "Control duration, transport, and sound. Reach for these when something runs, counts, or plays.", [
+        "Aether Receiver", "Horologion", "Vigil Clock", "Vigil 90", "Pomodoro Vigil", "Strobe Platter",
         "Transport Bank", "Monitor Pair",
     ]),
-    ("Signal & feedback", "Read conditions, levels, and outcomes.", [
-        "Lumen VU", "Cantor Ladder", "Excursion Pair", "Lodestar",
-        "Climate", "Velocity", "Triad", "Departures", "Manifest",
+    ("Signal & feedback", "Read conditions, levels, and outcomes. Reach for these when the system reports rather than asks.", [
+        "Lumen VU", "Lumen Context", "Cantor Ladder", "Cantor Agents", "Excursion Pair", "Lodestar",
+        "Climate", "Velocity", "Velocity Context", "Triad", "Triad Context", "Triad Quota",
+        "Departures", "Manifest", "Aemeth",
     ]),
 ]
 FEATURED = "Obsidian Dial"
-WIDE = {"Mechanical Keyboard", "Cadence Pads", "Penumbra Deck", "Departures", "Manifest"}
+WIDE = {"Mechanical Keyboard", "Cadence Pads", "Penumbra Deck", "Departures", "Manifest", "Aemeth",
+        "Lumen Context", "Cantor Agents", "Triad Quota"}
 
 
 def split_source(path):
@@ -146,15 +149,11 @@ def main():
         selectors = ".cap" if key == "foundation" else "article.unit .cap"
         found.update(cap.select_one("span").get_text(" ", strip=True).split("·")[0].strip() for cap in soup.select(selectors))
     expected = {FEATURED, "The Code Veil", *(name for _, _, names in GROUPS for name in names)}
-    if found != expected or len(found) != 56:
+    if found != expected:
         raise ValueError(f"Catalog mismatch: missing={expected-found}, extra={found-expected}, count={len(found)}")
     markup = "".join(source_markup(key, soup) for key, (soup, _, _) in records.items())
     nav, headings = category_nav()
-    shell = (UIUX / "shell.html").read_text()
-    shell = shell.replace("<!-- CATEGORY_NAV -->", nav).replace("<!-- GROUP_HEADINGS -->", headings)
-    shell = shell.replace("<!-- CONTROL_MARKUP -->", markup)
-    (UIUX / "index.html").write_text(shell)
-    (UIUX / "controls.css").write_text("\n".join(scoped_css(css, key) for key, (_, css, _) in records.items()))
+    controls_css = "\n".join(scoped_css(css, key) for key, (_, css, _) in records.items())
     prefix = (UIUX / "controls-prefix.js").read_text()
     script = [prefix]
     for key in ("compact", "instruments", "foundation"):
@@ -163,9 +162,24 @@ def main():
             script.append('try{animate=(await motionPromise).animate;}catch(error){console.warn("Motion unavailable; controls use immediate transitions",error);}')
         script.append(f'{{\nconst root=globalThis.document.getElementById("source-{key}");\n'
                       f'const document=scopedDocument(root);\nconst addEventListener=scopedListener(root);\n{logic}\n}}')
-    script.append('import("./atlas.js");\n')
-    (UIUX / "controls.js").write_text("\n".join(script))
-    print("Generated one page with 55 controls in six functional groups")
+    atlas_js_version = hashlib.sha256((UIUX / "atlas.js").read_bytes()).hexdigest()[:12]
+    script.append(f'import("./atlas.js?v={atlas_js_version}");\n')
+    controls_js = "\n".join(script)
+    shell = (UIUX / "shell.html").read_text()
+    shell = shell.replace("<!-- CATEGORY_NAV -->", nav).replace("<!-- GROUP_HEADINGS -->", headings)
+    shell = shell.replace("<!-- CONTROL_MARKUP -->", markup)
+    shell = shell.replace("{{CONTROL_COUNT}}", str(sum(len(names) for _, _, names in GROUPS) + 1))
+    assets = {
+        "CSS_VERSION": controls_css.encode(),
+        "JS_VERSION": controls_js.encode(),
+        "ATLAS_CSS_VERSION": (UIUX / "atlas.css").read_bytes(),
+    }
+    for placeholder, content in assets.items():
+        shell = shell.replace("{{" + placeholder + "}}", hashlib.sha256(content).hexdigest()[:12])
+    (UIUX / "index.html").write_text(shell)
+    (UIUX / "controls.css").write_text(controls_css)
+    (UIUX / "controls.js").write_text(controls_js)
+    print(f"Generated one page with {len(expected) - 1} controls in six functional groups")
 
 
 if __name__ == "__main__":

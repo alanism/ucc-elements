@@ -1,0 +1,1095 @@
+<title>Enochian Elements III</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400;1,500&display=swap">
+<style>
+  /* Layout: Volume I atlas grammar — header, mono section eyebrows, two-up instrument tiles on #f5f6f7.
+     One page-level look (white paper); each instrument carries its own Ivory / Obsidian finish. */
+  :root{
+    --accent:#CC0000; --ink:#111; --muted:#6e6e6e; --tile:#f5f6f7; --line:#dedee2; --paper:#fff;
+    --amber:#F4A934; --go:#3ccf7a;
+    --sans:"IBM Plex Sans",-apple-system,Inter,"Segoe UI",sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    color-scheme:light;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased}
+  .page{max-width:1240px;margin:0 auto;padding-inline:clamp(16px,3.2vw,32px);padding-block:0 8px}
+  button{font-family:inherit}
+  header{padding-block:36px 12px;max-width:980px}
+  header h1{font-size:32px;margin:0 0 4px;letter-spacing:-.6px;text-wrap:balance}
+  header h2{font-size:16px;font-weight:500;color:var(--muted);margin:0 0 22px}
+  header p{color:var(--muted);font-size:15px;line-height:1.65;max-width:72ch;margin:0 0 14px}
+  .portable{border-left:3px solid var(--accent);padding:10px 14px;margin:20px 0;color:var(--ink);background:#f7f7f8;max-width:760px;font-size:15px;line-height:1.55}
+  .atlas-map{margin-top:26px}.atlas-map h3{font-size:15px;margin:0 0 10px}
+  .atlas-map ul{margin:0;padding-left:20px;color:var(--muted);font-size:14px;line-height:1.7}
+  .atlas-map b{color:var(--ink);font-weight:600}
+  .accentrow{display:flex;gap:10px;align-items:center;padding-block:14px 0;font-size:13px;color:var(--muted);flex-wrap:wrap}
+  .accentrow .sep{width:14px}
+  .accentrow button,.stepbar button,.rthemes button{font:600 11px var(--mono);letter-spacing:.6px;border:1px solid #d0d0d4;background:#fff;color:#222;border-radius:999px;padding:8px 14px;cursor:pointer}
+  .accentrow button[aria-pressed="true"],.stepbar button[aria-pressed="true"],.rthemes button[aria-pressed="true"]{background:#111;color:#fff;border-color:#111}
+  .accentrow button:focus-visible,.stepbar button:focus-visible,.rthemes button:focus-visible,.prevnext button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .rthemes{display:flex;gap:8px;justify-content:center}
+  .rthemes button{min-width:62px;font-size:10px;padding:7px 11px;letter-spacing:.7px}
+  .stepbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .prevnext{display:flex;gap:8px}
+  .prevnext button{font:600 12px var(--mono);border:1px solid #d0d0d4;background:#fff;color:#222;border-radius:8px;padding:9px 14px;cursor:pointer}
+  .section-title{padding-block:40px 2px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(440px,100%),1fr));gap:20px;padding-block:14px 10px}
+  .unit{display:flex;flex-direction:column;gap:10px;min-width:0}
+  .unit.wide{grid-column:1/-1}
+  .cap{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:15px;flex-wrap:wrap}
+  .pill{font:500 11px var(--mono);background:#e9e9eb;color:#6e6e6e;border-radius:20px;padding:4px 10px;letter-spacing:.3px}
+  .card{background:var(--tile);border-radius:4px;padding:36px 20px 26px;display:flex;flex-direction:column;align-items:center;gap:16px;min-height:340px;flex:1;min-width:0}
+  .component-copy{align-self:stretch;max-width:640px;margin:0 auto;color:var(--muted);font-size:13px;line-height:1.55;text-align:left}
+  .component-copy strong{color:var(--ink);font-weight:600}
+  .readout{font:13px var(--mono);color:var(--muted);text-align:center;font-variant-numeric:tabular-nums}
+  .readout b{color:var(--ink);font-size:20px;font-weight:600}
+  .hint{font-size:12px;color:#999;text-align:center;line-height:1.5;max-width:560px}
+  .lineage{font:500 10px var(--mono);letter-spacing:1.2px;text-transform:uppercase;color:#a3a3a8}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  /* Code Veil (carried over from Volume I) */
+  .d37-wrap{display:flex;align-items:center;gap:16px}
+  .d37-track{width:132px;height:60px;border:0;border-radius:999px;background:#efefef;position:relative;cursor:pointer;
+    box-shadow:inset 0 2px 6px rgba(0,0,0,.08),inset 0 -1px 2px rgba(255,255,255,.9)}
+  .d37-track:focus-visible{outline:3px solid var(--accent);outline-offset:6px}
+  .d37-knob{position:absolute;top:5px;left:5px;width:50px;height:50px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#fff,#f4f4f4 70%,#ececec);box-shadow:0 10px 22px rgba(0,0,0,.22),0 2px 6px rgba(0,0,0,.18)}
+  .d37-track[data-finish="obsidian"]{background:#1b1b1d;box-shadow:inset 0 2px 7px rgba(0,0,0,.72),inset 0 -1px 2px rgba(255,255,255,.10)}
+  .d37-track[data-finish="obsidian"] .d37-knob{background:radial-gradient(circle at 35% 30%,#3b3b3f,#171719 72%);box-shadow:0 10px 22px rgba(0,0,0,.42),0 2px 0 rgba(255,255,255,.14) inset}
+  .d37-label{min-width:118px;font:600 12px var(--mono);letter-spacing:.8px;color:#666}
+  .code-toggle-card{min-height:230px}
+  .code-snippet{width:min(780px,100%);max-height:0;opacity:0;overflow:hidden;visibility:hidden;margin-top:0;
+    border:1px solid #d8d8dc;border-radius:10px;background:#111;color:#eee;text-align:left;
+    transition:max-height .32s ease,opacity .2s ease,margin-top .32s ease}
+  body.show-code .code-snippet{max-height:620px;opacity:1;visibility:visible;margin-top:6px}
+  .code-snippet-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #333;color:#cfcfd4;font:600 11px var(--mono);letter-spacing:.5px}
+  .copy-code{border:1px solid #555;border-radius:999px;background:#242426;color:#fff;padding:5px 10px;cursor:pointer;font:600 10px var(--mono)}
+  .copy-code:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .code-snippet pre{margin:0;padding:16px;overflow:auto;white-space:pre;tab-size:2;font:600 12px/1.55 var(--mono);color:var(--accent)}
+
+  .finish-line{margin-block:48px 56px;padding-block:28px 0;border-top:1px solid var(--line);max-width:860px}
+  .finish-line h2{font-size:18px;margin:0 0 10px}.finish-line p{color:var(--muted);font-size:14px;line-height:1.6;max-width:70ch}
+  .finish-line blockquote{margin:18px 0 0;padding-left:15px;border-left:3px solid var(--accent);font-weight:700}
+  /* ── Volume III shared material: one stage per instrument, Ivory sits on the tile, Obsidian brings its own plate ── */
+  :root{ --serif:"IBM Plex Serif",Georgia,"Times New Roman",serif; }
+  header h2{font-family:var(--serif);font-style:italic;font-weight:400;font-size:18px}
+  .finish-line blockquote{font-family:var(--serif);font-style:italic;font-weight:500}
+  .fx{--plate:transparent;--well:#e7e7ea;--rim:#d4d4d8;--ink:#111;--sub:#8a8a8f;--cap:linear-gradient(160deg,#fff,#ececee);--knob:#fff;
+    --lift:0 6px 14px rgba(0,0,0,.14),0 1px 2px rgba(0,0,0,.1),inset 0 1px 1px rgba(255,255,255,.9);
+    --lift-lo:0 2px 4px rgba(0,0,0,.14),inset 0 1px 1px rgba(255,255,255,.9);
+    --sunk:inset 0 2px 5px rgba(0,0,0,.13),inset 0 -1px 1px rgba(255,255,255,.85);--dot-off:#cfcfd3;
+    display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;padding:28px;border-radius:22px;background:var(--plate);transition:background .22s ease;max-width:100%}
+  .fx[data-finish="obsidian"]{--plate:#121214;--well:#0b0b0c;--rim:#000;--ink:#f7f7f8;--sub:#9a9aa0;--cap:linear-gradient(160deg,#3d3d41,#1d1d20);--knob:#2c2c30;
+    --lift:0 6px 14px rgba(0,0,0,.6),0 1px 2px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.12);
+    --lift-lo:0 2px 4px rgba(0,0,0,.6),inset 0 1px 1px rgba(255,255,255,.12);
+    --sunk:inset 0 2px 6px rgba(0,0,0,.8),inset 0 -1px 1px rgba(255,255,255,.07);--dot-off:#38383d}
+  .dot{display:block;width:8px;height:8px;border-radius:50%;background:var(--dot-off);transition:background .15s,box-shadow .15s;flex:none}
+  .dot.on{background:var(--accent);box-shadow:0 0 8px color-mix(in srgb,var(--accent) 70%,transparent)}
+  .lbl{font:600 9px var(--mono);letter-spacing:1.2px;text-transform:uppercase;color:var(--sub)}
+  .col-u{display:flex;flex-direction:column;align-items:center;gap:12px}
+
+  /* toggles */
+  .tg{position:relative;width:84px;height:40px;border-radius:999px;border:0;padding:0;cursor:pointer;background:var(--well);box-shadow:var(--sunk);touch-action:none;transition:background .22s ease;flex:none}
+  .tg:focus-visible{outline:3px solid var(--accent);outline-offset:5px}
+  .tg-k{position:absolute;top:4px;left:4px;width:32px;height:32px;border-radius:50%;background:var(--cap);box-shadow:var(--lift);will-change:transform;pointer-events:none}
+  .tg.std[aria-checked="true"]{background:var(--ink)}
+  .tg.col[aria-checked="true"]{background:var(--accent);box-shadow:inset 0 2px 5px rgba(0,0,0,.25)}
+  .tg.col[aria-checked="true"] .tg-k{background:radial-gradient(circle at 38% 30%,color-mix(in srgb,var(--accent) 70%,#fff),var(--accent) 52%,color-mix(in srgb,var(--accent) 78%,#000));box-shadow:0 6px 12px color-mix(in srgb,var(--accent) 40%,rgba(0,0,0,.4))}
+  .tg .io-i{position:absolute;left:19px;top:50%;width:3px;height:14px;margin-top:-7px;border-radius:2px;background:var(--sub);transition:background .2s}
+  .tg .io-o{position:absolute;right:15px;top:50%;width:14px;height:14px;margin-top:-7px;border:2px solid var(--sub);border-radius:50%}
+  .tg[aria-checked="true"] .io-i{background:var(--accent)}
+  .tg.pz{width:104px;height:46px}
+  .tg.pz .tg-k{top:5px;left:5px;width:58px;height:36px;border-radius:18px;transform-origin:center}
+  .pzt-wrap{display:flex;align-items:center;gap:16px}
+  .pzt{position:relative;width:184px;height:44px;border:0;padding:0;background:transparent;cursor:pointer;touch-action:none}
+  .pzt:focus-visible{outline:3px solid var(--accent);outline-offset:5px;border-radius:22px}
+  .pzt-line{position:absolute;left:40px;right:8px;top:50%;height:2px;margin-top:-1px;border-radius:1px;background:var(--rim)}
+  .pzt-end{position:absolute;right:4px;top:50%;margin-top:-4px}
+  .pzt .tg-k{top:4px;left:0;width:60px;height:36px;border-radius:18px;transform-origin:center}
+  .pzt[aria-checked="true"] .pzt-line{background:var(--ink)}
+
+  /* OP-1 keys */
+  .op{flex-direction:column;gap:16px}
+  .op-top{display:flex;align-items:center;justify-content:space-between;width:100%;gap:14px}
+  .op-disp{font:600 13px var(--mono);letter-spacing:1px;color:var(--ink);font-variant-numeric:tabular-nums}
+  .op-oct{display:flex;gap:6px}
+  .op-oct button{width:34px;height:28px;border-radius:6px;border:1px solid var(--rim);background:var(--cap);color:var(--ink);font:600 13px var(--mono);cursor:pointer;box-shadow:var(--lift-lo)}
+  .op-oct button:active{transform:translateY(1px)}
+  .op-oct button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .op-kb{--w:clamp(40px,8.6vw,62px);position:relative;width:calc(var(--w) * 7);outline:none}
+  .op-kb:focus-visible{outline:3px solid var(--accent);outline-offset:6px;border-radius:4px}
+  .op-row-b{position:relative;height:var(--w)}
+  .op-row-w{display:grid;grid-template-columns:repeat(7,var(--w));height:calc(var(--w) * 1.9);gap:1px;background:var(--rim);border:1px solid var(--rim)}
+  .op-cell{position:relative;background:var(--well);display:grid;place-items:center;border:0;padding:0;cursor:pointer;touch-action:none}
+  .op-row-b .op-cell{position:absolute;top:0;width:var(--w);height:var(--w);box-shadow:0 0 0 1px var(--rim)}
+  .op-cap{display:block;border-radius:999px;background:var(--cap);box-shadow:var(--lift);transition:transform .06s ease,box-shadow .06s ease;pointer-events:none}
+  .op-row-w .op-cap{width:62%;height:78%}
+  .op-row-b .op-cap{width:62%;height:62%;border-radius:50%;display:grid;place-items:center}
+  .op-row-b .op-cap::after{content:"";width:16%;aspect-ratio:1;border-radius:50%;background:var(--accent)}
+  .op-cell[data-down="true"] .op-cap{transform:translateY(2px) scale(.97);box-shadow:var(--lift-lo)}
+  .op-cell[data-down="true"] .op-cap::after{box-shadow:0 0 8px var(--accent)}
+  .op-cell span.n{position:absolute;bottom:4px;font:600 8px var(--mono);color:var(--sub);pointer-events:none}
+
+  /* round push buttons */
+  .rb{--c:#fff;--wall:#c9c9cd;width:60px;height:60px;border-radius:50%;border:0;padding:0;cursor:pointer;
+    background:radial-gradient(circle at 40% 30%,color-mix(in srgb,var(--c) 60%,#fff),var(--c) 66%);
+    transform:translateY(-3px);box-shadow:0 5px 0 var(--wall),0 10px 16px rgba(0,0,0,.24);transition:transform .07s ease,box-shadow .07s ease}
+  .rb[data-tone="signal"]{--c:var(--accent);--wall:color-mix(in srgb,var(--accent) 60%,#000)}
+  .rb[data-tone="black"]{--c:#26262a;--wall:#060607}
+  .rb[aria-pressed="true"],.rb[data-down="true"]{transform:translateY(1px);box-shadow:0 1px 0 var(--wall),0 3px 6px rgba(0,0,0,.24)}
+  .rb:focus-visible{outline:3px solid var(--accent);outline-offset:5px}
+
+  /* pushin' click button */
+  .pcb-sock{width:132px;height:132px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#2a2a2e 0 60%,#0b0b0c 70%);box-shadow:0 10px 22px rgba(0,0,0,.28)}
+  .pcb{width:112px;height:112px;border-radius:50%;border:0;padding:0;cursor:pointer;background:radial-gradient(circle at 42% 34%,#fff,#ebebed 55%,#cfcfd3);
+    box-shadow:0 6px 0 #9d9da2,0 8px 12px rgba(0,0,0,.35),inset 0 2px 2px #fff;transform:translateY(-4px);transition:transform .06s ease,box-shadow .06s ease}
+  .fx[data-finish="obsidian"] .pcb{background:radial-gradient(circle at 42% 34%,#4a4a4f,#232326 55%,#141416);box-shadow:0 6px 0 #000,0 8px 12px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.15)}
+  .pcb[data-down="true"]{transform:translateY(2px);box-shadow:0 0 0 #9d9da2,0 2px 4px rgba(0,0,0,.35),inset 0 2px 5px rgba(0,0,0,.15)}
+  .pcb:focus-visible{outline:3px solid var(--accent);outline-offset:8px}
+
+  /* concaved switch */
+  .ccv-rim{width:130px;height:130px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#1c1c1f 0 62%,#0a0a0b 72%);box-shadow:0 10px 22px rgba(0,0,0,.25)}
+  .ccv{width:112px;height:112px;border-radius:50%;border:0;padding:0;cursor:pointer;
+    background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 55%,#000) 0%,var(--accent) 48%,color-mix(in srgb,var(--accent) 72%,#fff) 100%);
+    box-shadow:inset 0 12px 18px rgba(0,0,0,.42),inset 0 -6px 10px rgba(255,255,255,.28),0 3px 0 color-mix(in srgb,var(--accent) 45%,#000);transition:transform .08s ease,box-shadow .12s ease,filter .2s}
+  .ccv[aria-pressed="true"]{transform:translateY(2px) scale(.98);box-shadow:inset 0 16px 22px rgba(0,0,0,.5),inset 0 -3px 6px rgba(255,255,255,.18),0 1px 0 color-mix(in srgb,var(--accent) 45%,#000)}
+  .ccv:focus-visible{outline:3px solid var(--ink);outline-offset:9px}
+
+  /* fidget poppin' */
+  .fp{display:grid;grid-template-columns:repeat(3,58px);gap:16px;padding:20px 22px;border-radius:18px;background:var(--well);box-shadow:var(--lift);will-change:transform}
+  .fp-b{width:58px;height:58px;border-radius:50%;border:0;padding:0;cursor:pointer;display:grid;place-items:center;background:radial-gradient(circle at 38% 30%,#fff,#ebebed 60%,#d7d7db);box-shadow:0 5px 10px rgba(0,0,0,.18),inset 0 1px 1px #fff;transition:box-shadow .12s ease,background .12s ease,transform .12s ease}
+  .fx[data-finish="obsidian"] .fp-b{background:radial-gradient(circle at 38% 30%,#45454a,#26262a 60%,#18181b);box-shadow:0 5px 10px rgba(0,0,0,.6),inset 0 1px 1px rgba(255,255,255,.12)}
+  .fp-b::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--accent);opacity:0;transform:scale(.4);transition:opacity .12s,transform .2s cubic-bezier(.3,1.6,.5,1)}
+  .fp-b[aria-pressed="true"]{background:radial-gradient(circle at 50% 66%,#fff,#e6e6e9 60%,#cfcfd3);box-shadow:inset 0 6px 10px rgba(0,0,0,.2),inset 0 -2px 3px rgba(255,255,255,.9);transform:scale(.97)}
+  .fx[data-finish="obsidian"] .fp-b[aria-pressed="true"]{background:radial-gradient(circle at 50% 66%,#2c2c30,#18181b 70%);box-shadow:inset 0 6px 10px rgba(0,0,0,.75),inset 0 -1px 2px rgba(255,255,255,.08)}
+  .fp-b[aria-pressed="true"]::after{opacity:1;transform:scale(1)}
+  .fp-b:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+
+  /* triple switch */
+  .ts{display:flex;gap:56px}
+  .ts-u{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .ts-track{position:relative;width:52px;height:140px;border:0;padding:0;background:transparent;cursor:grab;touch-action:none}
+  .ts-track:focus-visible{outline:3px solid var(--accent);outline-offset:4px;border-radius:26px}
+  .ts-line{position:absolute;left:50%;top:0;bottom:30px;width:3px;margin-left:-1.5px;border-radius:2px;background:var(--rim)}
+  .ts-th{position:absolute;left:0;top:0;width:52px;height:82px;border-radius:26px;background:var(--cap);box-shadow:var(--lift);display:flex;flex-direction:column;align-items:center;justify-content:space-around;padding:8px 0;will-change:transform;pointer-events:none}
+  .ts-th i{width:34px;height:30px;border-radius:50%;box-shadow:var(--sunk);background:var(--knob)}
+
+  /* triple light switch */
+  .ls{display:grid;grid-template-columns:repeat(3,72px);padding:10px;border-radius:18px;background:var(--cap);box-shadow:var(--lift)}
+  .ls-p{position:relative;height:150px;border:0;padding:0;cursor:pointer;background:linear-gradient(180deg,var(--pt),var(--pb));box-shadow:inset -1px 0 0 var(--rim);transition:background .12s;--pt:#f6f6f7;--pb:#e7e7ea}
+  .ls-p:first-child{border-radius:10px 0 0 10px}.ls-p:last-child{border-radius:0 10px 10px 0;box-shadow:none}
+  .ls-p[aria-pressed="true"]{--pt:#e2e2e5;--pb:#fbfbfc}
+  .fx[data-finish="obsidian"] .ls-p{--pt:#2c2c30;--pb:#1c1c1f}
+  .fx[data-finish="obsidian"] .ls-p[aria-pressed="true"]{--pt:#141416;--pb:#323236}
+  .ls-p .dot{position:absolute;left:50%;top:18px;margin-left:-4px;opacity:.45;background:var(--accent)}
+  .ls-p[aria-pressed="true"] .dot{opacity:1;box-shadow:0 0 9px var(--accent)}
+  .ls-p span.n{position:absolute;left:0;right:0;bottom:12px;font:600 8.5px var(--mono);letter-spacing:1px;color:var(--sub);text-transform:uppercase}
+  .ls-p:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+  .lamps{display:flex;gap:16px}
+  .lamp-b{width:22px;height:22px;border-radius:50%;background:var(--well);box-shadow:var(--sunk);transition:background .2s,box-shadow .2s}
+  .lamp-b.on{background:radial-gradient(circle,#fff,color-mix(in srgb,var(--accent) 40%,#fff));box-shadow:0 0 16px color-mix(in srgb,var(--accent) 50%,transparent)}
+
+  /* sliders */
+  .hs{position:relative;width:280px;max-width:100%;height:48px;touch-action:none;cursor:grab;flex:none}
+  .hs:focus-visible{outline:3px solid var(--accent);outline-offset:6px;border-radius:24px}
+  .hs-line{position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;border-radius:1px;background:var(--rim)}
+  .hs-fill{position:absolute;left:0;top:50%;height:2px;margin-top:-1px;border-radius:1px;background:var(--ink)}
+  .hs-th{position:absolute;top:50%;left:0;will-change:transform;pointer-events:none}
+  .trk .hs-th{width:66px;height:34px;margin-top:-17px;border-radius:17px;background:var(--cap);box-shadow:var(--lift);display:flex;align-items:center;justify-content:center;gap:4px}
+  .trk .hs-th i{width:2px;height:16px;border-radius:1px;background:var(--rim);box-shadow:1px 0 0 rgba(255,255,255,.7)}
+  .sq .hs-th{width:36px;height:36px;margin-top:-18px;border-radius:8px;background:var(--cap);box-shadow:var(--lift)}
+  .sq .hs-ticks{position:absolute;left:18px;right:18px;top:calc(50% + 14px);height:6px;display:flex;justify-content:space-between}
+  .sq .hs-ticks i{width:1px;height:6px;background:var(--sub);opacity:.6}
+  .sq .hs-ticks i.on{background:var(--accent);opacity:1}
+  .dmp .hs-line{height:14px;margin-top:-7px;border-radius:7px;background:var(--well);box-shadow:var(--sunk)}
+  .dmp .hs-fill{height:14px;margin-top:-7px;border-radius:7px;background:color-mix(in srgb,var(--accent) 22%,transparent)}
+  .dmp .hs-th{width:78px;height:40px;margin-top:-20px;border-radius:20px;
+    background:radial-gradient(circle,color-mix(in srgb,var(--accent) 70%,#000) 0 1.1px,transparent 1.5px) 0 0/6px 6px,radial-gradient(circle at 40% 25%,color-mix(in srgb,var(--accent) 75%,#fff),var(--accent) 60%,color-mix(in srgb,var(--accent) 85%,#000));
+    box-shadow:0 8px 16px color-mix(in srgb,var(--accent) 35%,rgba(0,0,0,.3)),inset 0 1px 1px rgba(255,255,255,.35)}
+
+  /* round on/off knob */
+  .rk-wrap{position:relative;width:200px;height:200px;display:grid;place-items:center}
+  .rk-lbl{position:absolute;font:600 9px var(--mono);letter-spacing:1.4px;color:var(--sub)}
+  .rk-lbl.on{color:var(--accent)}
+  .rk{position:relative;width:150px;height:150px;border-radius:50%;cursor:grab;touch-action:none;background:var(--cap);
+    box-shadow:0 14px 22px rgba(0,0,0,.18),0 0 0 1.5px var(--rim),inset 0 1px 1px rgba(255,255,255,.9)}
+  .rk:focus-visible{outline:3px solid var(--accent);outline-offset:8px}
+  .rk-rot{position:absolute;inset:0;border-radius:50%;will-change:transform}
+  .rk-bar{position:absolute;left:50%;top:6%;bottom:6%;width:30px;margin-left:-15px;border-radius:15px;background:linear-gradient(90deg,#d9d9dd,#fff 35%,#fff 55%,#cfcfd3);box-shadow:4px 6px 10px rgba(0,0,0,.18),inset 0 0 0 1px rgba(0,0,0,.05)}
+  .fx[data-finish="obsidian"] .rk-bar{background:linear-gradient(90deg,#141416,#3a3a3e 35%,#38383c 55%,#121214)}
+  .rk-dot{position:absolute;left:50%;top:13%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:var(--sub);transition:background .2s}
+  .rk.on .rk-dot{background:var(--accent);box-shadow:0 0 6px var(--accent)}
+
+  /* joypad */
+  .jp-base{position:relative;width:150px;height:150px;border-radius:50%;background:var(--well);box-shadow:var(--sunk);display:grid;place-items:center;touch-action:none}
+  .jp{position:relative;width:96px;height:96px;border-radius:50%;cursor:grab;background:radial-gradient(circle at 40% 30%,#fff,#e4e4e7 60%,#bdbdc2);box-shadow:0 10px 18px rgba(0,0,0,.28),inset 0 1px 1px #fff;will-change:transform}
+  .fx[data-finish="obsidian"] .jp{background:radial-gradient(circle at 40% 30%,#4a4a4f,#232326 60%,#101012)}
+  .jp::after{content:"";position:absolute;inset:16%;border-radius:50%;background:radial-gradient(circle at 50% 65%,#fff,#ececee 70%);box-shadow:inset 0 4px 8px rgba(0,0,0,.18)}
+  .fx[data-finish="obsidian"] .jp::after{background:radial-gradient(circle at 50% 65%,#2e2e32,#1a1a1d 70%);box-shadow:inset 0 4px 8px rgba(0,0,0,.7)}
+  .jp-base:focus-visible{outline:3px solid var(--accent);outline-offset:5px}
+  .jp-arena{position:relative;width:170px;height:150px;border-radius:14px;background:var(--well);box-shadow:var(--sunk);overflow:hidden}
+  .jp-arena i{position:absolute;left:0;top:0;width:14px;height:14px;margin:-7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px color-mix(in srgb,var(--accent) 60%,transparent);will-change:transform}
+  .jp-arena::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--rim)}
+  .jp-arena::after{content:"";position:absolute;top:50%;left:0;right:0;height:1px;background:var(--rim)}
+
+  /* bouncin' ball */
+  .bb{position:relative;display:flex;gap:26px;align-items:flex-end;height:220px;padding:0 10px;border-bottom:1px solid var(--rim)}
+  .bb-u{position:relative;width:62px;height:100%}
+  .bb-shadow{position:absolute;left:50%;bottom:-2px;width:52px;height:8px;margin-left:-26px;border-radius:50%;background:rgba(0,0,0,.22);filter:blur(3px);will-change:transform,opacity}
+  .bb-ball{position:absolute;left:0;bottom:0;width:62px;height:62px;border-radius:50%;border:0;padding:0;cursor:pointer;display:grid;place-items:center;transform-origin:50% 100%;will-change:transform;
+    background:radial-gradient(circle at 36% 28%,#fff,#ececee 55%,#c9c9cd);box-shadow:inset 0 -4px 8px rgba(0,0,0,.08)}
+  .fx[data-finish="obsidian"] .bb-ball{background:radial-gradient(circle at 36% 28%,#55555a,#26262a 55%,#0f0f11)}
+  .bb-ball::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--accent)}
+  .bb-ball:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+
+  /* rollin' search */
+  .rs{flex-direction:column;align-items:stretch;width:min(560px,100%)}
+  .rs-bar{position:relative;height:60px}
+  .rs-field{position:absolute;left:0;top:2px;height:56px;width:56px;border-radius:28px;background:var(--cap);box-shadow:var(--sunk);overflow:hidden;will-change:width}
+  .rs-field input{position:absolute;left:20px;right:72px;top:0;bottom:0;border:0;background:transparent;outline:none;font:500 15px var(--sans);color:var(--ink);opacity:0;transition:opacity .2s}
+  .rs-field input::placeholder{color:var(--sub)}
+  .rs[data-open="true"] .rs-field input{opacity:1}
+  .rs-ball{position:absolute;left:0;top:0;width:60px;height:60px;border-radius:50%;border:0;padding:0;cursor:pointer;display:grid;place-items:center;will-change:transform;
+    background:radial-gradient(circle at 36% 28%,color-mix(in srgb,var(--accent) 60%,#fff),var(--accent) 55%,color-mix(in srgb,var(--accent) 75%,#000));box-shadow:0 10px 18px color-mix(in srgb,var(--accent) 35%,rgba(0,0,0,.35))}
+  .rs-ball svg{width:24px;height:24px;fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round}
+  .rs-ball:focus-visible{outline:3px solid var(--ink);outline-offset:4px}
+  .rs-list{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:4px;max-height:0;overflow:hidden;transition:max-height .35s ease}
+  .rs[data-open="true"] .rs-list{max-height:260px;overflow:auto}
+  .rs-list li{display:flex;justify-content:space-between;gap:12px;padding:8px 12px;border-radius:8px;font:500 13px var(--sans);color:var(--ink);cursor:pointer}
+  .rs-list li span{font:500 10px var(--mono);letter-spacing:1px;color:var(--sub);text-transform:uppercase}
+  .rs-list li[aria-selected="true"]{background:var(--ink);color:var(--plate-ink,#fff)}
+  .fx[data-finish="obsidian"] .rs-list li[aria-selected="true"]{color:#111}
+  .rs-list li[aria-selected="true"] span{color:inherit;opacity:.7}
+  .rs-list li.none{color:var(--sub);cursor:default}
+  .unit.flash .card{animation:cardflash 1.2s ease}
+  @keyframes cardflash{0%,40%{box-shadow:0 0 0 3px var(--accent)}100%{box-shadow:0 0 0 0 transparent}}
+  @media (max-width:520px){.ts{gap:30px}.fp{grid-template-columns:repeat(3,50px)}.fp-b{width:50px;height:50px}.bb{gap:14px}.ls{grid-template-columns:repeat(3,62px)}}
+  @media (prefers-reduced-motion:reduce){.code-snippet{transition:none}}
+</style>
+
+<div class="page">
+<header>
+  <h1>Enochian Elements</h1>
+  <h2>Volume III · after Drams</h2>
+  <p>Twenty small controls in the spirit of the Drams collection, rebuilt in the atlas language. The Drams originals lean on a soft orange. Here that role goes to the signal accent, and everything else is black and white.</p>
+  <p>Each control does one job and shows its state plainly. Every one has an Ivory and an Obsidian finish, spring motion, keyboard access, and a copyable fragment behind the Code Veil.</p>
+  <div class="portable"><strong>Same construction.</strong> No libraries and no hosted services. The springs, clicks, synth voices and ball physics are all written inline.</div>
+  <div class="atlas-map">
+    <h3>Find the right pattern</h3>
+    <ul>
+      <li><b>Play notes</b> with the OP-1 Keys.</li>
+      <li><b>Trigger or latch an action</b> with the Triple Push Buttons, the Pushin' Click Button or the Concaved Switch.</li>
+      <li><b>Turn something on or off</b> with the Standard, Coloured, LED, I/O, Pinchin' and Pinchin' Track switches.</li>
+      <li><b>Set several on/off states side by side</b> with the Triple Switch and the Triple Light Switch.</li>
+      <li><b>Pick a value along a line</b> with the Trackin', Square and Dimpled sliders.</li>
+      <li><b>Steer in two dimensions</b> with the Joypad Controller.</li>
+      <li><b>Find anything on this page</b> with Rollin' Search.</li>
+    </ul>
+  </div>
+  <div class="accentrow">
+    <span>Signal accent:</span>
+    <button type="button" id="accOrange" aria-pressed="false">EMBER</button>
+    <button type="button" id="accRed" aria-pressed="true">CINNABAR</button>
+    <span class="sep"></span>
+    <span>Clicks:</span>
+    <button type="button" id="soundBtn" aria-pressed="true">ON</button>
+  </div>
+</header>
+
+<div class="section-title">Inspect the construction</div>
+<div class="grid">
+  <article class="unit wide">
+    <div class="cap"><span>The Code Veil · reveal the implementation</span><span class="pill">CODE HIDDEN / VISIBLE</span></div>
+    <div class="card code-toggle-card">
+      <p class="component-copy">The same switch as Volumes I and II. Turn it on to show the fragment that makes each control behave.</p>
+      <div class="rthemes" id="veilFinish" role="group" aria-label="Code Veil finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="d37-wrap"><button type="button" class="d37-track" id="veil" data-finish="ivory" role="switch" aria-checked="false" aria-label="Show implementation code"><span class="d37-knob" id="veilKnob"></span></button><span class="d37-label" id="veilLabel">CODE HIDDEN</span></div>
+      <div class="hint">pointer or keyboard · Space / Enter · every revealed pattern is copyable</div>
+    </div>
+  </article>
+  <article class="unit wide" id="c-search">
+    <div class="cap"><span>Rollin' Search · a ball that unrolls into a field</span><span class="pill">CLICK · TYPE · ENTER</span></div>
+    <div class="card">
+      <p class="component-copy">A search that hides until it's wanted. Tap the ball and it rolls to the far end, laying out the field behind it. Type to filter the twenty controls on this page, and press Enter to jump to one. <strong>Escape rolls it home</strong> and clears the field.</p>
+      <div class="rthemes" data-target="rs" role="group" aria-label="Rollin' Search finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx rs" id="rs" data-finish="ivory" data-open="false">
+        <div class="rs-bar">
+          <div class="rs-field" id="rsField"><input id="rsInput" type="search" placeholder="Search controls" aria-label="Search controls" autocomplete="off" tabindex="-1" role="combobox" aria-expanded="false" aria-controls="rsList"></div>
+          <button type="button" class="rs-ball" id="rsBall" aria-label="Open search" aria-expanded="false"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 4.5 4.5"/></svg></button>
+        </div>
+        <ul class="rs-list" id="rsList" role="listbox" aria-label="Matching controls"></ul>
+      </div>
+      <div class="readout" id="rsRead"><b>closed</b> · 20 controls indexed</div>
+      <div class="hint">click the ball or press / anywhere on the page · ↑/↓ choose · Enter jumps · Esc closes</div>
+      <div class="lineage">after · Drams — Rollin' Search</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Rollin' Search</span><button type="button" class="copy-code">COPY</button></div><pre><code>// The ball rolls without slipping: rotation = distance / radius.
+const travel = bar.clientWidth - ball.offsetWidth;
+spring.to(open ? 1 : 0);   // one spring drives both ball and field
+onFrame(x =&gt; {
+  ball.style.transform  = `translateX(${x * travel}px) rotate(${x * travel / 30}rad)`;
+  field.style.width     = `${56 + x * travel}px`;
+});</code></pre></section>
+    </div>
+  </article>
+</div>
+
+<!-- ───────────── KEYS AND BUTTONS ───────────── -->
+<div class="section-title">Keys and buttons</div>
+<div class="grid">
+  <article class="unit wide" id="c-op1">
+    <div class="cap"><span>OP-1 Keys · playable octave</span><span class="pill">7 WHITE · 5 SIGNAL · SYNTH</span></div>
+    <div class="card">
+      <p class="component-copy">One octave of a pocket synth. Each key is a pill cap set in a square cell, and the accidentals are round caps marked with the signal dot. Hold a key and the note sustains, then fades out when you let go. Several keys can sound at once. <strong>Your computer keyboard plays it too</strong> once it has focus.</p>
+      <div class="rthemes" data-target="op" role="group" aria-label="OP-1 Keys finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx op" id="op" data-finish="ivory">
+        <div class="op-top"><span class="op-disp" id="opDisp">OCT 4 · READY</span><span class="op-oct"><button type="button" id="opDown" aria-label="Octave down">−</button><button type="button" id="opUp" aria-label="Octave up">+</button></span></div>
+        <div class="op-kb" id="opKb" tabindex="0" aria-label="Keyboard. While focused: A S D F G H J play white keys, W E T Y U play the round keys, Z and X shift the octave.">
+          <div class="op-row-b" id="opBlack"></div>
+          <div class="op-row-w" id="opWhite"></div>
+        </div>
+      </div>
+      <div class="readout" id="opRead"><b>octave 4</b> · C4 = 261.6 Hz</div>
+      <div class="hint">pointer: press and hold, slide across keys · keyboard: A–J white, W E T Y U round, Z / X octave</div>
+      <div class="lineage">after · Drams — OP-1 Keys</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>OP-1 Keys</span><button type="button" class="copy-code">COPY</button></div><pre><code>// One voice per held key: attack, decay to sustain, release on key up.
+function noteOn(midi) {
+  const f = 440 * 2 ** ((midi - 69) / 12), t = ctx.currentTime;
+  const osc = ctx.createOscillator(); osc.type = "triangle"; osc.frequency.value = f;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.22, t + 0.005);   // attack
+  g.gain.exponentialRampToValueAtTime(0.09, t + 0.3);     // decay → sustain
+  osc.connect(g).connect(master); osc.start();
+  voices.set(midi, { osc, g });
+}
+function noteOff(midi) { const v = voices.get(midi); v.g.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.08); v.osc.stop(ctx.currentTime + 0.5); }</code></pre></section>
+    </div>
+  </article>
+
+  <article class="unit" id="c-tpb">
+    <div class="cap"><span>Triple Push Buttons · latching trio</span><span class="pill">SIGNAL · WHITE · BLACK</span></div>
+    <div class="card">
+      <p class="component-copy">Three latching buttons, told apart by colour. A press seats the cap and lights the lamp above it, and a second press releases it. The red one is kept for the action you most want to notice.</p>
+      <div class="rthemes" data-target="tpb" role="group" aria-label="Triple Push Buttons finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="tpb" data-finish="ivory">
+        <div class="col-u"><i class="dot"></i><button type="button" class="rb" data-tone="signal" aria-pressed="false" aria-label="Record"></button><span class="lbl">rec</span></div>
+        <div class="col-u"><i class="dot"></i><button type="button" class="rb" data-tone="white" aria-pressed="false" aria-label="Monitor"></button><span class="lbl">mon</span></div>
+        <div class="col-u"><i class="dot"></i><button type="button" class="rb" data-tone="black" aria-pressed="false" aria-label="Mute"></button><span class="lbl">mute</span></div>
+      </div>
+      <div class="readout" id="tpbRead"><b>none</b> latched</div>
+      <div class="hint">click or Space / Enter · press again to release</div>
+      <div class="lineage">after · Drams — Triple Push Buttons</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Triple Push Buttons</span><button type="button" class="copy-code">COPY</button></div><pre><code>.rb { transform: translateY(-3px); box-shadow: 0 5px 0 var(--wall), 0 10px 16px rgba(0,0,0,.24); }
+.rb[aria-pressed="true"] { transform: translateY(1px); box-shadow: 0 1px 0 var(--wall), 0 3px 6px rgba(0,0,0,.24); }
+/* the wall shadow shrinks by the same 4px the cap travels */</code></pre></section>
+    </div>
+  </article>
+
+  <article class="unit" id="c-pcb">
+    <div class="cap"><span>Pushin' Click Button · tap or hold</span><span class="pill">TAP · HOLD 600 ms</span></div>
+    <div class="card">
+      <p class="component-copy">A large domed button in a black socket. A tap is a click, and holding for 600 ms is a second action, so a long press can mean "more". The lamp blinks for a tap and stays lit after a hold.</p>
+      <div class="rthemes" data-target="pcbx" role="group" aria-label="Pushin' Click Button finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="pcbx" data-finish="ivory"><div class="col-u"><i class="dot" id="pcbLed"></i><span class="pcb-sock"><button type="button" class="pcb" id="pcb" aria-label="Click button. Hold for the alternate action."></button></span></div></div>
+      <div class="readout" id="pcbRead"><b>0</b> taps · 0 holds</div>
+      <div class="hint">pointer: tap or hold · keyboard: Space / Enter, hold for the alternate action</div>
+      <div class="lineage">after · Drams — Pushin' Click Button</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Pushin' Click Button</span><button type="button" class="copy-code">COPY</button></div><pre><code>btn.onpointerdown = () =&gt; { held = false; timer = setTimeout(() =&gt; { held = true; onHold(); }, 600); };
+btn.onpointerup   = () =&gt; { clearTimeout(timer); if (!held) onTap(); };</code></pre></section>
+    </div>
+  </article>
+
+  <article class="unit" id="c-ccv">
+    <div class="cap"><span>Concaved Switch · dished latch</span><span class="pill">ON / OFF</span></div>
+    <div class="card">
+      <p class="component-copy">A signal-red latch with a dished face. Turning it on deepens the dish as the cap seats, and the lamp above confirms the state. Use it for one important on/off, like arming or going live.</p>
+      <div class="rthemes" data-target="ccvx" role="group" aria-label="Concaved Switch finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="ccvx" data-finish="ivory"><div class="col-u"><i class="dot" id="ccvLed"></i><span class="ccv-rim"><button type="button" class="ccv" id="ccv" aria-pressed="false" aria-label="Arm"></button></span></div></div>
+      <div class="readout" id="ccvRead"><b>off</b> · lamp dark</div>
+      <div class="hint">click or Space / Enter</div>
+      <div class="lineage">after · Drams — Concaved Switch</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Concaved Switch</span><button type="button" class="copy-code">COPY</button></div><pre><code>/* concave = light from below, shadow from above */
+.ccv { background: radial-gradient(circle at 50% 70%, light, var(--accent) 45%, dark);
+       box-shadow: inset 0 10px 16px rgba(0,0,0,.35); }
+.ccv[aria-pressed="true"] { box-shadow: inset 0 16px 22px rgba(0,0,0,.5); transform: translateY(2px); }</code></pre></section>
+    </div>
+  </article>
+
+  <article class="unit" id="c-fp">
+    <div class="cap"><span>Fidget Poppin' · six bubbles</span><span class="pill">POP ALL TO RESET</span></div>
+    <div class="card">
+      <p class="component-copy">Six bubbles that invert when pressed, and a signal dot shows in each one you've popped. Pop all six and the tray flips over, ready to start again. It's a toy, but it's also a checklist where the finish resets itself.</p>
+      <div class="rthemes" data-target="fpx" role="group" aria-label="Fidget Poppin' finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="fpx" data-finish="ivory"><div class="fp" id="fp" role="group" aria-label="Bubbles">
+        <button type="button" class="fp-b" aria-pressed="true" aria-label="Bubble 1"></button><button type="button" class="fp-b" aria-pressed="false" aria-label="Bubble 2"></button><button type="button" class="fp-b" aria-pressed="true" aria-label="Bubble 3"></button>
+        <button type="button" class="fp-b" aria-pressed="false" aria-label="Bubble 4"></button><button type="button" class="fp-b" aria-pressed="true" aria-label="Bubble 5"></button><button type="button" class="fp-b" aria-pressed="false" aria-label="Bubble 6"></button>
+      </div></div>
+      <div class="readout" id="fpRead"><b>3 of 6</b> popped · tray 1</div>
+      <div class="hint">click or Space / Enter on a bubble · a popped bubble pops back up when pressed</div>
+      <div class="lineage">after · Drams — Fidget Poppin'</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Fidget Poppin'</span><button type="button" class="copy-code">COPY</button></div><pre><code>bubble.onclick = () =&gt; {
+  bubble.ariaPressed = String(bubble.ariaPressed !== "true"); pop();
+  if (bubbles.every(b =&gt; b.ariaPressed === "true"))       // all popped:
+    flipTray().then(() =&gt; bubbles.forEach(b =&gt; b.ariaPressed = "false"));
+};</code></pre></section>
+    </div>
+  </article>
+</div>
+
+<!-- ───────────── SWITCHES ───────────── -->
+<div class="section-title">Switches</div>
+<div class="grid">
+  <article class="unit" id="c-std">
+    <div class="cap"><span>Standard Switch · the plain toggle</span><span class="pill">ON / OFF</span></div>
+    <div class="card">
+      <p class="component-copy">The baseline toggle. A white knob in a sunken track, and the track fills black when the switch is on. Click it, or drag the knob and let it settle on the nearer side.</p>
+      <div class="rthemes" data-target="stdx" role="group" aria-label="Standard Switch finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="stdx" data-finish="ivory"><button type="button" class="tg std" id="std" role="switch" aria-checked="false" aria-label="Standard switch"><span class="tg-k"></span></button></div>
+      <div class="readout" id="stdRead"><b>off</b></div>
+      <div class="hint">click, drag ↔, or Space / Enter</div>
+      <div class="lineage">after · Drams — Standard Switch</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Standard Switch</span><button type="button" class="copy-code">COPY</button></div><pre><code>// Drag or click: a drag settles on the nearer side, a click flips.
+up = () =&gt; moved &gt; 3 ? set(spring.x &gt; .5) : set(!on);
+knob.style.transform = `translateX(${x * 44}px)`;</code></pre></section>
+    </div>
+  </article>
+
+  <article class="unit" id="c-col">
+    <div class="cap"><span>Coloured Switch · the whole switch changes</span><span class="pill">NEUTRAL → SIGNAL</span></div>
+    <div class="card">
+      <p class="component-copy">When this switch is on, the whole switch turns the signal colour, track and knob together. Save it for the one setting whose state should be obvious from across the room.</p>
+      <div class="rthemes" data-target="colx" role="group" aria-label="Coloured Switch finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="colx" data-finish="ivory"><button type="button" class="tg col" id="col" role="switch" aria-checked="true" aria-label="Coloured switch"><span class="tg-k"></span></button></div>
+      <div class="readout" id="colRead"><b>on</b> · signal colour</div>
+      <div class="hint">click, drag ↔, or Space / Enter</div>
+      <div class="lineage">after · Drams — Coloured Switch</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Coloured Switch</span><button type="button" class="copy-code">COPY</button></div><pre><code>.tg.col[aria-checked="true"] { background: var(--accent); }
+.tg.col[aria-checked="true"] .tg-k { background: radial-gradient(circle at 38% 30%,
+  color-mix(in srgb, var(--accent) 70%, #fff), var(--accent) 52%,
+  color-mix(in srgb, var(--accent) 78%, #000)); }</code></pre></section>
+    </div>
+  </article>
+
+  <article class="unit" id="c-led">
+    <div class="cap"><span>LED Switch · a lamp on each side</span><span class="pill">○ OFF · ● ON</span></div>
+    <div class="card">
+      <p class="component-copy">A toggle with a lamp at each end. The ring on the left lights when the switch is off, and the dot on the right lights in the signal colour when it's on. Exactly one lamp is always lit, so the state reads even when the knob is out of sight.</p>
+      <div class="rthemes" data-target="ledx" role="group" aria-label="LED Switch finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="ledx" data-finish="ivory" style="gap:16px"><i class="dot" id="ledOff" style="background:transparent;border:2px solid var(--ink);width:10px;height:10px"></i><button type="button" class="tg std" id="led" role="switch" aria-checked="false" aria-label="LED switch"><span class="tg-k"></span></button><i class="dot" id="ledOn"></i></div>
+      <div class="readout" id="ledRead"><b>off</b> · ring lit</div>
+      <div class="hint">click, drag ↔, or Space / Enter</div>
+      <div class="lineage">after · Drams — LED Switch</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>LED Switch</span><button type="button" class="copy-code">COPY</button></div><pre><code>ringLed.style.opacity = on ? .25 : 1;   // off-state lamp
+dotLed.classList.toggle("on", on);      // on-state lamp, signal colour</code></pre></section>
+    </div>
+  </article>
+
+  <article class="unit" id="c-io">
+    <div class="cap"><span>I/O Switch · printed symbols</span><span class="pill">I = ON · O = OFF</span></div>
+    <div class="card">
+      <p class="component-copy">The IEC power symbols are printed in the track and the knob covers one of them, so the symbol you can see is the current state. "O" shows when the switch is off. When it's on, the knob covers the O and the "I" shows in the signal colour.</p>
+      <div class="rthemes" data-target="iox" role="group" aria-label="I/O Switch finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="iox" data-finish="ivory"><button type="button" class="tg" id="io" role="switch" aria-checked="false" aria-label="Power"><span class="io-i"></span><span class="io-o"></span><span class="tg-k"></span></button></div>
+      <div class="readout" id="ioRead"><b>O</b> · power off</div>
+      <div class="hint">click, drag ↔, or Space / Enter</div>
+      <div class="lineage">after · Drams — I/O Switch</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>I/O Switch</span><button type="button" class="copy-code">COPY</button></div><pre><code>&lt;button class="tg" role="switch" aria-checked="false"&gt;
+  &lt;span class="io-i"&gt;&lt;/span&gt;&lt;span class="io-o"&gt;&lt;/span&gt;&lt;span class="tg-k"&gt;&lt;/span&gt;
+&lt;/button&gt;   &lt;!-- the knob is drawn last, so it hides the symbol it sits on --&gt;</code></pre></section>
+    </div>
+  </article>
+
+  <article class="unit" id="c-pz">
+    <div class="cap"><span>Pinchin' Switch · squash and stretch</span><span class="pill">KNOB STRETCHES IN TRANSIT</span></div>
+    <div class="card">
+      <p class="component-copy">A pill-shaped knob that stretches while it moves and settles back into shape when it arrives. The stretch follows the spring's speed, so a quick flick stretches more than a slow drag. A lamp beside the track confirms the state.</p>
+      <div class="rthemes" data-target="pzx" role="group" aria-label="Pinchin' Switch finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="pzx" data-finish="ivory" style="gap:16px"><button type="button" class="tg pz" id="pz" role="switch" aria-checked="false" aria-label="Pinchin' switch"><span class="tg-k"></span></button><i class="dot" id="pzLed"></i></div>
+      <div class="readout" id="pzRead"><b>off</b></div>
+      <div class="hint">click, drag ↔, or Space / Enter</div>
+      <div class="lineage">after · Drams — Pinchin' Switch</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Pinchin' Switch</span><button type="button" class="copy-code">COPY</button></div><pre><code>// Stretch scales with the spring's velocity, then relaxes as it settles.
+const PINCH = { stiffness: 420, damping: 22, mass: 1 };
+onFrame(x =&gt; {
+  const stretch = 1 + Math.min(.45, Math.abs(spring.v) * .09);
+  knob.style.transform = `translateX(${x * travel}px) scaleX(${stretch})`;
+});</code></pre></section>
+    </div>
+  </article>
+
+  <article class="unit" id="c-pzt">
+    <div class="cap"><span>Pinchin' Track Switch · long throw</span><span class="pill">TRAVEL TO THE LAMP</span></div>
+    <div class="card">
+      <p class="component-copy">The pinching knob on an open rail. Switching on sends it all the way along the line until it covers the lamp at the end. The long throw makes a change feel deliberate, which suits settings people shouldn't flip by accident.</p>
+      <div class="rthemes" data-target="pztx" role="group" aria-label="Pinchin' Track Switch finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="pztx" data-finish="ivory"><button type="button" class="pzt" id="pzt" role="switch" aria-checked="false" aria-label="Pinchin' track switch"><span class="pzt-line"></span><i class="dot pzt-end" id="pztLed"></i><span class="tg-k"></span></button></div>
+      <div class="readout" id="pztRead"><b>off</b> · knob at rest</div>
+      <div class="hint">click, drag ↔, or Space / Enter</div>
+      <div class="lineage">after · Drams — Pinchin' Track Switch</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Pinchin' Track Switch</span><button type="button" class="copy-code">COPY</button></div><pre><code>// Same pinch spring, longer travel: the rail is the track.
+const travel = rail.clientWidth - knob.offsetWidth;   // ≈ 124 px vs 44 px
+endLamp.classList.toggle("on", on);</code></pre></section>
+    </div>
+  </article>
+
+  <article class="unit" id="c-ts">
+    <div class="cap"><span>Triple Switch · three vertical toggles</span><span class="pill">UP = ON</span></div>
+    <div class="card">
+      <p class="component-copy">Three tall knobs on thin rails, each with two dimples. Slide a knob up to switch it on and the lamp above lights. Each knob works on its own, and the readout spells out the combination.</p>
+      <div class="rthemes" data-target="tsx" role="group" aria-label="Triple Switch finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="tsx" data-finish="ivory"><div class="ts" id="ts">
+        <div class="ts-u"><i class="dot"></i><button type="button" class="ts-track" role="switch" aria-checked="false" aria-label="Switch 1"><span class="ts-line"></span><span class="ts-th"><i></i><i></i></span></button></div>
+        <div class="ts-u"><i class="dot"></i><button type="button" class="ts-track" role="switch" aria-checked="true" aria-label="Switch 2"><span class="ts-line"></span><span class="ts-th"><i></i><i></i></span></button></div>
+        <div class="ts-u"><i class="dot"></i><button type="button" class="ts-track" role="switch" aria-checked="false" aria-label="Switch 3"><span class="ts-line"></span><span class="ts-th"><i></i><i></i></span></button></div>
+      </div></div>
+      <div class="readout" id="tsRead"><b>OFF – ON – OFF</b></div>
+      <div class="hint">click, drag ↕, Space / Enter, or ↑ / ↓</div>
+      <div class="lineage">after · Drams — Triple Switch</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Triple Switch</span><button type="button" class="copy-code">COPY</button></div><pre><code>// Vertical travel: up is on. Arrow keys map to direction, not toggle.
+track.onkeydown = e =&gt; { if (e.key === "ArrowUp") set(true); if (e.key === "ArrowDown") set(false); };
+thumb.style.transform = `translateY(${(1 - x) * 58}px)`;</code></pre></section>
+    </div>
+  </article>
+
+  <article class="unit" id="c-ls">
+    <div class="cap"><span>Triple Light Switch · three rocker paddles</span><span class="pill">ROCKER · LOCATOR LAMPS</span></div>
+    <div class="card">
+      <p class="component-copy">A wall plate with three paddles. Each one rocks top-down for on and bottom-down for off, so the light catches it the way it would on a wall. Each locator lamp glows faintly while its light is off so you can find the switch in the dark, and brightens when it's on.</p>
+      <div class="rthemes" data-target="lsx" role="group" aria-label="Triple Light Switch finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="lsx" data-finish="ivory" style="flex-direction:column;gap:18px">
+        <div class="lamps" aria-hidden="true"><i class="lamp-b"></i><i class="lamp-b on"></i><i class="lamp-b"></i></div>
+        <div class="ls" id="ls">
+          <button type="button" class="ls-p" aria-pressed="false" aria-label="Hall light"><i class="dot"></i><span class="n">hall</span></button>
+          <button type="button" class="ls-p" aria-pressed="true" aria-label="Kitchen light"><i class="dot"></i><span class="n">kitchen</span></button>
+          <button type="button" class="ls-p" aria-pressed="false" aria-label="Porch light"><i class="dot"></i><span class="n">porch</span></button>
+        </div>
+      </div>
+      <div class="readout" id="lsRead"><b>1 on</b> · kitchen</div>
+      <div class="hint">click a paddle or Space / Enter · the lamps above stand in for the rooms</div>
+      <div class="lineage">after · Drams — Triple Light Switch</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Triple Light Switch</span><button type="button" class="copy-code">COPY</button></div><pre><code>/* the rocker is only a gradient flip: the pressed half is the darker half */
+.ls-p                      { background: linear-gradient(180deg, #f6f6f7, #e7e7ea); }
+.ls-p[aria-pressed="true"] { background: linear-gradient(180deg, #e2e2e5, #fbfbfc); }
+.ls-p .dot { opacity: .45; }  .ls-p[aria-pressed="true"] .dot { opacity: 1; }</code></pre></section>
+    </div>
+  </article>
+</div>
+
+<!-- ───────────── SLIDERS AND DIALS ───────────── -->
+<div class="section-title">Sliders and dials</div>
+<div class="grid">
+  <article class="unit" id="c-trk">
+    <div class="cap"><span>Trackin' Slider · ribbed thumb</span><span class="pill">0 – 100</span></div>
+    <div class="card">
+      <p class="component-copy">A continuous slider with a ribbed pill thumb on a hairline track. The part of the track behind the thumb fills black, so the value reads from the line alone. Drag anywhere on the track and the thumb follows.</p>
+      <div class="rthemes" data-target="trkx" role="group" aria-label="Trackin' Slider finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="trkx" data-finish="ivory"><div class="hs trk" id="trk" role="slider" tabindex="0" aria-label="Level" aria-valuemin="0" aria-valuemax="100"><span class="hs-line"></span><span class="hs-fill"></span><span class="hs-th"><i></i><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="readout" id="trkRead"><b>35</b> / 100</div>
+      <div class="hint">drag ↔ or click the track · ←/→ 1 · PgUp/PgDn 10 · Home/End</div>
+      <div class="lineage">after · Drams — Trackin' Slider</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Trackin' Slider</span><button type="button" class="copy-code">COPY</button></div><pre><code>// Grab the thumb where you hold it; click the track and it springs there.
+const offset = onThumb ? e.clientX - thumbCenter : 0;
+value = clamp((e.clientX - offset - rect.left - half) / travel, 0, 1);
+fill.style.width = `${value * travel + half}px`;</code></pre></section>
+    </div>
+  </article>
+
+  <article class="unit" id="c-sq">
+    <div class="cap"><span>Square Slider · eleven detents</span><span class="pill">0 – 10 · STEPPED</span></div>
+    <div class="card">
+      <p class="component-copy">A square cap that moves in eleven steps, clicking into each one. The ticks under the track light up behind the cap, so the setting reads as a count. Use it where values in between would mean nothing.</p>
+      <div class="rthemes" data-target="sqx" role="group" aria-label="Square Slider finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="sqx" data-finish="ivory"><div class="hs sq" id="sq" role="slider" tabindex="0" aria-label="Step" aria-valuemin="0" aria-valuemax="10"><span class="hs-line"></span><span class="hs-ticks" id="sqTicks"></span><span class="hs-th"></span></div></div>
+      <div class="readout" id="sqRead"><b>step 4</b> of 10</div>
+      <div class="hint">drag ↔ (it snaps with a click) · ←/→ one step · Home/End</div>
+      <div class="lineage">after · Drams — Square Slider</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Square Slider</span><button type="button" class="copy-code">COPY</button></div><pre><code>const step = Math.round(raw * 10);
+if (step !== last) { detentClick(); last = step; }
+spring.to(step / 10);   // SNAP spring seats the cap into the detent</code></pre></section>
+    </div>
+  </article>
+
+  <article class="unit" id="c-dmp">
+    <div class="cap"><span>Dimpled Slider · grip texture</span><span class="pill">0 – 100</span></div>
+    <div class="card">
+      <p class="component-copy">A signal-coloured thumb with a dimpled grip on a deep channel. The colour says this is the setting that matters, and the dimples show where to hold it. The channel fills with a light tint behind the thumb.</p>
+      <div class="rthemes" data-target="dmpx" role="group" aria-label="Dimpled Slider finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="dmpx" data-finish="ivory"><div class="hs dmp" id="dmp" role="slider" tabindex="0" aria-label="Intensity" aria-valuemin="0" aria-valuemax="100"><span class="hs-line"></span><span class="hs-fill"></span><span class="hs-th"></span></div></div>
+      <div class="readout" id="dmpRead"><b>20</b> / 100</div>
+      <div class="hint">drag ↔ or click the channel · arrows · Home/End</div>
+      <div class="lineage">after · Drams — Dimpled Slider</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Dimpled Slider</span><button type="button" class="copy-code">COPY</button></div><pre><code>/* dimples: a dot grid layered over the dome gradient */
+.dmp .hs-th { background:
+  radial-gradient(circle, dark 0 1.1px, transparent 1.5px) 0 0 / 6px 6px,
+  radial-gradient(circle at 40% 25%, light, var(--accent) 60%, dark); }</code></pre></section>
+    </div>
+  </article>
+
+  <article class="unit" id="c-rk">
+    <div class="cap"><span>Round On/Off Knob · quarter turn</span><span class="pill">OFF 0° · ON 90°</span></div>
+    <div class="card">
+      <p class="component-copy">A stove-style knob with a raised bar to grip. A quarter turn clockwise switches it on, and the pointer dot lights in the signal colour. Turning a knob takes more intent than tapping a toggle, which suits things that shouldn't switch on by accident.</p>
+      <div class="rthemes" data-target="rkx" role="group" aria-label="Round On/Off Knob finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="rkx" data-finish="ivory"><div class="rk-wrap"><span class="rk-lbl" id="rkOffL" style="top:0;left:50%;transform:translateX(-50%)">OFF</span><span class="rk-lbl" id="rkOnL" style="right:0;top:50%;transform:translateY(-50%)">ON</span>
+        <div class="rk" id="rk" role="switch" tabindex="0" aria-checked="false" aria-label="On/off knob"><span class="rk-rot" id="rkRot"><span class="rk-bar"></span><span class="rk-dot"></span></span></div></div></div>
+      <div class="readout" id="rkRead"><b>off</b> · 0°</div>
+      <div class="hint">turn: drag around · click toggles · ←/→ or Space / Enter</div>
+      <div class="lineage">after · Drams — Round On/Off Knob</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Round On/Off Knob</span><button type="button" class="copy-code">COPY</button></div><pre><code>// Follow the hand between the stops, then snap to the nearer one.
+angle = clamp(start + delta, -8, 98);           // a little give past each stop
+on    = angle &gt; 45;  spring.to(on ? 90 : 0);    // HEAVY spring, one clack</code></pre></section>
+    </div>
+  </article>
+</div>
+
+<!-- ───────────── PLAY ───────────── -->
+<div class="section-title">Play</div>
+<div class="grid">
+  <article class="unit" id="c-jp">
+    <div class="cap"><span>Joypad Controller · two-axis stick</span><span class="pill">X · Y · 8 DIRECTIONS</span></div>
+    <div class="card">
+      <p class="component-copy">A thumbstick with a dished cap. Push it in any direction and it springs back to center when you let go. The signal dot in the field moves at the speed the stick sets, so a light push creeps and a full push races. <strong>The readout gives the vector</strong> and the nearest of the eight directions.</p>
+      <div class="rthemes" data-target="jpx" role="group" aria-label="Joypad finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="jpx" data-finish="ivory"><div class="jp-base" id="jpBase" tabindex="0" role="application" aria-label="Thumbstick. While focused, hold arrow keys to push."><span class="jp" id="jp"></span></div><div class="jp-arena" id="jpArena" aria-hidden="true"><i id="jpDot"></i></div></div>
+      <div class="readout" id="jpRead"><b>center</b> · x 0.00 · y 0.00</div>
+      <div class="hint">drag the stick · or focus it and hold the arrow keys</div>
+      <div class="lineage">after · Drams — Joypad Controller</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Joypad Controller</span><button type="button" class="copy-code">COPY</button></div><pre><code>// Clamp the stick to a circle, report a unit vector, spring home on release.
+let dx = e.clientX - cx, dy = e.clientY - cy;
+const r = Math.hypot(dx, dy), max = 26;
+if (r &gt; max) { dx *= max / r; dy *= max / r; }
+stick = { x: dx / max, y: dy / max };
+const dir = ["E","SE","S","SW","W","NW","N","NE"][Math.round(Math.atan2(dy, dx) / (Math.PI / 4) + 8) % 8];</code></pre></section>
+    </div>
+  </article>
+
+  <article class="unit" id="c-bb">
+    <div class="cap"><span>Bouncin' Ball · gravity and squash</span><span class="pill">TAP TO LAUNCH</span></div>
+    <div class="card">
+      <p class="component-copy">Three balls at rest on a line. Tap one and it launches, falls under gravity, and loses a third of its speed on each bounce. It squashes on impact, and its shadow tightens as it lands. Each bounce click is quieter than the last.</p>
+      <div class="rthemes" data-target="bbx" role="group" aria-label="Bouncin' Ball finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+      <div class="fx" id="bbx" data-finish="ivory" style="flex-direction:column;gap:18px"><div class="bb" id="bb">
+        <div class="bb-u"><span class="bb-shadow"></span><button type="button" class="bb-ball" aria-label="Bounce ball 1"></button></div>
+        <div class="bb-u"><span class="bb-shadow"></span><button type="button" class="bb-ball" aria-label="Bounce ball 2"></button></div>
+        <div class="bb-u"><span class="bb-shadow"></span><button type="button" class="bb-ball" aria-label="Bounce ball 3"></button></div>
+      </div><div class="stepbar"><button type="button" id="bbAll">BOUNCE ALL</button></div></div>
+      <div class="readout" id="bbRead"><b>at rest</b> · 0 bounces</div>
+      <div class="hint">click a ball or Space / Enter on it · the motion is skipped if you prefer reduced motion</div>
+      <div class="lineage">after · Drams — Bouncin' Ball</div>
+      <section class="code-snippet" inert aria-hidden="true"><div class="code-snippet-head"><span>Bouncin' Ball</span><button type="button" class="copy-code">COPY</button></div><pre><code>vy -= 1800 * dt;  y += vy * dt;                 // px/s², up is positive
+if (y &lt;= 0) { y = 0; vy = -vy * 0.66; squash = Math.min(.35, -prevVy / 2400); bounceClick(squash); }
+ball.style.transform = `translateY(${-y}px) scale(${1 + squash}, ${1 - squash})`;
+shadow.style.transform = `scale(${1 - y / 400})`;  shadow.style.opacity = 1 - y / 300;</code></pre></section>
+    </div>
+  </article>
+</div>
+
+<section class="finish-line">
+  <h2>The Volume III finish line</h2>
+  <p>Small controls have the least room to explain themselves, so each one here carries its state in a single cue: a lamp, a colour, a printed symbol, or the depth of a cap. If you have to read the label to know whether something is on, the control hasn't done its job.</p>
+  <blockquote>Less, but better, and always legible.</blockquote>
+</section>
+</div>
+
+<script>
+(() => {
+"use strict";
+let MASTER=null, ANALYSER=null; const masterGainVal=()=>1;
+const SNAP  = { stiffness:700, damping:35, mass:0.8 };
+const HEAVY = { stiffness:300, damping:30, mass:1.2 };
+const PRESS = { stiffness:720, damping:32, mass:0.55 };
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = id => document.getElementById(id);
+const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+const clamp = (v,a,b) => Math.min(b, Math.max(a, v));
+const NS = "http://www.w3.org/2000/svg";
+function svgEl(tag, attrs, parent){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k, attrs[k]); if(parent) parent.appendChild(e); return e; }
+const fmtSigned = (v,d=1) => (v>0?"+":v<0?"−":"±") + Math.abs(v).toFixed(d);
+
+/* ── spring: same SNAP / HEAVY constants as Volume I, integrated inline ── */
+class Spring {
+  constructor(value, cfg, onUpdate, prec=0.01){ this.x=value; this.v=0; this.t=value; this.cfg=cfg; this.on=onUpdate; this.prec=prec; this.raf=0; onUpdate(value); }
+  to(target, cfg){
+    this.t=target; if(cfg) this.cfg=cfg;
+    if(reduce){ this.x=target; this.v=0; this.on(target); return; }
+    if(!this.raf){ this.last=performance.now(); this.raf=requestAnimationFrame(this.step); }
+  }
+  set(value){ this.x=this.t=value; this.v=0; if(this.raf){ cancelAnimationFrame(this.raf); this.raf=0; } this.on(value); }
+  step = (now) => {
+    let dt=Math.min(0.05,(now-this.last)/1000); this.last=now;
+    const { stiffness:k, damping:c, mass:m } = this.cfg;
+    while(dt>0){ const h=Math.min(1/240, dt); const a=(-k*(this.x-this.t)-c*this.v)/m; this.v+=a*h; this.x+=this.v*h; dt-=h; }
+    if(Math.abs(this.x-this.t)<this.prec && Math.abs(this.v)<this.prec*4){ this.x=this.t; this.v=0; this.on(this.x); this.raf=0; return; }
+    this.on(this.x); this.raf=requestAnimationFrame(this.step);
+  };
+}
+
+/* ── one shared frame loop for continuous instruments ── */
+const loops = new Set(); let loopRaf=0, loopLast=0;
+function addLoop(fn){ loops.add(fn); if(!loopRaf){ loopLast=performance.now(); loopRaf=requestAnimationFrame(runLoop); } }
+function runLoop(now){
+  const dt=Math.min(0.05,(now-loopLast)/1000); loopLast=now;
+  for(const fn of [...loops]){ if(fn(dt, now)===false) loops.delete(fn); }
+  loopRaf = loops.size ? requestAnimationFrame(runLoop) : 0;
+}
+const visible = new Map();
+const wakers = new Map();
+const io = new IntersectionObserver(entries => entries.forEach(e => {
+  visible.set(e.target, e.isIntersecting);
+  if(e.isIntersecting && wakers.has(e.target)) wakers.get(e.target)();
+}), { rootMargin:"120px" });
+function watch(el, wake){ visible.set(el, true); wakers.set(el, wake); io.observe(el); }
+
+/* ── sound: short filtered noise for mechanical clicks; starts only from a gesture ── */
+let AC=null, NB=null, soundOn=true;
+function audio(){
+  if(!soundOn) return null;
+  if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } }
+  if(!MASTER){ MASTER=AC.createGain(); ANALYSER=AC.createAnalyser(); ANALYSER.fftSize=1024; ANALYSER.smoothingTimeConstant=.6; MASTER.connect(ANALYSER); ANALYSER.connect(AC.destination); MASTER.gain.value=masterGainVal(); }
+  if(AC.state==="suspended") AC.resume();
+  if(!NB){ NB=AC.createBuffer(1, Math.floor(AC.sampleRate*0.08), AC.sampleRate); const d=NB.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,5); }
+  return AC;
+}
+function click(freq=3200, gain=0.12, q=1.4){
+  const a=audio(); if(!a) return;
+  const src=a.createBufferSource(); src.buffer=NB;
+  const f=a.createBiquadFilter(); f.type="bandpass"; f.frequency.value=freq; f.Q.value=q;
+  const g=a.createGain(); g.gain.value=gain;
+  src.connect(f); f.connect(g); g.connect(MASTER); src.start();
+}
+const tick  = () => click(4200, 0.07, 2);
+const thock = () => click(1100, 0.22, 1.1);
+const clack = () => { click(1700, 0.16, 1.2); setTimeout(()=>click(3600,0.06,2), 28); };
+
+/* ── accent, sound, finishes ── */
+let ACCENT = "#CC0000";
+const accentHooks = [];
+function paintAccent(){
+  document.documentElement.style.setProperty("--accent", ACCENT);
+  $("accOrange").setAttribute("aria-pressed", String(ACCENT==="#E76A2E"));
+  $("accRed").setAttribute("aria-pressed", String(ACCENT==="#CC0000"));
+  accentHooks.forEach(f=>f());
+}
+$("accOrange").onclick = () => { ACCENT="#E76A2E"; paintAccent(); tick(); };
+$("accRed").onclick    = () => { ACCENT="#CC0000"; paintAccent(); tick(); };
+$("soundBtn").onclick = () => { soundOn=!soundOn; $("soundBtn").setAttribute("aria-pressed", String(soundOn)); $("soundBtn").textContent = soundOn?"ON":"OFF"; tick(); };
+
+function bindFinish(groupId, targetId, after){
+  const group=$(groupId), target=$(targetId);
+  group.addEventListener("click", e => {
+    const b=e.target.closest("button[data-finish]"); if(!b) return;
+    target.dataset.finish=b.dataset.finish;
+    $$("button[data-finish]", group).forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
+    tick(); if(after) after(b.dataset.finish);
+  });
+}
+
+/* ── Code Veil ── */
+const veil=$("veil");
+const veilSpring = new Spring(0, SNAP, x => { $("veilKnob").style.transform=`translateX(${x}px)`; });
+bindFinish("veilFinish","veil");
+veil.addEventListener("click", () => {
+  const on = !document.body.classList.contains("show-code");
+  document.body.classList.toggle("show-code", on);
+  veil.setAttribute("aria-checked", String(on));
+  $("veilLabel").textContent = on ? "CODE VISIBLE" : "CODE HIDDEN";
+  veilSpring.to(on ? 72 : 0);
+  $$(".code-snippet").forEach(s => { s.inert = !on; s.setAttribute("aria-hidden", String(!on)); });
+  thock();
+});
+$$(".copy-code").forEach(btn => btn.addEventListener("click", () => {
+  const code = btn.closest(".code-snippet").querySelector("code");
+  const done = t => { btn.textContent=t; setTimeout(()=>btn.textContent="COPY", 1400); };
+  const fallback = () => { const r=document.createRange(); r.selectNodeContents(code); const s=getSelection(); s.removeAllRanges(); s.addRange(r); done("SELECTED"); };
+  try { navigator.clipboard.writeText(code.textContent).then(()=>done("COPIED"), fallback); } catch(e){ fallback(); }
+}));
+
+/* ── generic rotary (drag ↕, arrows, Home/End) ── */
+function makeRotary(el, knob, { value=0.5, onChange, arc=270, cfg=HEAVY }={}){
+  let v=value;
+  const sp = new Spring(v, cfg, x => { knob.style.transform=`rotate(${-arc/2 + x*arc}deg)`; }, 0.0005);
+  function set(nv, instant){ v=clamp(nv,0,1); instant ? sp.set(v) : sp.to(v); el.setAttribute("aria-valuenow", Math.round(v*100)); el.setAttribute("aria-valuetext", Math.round(v*100)+" percent"); onChange && onChange(v); }
+  let sy=0, sv=0, drag=false;
+  el.addEventListener("pointerdown", e => { drag=true; sy=e.clientY; sv=v; el.setPointerCapture(e.pointerId); });
+  el.addEventListener("pointermove", e => { if(drag) set(sv + (sy-e.clientY)/150, true); });
+  el.addEventListener("pointerup", () => { drag=false; });
+  el.addEventListener("pointercancel", () => { drag=false; });
+  el.addEventListener("keydown", e => {
+    const k=e.key; let d=null;
+    if(k==="ArrowRight"||k==="ArrowUp") d=v+.02; else if(k==="ArrowLeft"||k==="ArrowDown") d=v-.02; else if(k==="Home") d=0; else if(k==="End") d=1;
+    if(d!==null){ set(d); e.preventDefault(); }
+  });
+  return { set, get:()=>v };
+}
+
+/* ═════════ Volume III ═════════ */
+$$(".rthemes[data-target]").forEach(g => {
+  const target=$(g.dataset.target);
+  g.addEventListener("click", e => { const b=e.target.closest("button[data-finish]"); if(!b) return;
+    target.dataset.finish=b.dataset.finish; $$("button[data-finish]",g).forEach(x=>x.setAttribute("aria-pressed",String(x===b))); tick(); });
+});
+const PINCH={ stiffness:420, damping:22, mass:1 };
+
+/* generic horizontal toggle: click flips, drag settles on the nearer side */
+function makeToggle(btn, knob, { travel, pinch=false, axis="x", onChange }){
+  let on = btn.getAttribute("aria-checked")==="true", sp;
+  const T = typeof travel==="function" ? travel : ()=>travel;
+  const draw = x => {
+    const s = pinch ? 1+Math.min(.45, Math.abs(sp ? sp.v : 0)*.09) : 1;
+    knob.style.transform = axis==="x" ? `translateX(${(x*T()).toFixed(2)}px) scaleX(${s.toFixed(3)})` : `translateY(${((1-x)*T()).toFixed(2)}px)`;
+  };
+  sp = new Spring(on?1:0, pinch?PINCH:SNAP, draw, .001);
+  function set(v, quiet){ const ch=v!==on; on=v; btn.setAttribute("aria-checked",String(on)); sp.to(on?1:0); if(ch && !quiet){ on?thock():tick(); } onChange && onChange(on); }
+  let drag=false, s0=0, x0=0, moved=0;
+  btn.addEventListener("pointerdown", e => { drag=true; s0=axis==="x"?e.clientX:e.clientY; x0=sp.x; moved=0; try{ btn.setPointerCapture(e.pointerId); }catch(_){} });
+  btn.addEventListener("pointermove", e => { if(!drag) return; const p=axis==="x"?e.clientX:e.clientY; const d=(p-s0)*(axis==="x"?1:-1); moved=Math.max(moved,Math.abs(d)); if(moved>3) sp.set(clamp(x0+d/T(),0,1)); });
+  btn.addEventListener("pointerup", () => { if(!drag) return; drag=false; if(moved>3) set(sp.x>.5); else set(!on); });
+  btn.addEventListener("pointercancel", () => { drag=false; sp.to(on?1:0); });
+  btn.addEventListener("click", e => { if(e.detail===0) set(!on); });   // keyboard Space / Enter
+  btn.addEventListener("keydown", e => {
+    const fwd = axis==="x" ? "ArrowRight" : "ArrowUp", back = axis==="x" ? "ArrowLeft" : "ArrowDown";
+    if(e.key===fwd){ e.preventDefault(); set(true); } else if(e.key===back){ e.preventDefault(); set(false); }
+  });
+  addEventListener("resize", () => draw(sp.x));
+  onChange && onChange(on);
+  return { set, get:()=>on };
+}
+
+/* ── Rollin' Search ── */
+const RS_ITEMS=$$("article.unit[id^='c-']").map(a=>({ id:a.id, name:a.querySelector(".cap span").textContent.split(" · ")[0], sect:(()=>{ let p=a.parentElement.previousElementSibling; while(p && !p.classList.contains("section-title")) p=p.previousElementSibling; return p?p.textContent:""; })() }));
+(() => {
+  const rs=$("rs"), ball=$("rsBall"), field=$("rsField"), input=$("rsInput"), list=$("rsList"); let open=false, sel=0, hits=[];
+  const travel=()=>$("rs").querySelector(".rs-bar").clientWidth-ball.offsetWidth;
+  const sp=new Spring(0, { stiffness:160, damping:20, mass:1 }, x => { const t=travel(); ball.style.transform=`translateX(${(x*t).toFixed(1)}px) rotate(${(x*t/30).toFixed(3)}rad)`; field.style.width=(56+x*t)+"px"; }, .001);
+  function render(){
+    const q=input.value.trim().toLowerCase();
+    hits = RS_ITEMS.filter(it => !q || it.name.toLowerCase().includes(q) || it.sect.toLowerCase().includes(q));
+    sel=Math.min(sel, Math.max(0,hits.length-1));
+    list.innerHTML = hits.length ? hits.map((h,i)=>`<li role="option" id="rs-o${i}" aria-selected="${i===sel}" data-id="${h.id}">${h.name}<span>${h.sect}</span></li>`).join("") : `<li class="none">Nothing matches "${input.value}". Try "switch" or "slider".</li>`;
+    input.setAttribute("aria-activedescendant", hits.length?`rs-o${sel}`:"");
+    $("rsRead").innerHTML = `<b>${open?"open":"closed"}</b> · ${open?`${hits.length} match${hits.length===1?"":"es"}`:"20 controls indexed"}`;
+  }
+  function setOpen(v){
+    open=v; rs.dataset.open=String(v); ball.setAttribute("aria-expanded",String(v)); ball.setAttribute("aria-label",v?"Close search":"Open search");
+    input.setAttribute("aria-expanded",String(v)); input.tabIndex=v?0:-1; sp.to(v?1:0);
+    if(v){ setTimeout(()=>input.focus({ preventScroll:true }), reduce?0:280); } else { input.value=""; sel=0; }
+    render(); thock();
+  }
+  function jump(id){ const a=$(id); if(!a) return; setOpen(false); a.scrollIntoView({ behavior:reduce?"auto":"smooth", block:"center" }); a.classList.remove("flash"); void a.offsetWidth; a.classList.add("flash"); const f=a.querySelector('[tabindex="0"],button:not([data-finish]):not(.copy-code)'); if(f) setTimeout(()=>f.focus({ preventScroll:true }), 500); }
+  ball.addEventListener("click", ()=>setOpen(!open));
+  input.addEventListener("input", ()=>{ sel=0; render(); tick(); });
+  input.addEventListener("keydown", e => {
+    if(e.key==="ArrowDown"){ e.preventDefault(); sel=Math.min(hits.length-1,sel+1); render(); }
+    else if(e.key==="ArrowUp"){ e.preventDefault(); sel=Math.max(0,sel-1); render(); }
+    else if(e.key==="Enter"){ e.preventDefault(); if(hits[sel]) jump(hits[sel].id); }
+    else if(e.key==="Escape"){ e.preventDefault(); setOpen(false); ball.focus(); }
+  });
+  list.addEventListener("click", e => { const li=e.target.closest("li[data-id]"); if(li) jump(li.dataset.id); });
+  addEventListener("keydown", e => { if(e.key==="/" && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)){ e.preventDefault(); $("c-search").scrollIntoView({ block:"center" }); if(!open) setOpen(true); else input.focus(); } });
+  addEventListener("resize", ()=>sp.on(sp.x));
+  render();
+})();
+
+/* ── OP-1 Keys ── */
+(() => {
+  const WHITE=[["C",0,"a"],["D",2,"s"],["E",4,"d"],["F",5,"f"],["G",7,"g"],["A",9,"h"],["B",11,"j"]];
+  const BLACK=[["C♯",1,"w",1],["D♯",3,"e",2],["F♯",6,"t",4],["G♯",8,"y",5],["A♯",10,"u",6]];
+  let oct=4; const voices=new Map(), cells={};
+  WHITE.forEach(([n,s,k]) => { const b=document.createElement("button"); b.type="button"; b.className="op-cell"; b.dataset.s=s; b.tabIndex=-1; b.setAttribute("aria-label",n); b.innerHTML=`<span class="op-cap"></span><span class="n">${k.toUpperCase()}</span>`; $("opWhite").appendChild(b); cells[s]=b; });
+  BLACK.forEach(([n,s,k,pos]) => { const b=document.createElement("button"); b.type="button"; b.className="op-cell"; b.dataset.s=s; b.tabIndex=-1; b.setAttribute("aria-label",n); b.style.left=`calc(var(--w) * ${pos} - var(--w) / 2)`; b.innerHTML=`<span class="op-cap"></span>`; $("opBlack").appendChild(b); cells[s]=b; });
+  const NAMES=["C","C♯","D","D♯","E","F","F♯","G","G♯","A","A♯","B"];
+  function on(s){
+    const midi=12*(oct+1)+s; if(voices.has(s)) return;
+    cells[s].dataset.down="true";
+    const hz=440*Math.pow(2,(midi-69)/12);
+    $("opDisp").textContent=`OCT ${oct} · ${NAMES[s]}${oct}`; $("opRead").innerHTML=`<b>${NAMES[s]}${oct}</b> · ${hz.toFixed(1)} Hz · ${voices.size+1} held`;
+    const a=audio(); if(!a){ voices.set(s,null); return; }
+    const t=a.currentTime, o=a.createOscillator(), o2=a.createOscillator(), f=a.createBiquadFilter(), g=a.createGain();
+    o.type="triangle"; o.frequency.value=hz; o2.type="sine"; o2.frequency.value=hz*2; f.type="lowpass"; f.frequency.setValueAtTime(5200,t); f.frequency.exponentialRampToValueAtTime(1400,t+.4);
+    const g2=a.createGain(); g2.gain.value=.25; o2.connect(g2); g2.connect(f); o.connect(f); f.connect(g); g.connect(MASTER);
+    g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.22,t+.005); g.gain.exponentialRampToValueAtTime(.09,t+.3);
+    o.start(t); o2.start(t); voices.set(s,{ o, o2, g });
+  }
+  function off(s){
+    if(!voices.has(s)) return; const v=voices.get(s); voices.delete(s); cells[s].dataset.down="false";
+    if(v && AC){ const t=AC.currentTime; v.g.gain.cancelScheduledValues(t); v.g.gain.setTargetAtTime(.0001,t,.08); v.o.stop(t+.6); v.o2.stop(t+.6); }
+  }
+  const allOff=()=>[...voices.keys()].forEach(off);
+  let down=false;
+  const sOf=e=>{ const c=document.elementFromPoint(e.clientX,e.clientY)?.closest(".op-cell"); return c && $("opKb").contains(c) ? +c.dataset.s : null; };
+  $("opKb").addEventListener("pointerdown", e => { const s=sOf(e); if(s===null) return; e.preventDefault(); down=true; try{ $("opKb").setPointerCapture(e.pointerId); }catch(_){} on(s); });
+  $("opKb").addEventListener("pointermove", e => { if(!down) return; const s=sOf(e); if(s!==null && !voices.has(s)){ allOff(); on(s); } });
+  ["pointerup","pointercancel"].forEach(ev=>$("opKb").addEventListener(ev, ()=>{ down=false; allOff(); }));
+  const KEYS=Object.fromEntries([...WHITE,...BLACK].map(([n,s,k])=>[k,s]));
+  const shift=d=>{ allOff(); oct=clamp(oct+d,1,7); $("opDisp").textContent=`OCT ${oct} · READY`; $("opRead").innerHTML=`<b>octave ${oct}</b> · C${oct} = ${(440*Math.pow(2,(12*(oct+1)-69)/12)).toFixed(1)} Hz`; tick(); };
+  $("opKb").addEventListener("keydown", e => { if(e.metaKey||e.ctrlKey||e.altKey) return; const k=e.key.toLowerCase();
+    if(k==="z"){ e.preventDefault(); shift(-1); return; } if(k==="x"){ e.preventDefault(); shift(1); return; }
+    if(KEYS[k]!==undefined){ e.preventDefault(); if(!e.repeat) on(KEYS[k]); } });
+  $("opKb").addEventListener("keyup", e => { const k=e.key.toLowerCase(); if(KEYS[k]!==undefined) off(KEYS[k]); });
+  $("opKb").addEventListener("blur", allOff);
+  $("opDown").onclick=()=>shift(-1); $("opUp").onclick=()=>shift(1);
+})();
+
+/* ── Triple Push Buttons ── */
+(() => {
+  const btns=$$("#tpb .rb");
+  const read=()=>{ const on=btns.filter(b=>b.getAttribute("aria-pressed")==="true").map(b=>b.closest(".col-u").querySelector(".lbl").textContent); $("tpbRead").innerHTML=`<b>${on.length?on.join(" · "):"none"}</b> latched`; };
+  btns.forEach(b => b.addEventListener("click", () => { const v=b.getAttribute("aria-pressed")!=="true"; b.setAttribute("aria-pressed",String(v)); b.closest(".col-u").querySelector(".dot").classList.toggle("on",v); v?thock():tick(); read(); }));
+  read();
+})();
+
+/* ── Pushin' Click Button ── */
+(() => {
+  const b=$("pcb"), led=$("pcbLed"); let taps=0, holds=0, timer=0, held=false, active=false, ledT=0;
+  const read=last=>$("pcbRead").innerHTML=`<b>${taps}</b> tap${taps===1?"":"s"} · ${holds} hold${holds===1?"":"s"}${last?` · last: ${last}`:""}`;
+  const start=()=>{ if(active) return; active=true; held=false; b.dataset.down="true"; tick();
+    timer=setTimeout(()=>{ held=true; holds++; led.classList.add("on"); clearTimeout(ledT); thock(); read("hold"); }, 600); };
+  const end=()=>{ if(!active) return; active=false; clearTimeout(timer); b.dataset.down="false";
+    if(!held){ taps++; led.classList.add("on"); clearTimeout(ledT); ledT=setTimeout(()=>led.classList.remove("on"),160); click(2400,.14,1.6); read("tap"); } };
+  b.addEventListener("pointerdown", e=>{ try{ b.setPointerCapture(e.pointerId); }catch(_){} start(); });
+  b.addEventListener("pointerup", end); b.addEventListener("pointercancel", ()=>{ active=false; clearTimeout(timer); b.dataset.down="false"; });
+  b.addEventListener("keydown", e=>{ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); if(!e.repeat) start(); } });
+  b.addEventListener("keyup", e=>{ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); end(); } });
+  b.addEventListener("click", e=>e.preventDefault());
+})();
+
+/* ── Concaved Switch ── */
+$("ccv").addEventListener("click", () => { const b=$("ccv"), v=b.getAttribute("aria-pressed")!=="true"; b.setAttribute("aria-pressed",String(v)); $("ccvLed").classList.toggle("on",v); v?thock():clack(); $("ccvRead").innerHTML=v?"<b>on</b> · lamp lit":"<b>off</b> · lamp dark"; });
+
+/* ── Fidget Poppin' ── */
+(() => {
+  const bs=$$("#fp .fp-b"); let tray=1, busy=false;
+  const read=()=>$("fpRead").innerHTML=`<b>${bs.filter(b=>b.getAttribute("aria-pressed")==="true").length} of 6</b> popped · tray ${tray}`;
+  const pop=up=>{ const a=audio(); if(!a) return; const t=a.currentTime, o=a.createOscillator(), g=a.createGain(); o.type="sine";
+    o.frequency.setValueAtTime(up?520:900+Math.random()*200,t); o.frequency.exponentialRampToValueAtTime(up?900:220,t+.06);
+    g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.25,t+.004); g.gain.exponentialRampToValueAtTime(.0001,t+.09); o.connect(g); g.connect(MASTER); o.start(t); o.stop(t+.1); click(1800,.08,3); };
+  bs.forEach(b => b.addEventListener("click", () => {
+    if(busy) return; const v=b.getAttribute("aria-pressed")!=="true"; b.setAttribute("aria-pressed",String(v)); pop(!v); read();
+    if(bs.every(x=>x.getAttribute("aria-pressed")==="true")){
+      busy=true; const fp=$("fp");
+      setTimeout(()=>{ if(!reduce) fp.animate([{ transform:"rotateY(0)" },{ transform:"rotateY(90deg)" },{ transform:"rotateY(0)" }],{ duration:520, easing:"ease-in-out" });
+        setTimeout(()=>{ bs.forEach(x=>x.setAttribute("aria-pressed","false")); tray++; clack(); read(); busy=false; }, reduce?0:260); }, 260);
+    }
+  }));
+  read();
+})();
+
+/* ── toggles: Standard, Coloured, LED, I/O, Pinchin', Pinchin' Track ── */
+makeToggle($("std"), $("std").querySelector(".tg-k"), { travel:44, onChange:on=>$("stdRead").innerHTML=`<b>${on?"on":"off"}</b>` });
+makeToggle($("col"), $("col").querySelector(".tg-k"), { travel:44, onChange:on=>$("colRead").innerHTML=on?"<b>on</b> · signal colour":"<b>off</b> · neutral" });
+makeToggle($("led"), $("led").querySelector(".tg-k"), { travel:44, onChange:on=>{ $("ledOn").classList.toggle("on",on); $("ledOff").style.opacity=on?.25:1; $("ledRead").innerHTML=on?"<b>on</b> · dot lit":"<b>off</b> · ring lit"; } });
+makeToggle($("io"), $("io").querySelector(".tg-k"), { travel:44, onChange:on=>$("ioRead").innerHTML=on?"<b>I</b> · power on":"<b>O</b> · power off" });
+makeToggle($("pz"), $("pz").querySelector(".tg-k"), { travel:36, pinch:true, onChange:on=>{ $("pzLed").classList.toggle("on",on); $("pzRead").innerHTML=`<b>${on?"on":"off"}</b>`; } });
+makeToggle($("pzt"), $("pzt").querySelector(".tg-k"), { travel:()=>$("pzt").clientWidth-60, pinch:true, onChange:on=>{ $("pztLed").classList.toggle("on",on); $("pztRead").innerHTML=on?"<b>on</b> · knob over the lamp":"<b>off</b> · knob at rest"; } });
+
+/* ── Triple Switch ── */
+(() => {
+  const tracks=$$("#ts .ts-track");
+  const read=()=>$("tsRead").innerHTML=`<b>${tracks.map(t=>t.getAttribute("aria-checked")==="true"?"ON":"OFF").join(" – ")}</b>`;
+  tracks.forEach(t => makeToggle(t, t.querySelector(".ts-th"), { travel:58, axis:"y", onChange:on=>{ t.closest(".ts-u").querySelector(".dot").classList.toggle("on",on); read(); } }));
+})();
+
+/* ── Triple Light Switch ── */
+(() => {
+  const ps=$$("#ls .ls-p"), lamps=$$("#lsx .lamp-b");
+  const read=()=>{ const on=ps.filter(p=>p.getAttribute("aria-pressed")==="true").map(p=>p.querySelector(".n").textContent); $("lsRead").innerHTML=`<b>${on.length} on</b>${on.length?" · "+on.join(" · "):" · all dark"}`; ps.forEach((p,i)=>lamps[i].classList.toggle("on",p.getAttribute("aria-pressed")==="true")); };
+  ps.forEach(p => p.addEventListener("click", () => { const v=p.getAttribute("aria-pressed")!=="true"; p.setAttribute("aria-pressed",String(v)); clack(); read(); }));
+  read();
+})();
+
+/* ── horizontal sliders: Trackin', Square, Dimpled ── */
+function makeHSlider(el, { value, steps=null, onChange, fmt }){
+  const th=el.querySelector(".hs-th"), fill=el.querySelector(".hs-fill");
+  const travel=()=>el.clientWidth-th.offsetWidth;
+  let v=value, lastStep=steps?Math.round(v*steps):null;
+  const sp=new Spring(v, SNAP, x=>{ const t=travel(); th.style.transform=`translateX(${(x*t).toFixed(2)}px)`; if(fill) fill.style.width=(x*t+th.offsetWidth/2)+"px"; }, .0005);
+  const q=x=>steps ? Math.round(x*steps)/steps : x;
+  function set(x, mode){ v=clamp(x,0,1); const qv=q(v);
+    if(mode==="raw") sp.set(v); else { v=qv; sp.to(v); }
+    if(steps){ const s=Math.round(qv*steps); if(s!==lastStep){ lastStep=s; tick(); } }
+    el.setAttribute("aria-valuenow", steps?Math.round(qv*steps):Math.round(qv*100)); el.setAttribute("aria-valuetext", fmt(qv)); onChange(qv); }
+  let drag=false, off=0;
+  el.addEventListener("pointerdown", e => { drag=true; try{ el.setPointerCapture(e.pointerId); }catch(_){} const r=th.getBoundingClientRect(); off=(e.clientX>=r.left&&e.clientX<=r.right)?e.clientX-(r.left+r.width/2):0; move(e, off?"raw":"jump"); });
+  const move=(e,mode)=>{ const r=el.getBoundingClientRect(); set((e.clientX-off-r.left-th.offsetWidth/2)/travel(), mode); };
+  el.addEventListener("pointermove", e => { if(drag) move(e,"raw"); });
+  const up=()=>{ if(!drag) return; drag=false; set(v); };
+  el.addEventListener("pointerup", up); el.addEventListener("pointercancel", up);
+  el.addEventListener("keydown", e => { const s=steps?1/steps:.01, d={ArrowRight:s,ArrowUp:s,ArrowLeft:-s,ArrowDown:-s,PageUp:s*10,PageDown:-s*10}[e.key];
+    if(d!==undefined){ e.preventDefault(); set(v+d); } else if(e.key==="Home"){ e.preventDefault(); set(0); } else if(e.key==="End"){ e.preventDefault(); set(1); } });
+  new ResizeObserver(()=>sp.on(sp.x)).observe(el);
+  set(v); return { set };
+}
+makeHSlider($("trk"), { value:.35, fmt:v=>`${Math.round(v*100)}`, onChange:v=>$("trkRead").innerHTML=`<b>${Math.round(v*100)}</b> / 100` });
+for(let i=0;i<=10;i++) $("sqTicks").appendChild(document.createElement("i"));
+makeHSlider($("sq"), { value:.4, steps:10, fmt:v=>`step ${Math.round(v*10)}`, onChange:v=>{ const s=Math.round(v*10); $("sqRead").innerHTML=`<b>step ${s}</b> of 10`; $$("#sqTicks i").forEach((t,i)=>t.classList.toggle("on",i<=s)); } });
+makeHSlider($("dmp"), { value:.2, fmt:v=>`${Math.round(v*100)}`, onChange:v=>$("dmpRead").innerHTML=`<b>${Math.round(v*100)}</b> / 100` });
+
+/* ── Round On/Off Knob ── */
+(() => {
+  const k=$("rk"), rot=$("rkRot"); let on=false, a=0, drag=false, last=null, moved=0;
+  const sp=new Spring(0, HEAVY, x=>{ rot.style.transform=`rotate(${x.toFixed(2)}deg)`; }, .05);
+  const set=v=>{ const ch=v!==on; on=v; k.classList.toggle("on",on); k.setAttribute("aria-checked",String(on)); a=on?90:0; sp.to(a);
+    $("rkOnL").classList.toggle("on",on); if(ch) clack(); $("rkRead").innerHTML=on?"<b>on</b> · 90°":"<b>off</b> · 0°"; };
+  const ang=e=>{ const r=k.getBoundingClientRect(); return Math.atan2(e.clientY-(r.top+r.height/2), e.clientX-(r.left+r.width/2))*180/Math.PI; };
+  k.addEventListener("pointerdown", e=>{ drag=true; last=ang(e); moved=0; try{ k.setPointerCapture(e.pointerId); }catch(_){} });
+  k.addEventListener("pointermove", e=>{ if(!drag) return; const n=ang(e); let d=n-last; if(d>180) d-=360; if(d<-180) d+=360; last=n; moved+=Math.abs(d); a=clamp(a+d,-8,98); sp.set(a); });
+  k.addEventListener("pointerup", ()=>{ if(!drag) return; drag=false; if(moved<4) set(!on); else set(a>45); });
+  k.addEventListener("pointercancel", ()=>{ drag=false; set(on); });
+  k.addEventListener("keydown", e=>{ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); set(!on); } else if(e.key==="ArrowRight"||e.key==="ArrowUp"){ e.preventDefault(); set(true); } else if(e.key==="ArrowLeft"||e.key==="ArrowDown"){ e.preventDefault(); set(false); } });
+})();
+
+/* ── Joypad Controller ── */
+(() => {
+  const base=$("jpBase"), stick=$("jp"), dot=$("jpDot"), arena=$("jpArena"), MAX=26;
+  const S={ x:0, y:0, px:85, py:75, drag:false, keys:new Set(), readAt:0 };
+  const sx=new Spring(0, SNAP, ()=>{}, .001), sy=new Spring(0, SNAP, ()=>{}, .001);
+  const draw=()=>{ stick.style.transform=`translate(${(sx.x*MAX).toFixed(2)}px,${(sy.x*MAX).toFixed(2)}px)`; };
+  sx.on=x=>{ sx.x=x; draw(); }; sy.on=y=>{ sy.x=y; draw(); };
+  const DIRS=["E","SE","S","SW","W","NW","N","NE"];
+  function aim(x,y){ const r=Math.hypot(x,y); if(r>1){ x/=r; y/=r; } S.x=x; S.y=y; addLoop(jpTick); }
+  function jpTick(dt, now){
+    if(!S.drag){ const kx=(S.keys.has("ArrowRight")?1:0)-(S.keys.has("ArrowLeft")?1:0), ky=(S.keys.has("ArrowDown")?1:0)-(S.keys.has("ArrowUp")?1:0);
+      if(kx||ky){ const r=Math.hypot(kx,ky); sx.to(kx/r); sy.to(ky/r); } else if(S.keys.size===0){ sx.to(0); sy.to(0); } S.x=sx.x; S.y=sy.x; }
+    const W=arena.clientWidth, H=arena.clientHeight, sp=140;
+    S.px=clamp(S.px+S.x*sp*dt,7,W-7); S.py=clamp(S.py+S.y*sp*dt,7,H-7);
+    dot.style.transform=`translate(${S.px.toFixed(1)}px,${S.py.toFixed(1)}px)`;
+    if(now-S.readAt>90){ S.readAt=now; const r=Math.hypot(S.x,S.y);
+      $("jpRead").innerHTML = r<.12 ? `<b>center</b> · x 0.00 · y 0.00` : `<b>${DIRS[(Math.round(Math.atan2(S.y,S.x)/(Math.PI/4))+8)%8]}</b> · x ${S.x.toFixed(2)} · y ${(-S.y).toFixed(2)} · ${Math.round(r*100)}%`; }
+    return S.drag || S.keys.size>0 || Math.hypot(sx.x,sy.x)>.01 || Math.hypot(S.x,S.y)>.01;
+  }
+  const local=e=>{ const r=base.getBoundingClientRect(); return [(e.clientX-(r.left+r.width/2))/MAX, (e.clientY-(r.top+r.height/2))/MAX]; };
+  base.addEventListener("pointerdown", e=>{ S.drag=true; try{ base.setPointerCapture(e.pointerId); }catch(_){} const [x,y]=local(e); const r=Math.hypot(x,y), k=r>1?1/r:1; sx.set(x*k); sy.set(y*k); aim(x,y); tick(); });
+  base.addEventListener("pointermove", e=>{ if(!S.drag) return; const [x,y]=local(e); const r=Math.hypot(x,y), k=r>1?1/r:1; sx.set(x*k); sy.set(y*k); aim(x,y); });
+  const up=()=>{ if(!S.drag) return; S.drag=false; sx.to(0); sy.to(0); aim(0,0); };
+  base.addEventListener("pointerup", up); base.addEventListener("pointercancel", up);
+  base.addEventListener("keydown", e=>{ if(e.key.startsWith("Arrow")){ e.preventDefault(); S.keys.add(e.key); addLoop(jpTick); } });
+  base.addEventListener("keyup", e=>{ S.keys.delete(e.key); addLoop(jpTick); });
+  base.addEventListener("blur", ()=>{ S.keys.clear(); addLoop(jpTick); });
+  dot.style.transform=`translate(${S.px}px,${S.py}px)`;
+})();
+
+/* ── Bouncin' Ball ── */
+(() => {
+  const units=$$("#bb .bb-u"), G=1800; let bounces=0;
+  const balls=units.map(u=>({ el:u.querySelector(".bb-ball"), sh:u.querySelector(".bb-shadow"), y:0, vy:0, sq:0, live:false }));
+  function draw(b){ b.el.style.transform=`translateY(${(-b.y).toFixed(1)}px) scale(${(1+b.sq*.6).toFixed(3)},${(1-b.sq).toFixed(3)})`;
+    b.sh.style.transform=`scale(${Math.max(.35,1-b.y/360).toFixed(3)})`; b.sh.style.opacity=Math.max(.15,1-b.y/260).toFixed(3); }
+  function bbTick(dt){
+    let any=false;
+    balls.forEach(b=>{ if(!b.live) return; any=true;
+      b.vy-=G*dt; b.y+=b.vy*dt; b.sq*=Math.exp(-dt*18);
+      if(b.y<=0){ b.y=0; const impact=-b.vy; if(impact>90){ b.vy=impact*.66; b.sq=Math.min(.32,impact/2600); bounces++; click(900+impact*.3, Math.min(.22,impact/4500), 1.4); } else { b.vy=0; b.live=b.sq>.01; } }
+      draw(b); });
+    $("bbRead").innerHTML = any ? `<b>bouncing</b> · ${bounces} bounces` : `<b>at rest</b> · ${bounces} bounces`;
+    return any;
+  }
+  const launch=b=>{ if(reduce){ b.sq=.2; draw(b); setTimeout(()=>{ b.sq=0; draw(b); },150); tick(); return; } b.vy=620+Math.random()*180; b.live=true; addLoop(bbTick); tick(); };
+  balls.forEach(b=>b.el.addEventListener("click", ()=>launch(b)));
+  $("bbAll").onclick=()=>balls.forEach((b,i)=>setTimeout(()=>launch(b), reduce?0:i*90));
+})();
+
+paintAccent();
+})();
+</script>

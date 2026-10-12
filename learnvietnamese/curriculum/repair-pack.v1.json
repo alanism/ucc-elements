@@ -1,0 +1,33 @@
+{
+  "version": "v1",
+  "sourceDocument": "vietnamese_phrase_sets.md",
+  "sourceSha256": "edde66fc4f4d99e6ecf8da4a43079aba1e70a9979c718e75189125845b9e43e7",
+  "description": "Foundational communication repair utterances from Stations 11 and 12, used as support material during missions",
+  "excludedFromRetrievalDenominator": true,
+  "items": [
+    {
+      "id": "repair_11_01",
+      "sourceStation": 11,
+      "sourceRow": 1,
+      "vietnamese": "Tôi không hiểu.",
+      "english": "I don't understand.",
+      "pronunciationAid": "toy khong hew"
+    },
+    {
+      "id": "repair_11_02",
+      "sourceStation": 11,
+      "sourceRow": 2,
+      "vietnamese": "Làm ơn nói chậm hơn.",
+      "english": "Please speak more slowly.",
+      "pronunciationAid": "lam un noy cham hun"
+    },
+    {
+      "id": "repair_12_03",
+      "sourceStation": 12,
+      "sourceRow": 3,
+      "vietnamese": "Chờ một chút.",
+      "english": "Please wait a moment.",
+      "pronunciationAid": "choh mot choot"
+    }
+  ]
+}

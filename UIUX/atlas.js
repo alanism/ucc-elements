@@ -127,4 +127,5 @@ document.querySelector('#copy-selected-code').addEventListener('click', async ev
   setTimeout(() => { event.currentTarget.textContent = 'Copy code'; }, 1500);
 });
 
-if (items.length !== 55) console.error(`Expected 55 Enochian controls; found ${items.length}`);
+const expectedCount = Number(document.querySelector("#catalog").dataset.controlCount);
+if (items.length !== expectedCount) console.error(`Expected ${expectedCount} Enochian controls; found ${items.length}`);

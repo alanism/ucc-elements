@@ -2,11 +2,46 @@
   "hosting": {
     "site": "uiux-nonhumanintelligence",
     "public": ".uiux-dist",
-    "ignore": ["**/.*"],
+    "ignore": [
+      "**/.*"
+    ],
     "cleanUrls": true,
     "trailingSlash": false,
     "redirects": [
-      {"source": "/", "destination": "/UIUX", "type": 302}
+      {
+        "source": "/",
+        "destination": "/UIUX",
+        "type": 302
+      }
+    ],
+    "headers": [
+      {
+        "source": "/UIUX",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/UIUX/",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/UIUX/index.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, max-age=0, must-revalidate"
+          }
+        ]
+      }
     ]
   }
 }

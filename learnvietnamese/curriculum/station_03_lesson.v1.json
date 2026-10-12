@@ -1,0 +1,116 @@
+{
+  "version": "v1",
+  "stationId": "STATION_03_CAFE",
+  "mission": "Order coffee and interact comfortably at a Saigon sidewalk or modern café",
+  "activities": [
+    "perception",
+    "echo",
+    "retrieval",
+    "recognition",
+    "frame_variation",
+    "roleplay",
+    "repair",
+    "transfer",
+    "recap"
+  ],
+  "recognitionTasks": [
+    {
+      "id": "recog_01",
+      "targetAudioPhraseId": "cafe_01",
+      "prompt": "Listen to what Mai ordered. What did she ask for?",
+      "correctOption": "One iced coffee, please.",
+      "distractors": [
+        "One iced tea, please.",
+        "One hot milk coffee, please.",
+        "Can I see the menu?"
+      ]
+    },
+    {
+      "id": "recog_02",
+      "targetAudioPhraseId": "cafe_02",
+      "prompt": "Mai gave a special request about sweetness. What was it?",
+      "correctOption": "Less sugar, please.",
+      "distractors": [
+        "No sugar, please.",
+        "Extra sugar, please.",
+        "No ice, please."
+      ]
+    },
+    {
+      "id": "recog_03",
+      "targetAudioPhraseId": "cafe_03",
+      "prompt": "Listen closely to Mai's preference.",
+      "correctOption": "No milk, please.",
+      "distractors": [
+        "Extra milk, please.",
+        "With condensed milk.",
+        "Hot milk, please."
+      ]
+    },
+    {
+      "id": "recog_04",
+      "targetAudioPhraseId": "cafe_04",
+      "prompt": "What extra item did Mai request?",
+      "correctOption": "Can I have some water?",
+      "distractors": [
+        "Can I have some bread?",
+        "Can I have the Wi-Fi password?",
+        "Can I have a napkin?"
+      ]
+    },
+    {
+      "id": "recog_05",
+      "targetAudioPhraseId": "cafe_05",
+      "prompt": "Mai walked up to a table and asked something. What was it?",
+      "correctOption": "Can I sit here?",
+      "distractors": [
+        "Is this seat broken?",
+        "Can you clean this table?",
+        "Where is the restroom?"
+      ]
+    }
+  ],
+  "frameVariations": [
+    {
+      "id": "frame_var_01",
+      "baseAnchor": "cafe_01",
+      "pattern": "Cho tôi một [drink].",
+      "reviewedSlots": [
+        { "slot": "cà phê đá", "meaning": "iced coffee" },
+        { "slot": "nước", "meaning": "water" }
+      ]
+    },
+    {
+      "id": "frame_var_02",
+      "baseAnchor": "cafe_05",
+      "pattern": "[Pronoun/Action] được không?",
+      "reviewedSlots": [
+        { "slot": "Tôi ngồi đây", "meaning": "Can I sit here?" }
+      ]
+    }
+  ],
+  "heldOutTransferMissions": [
+    {
+      "id": "transfer_01",
+      "title": "Combined Customized Drink Order",
+      "situation": "You want an iced black coffee, but specifically customized: less sugar AND no milk in the same order.",
+      "validAdaptations": [
+        "Cho tôi một cà phê đá, ít đường, không sữa.",
+        "Cho tôi một cà phê đá, không sữa, ít đường thôi.",
+        "Cho em một cà phê đá ít đường không sữa."
+      ],
+      "forbiddenAids": ["cà phê sữa", "trà đá"]
+    },
+    {
+      "id": "transfer_02",
+      "title": "Polite Hospitality & Seating Request",
+      "situation": "You enter a crowded café, spot an empty chair at a table, and also want to ask for a cup of water politely.",
+      "validAdaptations": [
+        "Cho tôi xin ít nước. Tôi ngồi đây được không?",
+        "Tôi ngồi đây được không? Cho tôi xin ít nước.",
+        "Cho em xin ít nước, em ngồi đây được không?"
+      ],
+      "forbiddenAids": ["toilet", "tính tiền"]
+    }
+  ]
+}
