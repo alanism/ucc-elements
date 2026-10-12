@@ -67,6 +67,10 @@ def atlas_files():
     files.add(Path('UIUX/previews/manifest.json'))
     from generate_uiux import HUDS
     files.add(Path('UIUX/studies/agent-hud/demo-frame.svg'))
+    config=Path('UIUX/studies/agent-hud/light-table-config.js')
+    if not (ROOT/config).is_file():
+        (ROOT/config).write_text('window.ENOCHIAN_LIGHT_TABLE_CONFIG = {};\n')
+    files.add(config)
     hud_manifest=json.loads((ROOT/'UIUX/previews/hud-manifest.json').read_text())
     if {r['slug'] for r in hud_manifest['images']}!={h['slug'] for h in HUDS}:
         raise SystemExit('Dashboard preview inventory does not match the showcase')

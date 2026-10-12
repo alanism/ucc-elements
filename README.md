@@ -1,6 +1,6 @@
 # Enochian Elements
 
-A working showcase of **63 controls, 12 device studies, and 5 dashboards and HUDs** with familiar names: Enochian Synth Keyboard, Enochian DJ Mixer, Enochian Stereo Speakers, and Enochian Toggle Switch 01–06. Digital screen studies support coding agents and harnesses, VR interfaces, and video production, alongside the tactile controls and blank device frames.
+A working showcase of **63 controls, 12 device studies, and 6 dashboards and HUDs** with familiar names: Enochian Synth Keyboard, Enochian DJ Mixer, Enochian Stereo Speakers, and Enochian Toggle Switch 01–06. Digital screen studies support coding agents and harnesses, VR interfaces, and video production, alongside the tactile controls and blank device frames.
 
 - `index.html` — main entry page, device previews, and direct study links.
 - `UIUX/index.html` — complete control catalog, device gallery, Light/Dark, search, sound, and one Code drawer.

@@ -173,6 +173,7 @@ HUDS = [
     {"slug": "decision-matrix", "name": "Enochian Decision Matrix", "source": "matrix-journey.html", "query": "theme=enochian", "wide": False, "description": "Priority, difficulty, and journey views for deciding what comes next.", "aliases": "dashboard hud matrix priority urgency importance journey planning VR video production"},
     {"slug": "command-deck", "name": "Enochian Command Deck", "source": "command-deck.html", "query": "theme=enochian", "wide": False, "description": "A cinematic priority radar, project journey, and batch-processing wall.", "aliases": "dashboard hud command deck cinematic radar batch content video production"},
     {"slug": "command-deck-v2", "name": "Enochian Command Deck 02", "source": "v2/command-deck-v2.html", "query": "theme=obsidian", "wide": False, "description": "A ranked queue, editable priority matrix, task actions with undo, and batch review.", "aliases": "dashboard hud command deck v2 priority matrix queue undo harness coding agent batch video production"},
+    {"slug": "light-table", "name": "Enochian Light Table", "source": "light-table/light-table.html", "query": "theme=obsidian", "wide": False, "description": "Four connected screens for model fleets, mission forecasts, operator routes, and device/subagent diagnostics.", "aliases": "dashboard hud light table fleet mission operator devices subagents coding agent harness context budget model routes VR video production"},
 ]
 
 
@@ -200,6 +201,12 @@ def public_huds():
         # Replace optional machine-local thumbnails with an explicit synthetic frame.
         text = text.replace('file:///Users/alannguyen/Downloads/gmunk-topgun/', '/UIUX/studies/agent-hud/demo-frame.svg?frame=')
         text = text.replace('GMUNK-TOPGUN · IMAGE PIPELINE', 'ENOCHIAN · PRODUCTION PIPELINE')
+        if hud["slug"] == "light-table":
+            config = destination / "light-table-config.js"
+            if not config.exists():
+                config.write_text('window.ENOCHIAN_LIGHT_TABLE_CONFIG = {};\n')
+            config_version = hashlib.sha256(config.read_bytes()).hexdigest()[:12]
+            text = text.replace('src="config.js"', f'src="/UIUX/studies/agent-hud/light-table-config.js?v={config_version}"')
         (destination / f'{hud["slug"]}-screen.html').write_text(text)
         version = hashlib.sha256(text.encode()).hexdigest()[:12]
         query = "?" + (hud["query"] + "&" if hud["query"] else "") + "v=" + version
@@ -269,6 +276,7 @@ def hub_studies():
         cards.append(f'<a class="hub-study" href="{link}"><div class="hub-preview">{study_image(study, "dark")}</div><h3>{name}</h3><p>{escape(study["description"])}</p><span>Open study →</span></a>')
     path = ROOT / "index.html"
     text = path.read_text()
+    text = re.sub(r'\d+ dashboards</span>', f'{len(HUDS)} dashboards</span>', text)
     text, count = re.subn(r'<!-- STUDY_LINKS -->.*?<!-- END_STUDY_LINKS -->', '<!-- STUDY_LINKS -->\n' + "\n".join(cards) + '\n<!-- END_STUDY_LINKS -->', text, flags=re.S)
     if count != 1:
         raise ValueError("Root page needs exactly one study-links marker")
@@ -403,6 +411,7 @@ def main():
     shell = shell.replace("<!-- CONTROL_MARKUP -->", markup)
     shell = shell.replace("<!-- DEVICE_STUDIES -->", study_markup())
     shell = shell.replace("<!-- HUD_STUDIES -->", hud_markup())
+    shell = shell.replace("{{HUD_COUNT}}", str(len(HUDS)))
     shell = shell.replace("{{CONTROL_COUNT}}", str(sum(len(names) for _, _, names in GROUPS) + 1))
     assets = {
         "CSS_VERSION": controls_css.encode(),

@@ -6,3 +6,5 @@ firebase-debug.log
 .showcase-dist/
 .qa/
 __pycache__/
+UIUX/studies/agent-hud/light-table-config.js
+prototypes/agent-hud/light-table/config.js

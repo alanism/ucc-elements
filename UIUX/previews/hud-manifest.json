@@ -31,6 +31,12 @@
       "sha256": "5611ce6b40562f17c9a171451c6fa23c26c1396182be3c805800bbef53dfba62",
       "width": 1440,
       "height": 900
+    },
+    {
+      "slug": "light-table",
+      "sha256": "9bef0b517028163d7f661762ca8fd554426562017f128a59297eb014bcefb0f9",
+      "width": 1440,
+      "height": 900
     }
   ],
   "source_hashes": {
@@ -38,6 +44,7 @@
     "board.html": "52b7e703658415124c5c41546a473103e7a1b8e0f65f0e42cbe8ceee2ddfbef7",
     "matrix-journey.html": "618ee417239726e54ebdfaa23d173c794d53a33f1c30ca037f0ee7d0506668af",
     "command-deck.html": "bfde326a61e2fb15450b79aae89890658ac1c638f9e36c5fe95bf7273da44335",
-    "v2/command-deck-v2.html": "10f626772ff6ef203bebd035cefc673e56cfec3bfb470b32dfd9df897b090626"
+    "v2/command-deck-v2.html": "10f626772ff6ef203bebd035cefc673e56cfec3bfb470b32dfd9df897b090626",
+    "light-table/light-table.html": "012d7c01a438690a6818570e326a805a966701259445558d04aac546d948a6e0"
   }
 }

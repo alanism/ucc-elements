@@ -1,5 +1,14 @@
 # Learning log
 
+## 2026-10-13 — Light Table dashboard addition
+
+- Changed: Added Enochian Light Table as the sixth dashboard, with Fleet, Mission, Operator, and Devices screens, a captured preview, search aliases, versioned wrapper/direct-screen links, and curated release inclusion. Preserved its authored layout and actions; externalized the embedded public browser token after GitHub's push protection rejected it. Derived hero/root dashboard counts from the gallery inventory so future additions cannot leave stale copy.
+- Validation: All six dashboard flows passed the persistent integration test at 1440px and 390px, including Light Table model focus, compaction/undo, mission/device switching, device selection, and White palette. All four Light Table screens were checked at both widths; Mapbox loaded five routes, and its authored offline fallback passed with Mapbox requests blocked. No uncaught page errors. Both curated builds and JavaScript syntax checks passed.
+- Failure / root cause: A temporary screenshot-check script composed a filesystem path with string addition, causing a tooling exception after the preview was saved. GitHub push protection also rejected the embedded Mapbox token in the prototype and its publication copy, identifying it as an access token.
+- Fix / prevention: Corrected the temporary screenshot path expression and reran the screen/map check successfully. Moved the public Mapbox browser token into ignored runtime configuration files and added an immediate offline-map state when configuration is absent; no protection was bypassed. Removed it from the unpushed commit by amending that commit. No acceptance threshold changed.
+- Suggested harness update: Preserve the new Light Table interaction branch and inventory-driven counts when adding future dashboards.
+- Remaining limits: Data remains simulated. The authored browser Mapbox token is public; administrators should retain appropriate URL restrictions in the Mapbox account. No real usage/provider data or device-control connection was added.
+
 ## 2026-10-13 — Dashboard and HUD showcase integration
 
 - Changed: Added five separately named digital dashboard/HUD studies to the atlas, with real-browser previews, shared search, top-level discovery links, independent working screens, direct screen URLs, and return navigation. Kept 63 controls, 12 devices, and five dashboards as separate inventories. Canonical prototype implementations remain unchanged. Published command decks replace optional machine-local thumbnail paths with a labeled synthetic frame; no personal images are uploaded.

@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="en" data-theme="ares">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Light Table — fleet · mission · operator · devices</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* =============================================================================================
+   LIGHT TABLE — the Oblivion light-table grammar (thin rules with end ticks, dot rings,
+   segmented gauges, cell grids, open field) applied to an AI-agent project.
+   Same system as Command Deck v2:
+   · ONE accent (red) = "needs you now". Everything else is neutral ink / steel.
+   · Type 11 · 18 · 29 · 47 (×1.618), weights 400 / 600.  Space 4 · 8 · 16 · 24.
+   · Shapes: ◇ task  ▢ blocked  ⬡ subagent  ▲ operator  ■ device  ○ phase.
+   · Motion: none that loops. Numbers change when data changes.
+   ============================================================================================= */
+:root,[data-theme=obsidian],[data-theme=enochian]{   /* ENOCHIAN · OBSIDIAN (dark) */
+  color-scheme:dark;
+  --void:#050506; --p0:#0a0a0b; --p1:#0e0e10; --r1:#121215; --r2:#1c1c20; --r3:#2a2a2e;
+  --line:#1f1f23; --line2:#3a3a3e; --ink:#f7f7f8; --ink2:#c9c9ce; --muted:#8a8a92; --dim:#4a4a50;
+  --red:#cc0000; --red-hi:#ff4040; --on-red:#fff; --ok:255,225,205; --red-rgb:204,0,0; --cool-rgb:169,173,189;
+  --easy:#fff3e6; --hard:#3a0d0d; --dot:rgba(255,255,255,.055); --selglow:rgba(169,173,189,.9);
+  --case:#33373a; --case-high:#555a5c; --case-low:#35383b; --edge:#737a7e; --shine:#ffffff44; --bezel:#101214; --glass:#0b0c0d;
+  --m-land:#1a1a1d; --m-water:#050506; --m-park:#202024; --m-road1:#55555c; --m-road2:#38383e; --m-road3:#2a2a2e; --m-admin:#4a4a50; --m-tint:.5; --m-hatch:.18;
+}
+[data-theme=white]{   /* ENOCHIAN · WHITE (light) */
+  color-scheme:light;
+  --void:#efeeeb; --p0:#ffffff; --p1:#fbfbfa; --r1:#f5f4f2; --r2:#ebeae7; --r3:#d8d7d3;
+  --line:#e3e2de; --line2:#b9b8b3; --ink:#0e0e10; --ink2:#36363c; --muted:#66666e; --dim:#a2a2a8;
+  --red:#cc0000; --red-hi:#cc0000; --on-red:#fff; --ok:30,30,34; --red-rgb:204,0,0; --cool-rgb:84,88,102;
+  --easy:#ffffff; --hard:#2a0808; --dot:rgba(0,0,0,.07); --selglow:rgba(14,14,16,.25);
+  --case:#eeefeb; --case-high:#f6f7f3; --case-low:#d7dad6; --edge:#b6bbb8; --shine:#ffffff; --bezel:#101214; --glass:#111315;
+  --m-land:#ffffff; --m-water:#dcdad5; --m-park:#f0efeb; --m-road1:#a9a8a3; --m-road2:#c9c8c3; --m-road3:#e0dfdb; --m-admin:#9a9a9f; --m-tint:.35; --m-hatch:.07;
+}
+[data-theme=ares]{   /* ARES (dark navy + crimson) */
+  color-scheme:dark;
+  --void:#010507; --p0:#020a0e; --p1:#06151f; --r1:#081a26; --r2:#0d2432; --r3:#1b3646;
+  --line:#102a38; --line2:#3c5666; --ink:#efeaea; --ink2:#cdcacb; --muted:#7f9aa8; --dim:#3d5866;
+  --red:#d62832; --red-hi:#fc6253; --on-red:#fff; --ok:120,184,96; --red-rgb:214,40,50; --cool-rgb:110,150,170;
+  --easy:#efeaea; --hard:#2a0d14; --dot:rgba(127,154,168,.09); --selglow:rgba(110,150,170,.9);
+  --case:#1b3646; --case-high:#2a4a5c; --case-low:#132a37; --edge:#3c5666; --shine:#ffffff30; --bezel:#01070a; --glass:#020a0e;
+  --m-land:#0e2633; --m-water:#020a0e; --m-park:#123040; --m-road1:#4a6878; --m-road2:#2c4a5a; --m-road3:#1b3646; --m-admin:#3c5666; --m-tint:.55; --m-hatch:.18;
+}
+:root{ --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace; --ease:cubic-bezier(.2,.7,.2,1) }
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--void);color:var(--ink);font:400 11px/16px var(--sans);font-variant-numeric:tabular-nums;display:grid;grid-template-rows:auto minmax(0,1fr);gap:16px;padding:16px 24px 24px;min-height:720px}
+html[data-bw="1"]{filter:grayscale(1)}
+html[data-flip="1"] body{transform:rotate(180deg)}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
+b,strong{font-weight:600}
+:focus-visible{outline:1px solid var(--ink);outline-offset:2px}
+.lb{font:600 11px/16px var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.mono{font-family:var(--mono)} .mu{color:var(--muted)} .ink2{color:var(--ink2)} .acc{color:var(--red-hi)}
+.n18{font:600 18px/24px var(--sans)} .n29{font:400 29px/32px var(--sans)} .n47{font:400 47px/48px var(--sans);letter-spacing:-.01em}
+.t18{font:600 18px/24px var(--sans)}
+
+/* ---- header ---- */
+header{display:flex;align-items:center;gap:8px 16px;flex-wrap:wrap;min-height:32px}
+.brand{display:flex;align-items:center;gap:16px}
+.sim{font:600 11px/16px var(--mono);letter-spacing:.12em;color:var(--muted);border:1px solid var(--line2);padding:0 8px;border-radius:2px}
+.seg{display:flex;align-items:center;border:1px solid var(--line2);border-radius:2px;background:var(--p0)}
+.seg>.lb{padding:0 8px;color:var(--muted)}
+.seg button{height:24px;padding:0 8px;font:600 11px/24px var(--mono);letter-spacing:.08em;color:var(--muted);border-left:1px solid var(--line)}
+.seg button:first-of-type{border-left:0}.seg>.lb+button{border-left:1px solid var(--line)}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed=true],.seg button[aria-selected=true]{color:var(--ink);background:var(--r2);box-shadow:inset 0 -2px 0 var(--ink2)}
+.tabs button kbd{font:400 11px var(--mono);color:var(--muted);margin-right:4px}
+.sp{flex:1}
+.focus{display:none;align-items:center;gap:8px;height:24px;padding:0 4px 0 8px;border:1px solid var(--ink2);border-radius:2px}
+.focus.on{display:flex}.focus button{width:20px;height:20px;display:grid;place-items:center}
+
+/* ---- screens ---- */
+main{min-height:0;position:relative;background-image:radial-gradient(var(--dot) 1px,transparent 1.3px);background-size:16px 16px;background-position:-8px -8px}
+.screen{display:none;height:100%;min-height:0;gap:16px}
+.screen.on{display:grid}
+@media (prefers-reduced-motion:no-preference){.screen.on{animation:fade .18s var(--ease) both}}
+@keyframes fade{from{opacity:0}}
+/* rule header (Oblivion): label · value over a hairline with end ticks */
+.rh{position:relative;display:flex;align-items:baseline;gap:8px;min-height:24px;padding:0 0 8px;margin-bottom:8px;border-bottom:1px solid var(--line2)}
+.rh::before,.rh::after{content:"";position:absolute;bottom:-4px;width:1px;height:7px;background:var(--line2)}
+.rh::before{left:0}.rh::after{right:0}
+.rh>.lb:first-child{color:var(--ink2)}.rh .r{margin-left:auto;color:var(--muted)}
+.blk{display:flex;flex-direction:column;min-width:0;min-height:0}
+dl.kv{display:grid;grid-template-columns:auto 1fr;gap:0 8px;margin:0}
+dl.kv dt{font:600 11px/24px var(--mono);letter-spacing:.12em;color:var(--muted)}
+dl.kv dd{margin:0;text-align:right;font:400 11px/24px var(--mono);color:var(--ink2)}
+dl.kv dd.acc{color:var(--red-hi)}
+.btn{height:32px;padding:0 16px;border:1px solid var(--line2);border-radius:2px;font:600 11px/30px var(--mono);letter-spacing:.12em;color:var(--ink2);white-space:nowrap}
+.btn:hover{border-color:var(--ink2);color:var(--ink)}
+.btn.p{background:var(--ink);border-color:var(--ink);color:var(--void)}
+.btn.s{height:24px;padding:0 8px;line-height:22px}
+.btn.w{background:var(--red);border-color:var(--red-hi);color:var(--on-red)}
+.btn[disabled]{opacity:.4;cursor:default}
+.chips{display:flex;gap:4px;flex-wrap:wrap}
+.chip{height:24px;padding:0 8px;border:1px solid var(--line2);border-radius:2px;font:600 11px/22px var(--mono);letter-spacing:.08em;color:var(--muted)}
+.chip:hover{color:var(--ink)}.chip[aria-pressed=true]{color:var(--ink);background:var(--r2);border-color:var(--ink2)}
+.chip b{font-weight:400;margin-left:4px}
+.chip.acc{color:var(--red-hi);border-color:var(--red-hi)}
+.empty{color:var(--muted);padding:8px 0}.empty b{display:block;color:var(--ink2)}
+svg{display:block;overflow:visible}
+svg text{font:400 11px/16px var(--mono);fill:var(--muted);letter-spacing:.06em}
+svg text.k{font-weight:600;fill:var(--ink2);letter-spacing:.12em}
+svg text.t{fill:var(--ink2)} svg text.big{font:400 47px var(--sans);fill:var(--ink);letter-spacing:-.01em} svg text.mid{font:400 29px var(--sans);fill:var(--ink)}
+.hit{fill:transparent;cursor:pointer}
+.sel-ring{fill:none;stroke:var(--ink);stroke-width:1}
+
+/* ================= FLEET ================= */
+#s-fleet{grid-template-columns:264px minmax(0,1fr)}
+.rail{display:flex;flex-direction:column;gap:16px;min-height:0;overflow:auto}
+.cols{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));min-width:0;min-height:0}
+.mc{display:flex;flex-direction:column;gap:12px;min-width:0;padding:0 16px;border-left:1px solid var(--line);position:relative}
+.mc.sel{background:linear-gradient(180deg,rgba(var(--cool-rgb),.10),transparent 40%)}
+.mc.sel::before{content:"";position:absolute;left:-1px;right:0;top:0;height:2px;background:var(--ink)}
+.mc.dim>*:not(.mch){opacity:.45}
+.mch{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"rr pv tc" "md md md";gap:0 8px;align-items:center;min-height:48px;padding:8px 0;border-bottom:1px solid var(--line2);position:relative;width:100%}
+.mch::before,.mch::after{content:"";position:absolute;bottom:-4px;width:1px;height:7px;background:var(--line2)}.mch::before{left:0}.mch::after{right:0}
+.mch>.n29{grid-area:rr}.mch .pv{grid-area:pv;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mch .md{grid-area:md;overflow-wrap:anywhere}
+.mch .tc{grid-area:tc;display:flex;flex-direction:column;align-items:flex-end}
+.mch:hover .n29{color:var(--ink)}
+.plate{display:flex;flex-direction:column;align-items:center;gap:4px}
+.plate .lb{white-space:nowrap}
+.ig{display:grid;grid-template-columns:minmax(0,1fr) 72px minmax(0,1fr);justify-items:center;grid-template-areas:"ri cx ro" "sl cx sr";gap:8px 8px;align-items:start}
+.ig .ri{grid-area:ri}.ig .ro{grid-area:ro}.ig .cx{grid-area:cx}.ig .sl{grid-area:sl}.ig .sr{grid-area:sr}
+.ring{display:flex;flex-direction:column;align-items:center;gap:0}
+.ig dl.kv dt,.ig dl.kv dd{line-height:20px}
+.ig dl.kv{grid-template-columns:1fr}.ig dl.kv dt{line-height:16px}.ig dl.kv dd{text-align:left;line-height:16px;margin-bottom:4px;color:var(--ink)}
+.ig .sr dl.kv dd,.ig .sr dl.kv dt{text-align:right}.ig .sl,.ig .sr{justify-self:stretch}
+.ctxb{display:flex;align-items:center;justify-content:center;gap:0;height:32px;border:1px solid var(--line2);border-radius:2px;margin:0 auto;min-width:120px}
+.ctxb span{padding:0 12px}.ctxb span:first-child{border-right:1px solid var(--line2);color:var(--ink2)}
+.ctxb.hot{border-color:var(--red-hi)}.ctxb.hot span:last-child{color:var(--red-hi)}.ctxb.hot span:first-child{border-color:var(--red-hi)}
+.amx{display:flex;flex-direction:column;align-items:center;gap:4px}
+.tlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.tlist button{display:grid;grid-template-columns:24px 16px minmax(0,1fr) auto;gap:4px;align-items:center;width:100%;height:24px;border-bottom:1px solid var(--line);padding:0 2px}
+.tlist button:hover{background:var(--r1)}.tlist button[aria-pressed=true]{background:var(--r2);box-shadow:inset 2px 0 0 var(--ink)}
+.tlist .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink2)}
+.tlist .st{font:400 11px var(--mono);color:var(--muted)}.tlist .st.acc{color:var(--red-hi)}
+.roster{display:flex;flex-direction:column}
+.ar{display:grid;grid-template-columns:16px 32px 40px 24px minmax(0,1fr);gap:4px;align-items:center;height:24px;border-bottom:1px solid var(--line)}.ar:hover{background:var(--r1)}.ar .lb{text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.io{display:flex;flex-direction:column;gap:4px;margin-top:auto}
+.bars{display:flex;align-items:flex-end;gap:2px;height:16px}
+.bars i{flex:1;background:var(--ink2);min-height:1px}.bars.o i{background:var(--muted)}
+.key{margin-top:auto}.kr{display:grid;grid-template-columns:24px minmax(0,1fr);gap:8px;align-items:center;min-height:32px}
+.alert{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.alert .lb{color:var(--red-hi)}.alert .mu{grid-column:1}
+.share{display:flex;height:12px;gap:2px}.share i{display:block;height:100%;background:var(--ink2)}
+.share i:nth-child(2n){background:var(--muted)}
+.segs{display:grid;grid-template-columns:repeat(24,1fr);gap:2px;height:8px}.segs i{background:var(--r2)}.segs i.on{background:var(--ink2)}.segs i.on.hot{background:var(--red-hi)}
+
+/* ================= MISSION ================= */
+#s-mission{grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:minmax(0,1.2fr) minmax(0,1fr)}
+.inst{display:flex;flex-direction:column;min-width:0;min-height:0}
+.inst .plot{flex:1;min-height:0;position:relative}
+.inst .ro{display:flex;gap:4px 16px;flex-wrap:wrap;align-items:baseline;padding-top:8px;min-height:40px;color:var(--muted);flex:none}
+.inst .ro b{font-weight:600;color:var(--ink2)} .inst .ro b.acc{color:var(--red-hi)}
+.inst .say{color:var(--ink2);max-width:640px}
+#i-batch{grid-column:1/5}#i-journey{grid-column:5/10}#i-sum{grid-column:10/13}#i-due{grid-column:1/6}#i-cone{grid-column:6/13}
+.sumclock{padding:8px 0 16px}
+.tcard{border:1px solid var(--line2);border-radius:2px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.tcard .row{display:flex;align-items:center;gap:8px}
+.pill{margin-left:auto;font:600 11px/16px var(--mono);letter-spacing:.08em;padding:0 8px;border:1px solid var(--line2);border-radius:2px;color:var(--ink2);white-space:nowrap}
+.pill.acc{color:var(--red-hi);border-color:var(--red-hi)}
+.agrow{display:flex;align-items:center;gap:8px;min-height:24px}
+
+/* ================= OPERATOR ================= */
+#s-operator{grid-template-columns:264px minmax(0,1fr) 224px}
+.opcard{display:grid;grid-template-columns:96px minmax(0,1fr);gap:16px;align-items:start}
+.av{width:96px;height:96px;border:1px solid var(--line2);position:relative;overflow:hidden;background:var(--r1)}
+.av img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.05)}
+.av svg{width:100%;height:100%}
+.av::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(var(--cool-rgb),.10) 0 1px,transparent 1px 3px);pointer-events:none}
+.wave{display:flex;align-items:center;gap:1px;height:40px}
+.wave i{flex:1;background:var(--ink2);min-height:1px}
+.cnt{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:8px;align-items:center;min-height:32px;border-bottom:1px solid var(--line)}
+.cnt .n18{text-align:right}.cnt.acc .n18,.cnt.acc .lb{color:var(--red-hi)}
+#mapP{display:flex;flex-direction:column;min-width:0;min-height:0}
+#mapBox{position:relative;flex:1;min-height:320px;border:1px solid var(--line2);overflow:hidden;background:var(--m-land)}
+#map{position:absolute;inset:0}
+#mapOv{position:absolute;inset:0;pointer-events:none;z-index:2}
+#mapTint{position:absolute;inset:0;pointer-events:none;z-index:1;background:var(--m-land);opacity:0;mix-blend-mode:color}
+#mapBox[data-style=sat] #mapTint{opacity:var(--m-tint)}
+#mapMsg{position:absolute;left:16px;top:16px;z-index:3;max-width:360px;padding:8px 16px;border:1px solid var(--line2);background:var(--p0);display:none}
+#mapMsg.on{display:block}
+.mlegend{display:flex;gap:16px;flex-wrap:wrap;align-items:center;min-height:32px;color:var(--muted);padding-top:8px}
+.mlegend span{display:inline-flex;align-items:center;gap:4px}
+.mk{display:flex;align-items:center;gap:4px;font:600 11px/16px var(--mono);letter-spacing:.08em;color:var(--ink);cursor:pointer;white-space:nowrap;text-shadow:0 0 3px var(--m-land),0 0 3px var(--m-land)}
+.mk svg{flex:none}.mk.dim{opacity:.35}.mk.sel{text-decoration:underline;text-underline-offset:3px}
+.mapboxgl-ctrl-attrib,.mapboxgl-ctrl-attrib a{font:400 11px/16px var(--mono)!important}
+.feeds .row{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:8px;align-items:center;min-height:24px}
+.feeds i.d{display:block;width:8px;height:8px;border-radius:50%;border:1px solid var(--ink2)}.feeds i.d.on{background:var(--ink2)}
+.rot{display:flex;align-items:center;gap:8px}
+.rot .btn{width:40px;padding:0;text-align:center}
+
+/* ================= DEVICES ================= */
+#s-devices{grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:minmax(0,1fr) 96px}
+#d-schem{grid-column:1/6}#d-diag{grid-column:6/9}#d-table{grid-column:9/13}#d-idents{grid-column:1/13}
+.codes{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:flex-end;padding:8px 0 8px}
+.codes>div{display:flex;flex-direction:column}
+.schem{position:relative;flex:1;min-height:200px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"a . b" "dv dv dv" "c . d";gap:8px 0}
+.schem .dv{grid-area:dv;display:grid;place-items:center;min-width:0;min-height:0}
+.schem .c1{grid-area:a}.schem .c2{grid-area:b;text-align:right}.schem .c3{grid-area:c}.schem .c4{grid-area:d;text-align:right}
+.schem .lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.callout{position:relative;font:600 11px/16px var(--mono);letter-spacing:.08em;color:var(--ink2);white-space:nowrap;padding:0 0 4px;border-bottom:1px solid var(--line2);min-width:0}
+.callout::after{content:"";position:absolute;bottom:-1px;width:32px;border-bottom:1px dashed var(--line2)}.c1::after,.c3::after{left:100%}.c2::after,.c4::after{right:100%}
+.callout span{display:block;font-weight:400;color:var(--muted)}
+.load{display:flex;align-items:flex-end;gap:2px;height:48px}
+.load i{flex:1;background:var(--ink2);min-height:1px}.load i.hi{background:var(--ink)}
+.lvl{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.lvl span{height:24px;border:1px solid var(--line2);display:grid;place-items:center;font:600 11px var(--mono);letter-spacing:.06em;color:var(--muted)}
+.lvl span.on{background:var(--r2);color:var(--ink);border-color:var(--ink2)}
+.fuel{display:grid;grid-template-columns:72px minmax(0,1fr) 104px;gap:8px;align-items:center;min-height:24px}
+.fuel .segs{height:10px}
+.fuel .v{text-align:right;font:400 11px var(--mono);color:var(--ink2)}.fuel .v.acc{color:var(--red-hi)}
+.tools{display:grid;grid-template-columns:repeat(24,1fr);gap:2px}
+.tools i{height:12px;border:1px solid var(--line2)}.tools i.ok{background:var(--ink2);border-color:var(--ink2)}.tools i.err{background:var(--red);border-color:var(--red-hi)}
+.tools i.run{background:repeating-linear-gradient(135deg,var(--ink2) 0 1px,transparent 1px 4px);border-color:var(--ink2)}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-content:start;overflow:auto;min-height:0;flex:1}
+.tile{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto auto auto;gap:4px 8px;padding:8px;border:1px solid var(--line2);border-radius:2px;text-align:left;min-height:104px;align-content:start}
+.tile:hover{border-color:var(--ink2)}.tile[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.tile.need{border-color:var(--red-hi)}.tile.need[aria-pressed=true]{box-shadow:inset 0 0 0 1px var(--red-hi)}
+.tile.off{opacity:.3}
+.tile .top{grid-column:1/3;display:flex;justify-content:space-between;color:var(--muted)}
+.tile .id{font:400 29px/32px var(--sans);color:var(--ink)}
+.tile .rings{display:flex;gap:4px;align-items:center;grid-row:2;grid-column:2}
+.tile .stl{grid-column:1/3;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tile .stl.acc{color:var(--red-hi)}
+.ident{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:16px}
+.idt{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 16px;align-items:center;padding:8px 16px;border:1px solid var(--line2);border-radius:2px;text-align:left;min-height:64px}
+.idt:hover{border-color:var(--ink2)}.idt[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.idt .lb.mu{grid-column:1/4}
+
+/* ---- device frames (from enochian_knobs_keys/apple-devices, compacted; finish follows the palette) ---- */
+.dev-scene{position:relative;container-type:inline-size;width:min(100%,520px)}
+.screen-slot{position:relative;width:100%;background:var(--glass);overflow:hidden;color:#c9c9ce;font:400 11px/16px var(--mono);padding:8px}
+.screen-slot .sline{display:flex;justify-content:space-between;gap:8px;white-space:nowrap}
+.screen-slot .need{color:#ff5a50}
+.camera{position:absolute;z-index:3;width:.8cqw;aspect-ratio:1;border-radius:50%;background:#06090b;box-shadow:inset 0 0 .15cqw #52616c}
+.laptop-lid{position:relative;width:82%;margin:0 auto;padding:1.4% 1.4% 2.8%;background:var(--bezel);border:.5cqw solid var(--edge);border-radius:2.6cqw 2.6cqw .8cqw .8cqw}
+.laptop-lid .screen-slot{aspect-ratio:16/10;border-radius:1.4cqw 1.4cqw 0 0}
+.laptop-lid .camera{left:calc(50% - .4cqw);top:.6%}
+.laptop-base{position:relative;width:100%;height:4.2cqw;margin-top:-.3cqw;border-radius:0 0 3.4cqw 3.4cqw;background:linear-gradient(90deg,var(--edge),var(--case-high) 2%,var(--case-low) 15%,var(--case) 50%,var(--case-low) 85%,var(--case-high) 98%,var(--edge));border:1px solid var(--edge)}
+.laptop-base i{position:absolute;top:0;left:41%;width:18%;height:1.4cqw;border-radius:0 0 1.4cqw 1.4cqw;background:linear-gradient(var(--edge),var(--case-low))}
+.monitor-panel{position:relative;background:var(--bezel);padding:2.2%;border-radius:1.2cqw;border:1px solid var(--edge)}
+.monitor-panel .screen-slot{aspect-ratio:16/9}
+.monitor-stand{width:22%;height:12cqw;margin:0 auto;background:linear-gradient(100deg,var(--case-low),var(--case-high) 45%,var(--case-low));border:1px solid var(--edge);border-top:0}
+.monitor-foot{width:34%;height:1.4cqw;margin:0 auto;border-radius:.3cqw;background:linear-gradient(var(--case-high),var(--edge),var(--case-high))}
+.mini{position:absolute;right:0;bottom:0;width:22%;height:8cqw;border-radius:.6cqw;background:linear-gradient(90deg,var(--case-low),var(--case-high) 8%,var(--case) 52%,var(--case-low) 94%,var(--case-high));border:1px solid var(--edge)}
+.tablet-case{position:relative;padding:3%;background:var(--bezel);border:.6cqw solid var(--edge);border-radius:4cqw}
+.tablet-case .screen-slot{aspect-ratio:4/3;border-radius:2cqw}
+.tablet-case .camera{top:1.2%;left:calc(50% - .4cqw)}
+.phone-wrap{width:44%;margin:0 auto}
+.phone-case{position:relative;padding:3%;border:1.2cqw solid var(--case-low);border-radius:12cqw;background:var(--bezel);box-shadow:inset 0 0 0 .3cqw var(--shine)}
+.phone-case .screen-slot{aspect-ratio:9/19.5;border-radius:10cqw;padding:28% 10% 8%}
+.island{position:absolute;top:5cqw;left:34%;width:32%;height:5cqw;border-radius:5cqw;background:#040607;z-index:4}
+
+/* ---- toast ---- */
+#toast{position:fixed;left:24px;bottom:24px;z-index:9;display:none;align-items:center;gap:16px;padding:8px 8px 8px 16px;background:var(--r2);border:1px solid var(--line2);border-radius:2px;color:var(--ink)}
+#toast.on{display:flex}
+#toast button{height:24px;padding:0 8px;border:1px solid var(--ink2);border-radius:2px;font:600 11px/22px var(--mono);letter-spacing:.12em}
+
+@media (max-width:1100px){
+  body{height:auto;display:block}
+  header{margin-bottom:16px}
+  .screen.on{display:flex;flex-direction:column;height:auto}
+  .cols{grid-template-columns:repeat(auto-fill,minmax(208px,1fr));row-gap:24px}
+  .rail{overflow:visible}
+  .inst{min-height:360px}
+  #mapBox{min-height:420px}
+  #s-devices .tiles{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .ident{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .blk,.inst{flex:none}
+}
+@media (max-width:520px){
+  body{padding:8px 8px 16px}
+  .seg>.lb{display:none}.seg button{padding:0 6px}
+  .tabs button kbd{display:none}
+  .opcard{grid-template-columns:72px minmax(0,1fr)}.av{width:72px;height:72px}
+}
+@media (prefers-reduced-motion:reduce){.screen.on{animation:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><span class="lb" id="proj"></span><span class="sim" title="Every number on this screen is sample data">SIMULATED DATA</span><span class="lb mu" id="clock">T 00:23:15</span></div>
+  <div class="seg tabs" id="gScreen" role="tablist" aria-label="Screens"></div>
+  <div class="sp"></div>
+  <div class="focus lb" id="focus"><span id="focusTxt"></span><button id="focusX" aria-label="Clear focus">✕</button></div>
+  <div class="seg" id="gTheme" role="group" aria-label="Palette"><button data-v="ares">ARES</button><button data-v="obsidian">OBSIDIAN</button><button data-v="white">WHITE</button></div>
+  <div class="seg" id="gReview" role="group" aria-label="Review aids"><span class="lb">REVIEW</span><button data-v="bw">B/W</button><button data-v="flip">FLIP</button></div>
+</header>
+<main id="scr">
+  <section class="screen" id="s-fleet" role="tabpanel" aria-label="Fleet"></section>
+  <section class="screen" id="s-mission" role="tabpanel" aria-label="Mission"></section>
+  <section class="screen" id="s-operator" role="tabpanel" aria-label="Operator">
+    <div class="rail" id="op-left"></div>
+    <div id="mapP">
+      <div class="rh"><span class="lb">ROUTE MAP</span><span class="lb mu" id="mapMode"></span><span class="lb r" id="mapStat"></span></div>
+      <div id="mapBox" data-style="vector"><div id="map" role="region" aria-label="Map of where agent work runs"></div><div id="mapTint"></div><svg id="mapOv" aria-hidden="true"></svg><div id="mapMsg" role="status"></div></div>
+      <div class="mlegend" id="mapLegend"></div>
+    </div>
+    <div class="rail" id="op-right"></div>
+  </section>
+  <section class="screen" id="s-devices" role="tabpanel" aria-label="Devices"></section>
+</main>
+<div id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo">UNDO</button></div>
+
+<script src="config.js"></script>
+<script>
+"use strict";
+/* ===========================================================================================
+   TEMPLATE — everything project-specific lives in CFG + the arrays below. All values are
+   SAMPLE DATA: replace model names, limits, rates, regions and locations with your own.
+   =========================================================================================== */
+const CFG = {
+  project: "GMUNK-TOPGUN · IMAGE PIPELINE",
+  mapbox: { token: window.ENOCHIAN_LIGHT_TABLE_CONFIG?.mapboxToken || "", // public (pk.) token; restrict its URLs in the Mapbox account before publishing
+            js: "https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js", css: "https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css" },
+  operators: [
+    { id:"user",  kind:"USER",  name:"Alan Nguyen",      role:"Operator · owner",              initials:"AN", avatar:null },   // avatar: URL to a headshot, or null for a generated sigil
+    { id:"agent", kind:"AGENT", name:"Hermes · Carmack", role:"Orchestrator · claude-opus-5-5", initials:"HC", avatar:null },
+  ],
+  location: { label:"SAMPLE LOCATION", lnglat:[106.700, 10.776] },
+  policy: { allowed:[ {code:"US", box:[-125,24,-66,50]}, {code:"EU", box:[-10,36,30,60]}, {code:"SG", box:[103.5,1.1,104.1,1.5]} ],
+            text:"Agent data may leave the device only for US, EU and SG regions." },
+  budget: 120,                                   // USD per day
+  thresholds: { ctx:.90, rate:.90, budget:.90 },  // at or above → needs you (red)
+  phases: [{n:"INGEST",d:-6},{n:"RESIZE",d:-4},{n:"GRADE",d:-1},{n:"EXPORT",d:2},{n:"QA",d:4},{n:"DELIVER",d:6}],
+  livePhase: 2, deadline: 6,
+  throughput: [2,3,1,2,4,2,3,2,1,3],             // tasks closed per day on recent work (reference class)
+  batch: { total:208, done:114, running:4, failed:[23,46,90] },
+  links: [ {n:"EMAIL",on:true,s:"6 tasks"}, {n:"PRD",on:true,s:"12 tasks"}, {n:"GITHUB",on:false,s:"not linked"} ],
+};
+const LV = ["LOW","MED","HIGH","XHIGH"];
+const MODELS = [   // window / tpm in thousands of tokens · rate in USD per 1M tokens · endpoint = sample region
+  { r:"R1", provider:"OPENAI",    model:"GPT-6.1-Sol",           window:400, tpm:{in:2000,out:400}, rate:{in:2.5,out:10}, region:"US", ep:{label:"us-east",    lnglat:[-77.46,38.95]}, role:"Lead implementer", tin:2410, tout:310, calls:182, p50:1.8, cache:.62 },
+  { r:"R2", provider:"ANTHROPIC", model:"claude-opus-5-5",       window:200, tpm:{in:1600,out:320}, rate:{in:5,out:25},   region:"US", ep:{label:"us-west",    lnglat:[-121.2,45.6]},  role:"Reviewer · hard tasks", tin:1980, tout:240, calls:96, p50:2.6, cache:.71 },
+  { r:"R3", provider:"META",      model:"Muse Spark",            window:256, tpm:{in:1200,out:300}, rate:{in:1,out:4},    region:"US", ep:{label:"us-central", lnglat:[-95.86,41.26]}, role:"Batch ops", tin:1220, tout:160, calls:211, p50:1.1, cache:.48 },
+  { r:"R4", provider:"DEEPSEEK",  model:"DeepSeek reasoner",     window:128, tpm:{in:800,out:200},  rate:{in:.6,out:2.2},  region:"SG", ep:{label:"ap-southeast",lnglat:[103.85,1.29]}, role:"Grade fixes", tin:640, tout:120, calls:58, p50:3.4, cache:.33 },
+  { r:"R5", provider:"NVIDIA",    model:"nemotron-3-ultra-550b", window:128, tpm:{in:900,out:220},  rate:{in:0,out:0},     region:"US", ep:{label:"us-west · NIM",lnglat:[-121.9,37.4]}, role:"Archive · QA sweeps", tin:410, tout:70, calls:44, p50:2.1, cache:.20 },
+];
+const DEVICES = [
+  { id:"A1", kind:"macbook", name:"MACBOOK", state:"ONLINE", net:"Wi-Fi · 24 ms", power:"AC", cpu:.38, mem:[21,36], off:[ .0060, .0035] },
+  { id:"A2", kind:"display", name:"MAC MINI", state:"ONLINE", net:"Ethernet · 9 ms", power:"AC", cpu:.22, mem:[14,32], off:[ .0130,-.0060] },
+  { id:"A3", kind:"ipad",    name:"IPAD",    state:"ONLINE", net:"Wi-Fi · 31 ms", power:"BATTERY 64%", cpu:.10, mem:[4,8], off:[-.0070, .0045] },
+  { id:"A4", kind:"iphone",  name:"IPHONE",  state:"SLEEP",  net:"5G · 48 ms",    power:"BATTERY 81%", cpu:.02, mem:[3,8], off:[-.0060,-.0040] },
+];
+const TASKS = [   // the same 18 tasks as Command Deck v2 (status: todo | running | done | blocked)
+ {n:1,name:"Reply: 4K spec",src:"EMAIL",imp:.92,urg:.94,diff:1,ph:0,status:"todo"},{n:2,name:"Export Darkstar",src:"PRD",imp:.84,urg:.76,diff:2,ph:3,status:"running"},
+ {n:3,name:"LUT · COLLECT",src:"PRD",imp:.90,urg:.62,diff:4,ph:2,status:"running"},{n:4,name:"Fix Maps banding",src:"EMAIL",imp:.74,urg:.86,diff:4,ph:2,status:"blocked"},
+ {n:5,name:"Resize TacAud",src:"PRD",imp:.70,urg:.60,diff:2,ph:1,status:"done"},{n:6,name:"Strip EXIF",src:"PRD",imp:.80,urg:.38,diff:2,ph:4,status:"todo"},
+ {n:7,name:"Match Early-Dev",src:"PRD",imp:.62,urg:.28,diff:5,ph:2,status:"todo"},{n:8,name:"Contact sheet",src:"PRD",imp:.72,urg:.18,diff:3,ph:4,status:"todo"},
+ {n:9,name:"LUT naming",src:"PRD",imp:.56,urg:.10,diff:1,ph:0,status:"todo"},{n:10,name:"Approve crops",src:"EMAIL",imp:.64,urg:.90,diff:1,ph:1,status:"todo"},
+ {n:11,name:"Rename files",src:"EMAIL",imp:.34,urg:.78,diff:1,ph:0,status:"todo"},{n:12,name:"Reply: invoice",src:"EMAIL",imp:.16,urg:.68,diff:1,ph:5,status:"todo"},
+ {n:13,name:"Archive originals",src:"PRD",imp:.24,urg:.30,diff:2,ph:5,status:"todo"},{n:14,name:"Grain preset",src:"EMAIL",imp:.30,urg:.08,diff:3,ph:2,status:"todo"},
+ {n:15,name:"2× upscale thumb",src:"PRD",imp:.40,urg:.54,diff:3,ph:1,status:"todo"},{n:16,name:"PNG-8 vs 16",src:"PRD",imp:.52,urg:.50,diff:3,ph:3,status:"running"},
+ {n:17,name:"Cockpit map 4K",src:"PRD",imp:.94,urg:.44,diff:5,ph:1,status:"todo"},{n:18,name:"Proof vs LUT",src:"PRD",imp:.60,urg:.40,diff:3,ph:4,status:"todo"},
+];
+// Subagents: ctx / budget / used in k tokens · lvl 0..3 · tools: 1 ok, 0 error, 2 running · last = seconds since last token
+const AGENTS = [
+ {id:150,r:"R1",lvl:2,task:3, dev:"A1",parent:"HC",ctx:210,budget:900,used:480,status:"running",tools:"111111112",last:2},
+ {id:151,r:"R1",lvl:1,task:2, dev:"A1",parent:"HC",ctx:120,budget:500,used:200,status:"running",tools:"1111112",last:1},
+ {id:163,r:"R1",lvl:0,task:16,dev:"A2",parent:150, ctx:60, budget:300,used:90, status:"running",tools:"11112",last:3},
+ {id:166,r:"R2",lvl:3,task:17,dev:"A1",parent:"HC",ctx:184,budget:700,used:520,status:"running",tools:"1111111111112",last:4},
+ {id:170,r:"R2",lvl:2,task:7, dev:"A1",parent:"HC",ctx:40, budget:600,used:60, status:"waiting",tools:"11",last:140},
+ {id:171,r:"R2",lvl:1,task:18,dev:"A3",parent:166, ctx:30, budget:300,used:44, status:"paused",tools:"111",last:600},
+ {id:172,r:"R3",lvl:1,task:6, dev:"A2",parent:"HC",ctx:90, budget:400,used:150,status:"running",tools:"1111111012",last:2},
+ {id:176,r:"R3",lvl:0,task:11,dev:"A2",parent:172, ctx:20, budget:120,used:110,status:"done",tools:"111111",last:900},
+ {id:177,r:"R4",lvl:2,task:4, dev:"A1",parent:"HC",ctx:70, budget:500,used:260,status:"stalled",tools:"1111110",last:420},
+ {id:180,r:"R4",lvl:1,task:15,dev:"A2",parent:177, ctx:36, budget:250,used:80, status:"running",tools:"1112",last:5},
+ {id:185,r:"R5",lvl:0,task:13,dev:"A4",parent:"HC",ctx:12, budget:150,used:20, status:"waiting",tools:"1",last:300},
+ {id:186,r:"R5",lvl:1,task:8, dev:"A3",parent:"HC",ctx:48, budget:300,used:120,status:"running",tools:"11011112",last:6},
+];
+/* =========================================================================================== */
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pad2 = n => String(n).padStart(2,"0"), pct = v => Math.round(v*100)+"%";
+const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+const fk = n => n>=1000 ? (n/1000).toFixed(n>=10000?1:2).replace(/\.?0+$/,"")+"M" : Math.round(n)+"k";
+const usd = v => "$"+v.toFixed(2);
+const qs = new URLSearchParams(location.search);
+const SCREENS = [["fleet","FLEET"],["mission","MISSION"],["operator","OPERATOR"],["devices","DEVICES"]];
+const S = { screen: SCREENS.some(s=>s[0]===qs.get("screen")) ? qs.get("screen") : "fleet",
+  theme: ({ares:"ares",obsidian:"obsidian",enochian:"obsidian",white:"white"})[qs.get("theme")]||"ares",
+  model: MODELS.some(m=>m.r===qs.get("model")) ? qs.get("model") : null, task: qs.get("task")?+qs.get("task"):null,
+  agent: qs.get("agent")?+qs.get("agent"):null, device: qs.get("device")||"A1", op: qs.get("op")==="agent"?"agent":"user",
+  approvals:"ask", tfilter:"all", bw:qs.get("bw")==="1", flip:qs.get("flip")==="1", sim:qs.get("sim")!=="0",
+  map:{ view:qs.get("mapview")==="local"?"local":"global", style:qs.get("mapstyle")==="sat"?"sat":"vector", bearing:0, layers:{routes:true,endpoints:true,devices:true,policy:true} } };
+const H = [];
+const byM = r => MODELS.find(m=>m.r===r), byT = n => TASKS.find(t=>t.n===n), byA = id => AGENTS.find(a=>a.id===id), byD = id => DEVICES.find(d=>d.id===id);
+const quad = t => t.imp>=.5 ? (t.urg>=.5?"DO FIRST":"SCHEDULE") : (t.urg>=.5?"DELEGATE":"ELIMINATE");
+const due = t => Math.max(.2,(1-t.urg)*14);                        // days until due, derived from urgency
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const hex2 = h => [1,3,5].map(i=>parseInt(h.substr(i,2),16));
+const colorAt = k => { const a=hex2(css("--easy")), b=hex2(css("--hard")); return `rgb(${a.map((v,i)=>Math.round(v+(b[i]-v)*k)).join(",")})`; };
+const dcol = t => colorAt((t.diff-1)/4);
+
+/* ---------- derived state + the one rule for red ---------- */
+const agentsOf = m => AGENTS.filter(a=>a.r===m.r);
+const ctxOf = a => a.ctx/byM(a.r).window;
+const T = CFG.thresholds;
+function needA(a){                                  // returns null, or {msg, act, label}
+  if(a.status==="done") return null;
+  if(ctxOf(a)>=T.ctx) return {msg:`CONTEXT ${pct(ctxOf(a))}`, act:"compact", label:"COMPACT"};
+  if(a.status==="stalled") return {msg:`STALLED ${Math.round(a.last/60)} MIN`, act:"retry", label:"RETRY"};
+  if(a.used/a.budget>=T.budget) return {msg:`BUDGET ${pct(a.used/a.budget)}`, act:"budget", label:"+25% BUDGET"};
+  if(a.tools.slice(-1)==="0") return {msg:"TOOL ERROR", act:"retry", label:"RETRY"};
+  return null; }
+const rateUse = m => Math.max(m.tpmNow.in/m.tpm.in, m.tpmNow.out/m.tpm.out);
+function needM(m){ const a=agentsOf(m).map(needA).find(Boolean); if(a) return a; if(rateUse(m)>=T.rate) return {msg:`RATE ${pct(rateUse(m))}`}; return null; }
+const ctxMax = m => Math.max(0,...agentsOf(m).filter(a=>a.status!=="done").map(ctxOf));
+const mState = m => { const s=agentsOf(m).map(a=>a.status); return s.includes("running")?"RUNNING":s.includes("stalled")?"STALLED":s.includes("waiting")?"WAITING":"IDLE"; };
+const tasksOf = m => [...new Set(agentsOf(m).map(a=>a.task))].map(byT).filter(Boolean);
+const agentsOnTask = n => AGENTS.filter(a=>a.task===n);
+const costOf = m => (m.tin*m.rate.in + m.tout*m.rate.out)/1000;
+const needsAll = () => AGENTS.map(a=>({a,n:needA(a)})).filter(x=>x.n);
+const inFocus = a => !S.model || a.r===S.model;
+
+/* ---------- seeded series for the sim ---------- */
+let seed=7; const rnd=()=> (seed=(seed*16807)%2147483647)/2147483647;
+MODELS.forEach(m=>{ m.tpmNow={in:m.tpm.in*(.3+rnd()*.4), out:m.tpm.out*(.3+rnd()*.4)}; m.series={in:[...Array(12)].map(()=>.3+rnd()*.7), out:[...Array(12)].map(()=>.2+rnd()*.6)}; });
+byM("R4").tpmNow.in = byM("R4").tpm.in*.62;
+const WAVE=[...Array(64)].map(()=>.15+rnd()*.85);
+DEVICES.forEach(d=>{ d.load=[...Array(48)].map(()=>d.cpu*(.5+rnd())); });
+
+/* ---------- small SVG kit ---------- */
+function dotRing(size,frac,hot,n=20,label=null){ const c=size/2, r=c-4; let s=`<svg width="${size}" height="${size}" aria-hidden="true">`;
+  const on=Math.round(clamp(frac,0,1)*n);
+  for(let i=0;i<n;i++){ const a=-Math.PI/2+i/n*2*Math.PI; s+=`<circle cx="${(c+Math.cos(a)*r).toFixed(1)}" cy="${(c+Math.sin(a)*r).toFixed(1)}" r="${i<on?2.2:1.6}" fill="${i<on?(hot?"var(--red-hi)":"var(--ink2)"):"var(--line2)"}"/>`; }
+  s+= label!=null ? `<text x="${c}" y="${c+4}" text-anchor="middle" class="t" style="${hot?"fill:var(--red-hi)":""}">${label}</text>` : `<circle cx="${c}" cy="${c}" r="${r-8}" fill="none" stroke="var(--line2)" stroke-width="1" stroke-dasharray="1 3"/>`;
+  return s+`</svg>`; }
+function taskGlyph(t,x,y,r){ if(t.status==="blocked") return `<rect x="${x-r*.8}" y="${y-r*.8}" width="${r*1.6}" height="${r*1.6}" fill="${dcol(t)}" stroke="var(--red-hi)" stroke-width="1.75"/>`;
+  const done=t.status==="done", d=`M${x} ${y-r}L${x+r} ${y}L${x} ${y+r}L${x-r} ${y}Z`;
+  return (t.status==="running"?`<path d="M${x} ${y-r-3}L${x+r+3} ${y}L${x} ${y+r+3}L${x-r-3} ${y}Z" fill="none" stroke="var(--ink2)" stroke-width="1" opacity=".6"/>`:"")
+    + `<path d="${d}" fill="${done?"none":dcol(t)}" stroke="var(--ink2)" stroke-width="1.25" ${done?'stroke-dasharray="2 2"':""}/>`; }
+const tglyph = (t,s=16) => `<svg width="${s}" height="${s}" aria-hidden="true">${taskGlyph(t,s/2,s/2,s/2-3)}</svg>`;
+function hexGlyph(lvl,s=24,hot=false){ const c=s/2, r=c-2, pts=[...Array(6)].map((_,i)=>{const a=Math.PI/6+i*Math.PI/3; return `${(c+Math.cos(a)*r).toFixed(1)},${(c+Math.sin(a)*r).toFixed(1)}`}).join(" ");
+  let bars=""; for(let i=0;i<4;i++){ const y=c+r*.45-i*r*.3; bars+=`<line x1="${c-r*.4}" x2="${c+r*.4}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" stroke="${i<=lvl?"var(--ink)":"var(--line2)"}" stroke-width="1.5"/>`; }
+  return `<svg width="${s}" height="${s}" aria-hidden="true"><polygon points="${pts}" fill="none" stroke="${hot?"var(--red-hi)":"var(--ink2)"}" stroke-width="1.25"/>${bars}</svg>`; }
+const segs = (frac,hot,n=24) => { const on=Math.round(clamp(frac,0,1)*n); return `<span class="segs" style="grid-template-columns:repeat(${n},1fr)">${[...Array(n)].map((_,i)=>`<i class="${i<on?"on":""}${i<on&&hot?" hot":""}"></i>`).join("")}</span>`; };
+const rh = (l,r,cls="") => `<div class="rh"><span class="lb ${cls}">${l}</span>${r!=null?`<span class="lb r">${r}</span>`:""}</div>`;
+
+/* ---------- actions (all undoable) ---------- */
+function toast(msg,undo=true){ $("#toastMsg").textContent=msg; $("#toastUndo").style.display=undo?"":"none"; const t=$("#toast"); t.classList.add("on"); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove("on"),5000); }
+function act(id,kind){ const a=byA(id); if(!a) return; const prev={...a};
+  if(kind==="compact"){ const m=byM(a.r); a.ctx=Math.round(m.window*.28); toast(`${a.id} compacted: context ${pct(prev.ctx/m.window)} → ${pct(a.ctx/m.window)}`); }
+  else if(kind==="retry"){ a.status="running"; a.last=0; a.tools=a.tools.replace(/0$/,"1")+"2"; toast(`${a.id} retried · running`); }
+  else if(kind==="budget"){ a.budget=Math.round(a.budget*1.25); toast(`${a.id} budget ${fk(prev.budget)} → ${fk(a.budget)}`); }
+  else if(kind==="pause"){ a.status="paused"; toast(`${a.id} paused`); }
+  else if(kind==="resume"){ a.status="running"; a.last=0; toast(`${a.id} resumed`); }
+  else if(kind==="lvl+"||kind==="lvl-"){ a.lvl=clamp(a.lvl+(kind==="lvl+"?1:-1),0,3); if(a.lvl===prev.lvl) return; toast(`${a.id} reasoning ${LV[prev.lvl]} → ${LV[a.lvl]}`); }
+  H.push(()=>Object.assign(a,prev)); render(); }
+function undo(){ const f=H.pop(); if(!f){ toast("Nothing to undo.",false); return; } f(); toast("Undone.",false); render(); }
+
+/* =========================== FLEET =========================== */
+function plate(st,nd){ const lamp = nd?"var(--red-hi)":st==="RUNNING"?"var(--ink)":st==="IDLE"?"var(--line2)":"var(--ink2)";
+  return `<svg width="152" height="36" aria-hidden="true"><path d="M2 2H150L128 34H24Z" fill="var(--r1)" stroke="var(--line2)"/><path d="M2 2L76 18L150 2M76 18V34" fill="none" stroke="var(--line2)"/><path d="M76 9L85 18L76 27L67 18Z" fill="${lamp}" stroke="${nd?"var(--red-hi)":"var(--ink2)"}"/></svg>`; }
+function ctxBars(m){ const top=agentsOf(m).filter(a=>a.status!=="done").sort((a,b)=>ctxOf(b)-ctxOf(a)).slice(0,3), W=72,Hh=180,n=24, sh=(Hh-36)/n;
+  let s=`<svg width="${W}" height="${Hh}" role="img" aria-label="Context use of the ${top.length} busiest ${m.r} agents: ${top.map(a=>a.id+" "+pct(ctxOf(a))).join(", ")||"none"}">`;
+  for(let b=0;b<3;b++){ const a=top[b], x=3+b*23, f=a?ctxOf(a):0, on=Math.round(f*n);
+    for(let i=0;i<n;i++){ const y=Hh-32-(i+1)*sh, hot=a&&f>=T.ctx; s+=`<rect x="${x}" y="${y.toFixed(1)}" width="20" height="${(sh-2).toFixed(1)}" fill="${i<on?(hot&&i>=Math.floor(T.ctx*n)?"var(--red-hi)":"var(--ink2)"):"var(--r2)"}"/>`; }
+    s+=`<text x="${x+10}" y="${b===1?Hh-2:Hh-18}" text-anchor="middle">${a?a.id:""}</text>`; }
+  const ty=Hh-32-T.ctx*n*sh; s+=`<line x1="0" x2="${W}" y1="${ty}" y2="${ty}" stroke="var(--muted)" stroke-dasharray="2 2"/>`;
+  return s+`</svg>`; }
+function miniMatrix(ts){ const W=128,Hh=80; let s=`<svg width="${W}" height="${Hh}" role="img" aria-label="Assigned tasks on the importance by urgency matrix">`;
+  s+=`<rect x="${W/2}" y="0" width="${W/2}" height="${Hh/2}" fill="rgba(var(--red-rgb),.10)"/>`;
+  for(let i=0;i<=4;i++){ s+=`<line x1="${i*W/4}" x2="${i*W/4}" y1="0" y2="${Hh}" stroke="var(--line${i%2?"":"2"})"/><line y1="${i*Hh/4}" y2="${i*Hh/4}" x1="0" x2="${W}" stroke="var(--line${i%2?"":"2"})"/>`; }
+  ts.forEach(t=>{ const x=4+t.urg*(W-8), y=4+(1-t.imp)*(Hh-8); s+=`<g class="tg" data-task="${t.n}">${taskGlyph(t,x,y,5)}${S.task===t.n?`<circle class="sel-ring" cx="${x}" cy="${y}" r="9"/>`:""}</g>`; });
+  return s+`</svg>`; }
+function modelCol(m){
+  const ag=agentsOf(m), nd=needM(m), st=mState(m), sel=S.model===m.r, ts=tasksOf(m), cm=ctxMax(m), inU=m.tpmNow.in/m.tpm.in, outU=m.tpmNow.out/m.tpm.out, lvl=Math.max(...ag.map(a=>a.lvl));
+  const smax=Math.max(...m.series.in,...m.series.out);
+  return `<section class="mc${sel?" sel":""}${S.model&&!sel?" dim":""}" aria-label="${m.r} ${m.provider} ${m.model}">
+   <button class="mch" data-fk="m${m.r}" data-model="${m.r}" aria-pressed="${sel}" title="Focus ${m.r} across all screens"><span class="n29">${m.r}</span><span class="lb pv">${m.provider}</span><span class="mono mu md">${esc(m.model)}</span><span class="tc"><span class="lb mu">TASKS</span><span class="n29">${pad2(ts.length)}</span></span></button>
+   <div class="plate">${plate(st,nd)}<span class="lb ${nd?"acc":"mu"}">${nd?nd.msg:`${st} · ${ag.filter(a=>a.status!=="done").length} AGENTS`}</span></div>
+   <div class="ig">
+     <div class="ring ri">${dotRing(56,inU,inU>=T.rate,20,pct(inU))}<span class="lb mu">IN</span></div>
+     <div class="cx">${ctxBars(m)}</div>
+     <div class="ring ro">${dotRing(56,outU,outU>=T.rate,20,pct(outU))}<span class="lb mu">OUT</span></div>
+     <div class="sl"><dl class="kv"><dt>IN</dt><dd>${fk(m.tin)}</dd><dt>OUT</dt><dd>${fk(m.tout)}</dd><dt>CACHE</dt><dd>${pct(m.cache)}</dd></dl></div>
+     <div class="sr"><dl class="kv"><dt>COST</dt><dd>${usd(costOf(m))}</dd><dt>P50</dt><dd>${m.p50.toFixed(1)} s</dd><dt>WINDOW</dt><dd>${fk(m.window)}</dd></dl></div>
+   </div>
+   <div class="ctxb ${cm>=T.ctx?"hot":""}" title="Highest context use among this model's agents"><span class="lb">CTX</span><span class="n18">${pct(cm)}</span></div>
+   <div class="amx">${miniMatrix(ts)}<span class="lb mu">ASSIGNED · MAX ${LV[lvl]}</span></div>
+   <ul class="tlist">${ts.map(t=>{ const a=agentsOnTask(t.n).find(a=>a.r===m.r), n=a&&needA(a);
+      return `<li><button data-fk="mt${m.r}${t.n}" data-task="${t.n}" aria-pressed="${S.task===t.n}"><span class="mono mu">${pad2(t.n)}</span>${tglyph(t)}<span class="nm">${esc(t.name)}</span><span class="st${n?" acc":""}">${a?a.id:""}</span></button></li>`; }).join("")||'<li class="empty">No tasks assigned.</li>'}</ul>
+   <div class="roster">${rh("AGENTS",`${ag.filter(a=>a.status!=="done").length} LIVE`)}${ag.map(a=>{ const n=needA(a); return `<button class="ar" data-fk="ar${a.id}" data-agentgo="${a.id}" title="Open ${a.id} on DEVICES">${hexGlyph(a.lvl,16,!!n)}<span class="mono ink2">${a.id}</span><span class="mono mu">${LV[a.lvl]}</span><span class="mono mu">${a.dev}</span><span class="lb ${n?"acc":"mu"}">${n?n.msg.split(" ")[0]:a.status.toUpperCase()}</span></button>`; }).join("")}</div>
+   <div class="io"><span class="lb mu">${esc(m.role)}</span><div class="bars">${m.series.in.map(v=>`<i style="height:${Math.round(v/smax*100)}%"></i>`).join("")}</div><div class="bars o">${m.series.out.map(v=>`<i style="height:${Math.round(v/smax*100)}%"></i>`).join("")}</div><span class="mu">IN / OUT · LAST 60 MIN</span></div>
+  </section>`; }
+function fleetRail(){
+  const live=AGENTS.filter(a=>a.status!=="done"), nds=needsAll(), tin=MODELS.reduce((s,m)=>s+m.tin,0), tout=MODELS.reduce((s,m)=>s+m.tout,0), cost=MODELS.reduce((s,m)=>s+costOf(m),0);
+  const tot=tin+tout, op=CFG.operators.find(o=>o.id===S.op), t=S.task&&byT(S.task);
+  return `<div class="blk">${rh("FLEET",`${pad2(MODELS.length)} MODELS`)}
+     <div style="display:flex;align-items:flex-end;gap:16px"><span class="n47">${pad2(live.length)}</span><span style="padding-bottom:8px"><span class="lb">AGENTS LIVE</span><br><span class="mu">${AGENTS.length} dispatched · ${nds.length} need you</span></span></div></div>
+   <div class="blk">${rh("REPORTING TO",op.kind)}<span class="t18">${esc(op.name)}</span><span class="mu">${esc(op.role)}</span></div>
+   <div class="blk">${rh("TOKENS TODAY",null)}<div style="display:flex;gap:24px"><span><span class="n29">${fk(tin)}</span><br><span class="lb mu">IN</span></span><span><span class="n29">${fk(tout)}</span><br><span class="lb mu">OUT</span></span></div>
+     <div class="share" style="margin-top:8px" role="img" aria-label="Token share by model">${MODELS.map(m=>`<i style="width:${((m.tin+m.tout)/tot*100).toFixed(1)}%" title="${m.r} ${pct((m.tin+m.tout)/tot)}"></i>`).join("")}</div>
+     <div style="display:flex;justify-content:space-between;margin-top:4px" class="mono mu">${MODELS.map(m=>`<span>${m.r}</span>`).join("")}</div></div>
+   <div class="blk">${rh("SPEND",`OF ${usd(CFG.budget)}`)}<span class="n29">${usd(cost)}</span><div style="margin-top:8px">${segs(cost/CFG.budget,cost/CFG.budget>=T.budget)}</div></div>
+   <div class="blk">${rh("NEEDS YOU",pad2(nds.length),nds.length?"acc":"")}${nds.length?nds.map(({a,n})=>`<div class="alert"><span class="lb">${a.id} · ${a.r} · ${n.msg}</span><button class="btn s w" data-fk="al${a.id}" data-act="${n.act}" data-agent="${a.id}">${n.label}</button><span class="mu">T${pad2(a.task)} ${esc(byT(a.task).name)}</span></div>`).join(""):'<div class="empty"><b>Nothing needs you.</b>All agents are inside their limits.</div>'}</div>
+   <div class="blk key">${rh("HOW TO READ",null)}
+     <div class="kr">${dotRing(24,.5,false,12)}<span class="mu">Rate-limit use, tokens per minute in and out.</span></div>
+     <div class="kr"><svg width="24" height="24" aria-hidden="true">${[0,1,2].map(i=>`<rect x="${2+i*8}" y="4" width="6" height="18" fill="var(--r2)"/><rect x="${2+i*8}" y="${10+i*3}" width="6" height="${12-i*3}" fill="var(--ink2)"/>`).join("")}<line x1="0" x2="24" y1="6" y2="6" stroke="var(--muted)" stroke-dasharray="2 2"/></svg><span class="mu">Context window of the 3 busiest agents. Dashed line = 90%.</span></div>
+     <div class="kr">${hexGlyph(2,24)}<span class="mu">Subagent; bars = reasoning level.</span></div>
+     <div class="kr"><svg width="24" height="24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" fill="none" stroke="var(--red-hi)" stroke-width="1.75"/></svg><span class="mu"><span class="acc">Red</span> only when something needs you.</span></div></div>
+   ${t?`<div class="blk">${rh("SELECTED TASK",`T${pad2(t.n)}`)}<span class="t18">${esc(t.name)}</span><span class="mu">${quad(t)} · ${CFG.phases[t.ph].n} · due in ${due(t).toFixed(1)} d</span>${agentsOnTask(t.n).map(a=>`<span class="mono ink2">${a.id} · ${a.r} ${esc(byM(a.r).model)} · ${LV[a.lvl]}</span>`).join("")}</div>`:""}`; }
+function renderFleet(){ const el=$("#s-fleet"); el.innerHTML=`<div class="rail">${fleetRail()}</div><div class="cols" style="--n:${MODELS.length}">${MODELS.map(modelCol).join("")}</div>`; }
+
+/* =========================== MISSION =========================== */
+let BATCH=null; function buildBatch(){ const {total,done,running,failed}=CFG.batch; BATCH=[...Array(total)].map((_,i)=> i<done?"d": i<done+running?"p":"q"); failed.forEach(i=>BATCH[i]="f"); }
+function batchRing(w,h){ const c=Math.min(w,h)/2, cx=w/2, cy=h/2, R=c-16, n=BATCH.length, cnt={d:0,p:0,f:0,q:0}; BATCH.forEach(s=>cnt[s]++);
+  const frac=(cnt.d+cnt.f)/n, a0=-Math.PI/2, arc=(r,a,b)=>{ const x1=cx+r*Math.cos(a),y1=cy+r*Math.sin(a),x2=cx+r*Math.cos(b),y2=cy+r*Math.sin(b); return `M${x1.toFixed(1)} ${y1.toFixed(1)}A${r} ${r} 0 ${b-a>Math.PI?1:0} 1 ${x2.toFixed(1)} ${y2.toFixed(1)}`; };
+  let s=`<svg width="${w}" height="${h}" role="img" aria-label="Batch: ${cnt.d} of ${n} file exports done, ${cnt.p} running, ${cnt.f} need review">`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${R-7}" fill="none" stroke="var(--r2)" stroke-width="14"/><path d="${arc(R-7,a0,a0+frac*2*Math.PI-.001)}" fill="none" stroke="rgba(var(--cool-rgb),.45)" stroke-width="14"/>`;
+  BATCH.forEach((st,i)=>{ const a=a0+(i+.5)/n*2*Math.PI, r1=R-26, r2=R-(st==="f"?40:34), col=st==="d"?"var(--ink2)":st==="p"?"var(--ink)":st==="f"?"var(--red-hi)":"var(--line2)";
+    s+=`<line x1="${(cx+r1*Math.cos(a)).toFixed(1)}" y1="${(cy+r1*Math.sin(a)).toFixed(1)}" x2="${(cx+r2*Math.cos(a)).toFixed(1)}" y2="${(cy+r2*Math.sin(a)).toFixed(1)}" stroke="${col}" stroke-width="${st==="f"?2.5:1.25}"/>`; });
+  const pi=BATCH.indexOf("p"), pa=a0+(pi+.5)/n*2*Math.PI, px=cx+(R+4)*Math.cos(pa), py=cy+(R+4)*Math.sin(pa);
+  s+=`<path d="M${px.toFixed(1)} ${py.toFixed(1)}l${(10*Math.cos(pa+2.6)).toFixed(1)} ${(10*Math.sin(pa+2.6)).toFixed(1)}l${(10*Math.cos(pa-2.6)-10*Math.cos(pa+2.6)).toFixed(1)} ${(10*Math.sin(pa-2.6)-10*Math.sin(pa+2.6)).toFixed(1)}z" fill="var(--ink)"/>`;
+  s+=`<text class="big" x="${cx}" y="${cy+8}" text-anchor="middle">${cnt.d}</text><text x="${cx}" y="${cy+32}" text-anchor="middle">OF ${n} EXPORTS</text>`;
+  return {svg:s+`</svg>`, cnt}; }
+function journeyRadial(w,h){ const cx=w/2, cy=h/2, R=Math.max(120,Math.min(w/2-72,h/2-24)), n=CFG.phases.length, gap=.03, live=CFG.livePhase, sec=2*Math.PI/n, a0=-Math.PI/2;
+  const arc=(r1,r2,a,b)=>{ const p=(r,t)=>`${(cx+r*Math.cos(t)).toFixed(1)} ${(cy+r*Math.sin(t)).toFixed(1)}`; return `M${p(r2,a)}A${r2} ${r2} 0 0 1 ${p(r2,b)}L${p(r1,b)}A${r1} ${r1} 0 0 0 ${p(r1,a)}Z`; };
+  let s=`<svg width="${w}" height="${h}" role="img" aria-label="Journey: phase ${live+1} of ${n}, ${CFG.phases[live].n}. Tasks placed by phase; distance from the centre shows difficulty.">`;
+  [1,2,3,4,5].forEach(d=>{ const r=R*(.30+(5-d)/4*.52); s+=`<circle cx="${cx}" cy="${cy}" r="${r.toFixed(1)}" fill="none" stroke="var(--line2)" stroke-dasharray="1 4"/>`; });
+  CFG.phases.forEach((p,i)=>{ const a=a0+i*sec+gap, b=a0+(i+1)*sec-gap, st=i<live?"done":i===live?"live":"next", mid=(a+b)/2, lr=R+16, lx=cx+lr*Math.cos(mid), ly=cy+lr*Math.sin(mid);
+    s+=`<path d="${arc(R-12,R,a,b)}" fill="${st==="done"?"rgba(var(--cool-rgb),.45)":st==="live"?"var(--ink)":"none"}" stroke="${st==="next"?"var(--line2)":"none"}" stroke-dasharray="${st==="next"?"2 3":"0"}"/>`;
+    const an=Math.cos(mid)>.2?"start":Math.cos(mid)<-.2?"end":"middle";
+    s+=`<text class="${st==="next"?"":"k"}" x="${lx.toFixed(1)}" y="${(ly+4).toFixed(1)}" text-anchor="${an}">${pad2(i+1)} ${p.n}</text>`;
+    const ts=TASKS.filter(t=>t.ph===i); ts.forEach((t,j)=>{ const ta=a+(j+1)/(ts.length+1)*(b-a), r=R*(.30+(5-t.diff)/4*.52), x=cx+r*Math.cos(ta), y=cy+r*Math.sin(ta);
+      s+=`<g class="tg" data-task="${t.n}" style="cursor:pointer"><circle class="hit" cx="${x}" cy="${y}" r="12"/>${taskGlyph(t,x,y,6)}${S.task===t.n?`<circle class="sel-ring" cx="${x}" cy="${y}" r="11"/>`:""}</g>`; }); });
+  const lp=CFG.phases[live], nx=CFG.phases[live+1], f=nx?clamp((0-lp.d)/(nx.d-lp.d),0,1):0, pa=a0+live*sec+gap+f*(sec-2*gap);
+  s+=`<line x1="${cx}" y1="${cy}" x2="${(cx+(R+4)*Math.cos(pa)).toFixed(1)}" y2="${(cy+(R+4)*Math.sin(pa)).toFixed(1)}" stroke="var(--ink)" stroke-width="1"/>`;
+  const hub=Math.max(R*.22,44); s+=`<circle cx="${cx}" cy="${cy}" r="${hub}" fill="var(--void)" stroke="var(--line2)"/><text class="mid" x="${cx}" y="${cy+2}" text-anchor="middle">${pad2(live+1)}/${pad2(n)}</text><text class="k" x="${cx}" y="${cy+20}" text-anchor="middle">${lp.n}</text>`;
+  s+=`<text x="${cx}" y="${(cy-R*.82-6).toFixed(1)}" text-anchor="middle">EASY</text>`;
+  if(R*.30-Math.max(R*.22,44)>=20) s+=`<text x="${cx}" y="${(cy-R*.22-6).toFixed(1)}" text-anchor="middle">HARD</text>`;   // only when the gap between hub and hardest ring fits a label
+  return s+`</svg>`; }
+function duePressure(w,h){ const x0=48, B=24, cy=(h-B)/2, rx=w-x0-48, ry=cy-16, open=TASKS.filter(t=>t.status!=="done"), f=d=>Math.sqrt(Math.min(d,14)/14);
+  const soon=open.filter(t=>due(t)<=1), ell=(k,full)=>{ const a=rx*k, b=ry*k; return full?`M${x0} ${cy-b}A${a} ${b} 0 0 1 ${x0} ${cy+b}Z`:`M${x0} ${cy-b}A${a} ${b} 0 0 1 ${x0} ${cy+b}`; };
+  let s=`<svg width="${w}" height="${h}" role="img" aria-label="Due pressure: ${soon.length} task due within 24 hours. Distance from the left edge is time until due; height is importance.">`;
+  s+=`<path d="${ell(f(1),true)}" fill="${soon.length?"rgba(var(--red-rgb),.22)":"var(--r1)"}"/>`;
+  [1,3,7,14].forEach(d=>{ s+=`<path d="${ell(f(d))}" fill="none" stroke="var(--line2)" ${d===14?"":'stroke-dasharray="1 4"'}/>`; });
+  s+=`<line x1="${x0}" x2="${x0+rx+8}" y1="${cy}" y2="${cy}" stroke="var(--line2)" stroke-dasharray="1 4"/><line x1="${x0}" x2="${x0}" y1="${cy-ry-8}" y2="${cy+ry+8}" stroke="var(--ink2)"/>`;
+  s+=`<text class="k" x="${x0-8}" y="${cy-ry+4}" text-anchor="end">IMP+</text><text class="k" x="${x0-8}" y="${cy+ry+4}" text-anchor="end">IMP−</text>`;
+  // time ruler under the plot (labels never sit on the data)
+  s+=`<line x1="${x0}" x2="${x0+rx}" y1="${h-B+4}" y2="${h-B+4}" stroke="var(--line2)"/>`; [[0,"NOW"],[1,"1D"],[3,"3D"],[7,"7D"],[14,"14D"]].forEach(([d,l])=>{ const x=x0+rx*f(d); s+=`<line x1="${x}" x2="${x}" y1="${h-B}" y2="${h-B+8}" stroke="var(--muted)"/><text x="${x}" y="${h-2}" text-anchor="${d===0?"start":d===14?"end":"middle"}">${l}</text>`; });
+  const pts=open.map(t=>{ const k=Math.max(.06,f(due(t))), ang=(-90+(1-t.imp)*180)*Math.PI/180; return {t,x:x0+rx*k*Math.cos(ang),y:cy+ry*k*Math.sin(ang)}; }), glyph=pts.map(p=>({x:p.x-8,y:p.y-8,w:16,h:16})), placed=[];
+  const hit=(a,b)=>a.x<b.x+b.w&&b.x<a.x+a.w&&a.y<b.y+b.h&&b.y<a.y+a.h;
+  pts.forEach(p=>{ let L=null; for(const [dx,dy,an] of [[12,4,"start"],[-12,4,"end"],[0,-12,"middle"],[0,20,"middle"]]){ const x=p.x+dx, bx=an==="start"?x:an==="end"?x-18:x-9, box={x:bx,y:p.y+dy-11,w:18,h:14};
+      if(bx<x0+2||bx+18>w||placed.some(q=>hit(q,box))||glyph.some((g,i)=>pts[i]!==p&&hit(g,box))) continue; placed.push(box); L={x,y:p.y+dy,an}; break; }
+    s+=`<g class="tg" data-task="${p.t.n}" style="cursor:pointer"><circle class="hit" cx="${p.x}" cy="${p.y}" r="12"/>${taskGlyph(p.t,p.x,p.y,6)}${S.task===p.t.n?`<circle class="sel-ring" cx="${p.x}" cy="${p.y}" r="11"/>`:""}${L?`<text class="t" x="${L.x}" y="${L.y}" text-anchor="${L.an}">${pad2(p.t.n)}</text>`:""}</g>`; });
+  return {svg:s+`</svg>`, soon}; }
+function forecast(){ // bootstrap finish dates from the reference-class throughput
+  const open=TASKS.filter(t=>t.status!=="done").length, hist=CFG.throughput; let sd=11; const r=()=> (sd=(sd*16807)%2147483647)/2147483647;
+  const runs=[]; for(let k=0;k<2000;k++){ let left=open, d=0; while(left>0&&d<60){ left-=hist[Math.floor(r()*hist.length)]; d++; } runs.push(d); }
+  runs.sort((a,b)=>a-b); const q=p=>runs[Math.floor(p*(runs.length-1))];
+  return {open, p10:q(.1), p50:q(.5), p90:q(.9), onTime:runs.filter(d=>d<=CFG.deadline).length/runs.length, mean:hist.reduce((a,b)=>a+b,0)/hist.length, n:runs.length}; }
+function forecastCone(w,h,F){ const L=48,R=24,Tp=24,B=32, pw=w-L-R, ph=h-Tp-B, x0=-6, x1=Math.max(14,F.p90+2), tot=TASKS.length, done=tot-F.open;
+  const X=d=>L+(d-x0)/(x1-x0)*pw, Y=v=>Tp+(1-v/tot)*ph, late=F.onTime<.5;
+  let s=`<svg width="${w}" height="${h}" role="img" aria-label="Forecast: median finish day ${F.p50}, 90th percentile day ${F.p90}, deadline day ${CFG.deadline}; ${pct(F.onTime)} of simulated runs finish on time.">`;
+  const step=[1,2,4,7].find(k=>pw/((x1-x0)/k)>=48)||14;   // keep ≥ 48 px between day labels
+  for(let d=Math.ceil(x0/step)*step; d<=x1; d+=step){ s+=`<line x1="${X(d)}" x2="${X(d)}" y1="${Tp}" y2="${Tp+ph}" stroke="var(--line)"/><text x="${X(d)}" y="${h-8}" text-anchor="middle">${d===0?"NOW":(d>0?"D+":"D−")+pad2(Math.abs(d))}</text>`; }
+  [0,6,12,18].forEach(v=>{ s+=`<line x1="${L}" x2="${L+pw}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${L-8}" y="${Y(v)+4}" text-anchor="end">${v}</text>`; });
+  s+=`<line x1="${L}" x2="${L+pw}" y1="${Y(tot)}" y2="${Y(tot)}" stroke="var(--ink2)"/><text class="k" x="${L+4}" y="${Y(tot)-6}">ALL ${tot} TASKS</text>`;
+  s+=`<path d="M${X(0)} ${Y(done)}L${X(F.p10)} ${Y(tot)}L${X(F.p90)} ${Y(tot)}Z" fill="rgba(var(--cool-rgb),.18)"/>`;
+  for(let k=0;k<=8;k++){ const d=F.p10+(F.p90-F.p10)*k/8; s+=`<line x1="${X(0)}" y1="${Y(done)}" x2="${X(d)}" y2="${Y(tot)}" stroke="var(--line2)" stroke-width="1"/>`; }
+  s+=`<line x1="${X(0)}" y1="${Y(done)}" x2="${X(F.p50)}" y2="${Y(tot)}" stroke="var(--ink)" stroke-width="1.5"/><text class="t" x="${X(F.p50)}" y="${Y(tot)-6}" text-anchor="middle">P50 D+${pad2(F.p50)}</text>`;
+  s+=`<polyline points="${[-6,-5,-4,-3,-2,-1,0].map((d,i)=>`${X(d)},${Y([0,0,0,1,1,1,done][i])}`).join(" ")}" fill="none" stroke="var(--ink2)" stroke-width="1.5"/>`;
+  s+=`<line x1="${X(0)}" x2="${X(0)}" y1="${Tp}" y2="${Tp+ph}" stroke="var(--ink2)" stroke-dasharray="2 3"/>`;
+  s+=`<line x1="${X(CFG.deadline)}" x2="${X(CFG.deadline)}" y1="${Tp}" y2="${Tp+ph}" stroke="${late?"var(--red-hi)":"var(--ink2)"}" stroke-width="1.5"/><text class="k" x="${X(CFG.deadline)+6}" y="${Tp+ph-8}" ${late?'style="fill:var(--red-hi)"':""}>DEADLINE D+${pad2(CFG.deadline)}</text>`;
+  s+=`<circle cx="${X(0)}" cy="${Y(done)}" r="4" fill="var(--ink)"/>`;
+  return s+`</svg>`; }
+function renderMission(){ const el=$("#s-mission"), F=forecast(), late=F.onTime<.5, open=TASKS.filter(t=>t.status!=="done");
+  const t=S.task?byT(S.task):null, blocked=TASKS.filter(x=>x.status==="blocked").length, dueSoon=open.filter(x=>due(x)<=1).length, cost=MODELS.reduce((s,m)=>s+costOf(m),0);
+  el.innerHTML=`
+   <div class="inst" id="i-batch">${rh("BATCH · RESIZE → LUT → PNG",`${CFG.batch.total} FILES`)}<div class="plot"></div><div class="ro" id="ro-batch"><span>&nbsp;</span></div></div>
+   <div class="inst" id="i-journey">${rh("JOURNEY",`PHASE ${pad2(CFG.livePhase+1)} / ${pad2(CFG.phases.length)}`)}<div class="plot"></div><div class="ro"><span class="say">Each ◇ is a task in its phase. Outer ring is easy, the centre is hard.</span></div></div>
+   <div class="inst" id="i-sum">${rh("SESSION",CFG.phases[CFG.livePhase].n)}<div class="sumclock"><span class="n47" id="sclock">00:23:15</span><br><span class="lb mu">ELAPSED · T+</span></div>
+     <dl class="kv"><dt>TASKS</dt><dd>${TASKS.length}</dd><dt>DO FIRST</dt><dd>${pad2(open.filter(x=>quad(x)==="DO FIRST").length)}</dd><dt>BLOCKED</dt><dd class="${blocked?"acc":""}">${pad2(blocked)}</dd><dt>DUE ≤ 24 H</dt><dd class="${dueSoon?"acc":""}">${pad2(dueSoon)}</dd><dt>ON TIME</dt><dd class="${late?"acc":""}">${pct(F.onTime)}</dd><dt>SPEND</dt><dd>${usd(cost)}</dd></dl>
+     <div style="margin-top:16px">${t?missionCard(t):`<div class="empty"><b>No task selected.</b>Pick a ◇ in any instrument.</div>`}</div></div>
+   <div class="inst" id="i-due">${rh("DUE PRESSURE","TIME TO DUE × IMPORTANCE")}<div class="plot"></div><div class="ro" id="ro-due"><span>&nbsp;</span><span class="say">Closer to the left edge means due sooner; higher means more important.</span></div></div>
+   <div class="inst" id="i-cone">${rh("DELIVERY FORECAST",`${F.n.toLocaleString()} SIMULATED RUNS`)}<div class="plot"></div>
+     <div class="ro"><span>P50 FINISH <b>D+${pad2(F.p50)}</b></span><span>P90 <b>D+${pad2(F.p90)}</b></span><span>DEADLINE <b>D+${pad2(CFG.deadline)}</b></span><span>ON TIME <b class="${late?"acc":""}">${pct(F.onTime)}</b></span>
+     <span class="say">At the recent pace (${F.mean.toFixed(1)} tasks a day), all ${TASKS.length} tasks finish by the deadline in ${pct(F.onTime)} of runs.${late?" Cut scope or add capacity.":""}</span></div></div>`;
+  const box=id=>{ const b=$(`#${id} .plot`); return [b,b.clientWidth,b.clientHeight]; };
+  let [b,w,h]=box("i-batch"); const br=batchRing(w,h); b.innerHTML=br.svg;
+  $("#ro-batch").innerHTML=`<span><b>${br.cnt.p}</b> RUNNING</span><span><b class="${br.cnt.f?"acc":""}">${br.cnt.f}</b> NEED REVIEW</span><span><b>${br.cnt.q}</b> QUEUED</span><span>▲ = NOW</span>`;
+  [b,w,h]=box("i-journey"); b.innerHTML=journeyRadial(w,h);
+  [b,w,h]=box("i-due"); const dp=duePressure(w,h); b.innerHTML=dp.svg;
+  $("#ro-due").innerHTML=`<span><b class="${dp.soon.length?"acc":""}">${dp.soon.length}</b> DUE ≤ 24 H</span><span><b>${open.filter(x=>due(x)<=3).length}</b> ≤ 3 DAYS</span><span class="say">Closer to the left edge means due sooner; higher means more important.</span>`;
+  [b,w,h]=box("i-cone"); b.innerHTML=forecastCone(w,h,F); }
+function missionCard(t){ const ag=agentsOnTask(t.n);
+  return `<div class="tcard"><div class="row"><span class="lb">T${pad2(t.n)}</span><span class="mu">${t.src}</span><span class="pill ${t.status==="blocked"?"acc":""}">${t.status.toUpperCase()}</span></div><span class="t18">${esc(t.name)}</span>
+   <span class="lb ${quad(t)==="DO FIRST"?"acc":"mu"}">${quad(t)} · ${CFG.phases[t.ph].n}</span><span class="mu">Due in ${due(t).toFixed(1)} d · difficulty ${t.diff}/5</span>
+   ${ag.length?ag.map(a=>{ const n=needA(a); return `<div class="agrow">${hexGlyph(a.lvl,24,!!n)}<span class="mono ink2">${a.id} · ${a.r} · ${LV[a.lvl]}</span>${n?`<button class="btn s w" data-fk="mc${a.id}" data-act="${n.act}" data-agent="${a.id}" style="margin-left:auto">${n.label}</button>`:`<span class="mu" style="margin-left:auto">${a.status.toUpperCase()}</span>`}</div>`; }).join(""):'<span class="mu">No agent assigned.</span>'}</div>`; }
+
+/* =========================== OPERATOR =========================== */
+function sigil(op){ return `<svg viewBox="0 0 96 96" aria-hidden="true">${op.kind==="AGENT"?`<polygon points="48,14 78,31 78,65 48,82 18,65 18,31" fill="none" stroke="var(--ink2)" stroke-width="1.5"/><polygon points="48,30 64,39 64,57 48,66 32,57 32,39" fill="var(--r2)" stroke="var(--line2)"/>`:`<circle cx="48" cy="38" r="16" fill="var(--r2)" stroke="var(--ink2)" stroke-width="1.5"/><path d="M18 88c4-18 16-26 30-26s26 8 30 26" fill="var(--r2)" stroke="var(--ink2)" stroke-width="1.5"/>`}<text x="48" y="${op.kind==="AGENT"?52:43}" text-anchor="middle" class="k" style="font-size:11px">${op.initials}</text></svg>`; }
+function renderOpLeft(){ const op=CFG.operators.find(o=>o.id===S.op), c={run:0,wait:0,pause:0}, nds=needsAll();
+  AGENTS.forEach(a=>{ if(a.status==="running") c.run++; else if(a.status==="waiting") c.wait++; else if(a.status==="paused") c.pause++; });
+  const wm=Math.max(...WAVE);
+  $("#op-left").innerHTML=`
+   <div class="blk"><div style="display:flex;align-items:baseline;justify-content:space-between"><span class="n29">ONLINE</span><span class="n18 mono" id="oclock">00:23:15</span></div>
+     <div class="seg" role="group" aria-label="Operator" style="margin-top:8px;align-self:flex-start">${CFG.operators.map(o=>`<button data-fk="op${o.id}" data-op="${o.id}" aria-pressed="${S.op===o.id}">${o.kind}</button>`).join("")}</div></div>
+   <div class="opcard"><div class="av">${op.avatar?`<img src="${esc(op.avatar)}" alt="${esc(op.name)}">`:sigil(op)}</div><div><span class="t18">${esc(op.name)}</span><br><span class="mu">${esc(op.role)}</span><br><span class="lb mu">${CFG.location.label}</span></div></div>
+   <div class="blk">${rh("ACTIVITY","TOKENS / S")}<div class="wave" role="img" aria-label="Token throughput, last 64 seconds">${WAVE.map(v=>`<i style="height:${Math.round(v/wm*100)}%"></i>`).join("")}</div></div>
+   <div class="blk">${rh("MISSION",null)}<span class="ink2">${esc(CFG.project)}</span></div>
+   <div class="blk">${rh("AGENTS",pad2(AGENTS.length))}
+     <div class="cnt">${hexGlyph(2,24)}<span class="lb">RUNNING</span><span class="n18">${pad2(c.run)}</span></div>
+     <div class="cnt">${hexGlyph(0,24)}<span class="lb">WAITING</span><span class="n18">${pad2(c.wait)}</span></div>
+     <div class="cnt">${hexGlyph(1,24)}<span class="lb">PAUSED</span><span class="n18">${pad2(c.pause)}</span></div>
+     <div class="cnt${nds.length?" acc":""}">${hexGlyph(3,24,nds.length>0)}<span class="lb">NEEDS YOU</span><span class="n18">${pad2(nds.length)}</span></div></div>
+   <div class="blk">${rh("APPROVALS",null)}<div class="seg" role="group" aria-label="Approvals" style="align-self:flex-start"><button data-fk="apask" data-appr="ask" aria-pressed="${S.approvals==="ask"}">ASK FIRST</button><button data-fk="apauto" data-appr="auto" aria-pressed="${S.approvals==="auto"}">AUTO</button></div>
+     <span class="mu" style="margin-top:8px">${S.approvals==="ask"?"Agents stop and ask before any step that cannot be undone.":"Agents act without asking. Irreversible steps still ask."}</span></div>`; }
+function routeInfo(m){ const [a,b]=[CFG.location.lnglat,m.ep.lnglat], R=6371, toR=x=>x*Math.PI/180, dl=toR(b[0]-a[0]), dp=toR(b[1]-a[1]);
+  const h=Math.sin(dp/2)**2+Math.cos(toR(a[1]))*Math.cos(toR(b[1]))*Math.sin(dl/2)**2, km=2*R*Math.asin(Math.sqrt(h));
+  const ok=CFG.policy.allowed.some(p=>p.code===m.region); return {km, rtt:Math.round(2*km/200+20), ok}; }   // fibre ≈ 200 km/ms + 20 ms overhead (estimate)
+function renderOpRight(){ const L=S.map.layers, m=S.model&&byM(S.model);
+  $("#op-right").innerHTML=`
+   <div class="blk feeds">${rh("FEEDS",`${CFG.links.filter(l=>l.on).length} LINKED`)}${CFG.links.map(l=>`<div class="row"><i class="d${l.on?" on":""}"></i><span class="lb${l.on?"":" mu"}">${l.n}</span><span class="mu">${l.s}</span></div>`).join("")}</div>
+   <div class="blk">${rh("VIEW",null)}<div class="seg" role="group" aria-label="Map view" style="align-self:flex-start"><button data-fk="mvg" data-mview="global" aria-pressed="${S.map.view==="global"}">GLOBAL</button><button data-fk="mvl" data-mview="local" aria-pressed="${S.map.view==="local"}">LOCAL</button></div>
+     <div class="seg" role="group" aria-label="Map style" style="align-self:flex-start;margin-top:8px"><button data-fk="msv" data-mstyle="vector" aria-pressed="${S.map.style==="vector"}">VECTOR</button><button data-fk="mss" data-mstyle="sat" aria-pressed="${S.map.style==="sat"}">TERRAIN</button></div></div>
+   <div class="blk">${rh("LAYERS",null)}<div class="chips">${Object.keys(L).map(k=>`<button class="chip" data-fk="ly${k}" data-layer="${k}" aria-pressed="${L[k]}">${k.toUpperCase()}</button>`).join("")}</div></div>
+   <div class="blk">${rh("ROTATION",`${String(Math.round(((S.map.bearing%360)+360)%360)).padStart(3,"0")}°`)}<div class="rot"><button class="btn" data-fk="rl" data-rot="-15" aria-label="Rotate left">L</button><button class="btn" data-fk="rr" data-rot="15" aria-label="Rotate right">R</button><button class="btn" data-fk="r0" data-rot="0" aria-label="Reset north" style="width:auto;padding:0 8px">N</button></div></div>
+   <div class="blk">${rh("ROUTES",`${MODELS.length}`)}${MODELS.map(x=>{ const ri=routeInfo(x); return `<button class="cnt" data-fk="rt${x.r}" data-model="${x.r}" aria-pressed="${S.model===x.r}" style="width:100%;${S.model&&S.model!==x.r&&ri.ok?"opacity:.4":""}"><span class="lb">${x.r}</span><span class="mu">${x.ep.label}</span><span class="mono ${ri.ok?"ink2":"acc"}">${ri.ok?"~"+ri.rtt+" ms":"OUT OF POLICY"}</span></button>`; }).join("")}
+     <span class="mu" style="margin-top:8px">${esc(CFG.policy.text)} Latency is estimated from distance.</span></div>`; }
+function renderOperator(){ renderOpLeft(); renderOpRight(); $("#mapMode").textContent=`· ${S.map.view.toUpperCase()} · ${S.map.style==="sat"?"TERRAIN":"VECTOR"}`;
+  const viol=MODELS.filter(m=>!routeInfo(m).ok).length;
+  $("#mapLegend").innerHTML=`<span><svg width="12" height="12"><path d="M6 1l5 10H1z" fill="var(--ink)"/></svg>${S.op==="agent"?"ORCHESTRATOR":"YOU"}</span><span><svg width="12" height="12"><path d="M6 1l5 5-5 5-5-5z" fill="none" stroke="var(--ink2)"/></svg>MODEL ENDPOINT</span><span><svg width="12" height="12"><rect x="2" y="2" width="8" height="8" fill="var(--ink2)"/></svg>DEVICE</span><span><svg width="24" height="8"><line x1="0" x2="24" y1="4" y2="4" stroke="var(--ink2)" stroke-dasharray="2 3"/></svg>ROUTE</span><span><svg width="16" height="12"><rect width="16" height="12" fill="url(#hatchL)"/><defs><pattern id="hatchL" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="var(--line2)" stroke-width="1.5"/></pattern></defs></svg>OUTSIDE POLICY</span><span style="margin-left:auto" class="lb ${viol?"acc":"mu"}">${viol?viol+" ROUTE OUT OF POLICY":"ALL ROUTES IN POLICY"}</span>`;
+  ensureMap(); drawOverlay(); syncMap(); }
+
+/* ---------- Mapbox (lazy; poster-style vector theme per palette, à la map-to-poster) ---------- */
+let MAP=null, mapState="idle", MK=[];
+const unwrap = lng => { const o=CFG.location.lnglat[0]; let x=lng; while(x-o>180) x-=360; while(x-o<-180) x+=360; return x; };
+function mapMsg(t){ const m=$("#mapMsg"); m.innerHTML=t||""; m.classList.toggle("on",!!t); }
+function ensureMap(){ if(mapState!=="idle") return; mapState="loading"; $("#mapStat").textContent="LOADING MAP…"; mapMsg("<b class='lb'>LOADING MAP…</b>");
+  const fail=why=>{ if(mapState==="ready") return; mapState="error"; $("#mapStat").textContent="MAP OFFLINE"; mapMsg(`<span class="lb acc">MAP OFFLINE</span><br><span class="mu">${esc(why)} The routes are still listed on the right, and the grid shows them in a flat projection.</span>`); drawOverlay(); };
+  if(!CFG.mapbox.token){fail("Mapbox is not configured for this host.");return;}
+  const to=setTimeout(()=>fail("Mapbox did not answer in 15 s (network or token)."),15000);
+  const l=document.createElement("link"); l.rel="stylesheet"; l.href=CFG.mapbox.css; document.head.appendChild(l);
+  const sc=document.createElement("script"); sc.src=CFG.mapbox.js; sc.onerror=()=>{ clearTimeout(to); fail("Could not load Mapbox GL JS."); };
+  sc.onload=()=>{ try{
+      if(!window.mapboxgl||!mapboxgl.supported?.({failIfMajorPerformanceCaveat:false})&&mapboxgl.supported){ clearTimeout(to); return fail("This browser has no WebGL."); }
+      mapboxgl.accessToken=CFG.mapbox.token;
+      const cam0=camera(); MAP=new mapboxgl.Map({container:"map", style:mapStyle(), ...(cam0.bounds?{bounds:cam0.bounds,fitBoundsOptions:{padding:cam0.padding}}:cam0), bearing:cam0.bearing, projection:"mercator", attributionControl:false, renderWorldCopies:true, preserveDrawingBuffer:true, cooperativeGestures:false});
+      MAP.addControl(new mapboxgl.AttributionControl({compact:true}),"bottom-right");
+      MAP.on("load",()=>{ clearTimeout(to); mapState="ready"; mapMsg(""); addOverlays(); syncMap(); $("#mapStat").textContent=`${MODELS.length} ROUTES`; window.__lt.mapReady=true; });
+      MAP.on("error",e=>{ if(mapState!=="ready"){ clearTimeout(to); fail("Mapbox error: "+(e?.error?.message||"unknown")+"."); } });
+      MAP.on("move",drawOverlay);
+    }catch(e){ clearTimeout(to); fail("Map failed to start: "+e.message); } };
+  document.head.appendChild(sc); }
+function mapColors(){ return {land:css("--m-land"),water:css("--m-water"),park:css("--m-park"),r1:css("--m-road1"),r2:css("--m-road2"),r3:css("--m-road3"),admin:css("--m-admin"),ink:css("--ink"),ink2:css("--ink2"),red:css("--red-hi"),line2:css("--line2")}; }
+function mapStyle(){ const c=mapColors(), sat=S.map.style==="sat";
+  return { version:8, sources:{ streets:{type:"vector",url:"mapbox://mapbox.mapbox-streets-v8"}, sat:{type:"raster",url:"mapbox://mapbox.satellite",tileSize:256} },
+    layers:[
+      {id:"bg",type:"background",paint:{"background-color":c.land}},
+      {id:"sat",type:"raster",source:"sat",layout:{visibility:sat?"visible":"none"},paint:{"raster-saturation":-1,"raster-contrast":.15,"raster-brightness-max":S.theme==="white"?1:.6,"raster-brightness-min":S.theme==="white"?.25:0}},
+      {id:"water",type:"fill",source:"streets","source-layer":"water",layout:{visibility:sat?"none":"visible"},paint:{"fill-color":c.water}},
+      {id:"park",type:"fill",source:"streets","source-layer":"landuse",filter:["match",["get","class"],["park","wood","grass","scrub"],true,false],layout:{visibility:sat?"none":"visible"},paint:{"fill-color":c.park}},
+      {id:"road3",type:"line",source:"streets","source-layer":"road",minzoom:11,filter:["match",["get","class"],["tertiary","street","street_limited"],true,false],paint:{"line-color":c.r3,"line-width":["interpolate",["linear"],["zoom"],11,.4,16,2]}},
+      {id:"road2",type:"line",source:"streets","source-layer":"road",minzoom:7,filter:["match",["get","class"],["primary","secondary"],true,false],paint:{"line-color":c.r2,"line-width":["interpolate",["linear"],["zoom"],7,.4,16,3]}},
+      {id:"road1",type:"line",source:"streets","source-layer":"road",minzoom:4,filter:["match",["get","class"],["motorway","trunk"],true,false],paint:{"line-color":c.r1,"line-width":["interpolate",["linear"],["zoom"],4,.4,16,4]}},
+      {id:"admin",type:"line",source:"streets","source-layer":"admin",filter:["==",["get","admin_level"],0],paint:{"line-color":c.admin,"line-width":.6}},
+    ]}; }
+function camera(){ if(S.map.view==="local") return {center:CFG.location.lnglat, zoom:13.2, bearing:S.map.bearing};
+  const pts=[CFG.location.lnglat,...MODELS.map(m=>[unwrap(m.ep.lnglat[0]),m.ep.lnglat[1]])], lo=pts.map(p=>p[0]), la=pts.map(p=>p[1]);
+  return {bounds:[[Math.min(...lo)-6,Math.min(...la)-10],[Math.max(...lo)+6,Math.max(...la)+14]], bearing:S.map.bearing, padding:{top:40,bottom:40,left:48,right:176}}; }
+function gc(a,b,n=64){ const toR=x=>x*Math.PI/180, toD=x=>x*180/Math.PI, [l1,p1]=a.map(toR), [l2,p2]=b.map(toR);
+  const v=(l,p)=>[Math.cos(p)*Math.cos(l),Math.cos(p)*Math.sin(l),Math.sin(p)], A=v(l1,p1), B=v(l2,p2), d=Math.acos(clamp(A[0]*B[0]+A[1]*B[1]+A[2]*B[2],-1,1)); const out=[];
+  for(let i=0;i<=n;i++){ const f=i/n, s1=Math.sin((1-f)*d)/Math.sin(d), s2=Math.sin(f*d)/Math.sin(d), x=s1*A[0]+s2*B[0], y=s1*A[1]+s2*B[1], z=s1*A[2]+s2*B[2]; out.push([toD(Math.atan2(y,x)),toD(Math.atan2(z,Math.hypot(x,y)))]); }
+  for(let i=1;i<out.length;i++){ while(out[i][0]-out[i-1][0]>180) out[i][0]-=360; while(out[i][0]-out[i-1][0]<-180) out[i][0]+=360; }
+  const sh=unwrap(out[0][0])-out[0][0]; return out.map(p=>[p[0]+sh,p[1]]); }
+function hatchImage(col){ const s=12, d=new Uint8Array(s*s*4), [r,g,b]=hex2(col.length===7?col:"#888888"); for(let y=0;y<s;y++) for(let x=0;x<s;x++){ const on=((x+y)%s)<1, i=(y*s+x)*4; d[i]=r; d[i+1]=g; d[i+2]=b; d[i+3]=on?255:0; } return {width:s,height:s,data:d}; }
+function policyGeo(){ const world=[[-540,-80],[540,-80],[540,84],[-540,84],[-540,-80]], holes=[]; CFG.policy.allowed.forEach(p=>{ const [a,b,c,d]=p.box; for(const k of [-360,0,360]) holes.push([[a+k,b],[a+k,d],[c+k,d],[c+k,b],[a+k,b]]); });
+  return {type:"Feature",geometry:{type:"Polygon",coordinates:[world,...holes]}}; }
+function addOverlays(){ if(!MAP) return; const c=mapColors();
+  if(!MAP.hasImage("hatch")) MAP.addImage("hatch",hatchImage(c.line2));
+  MAP.addSource("policy",{type:"geojson",data:policyGeo()});
+  MAP.addLayer({id:"policy",type:"fill",source:"policy",maxzoom:5,paint:{"fill-pattern":"hatch","fill-opacity":+css("--m-hatch")||.2}});
+  MAP.addSource("allowed",{type:"geojson",data:{type:"FeatureCollection",features:CFG.policy.allowed.flatMap(p=>[-360,0,360].map(k=>{ const [a,b,c2,d]=p.box; return {type:"Feature",properties:{code:p.code},geometry:{type:"Polygon",coordinates:[[[a+k,b],[a+k,d],[c2+k,d],[c2+k,b],[a+k,b]]]}}; }))}});
+  MAP.addLayer({id:"allowed",type:"line",source:"allowed",maxzoom:5,paint:{"line-color":c.ink2,"line-width":1,"line-dasharray":[4,2],"line-opacity":.8}});
+  MAP.addSource("routes",{type:"geojson",data:{type:"FeatureCollection",features:[]}});
+  MAP.addLayer({id:"routes",type:"line",source:"routes",layout:{"line-cap":"round"},paint:{"line-color":["case",["get","bad"],c.red,["get","sel"],c.ink,c.ink2],"line-width":["case",["get","bad"],2,["get","sel"],2,1.2],"line-dasharray":[1,3],"line-opacity":["case",["get","bad"],1,["get","dim"],.25,.9]}}); }
+function markerEl(kind,label,key,cls=""){ const el=document.createElement("div"); el.className="mk "+cls; el.dataset.fk="mk"+key; if(kind==="ep"){ el.dataset.model=key; el.setAttribute("role","button"); el.tabIndex=0; el.setAttribute("aria-label",`Focus ${key}`); }
+  const g=kind==="op"?`<path d="M7 1l6 12H1z" fill="var(--ink)"/>`:kind==="ep"?`<path d="M7 1l6 6-6 6-6-6z" fill="var(--m-land)" stroke="${cls.includes("bad")?"var(--red-hi)":"var(--ink2)"}" stroke-width="1.5"/>`:`<rect x="3" y="3" width="8" height="8" fill="var(--ink2)"/>`;
+  el.innerHTML=`<svg width="14" height="14" aria-hidden="true">${g}</svg><span>${label}</span>`; return el; }
+function syncMap(){ if(!MAP||mapState!=="ready") return; const c=mapColors(), L=S.map.layers;
+  $("#mapBox").dataset.style=S.map.style;
+  [["bg","background-color",c.land],["water","fill-color",c.water],["park","fill-color",c.park],["road1","line-color",c.r1],["road2","line-color",c.r2],["road3","line-color",c.r3],["admin","line-color",c.admin]].forEach(([id,p,v])=>MAP.setPaintProperty(id,p,v));
+  MAP.setLayoutProperty("sat","visibility",S.map.style==="sat"?"visible":"none"); ["water","park"].forEach(id=>MAP.setLayoutProperty(id,"visibility",S.map.style==="sat"?"none":"visible"));
+  MAP.setPaintProperty("sat","raster-brightness-max",S.theme==="white"?1:.6); MAP.setPaintProperty("sat","raster-brightness-min",S.theme==="white"?.25:0);
+  if(MAP.hasImage("hatch")) MAP.updateImage("hatch",hatchImage(c.line2));
+  MAP.setLayoutProperty("policy","visibility",L.policy?"visible":"none"); MAP.setPaintProperty("policy","fill-opacity",+css("--m-hatch")||.2); MAP.setLayoutProperty("allowed","visibility",L.policy?"visible":"none"); MAP.setPaintProperty("allowed","line-color",c.ink2);
+  MAP.setPaintProperty("routes","line-color",["case",["get","bad"],c.red,["get","sel"],c.ink,c.ink2]);
+  MAP.getSource("routes").setData({type:"FeatureCollection",features:L.routes?MODELS.map(m=>({type:"Feature",properties:{r:m.r,sel:S.model===m.r,dim:!!S.model&&S.model!==m.r,bad:!routeInfo(m).ok},geometry:{type:"LineString",coordinates:gc(CFG.location.lnglat,m.ep.lnglat)}})):[]});
+  MK.forEach(m=>m.remove()); MK=[]; const op=CFG.operators.find(o=>o.id===S.op);
+  MK.push(new mapboxgl.Marker({element:markerEl("op",S.op==="agent"?op.initials:"YOU","op"),anchor:"center"}).setLngLat(CFG.location.lnglat).addTo(MAP));
+  if(L.endpoints) MODELS.forEach(m=>MK.push(new mapboxgl.Marker({element:markerEl("ep",m.r,m.r,`${S.model&&S.model!==m.r&&routeInfo(m).ok?"dim":""} ${S.model===m.r?"sel":""} ${routeInfo(m).ok?"":"bad"}`),anchor:"left",offset:[-7,0]}).setLngLat([unwrap(m.ep.lnglat[0]),m.ep.lnglat[1]]).addTo(MAP)));
+  if(L.devices&&S.map.view==="local") DEVICES.forEach(d=>MK.push(new mapboxgl.Marker({element:markerEl("dev",`${d.id} ${d.name}`,d.id),anchor:"left",offset:[-7,0]}).setLngLat([CFG.location.lnglat[0]+d.off[0],CFG.location.lnglat[1]+d.off[1]]).addTo(MAP)));
+  drawOverlay(); }
+function moveCamera(){ if(!MAP||mapState!=="ready") return; const cam=camera(); if(cam.bounds) MAP.fitBounds(cam.bounds,{bearing:cam.bearing,duration:matchMedia("(prefers-reduced-motion: reduce)").matches?0:600,padding:cam.padding}); else MAP.easeTo({...cam,duration:matchMedia("(prefers-reduced-motion: reduce)").matches?0:600}); }
+function drawOverlay(){ const ov=$("#mapOv"), b=$("#mapBox"); if(!ov||!b) return; const w=b.clientWidth, h=b.clientHeight; if(w<40) return;
+  const cols=13, rows=7, cw=w/cols, rh2=h/rows; let s=`<svg width="${w}" height="${h}">`;
+  for(let i=1;i<cols;i++) s+=`<line x1="${i*cw}" x2="${i*cw}" y1="0" y2="${h}" stroke="var(--line2)" stroke-opacity=".45"/>`;
+  for(let j=1;j<rows;j++) s+=`<line y1="${j*rh2}" y2="${j*rh2}" x1="0" x2="${w}" stroke="var(--line2)" stroke-opacity=".45"/>`;
+  for(let i=1;i<cols;i++) for(let j=1;j<rows;j++) s+=`<path d="M${i*cw-4} ${j*rh2}h8M${i*cw} ${j*rh2-4}v8" stroke="var(--ink2)" stroke-opacity=".7"/>`;
+  for(let j=0;j<rows;j++) s+=`<text x="8" y="${j*rh2+rh2/2+4}" class="k">${"ABCDEFG"[j]}</text>`;
+  for(let i=0;i<cols;i++) s+=`<text x="${i*cw+cw/2}" y="18" text-anchor="middle">${i+1}</text>`;
+  [[0,0,1,1],[w,0,-1,1],[0,h,1,-1],[w,h,-1,-1]].forEach(([x,y,sx,sy])=>{ s+=`<path d="M${x+sx*2} ${y+sy*20}V${y+sy*2}H${x+sx*20}" fill="none" stroke="var(--ink)" stroke-width="1.5"/>`; });
+  if(mapState==="error"){ // flat fallback: equirectangular plot so the screen still answers "where does work run?"
+    const P=([lng,lat])=>[ (unwrap(lng)-CFG.location.lnglat[0]+200)/400*w, (80-lat)/160*h ];
+    const [ox,oy]=P(CFG.location.lnglat); MODELS.forEach(m=>{ const [x,y]=P(m.ep.lnglat), ok=routeInfo(m).ok;
+      s+=`<line x1="${ox}" y1="${oy}" x2="${x}" y2="${y}" stroke="${ok?"var(--ink2)":"var(--red-hi)"}" stroke-dasharray="2 4"/><path d="M${x} ${y-6}l6 6-6 6-6-6z" fill="var(--p0)" stroke="var(--ink2)"/><text class="t" x="${x+10}" y="${y+4}">${m.r}</text>`; });
+    s+=`<path d="M${ox} ${oy-7}l7 13h-14z" fill="var(--ink)"/>`; }
+  ov.setAttribute("width",w); ov.setAttribute("height",h); ov.innerHTML=s.replace(/^<svg[^>]*>/,""); }
+
+/* =========================== DEVICES =========================== */
+function deviceFrame(d){ const ag=AGENTS.filter(a=>a.dev===d.id&&a.status!=="done");
+  const lines=`<div class="sline"><span>HERMES</span><span>${ag.length} AGENTS</span></div>`+ag.slice(0,6).map(a=>`<div class="sline"><span>${a.id} ${a.r}</span><span class="${needA(a)?"need":""}">${needA(a)?needA(a).msg.split(" ")[0]:a.status.toUpperCase()}</span></div>`).join("");
+  if(d.kind==="macbook") return `<div class="dev-scene" role="img" aria-label="Laptop ${d.id}"><div class="laptop-lid"><div class="camera"></div><div class="screen-slot">${lines}</div></div><div class="laptop-base"><i></i></div></div>`;
+  if(d.kind==="display") return `<div class="dev-scene" role="img" aria-label="Desktop display ${d.id}" style="padding-right:18%"><div class="monitor-panel"><div class="screen-slot">${lines}</div></div><div class="monitor-stand"></div><div class="monitor-foot"></div><div class="mini"></div></div>`;
+  if(d.kind==="ipad") return `<div class="dev-scene" role="img" aria-label="Tablet ${d.id}" style="width:min(100%,400px)"><div class="tablet-case"><div class="camera"></div><div class="screen-slot">${lines}</div></div></div>`;
+  return `<div class="dev-scene" role="img" aria-label="Phone ${d.id}" style="width:min(100%,360px)"><div class="phone-wrap"><div class="phone-case"><div class="screen-slot">${ag.length?lines:`<div class="sline"><span>${d.state}</span></div>`}</div><div class="island"></div></div></div></div>`; }
+function renderDevices(){ const el=$("#s-devices"), d=byD(S.device)||DEVICES[0], onDev=AGENTS.filter(a=>a.dev===d.id);
+  if(S.agent==null||!byA(S.agent)){ const n=needsAll()[0]; S.agent=n?n.a.id:AGENTS[0].id; }
+  const a=byA(S.agent), m=byM(a.r), na=needA(a), lm=Math.max(...d.load,.01);
+  const filt=S.tfilter, pass=x=> inFocus(x) && (filt==="all"||(filt==="need"?!!needA(x):filt==="dev"?x.dev===d.id:x.status===filt));
+  const counts={all:AGENTS.length, dev:onDev.length, running:AGENTS.filter(x=>x.status==="running").length, waiting:AGENTS.filter(x=>x.status==="waiting").length, need:needsAll().length};
+  const lineage=agentLineage(a);
+  el.innerHTML=`
+   <div class="blk" id="d-schem">${rh("DEVICE STATUS · MONITOR FEED",d.state,d.state==="ONLINE"?"":"mu")}
+     <div class="codes"><div><span class="lb mu">DEVICE CODE</span><span class="n47">${d.id}</span></div><div><span class="lb mu">DEVICE</span><span class="n29">${d.name}</span></div><div style="margin-left:auto;align-items:flex-end"><span class="lb mu">AGENTS</span><span class="n29">${pad2(onDev.filter(x=>x.status!=="done").length)}</span></div></div>
+     <div class="schem"><div class="callout c1">NETWORK<span>${d.net}</span></div><div class="callout c2">POWER<span>${d.power}</span></div>
+       <div class="dv">${deviceFrame(d)}</div>
+       <div class="callout c3">CPU<span>${pct(d.cpu)}</span></div><div class="callout c4">MEMORY<span>${d.mem[0]} / ${d.mem[1]} GB</span></div></div>
+     ${rh("DEVICE LOAD",`PEAK ${pct(lm)} CPU`)}<div class="load" role="img" aria-label="CPU load, last 48 samples">${d.load.map(v=>`<i class="${v>=lm*.95?"hi":""}" style="height:${Math.round(v/lm*100)}%"></i>`).join("")}</div></div>
+   <div class="blk" id="d-diag" style="gap:16px">${rh(`SUBAGENT ${a.id} · DIAGNOSTICS`,a.r,na?"acc":"")}
+     <div style="display:flex;align-items:center;gap:16px">${hexGlyph(a.lvl,48,!!na)}<div><span class="t18">${esc(m.model)}</span><br><span class="mu">${m.provider} · T${pad2(a.task)} ${esc(byT(a.task).name)}</span><br><span class="lb ${na?"acc":"mu"}">${na?na.msg:a.status.toUpperCase()}</span></div></div>
+     <div>${rh("REASONING",LV[a.lvl])}<div class="lvl">${LV.map((l,i)=>`<span class="${i<=a.lvl?"on":""}">${l}</span>`).join("")}</div>
+       <div class="acts" style="margin-top:8px"><button class="btn s" data-fk="lv-" data-act="lvl-" data-agent="${a.id}" ${a.lvl===0?"disabled":""}>− LOWER</button><button class="btn s" data-fk="lv+" data-act="lvl+" data-agent="${a.id}" ${a.lvl===3?"disabled":""}>+ RAISE</button></div></div>
+     <div>${rh("FUEL",null)}
+       <div class="fuel"><span class="lb mu">CONTEXT</span>${segs(ctxOf(a),ctxOf(a)>=T.ctx)}<span class="v${ctxOf(a)>=T.ctx?" acc":""}">${fk(a.ctx)} / ${fk(m.window)}</span></div>
+       <div class="fuel"><span class="lb mu">BUDGET</span>${segs(a.used/a.budget,a.used/a.budget>=T.budget)}<span class="v${a.used/a.budget>=T.budget?" acc":""}">${fk(a.used)} / ${fk(a.budget)}</span></div>
+       <div class="fuel"><span class="lb mu">COST</span>${segs((a.used*m.rate.in/1000)/10,false)}<span class="v">${usd(a.used*m.rate.in/1000)}</span></div></div>
+     <div>${rh("TOOL CALLS",`${a.tools.length} · ${(a.tools.match(/0/g)||[]).length} ERR`)}<div class="tools" role="img" aria-label="Last tool calls: ${(a.tools.match(/1/g)||[]).length} ok, ${(a.tools.match(/0/g)||[]).length} errors">${a.tools.split("").slice(-24).map(c=>`<i class="${c==="1"?"ok":c==="0"?"err":"run"}"></i>`).join("")}</div></div>
+     <div>${rh("LINEAGE",lineage.depth===1?"DIRECT":"DEPTH "+lineage.depth)}<span class="mono ink2">${lineage.path}</span></div>
+     <div class="acts">${na?`<button class="btn w" data-fk="dna" data-act="${na.act}" data-agent="${a.id}">${na.label}</button>`:""}${a.status==="paused"?`<button class="btn p" data-fk="dres" data-act="resume" data-agent="${a.id}">RESUME</button>`:a.status==="done"?"":`<button class="btn" data-fk="dpau" data-act="pause" data-agent="${a.id}">PAUSE</button>`}</div></div>
+   <div class="blk" id="d-table">${rh("DISPATCHED SUBAGENTS",`${AGENTS.filter(pass).length} / ${AGENTS.length}`)}
+     <div class="chips" style="margin-bottom:8px" role="group" aria-label="Filter subagents">${[["all","ALL"],["dev","ON "+d.id],["running","RUNNING"],["waiting","WAITING"],["need","NEEDS YOU"]].map(([k,l])=>`<button class="chip${k==="need"&&counts.need?" acc":""}" data-fk="tf${k}" data-tf="${k}" aria-pressed="${filt===k}">${l}<b>${counts[k]}</b></button>`).join("")}</div>
+     <div class="tiles">${AGENTS.map(x=>{ const n=needA(x), xm=byM(x.r); return `<button class="tile${n?" need":""}${pass(x)?"":" off"}" data-fk="ag${x.id}" data-agent="${x.id}" aria-pressed="${S.agent===x.id}" aria-label="Subagent ${x.id}, ${x.r} ${xm.model}, ${LV[x.lvl]}, ${n?n.msg:x.status}">
+        <span class="top lb"><span>${x.r} · ${LV[x.lvl]}</span><span>${x.dev}</span></span><span class="id">${x.id}</span>
+        <span class="rings">${hexGlyph(x.lvl,24,!!n)}${dotRing(32,ctxOf(x),ctxOf(x)>=T.ctx,12)}</span>
+        <span class="stl lb${n?" acc":""}">${n?n.msg:x.status.toUpperCase()}</span><span class="stl mono">T${pad2(x.task)} ${esc(byT(x.task).name)}</span></button>`; }).join("")}</div></div>
+   <div class="blk" id="d-idents">${rh("DEVICE IDENT",`${DEVICES.length} DEVICES`)}<div class="ident" style="--n:${DEVICES.length}">${DEVICES.map(x=>{ const c=AGENTS.filter(a=>a.dev===x.id&&a.status!=="done").length, nd=AGENTS.some(a=>a.dev===x.id&&needA(a));
+       return `<button class="idt" data-fk="dv${x.id}" data-device="${x.id}" aria-pressed="${S.device===x.id}"><span class="n29">${x.id}</span><span><span class="lb">${x.name}</span><br><span class="mu">${x.state}</span></span><span class="lb ${nd?"acc":"mu"}">${pad2(c)} AGENTS${nd?" · !":""}</span></button>`; }).join("")}</div></div>`; }
+function agentLineage(a){ const path=[a.id]; let p=a.parent, depth=1; while(p!=="HC"&&byA(p)){ path.unshift(p); p=byA(p).parent; depth++; } path.unshift("HC"); return {depth, path:path.join(" → ")}; }
+
+/* =========================== shell =========================== */
+function renderHeader(){ $("#proj").textContent=CFG.project;
+  $("#gScreen").innerHTML=SCREENS.map(([k,l],i)=>`<button role="tab" data-fk="tab${k}" data-screen="${k}" aria-selected="${S.screen===k}" aria-controls="s-${k}"><kbd>${i+1}</kbd>${l}</button>`).join("");
+  $$("#gTheme button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===S.theme));
+  $$("#gReview button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v==="bw"?S.bw:S.flip));
+  const m=S.model&&byM(S.model); $("#focus").classList.toggle("on",!!m); $("#focusTxt").textContent=m?`FOCUS ${m.r} · ${m.provider}`:"";
+  const de=document.documentElement; de.dataset.theme=S.theme; de.dataset.bw=S.bw?1:0; de.dataset.flip=S.flip?1:0;
+  $$(".screen").forEach(s=>s.classList.toggle("on",s.id==="s-"+S.screen)); }
+function render(){ const ae=document.activeElement?.dataset?.fk;
+  renderHeader();
+  if(S.screen==="fleet") renderFleet(); else if(S.screen==="mission") renderMission(); else if(S.screen==="operator") renderOperator(); else renderDevices();
+  if(ae){ const n=document.querySelector(`[data-fk="${CSS.escape(ae)}"]`); if(n&&n!==document.activeElement) n.focus({preventScroll:true}); } }
+function go(screen){ S.screen=screen; const u=new URL(location); u.searchParams.set("screen",screen); history.replaceState(null,"",u); render(); if(screen==="operator"&&MAP){ setTimeout(()=>{ MAP.resize(); drawOverlay(); },0); } }
+
+document.addEventListener("click",e=>{ const b=e.target.closest("button,[data-model],[data-task],.tg"); if(!b) return;
+  if(b.closest("#gTheme")){ S.theme=b.dataset.v; try{localStorage.hudTheme=S.theme}catch{} render(); syncMap(); return; }
+  if(b.closest("#gReview")){ if(b.dataset.v==="bw") S.bw=!S.bw; else S.flip=!S.flip; render(); return; }
+  if(b.dataset.screen) return go(b.dataset.screen);
+  if(b.id==="focusX"){ S.model=null; render(); syncMap(); return; }
+  if(b.id==="toastUndo") return undo();
+  if(b.dataset.act) return act(+b.dataset.agent,b.dataset.act);
+  if(b.dataset.op){ S.op=b.dataset.op; render(); syncMap(); return; }
+  if(b.dataset.appr){ const prev=S.approvals; S.approvals=b.dataset.appr; if(prev!==S.approvals){ H.push(()=>{S.approvals=prev}); toast(`Approvals: ${S.approvals==="ask"?"ASK FIRST":"AUTO"}`); } render(); return; }
+  if(b.dataset.mview){ S.map.view=b.dataset.mview; render(); moveCamera(); return; }
+  if(b.dataset.mstyle){ S.map.style=b.dataset.mstyle; render(); return; }
+  if(b.dataset.layer){ S.map.layers[b.dataset.layer]=!S.map.layers[b.dataset.layer]; render(); return; }
+  if(b.dataset.rot!=null){ const r=+b.dataset.rot; S.map.bearing = r===0?0:S.map.bearing+r; if(MAP&&mapState==="ready") MAP.easeTo({bearing:S.map.bearing,duration:matchMedia("(prefers-reduced-motion: reduce)").matches?0:300}); render(); return; }
+  if(b.dataset.tf){ S.tfilter=b.dataset.tf; render(); return; }
+  if(b.dataset.device){ S.device=b.dataset.device;   // keep the diagnostics on an agent that runs on this device: needs-you first, then running
+    const on=AGENTS.filter(x=>x.dev===S.device&&x.status!=="done"); if(on.length&&byA(S.agent)?.dev!==S.device) S.agent=(on.find(x=>needA(x))||on.find(x=>x.status==="running")||on[0]).id; render(); return; }
+  if(b.dataset.agentgo){ S.agent=+b.dataset.agentgo; S.device=byA(S.agent).dev; return go("devices"); }
+  if(b.dataset.agent){ S.agent=+b.dataset.agent; render(); return; }
+  if(b.dataset.model){ S.model = S.model===b.dataset.model?null:b.dataset.model; render(); syncMap(); return; }
+  const tk=b.dataset.task||b.closest(".tg")?.dataset.task; if(tk){ S.task = S.task===+tk?null:+tk; render(); }
+});
+document.addEventListener("keydown",e=>{ if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||e.metaKey||e.ctrlKey||e.altKey) return;
+  if(/^[1-4]$/.test(e.key)){ go(SCREENS[+e.key-1][0]); return; }
+  if(e.key==="Escape"){ S.model=null; S.task=null; render(); syncMap(); return; }
+  if(e.key==="z"||e.key==="Z"){ e.preventDefault(); undo(); return; }
+  if(e.key==="Enter"&&e.target.classList?.contains("mk")){ e.target.click(); return; }
+  if((e.key==="ArrowRight"||e.key==="ArrowLeft")&&S.screen==="fleet"){ const i=MODELS.findIndex(m=>m.r===S.model), j=clamp((i<0?0:i+(e.key==="ArrowRight"?1:-1)),0,MODELS.length-1); S.model=MODELS[j].r; render(); $(`[data-fk="m${S.model}"]`)?.focus(); }
+});
+new ResizeObserver(()=>{ if(S.screen==="mission") renderMission(); if(S.screen==="operator") drawOverlay(); }).observe($("#scr"));
+
+/* ---------- sim: numbers move only because the (sample) data moved ---------- */
+const T0=Date.now();
+function clockTick(){ const d=Date.now()-T0+1395000, p=n=>pad2(n), s=`${p(Math.floor(d/3600000))}:${p(Math.floor(d/60000)%60)}:${p(Math.floor(d/1000)%60)}`; $("#clock").textContent="T "+s; ["#sclock","#oclock"].forEach(id=>{ const e=$(id); if(e) e.textContent=s; }); }
+function simTick(){ AGENTS.forEach(a=>{ if(a.status==="running"){ const m=byM(a.r), dt=.2+rnd()*.8; a.used+=dt*1.5; a.ctx=Math.min(m.window*.99,a.ctx+dt*.12); a.last=0; m.tin+=dt*1.2; m.tout+=dt*.15; } else a.last+=1; });
+  MODELS.forEach(m=>{ m.tpmNow.in=clamp(m.tpmNow.in*(.92+rnd()*.16),m.tpm.in*.05,m.tpm.in*.86); m.tpmNow.out=clamp(m.tpmNow.out*(.92+rnd()*.16),m.tpm.out*.05,m.tpm.out*.86); });
+  WAVE.shift(); WAVE.push(.15+rnd()*.85); DEVICES.forEach(d=>{ d.load.shift(); d.load.push(d.cpu*(.5+rnd())); });
+  const ip=BATCH.indexOf("p"); if(ip>=0&&rnd()<.35){ BATCH[ip]="d"; const iq=BATCH.indexOf("q"); if(iq>=0) BATCH[iq]="p"; }
+  if(S.screen==="operator"){ renderOpLeft(); renderOpRight(); } else render(); }
+setInterval(clockTick,1000);
+buildBatch(); render();
+if(S.sim && !matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(simTick,2000);
+window.__lt={S,MODELS,AGENTS,TASKS,DEVICES,H,render,act,undo,go,needA,needsAll,forecast,get MAP(){return MAP},get mapState(){return mapState},mapReady:false,syncMap,routeInfo,get BATCH(){return BATCH}};
+</script>
+</body>
+</html>

@@ -9,6 +9,7 @@ Canonical studies:
 - `matrix-journey.html`: Decision Matrix — priorities, difficulty, and journey variants.
 - `command-deck.html`: Command Deck — cinematic radar, journey, and batch wall.
 - `v2/command-deck-v2.html`: Command Deck 02 — queue, editable matrix, reversible task actions, and batch review.
+- `light-table/light-table.html`: Light Table — Fleet, Mission, Operator, and Devices screens with model/agent diagnostics and reversible actions. The operator map uses the prototype's public Mapbox token and keeps its offline route fallback.
 
 The generator publishes isolated copies under `UIUX/studies/agent-hud/`, with navigation wrappers and direct screen links. Agent HUD and Build Board preserve their desktop composition in a horizontally scrollable viewport on narrow devices. The other screens retain their authored responsive behavior.
 
