@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Command Deck — matrix · journey · batch (template)</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme=enochian]{--void:#050506;--p0:#0a0a0b;--p1:#0e0e10;--r1:#121215;--r2:#1c1c20;--r3:#2a2a2e;--line:#1f1f23;--line2:#3a3a3e;
+ --ink:#f7f7f8;--ink2:#c9c9ce;--muted:#7b7b82;--dim:#4a4a50;--red:#cc0000;--red-hi:#ff4040;--ember:#ff5a1f;--amber:#f4a934;--hot:#fff3e6;--ok:255,225,205;
+ --red-rgb:204,0,0;--ember-rgb:255,90,31;--cool-rgb:169,173,189;--easy:#fff3e6;--hard:#3a0d0d}
+[data-theme=ares]{--void:#010507;--p0:#020a0e;--p1:#06151f;--r1:#081a26;--r2:#0d2432;--r3:#1b3646;--line:#102a38;--line2:#3c5666;
+ --ink:#efeaea;--ink2:#cdcacb;--muted:#6f8b99;--dim:#3d5866;--red:#d62832;--red-hi:#fc6253;--ember:#f2701e;--amber:#e8924f;--hot:#fff1e8;--ok:120,184,96;
+ --red-rgb:214,40,50;--ember-rgb:242,112,30;--cool-rgb:110,150,170;--easy:#efeaea;--hard:#2a0d14}
+*{box-sizing:border-box}
+html,body{margin:0;background:radial-gradient(120% 90% at 50% 20%,var(--p1) 0%,var(--void) 70%) fixed;color:var(--ink);font:400 12px "IBM Plex Sans",sans-serif;min-height:100%}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:20;background:repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 1px,transparent 1px 3px),radial-gradient(120% 100% at 50% 45%,transparent 55%,rgba(0,0,0,.55))}
+button{font:inherit;color:inherit}
+header{display:flex;align-items:center;gap:16px;padding:12px 22px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+header h1{font:500 14px "IBM Plex Sans";margin:0;letter-spacing:.02em}
+.mono,.cap{font-family:"IBM Plex Mono",monospace}.cap{font-size:10.5px;color:var(--muted);letter-spacing:.04em}
+.ctl{display:flex;gap:2px;background:var(--p0);border:1px solid var(--line2);border-radius:3px;padding:2px;align-items:center}
+.ctl label{font:500 9px "IBM Plex Mono";letter-spacing:.14em;color:var(--dim);padding:0 8px}
+.ctl button{background:none;border:0;padding:6px 10px;font:500 10px "IBM Plex Mono";letter-spacing:.1em;color:var(--muted);cursor:pointer;border-radius:2px}
+.ctl button[aria-pressed=true]{background:var(--r2);color:var(--ink);box-shadow:inset 0 -1px 0 var(--red)}
+.ctls{display:flex;gap:10px;margin-left:auto;flex-wrap:wrap}
+main{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px;padding:12px 22px 26px;max-width:1760px;margin:auto}
+.panel{position:relative;background:linear-gradient(180deg,rgba(var(--cool-rgb),.05),transparent 30%),linear-gradient(180deg,var(--p1),var(--p0));border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.ph{display:flex;align-items:baseline;gap:10px;padding:12px 16px 0;font:500 10px "IBM Plex Mono";letter-spacing:.12em;color:var(--ink2)}
+.ph .r{margin-left:auto;color:var(--muted)}.ph em{font-style:normal;color:var(--red-hi)}
+.col{display:grid;gap:12px;align-content:start;min-width:0}
+.strip{grid-column:1/-1}
+/* radar */
+#radarP{min-height:640px;background:radial-gradient(70% 70% at 50% 50%,rgba(var(--red-rgb),.10),transparent 70%),linear-gradient(180deg,var(--p1),var(--void))}
+.rw{perspective:1700px;padding:6px 18px 0}
+.tilt{transform:rotateX(9deg) rotateY(-11deg) scale(.97);transition:transform .5s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d;will-change:transform}
+body[data-cine=off] .tilt{transform:none!important}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{font-family:"IBM Plex Mono",monospace;fill:var(--muted);letter-spacing:.06em}
+.t2{fill:var(--ink2)!important}
+.ring{fill:none;stroke:rgba(var(--cool-rgb),.45)}
+.mk{cursor:pointer}.mk .hit{fill:transparent}
+.mk:hover .dm,.mk.sel .dm{stroke:var(--hot);stroke-width:2.2}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sweep{transform-origin:300px 300px;animation:spin 9s linear infinite}
+@keyframes pulse{0%{r:8;opacity:.9}100%{r:22;opacity:0}}
+.pr{fill:none;stroke:var(--red-hi);stroke-width:1.4;animation:pulse 1.8s ease-out infinite}
+@keyframes blinkb{50%{opacity:.25}}
+.tiles i.p,.blk.run{animation:blinkb 1.6s ease-in-out infinite}
+/* detail */
+#detail{min-height:330px;padding-bottom:14px}
+.d-id{display:flex;align-items:center;gap:10px;padding:14px 16px 0;font:500 11px "IBM Plex Mono";letter-spacing:.1em;color:var(--ink2)}
+.pill{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font:500 9.5px "IBM Plex Mono";letter-spacing:.1em;padding:3px 8px;border:1px solid var(--line2);border-radius:2px;color:var(--muted)}
+.pill.running{color:var(--ember);border-color:rgba(var(--ember-rgb),.6)}.pill.blocked{color:var(--red-hi);border-color:rgba(var(--red-rgb),.7)}.pill.done{color:rgb(var(--ok));border-color:rgba(var(--ok),.55)}
+.d-t{font:300 20px/1.3 "IBM Plex Sans";margin:8px 16px 4px;color:var(--ink)}
+.d-q{margin:0 16px 10px;font:500 10px "IBM Plex Mono";letter-spacing:.14em;color:var(--red-hi)}
+.kvg{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.kvg div{background:var(--p0);padding:9px 14px}.kvg b{display:block;font:300 20px "IBM Plex Sans";color:var(--ink);font-variant-numeric:tabular-nums}.kvg span{font:400 9px "IBM Plex Mono";letter-spacing:.1em;color:var(--muted)}
+.kvg .hl b{color:var(--hot);text-shadow:0 0 12px rgba(var(--red-rgb),.8)}
+.mbar{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;margin:12px 16px 0;font:400 9.5px "IBM Plex Mono";color:var(--muted);letter-spacing:.08em}
+.mbar .segs{display:grid;grid-template-columns:repeat(20,1fr);gap:2px;height:9px}.mbar .segs i{background:var(--r2)}.mbar .segs i.on{background:var(--ink2)}.mbar .segs i.on.hot{background:var(--red-hi);box-shadow:0 0 6px var(--red)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:12px 16px 0}
+.chips span{font:500 9.5px "IBM Plex Mono";letter-spacing:.08em;padding:3px 7px;border:1px solid var(--line2);border-radius:2px;color:var(--ink2)}
+.chips span.ok{border-color:rgba(var(--ok),.6);color:rgb(var(--ok))}.chips span.cur{border-color:var(--red-hi);color:var(--red-hi)}
+.thumbs{display:flex;gap:6px;margin:12px 16px 0}.thumbs img{height:54px;border:1px solid var(--line2);filter:grayscale(.55) contrast(1.1) brightness(.85);flex:0 0 auto;max-width:30%;object-fit:cover}
+.idle{padding:34px 22px;color:var(--muted);font:400 11px/1.7 "IBM Plex Mono";letter-spacing:.06em}.idle b{color:var(--ink2);font-weight:500}
+.src{font:400 10px "IBM Plex Mono";color:var(--muted);margin:0 16px 12px}
+/* tile wall */
+.tiles{display:grid;gap:3px;padding:12px 16px 6px}
+.tiles i{display:block;aspect-ratio:1;border:1px solid var(--line2);background:var(--p0);cursor:pointer}
+.tiles i.d{background:rgba(var(--ok),.9);border-color:rgb(var(--ok))}
+.tiles i.p{background:rgba(var(--red-rgb),.18);border-color:var(--red-hi);box-shadow:0 0 8px rgba(var(--red-rgb),.8)}
+.tiles i.f{background:var(--red);border-color:var(--red-hi)}
+.tiles i.sel{outline:1px solid var(--hot);outline-offset:1px}
+.kv{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border-top:1px solid var(--line)}
+.kv div{background:var(--p0);padding:9px 14px}.kv b{display:block;font:300 22px "IBM Plex Sans";color:var(--ink)}.kv span{font:400 9px "IBM Plex Mono";color:var(--muted);letter-spacing:.1em}
+/* zone strip */
+.zones{display:grid;gap:0;padding:14px 16px 8px}
+.zone{position:relative;min-height:190px;border:1px solid var(--line2);border-left-width:0;padding:12px 12px 10px;background:transparent}
+.zone:first-child{border-left-width:1px}
+.zone.done{background:linear-gradient(90deg,rgba(var(--cool-rgb),.03),rgba(var(--cool-rgb),.14))}
+.zone.live{background:linear-gradient(90deg,rgba(var(--red-rgb),.04),rgba(var(--red-rgb),.5))}
+.zone.live::after{content:"";position:absolute;right:-1px;top:0;bottom:0;width:3px;background:var(--red-hi);box-shadow:0 0 12px var(--red)}
+.zone.next{border-style:dashed}
+.z1{font:500 12px "IBM Plex Mono";letter-spacing:.14em;color:var(--ink)}.zone.next .z1{color:var(--muted)}
+.z2{font:400 11px "IBM Plex Mono";color:var(--muted);margin-top:3px;letter-spacing:.06em}
+.zb{display:flex;flex-wrap:wrap;gap:5px;margin:14px 0 8px}
+.blk{min-width:44px;height:30px;padding:0 8px;display:grid;place-items:center;font:500 11px "IBM Plex Mono";border:1px solid rgba(0,0,0,.35);cursor:pointer;letter-spacing:.04em}
+.blk.done{opacity:.5}.blk.blocked{outline:1.5px dashed var(--red-hi);outline-offset:1px}.blk.run{outline:1.5px solid var(--red-hi);outline-offset:1px}.blk.sel{outline:1.5px solid var(--hot);outline-offset:2px}
+.zd{position:absolute;left:12px;bottom:8px;font:400 10px "IBM Plex Mono";color:var(--muted)}
+.ruler{margin:0 16px;height:12px;background:repeating-linear-gradient(90deg,var(--line2) 0 1px,transparent 1px 1.667%);border-top:1px solid var(--line2)}
+.legend{display:flex;gap:6px;align-items:center;font:400 10px "IBM Plex Mono";color:var(--muted);padding:10px 16px 14px;flex-wrap:wrap}
+.legend i{display:block;width:16px;height:11px;border:1px solid var(--line2)}
+@media (prefers-reduced-motion:reduce){.sweep,.pr,.blk.run,.tiles i.p{animation:none}.tilt{transition:none}}
+@media (max-width:1100px){main{grid-template-columns:1fr}}
+</style></head><body data-cine="on">
+<header><h1 id="proj"></h1><span class="cap" id="clock"></span>
+<div class="ctls">
+ <div class="ctl" id="cMetric"><label>BLOCK INTENSITY</label></div>
+ <div class="ctl" id="cLabel"><label>LABELS</label><button data-v="num">NUMBER</button><button data-v="name">NAME</button></div>
+ <div class="ctl" id="cCine"><label>CINEMA</label><button data-v="on">ON</button><button data-v="off">OFF</button></div>
+ <div class="ctl" id="cScale"><label>BATCH</label><button data-v="1">SOURCES</button><button data-v="8">×8 EXPORTS</button></div>
+ <div class="ctl" id="cTheme"><button data-v="ares">ARES</button><button data-v="enochian">ENOCHIAN</button></div></div></header>
+<main>
+ <section class="panel" id="radarP"></section>
+ <div class="col"><section class="panel" id="detail"></section><section class="panel" id="wall"></section></div>
+ <section class="panel strip" id="strip"></section>
+</main>
+<script>
+"use strict";
+/* ======================================================================================
+   TEMPLATE — everything project-specific lives in this CONFIG block. Swap it and the
+   radar, journey strip, batch wall and detail panel all follow.
+   ====================================================================================== */
+const CFG = {
+  project: "GMUNK-TOPGUN · IMAGE PIPELINE",
+  dir: "file:///Users/alannguyen/Downloads/gmunk-topgun/",      // thumbnails (optional; hidden if missing)
+  // Block/diamond intensity is user-selectable. Add a metric = add a line. light = low, dark = high.
+  metrics: {
+    difficulty: {label:"DIFFICULTY", get:t=>t.diff,   fmt:v=>`${v}/5`, unit:"1 = trivial · 5 = brutal"},
+    files:      {label:"FILES",      get:t=>t.files.length, fmt:v=>`${v}`, unit:"files touched"},
+    tokens:     {label:"TOKENS",     get:t=>t.tok,    fmt:v=>`${v}k`, unit:"est. tokens (k)"},
+    cost:       {label:"COST",       get:t=>t.cost,   fmt:v=>`$${v.toFixed(2)}`, unit:"est. USD"},
+  },
+  metric: "difficulty",
+  phases: [ // journey / timeline zones
+    {n:"INGEST",s:"load originals",d:"D-06"},{n:"RESIZE",s:"1920w · 4K",d:"D-04"},{n:"GRADE",s:"apply LUT",d:"D-01"},
+    {n:"EXPORT",s:"PNG-16",d:"D+02"},{n:"QA",s:"proof vs LUT",d:"D+04"},{n:"DELIVER",s:"handoff",d:"D+06"}],
+  livePhase: 2,
+  ops: ["RESIZE","LUT","PNG"],              // per-file pipeline shown in the batch wall
+};
+const FILES = ["Lopardo---Darkstar-10.jpg","Lopardo---Darkstar-11.jpg","Lopardo---Darkstar-17.jpg","Lopardo---Darkstar-19.jpg","Lopardo---Darkstar-2.jpg","Lopardo---Darkstar-25.jpg","Lopardo---Darkstar-28.jpg","Lopardo---Darkstar-3.jpg","Lopardo---Darkstar-31.jpg","Lopardo---Darkstar-32.jpg","Lopardo---Early-Dev-15.jpg","Lopardo---Early-Dev-6.jpg","Lopardo---Maps-32.jpg","Lopardo---Maps-8.jpg","Lopardo---Tactical-Auditorium-24_extra.jpg","Lopardo---Tactical-Auditorium-30.jpg","TG_COLLECT_030_00000_adj.jpg","TG_COLLECT_033_00000_adj.jpg","TG_COLLECT_036_00000.jpg","TG_COLLECT_040_00000.jpg","TG_COLLECT_041_00000.jpg","TG_COLLECT_047_00000.jpg","TG_TK_Darkstar_Cockpit_Map_v1_C-100.jpg","TG_TK_TacAud_Full_01_0000.jpg","TG_TK_TacAud_Right_01_0000_adj.jpg","Top-Gun_Maverick_thumbnail.jpg"];
+const F = p => FILES.filter(n=>n.startsWith(p));
+// imp / urg 0..1 · diff 1..5 · tok = est. k tokens · status: todo|running|done|blocked · phase = index into CFG.phases
+const TASKS = [
+ {n:1, name:"Reply: 4K spec",   title:"Reply to Aya — confirm 4K delivery spec",       src:"EMAIL", ref:"Aya · re: delivery spec",     imp:.92,urg:.94,diff:1,files:[],                 tok:3,  cost:.03, ph:0,status:"todo",    ops:[]},
+ {n:2, name:"Export Darkstar",  title:"Export Darkstar set to PNG-16",                  src:"PRD",   ref:"§3.1 Export",                 imp:.84,urg:.78,diff:2,files:F("Lopardo---Darkstar"),tok:22,cost:1.1,ph:3,status:"running", ops:["PNG"]},
+ {n:3, name:"LUT · COLLECT",    title:"Apply ARES LUT to TG_COLLECT frames",            src:"PRD",   ref:"§2.2 Grade",                  imp:.90,urg:.66,diff:4,files:F("TG_COLLECT"),    tok:48, cost:2.4, ph:2,status:"running", ops:["LUT"]},
+ {n:4, name:"Fix Maps banding", title:"Fix banding in gradients after LUT (Maps)",      src:"EMAIL", ref:"Mitchell · banding on Maps",  imp:.76,urg:.86,diff:4,files:F("Lopardo---Maps"),tok:60, cost:3.1, ph:2,status:"blocked", ops:["LUT"]},
+ {n:5, name:"Resize TacAud",    title:"Resize Tactical Auditorium set to 1920w",        src:"PRD",   ref:"§2.1 Resize",                 imp:.70,urg:.60,diff:2,files:[...F("Lopardo---Tactical"),...F("TG_TK_TacAud")],tok:12,cost:.6,ph:1,status:"done",ops:["RESIZE"]},
+ {n:6, name:"Strip EXIF",       title:"Strip EXIF and embed sRGB profile",              src:"PRD",   ref:"§3.4 Metadata",               imp:.80,urg:.38,diff:2,files:FILES,              tok:30, cost:1.5, ph:4,status:"todo",    ops:["PNG"]},
+ {n:7, name:"Match Early-Dev",  title:"Color-match the Early-Dev pair to Darkstar grade", src:"PRD", ref:"§2.4 Grade",                  imp:.62,urg:.28,diff:5,files:F("Lopardo---Early"),tok:90,cost:4.8, ph:2,status:"todo",    ops:["LUT"]},
+ {n:8, name:"Contact sheet",    title:"Build a contact sheet of all 26 frames",         src:"PRD",   ref:"§5 Review aids",              imp:.72,urg:.20,diff:3,files:FILES,              tok:40, cost:2.0, ph:4,status:"todo",    ops:["PNG"]},
+ {n:9, name:"LUT naming",       title:"Write the LUT naming convention",                src:"PRD",   ref:"§1 Conventions",              imp:.56,urg:.12,diff:1,files:[],                 tok:4,  cost:.05, ph:0,status:"todo",    ops:[]},
+ {n:10,name:"Approve crops",    title:"Get sign-off on crop ratios",                    src:"EMAIL", ref:"Aya · crop ratios",           imp:.64,urg:.88,diff:1,files:[],                 tok:3,  cost:.03, ph:1,status:"todo",    ops:["RESIZE"]},
+ {n:11,name:"Rename files",     title:"Rename files to the project scheme",             src:"EMAIL", ref:"Ashley · naming",             imp:.34,urg:.76,diff:1,files:FILES,              tok:6,  cost:.10, ph:0,status:"todo",    ops:[]},
+ {n:12,name:"Reply: invoice",   title:"Reply to invoice question",                      src:"EMAIL", ref:"Vendor · invoice #4471",      imp:.18,urg:.68,diff:1,files:[],                 tok:2,  cost:.02, ph:5,status:"todo",    ops:[]},
+ {n:13,name:"Archive originals",title:"Archive originals to cold storage",              src:"PRD",   ref:"§6 Retention",                imp:.26,urg:.32,diff:2,files:FILES,              tok:2,  cost:.02, ph:5,status:"todo",    ops:[]},
+ {n:14,name:"Grain preset",     title:"Try a film-grain preset on three frames",        src:"EMAIL", ref:"Aria · grain idea",           imp:.30,urg:.10,diff:3,files:F("Lopardo---Darkstar").slice(0,3),tok:35,cost:1.7,ph:2,status:"todo",ops:["LUT"]},
+ {n:15,name:"2× upscale thumb", title:"Upscale the thumbnail 2× without halos",         src:"PRD",   ref:"§7 Marketing",                imp:.38,urg:.56,diff:3,files:F("Top-Gun"),       tok:25, cost:1.2, ph:1,status:"todo",    ops:["RESIZE"]},
+ {n:16,name:"PNG-8 vs 16",      title:"Compare PNG-8 vs PNG-16 file sizes",             src:"PRD",   ref:"§3.5 Export",                 imp:.54,urg:.56,diff:3,files:F("TG_TK"),         tok:28, cost:1.4, ph:3,status:"running", ops:["PNG"]},
+ {n:17,name:"Cockpit map 4K",   title:"Re-render the cockpit map at 4K with LUT",       src:"PRD",   ref:"§2.6 Hero asset",             imp:.88,urg:.46,diff:5,files:F("TG_TK_Darkstar"),tok:70, cost:3.5, ph:1,status:"todo",    ops:["RESIZE","LUT"]},
+ {n:18,name:"Proof vs LUT",     title:"Proof pass: compare graded frames against LUT",  src:"PRD",   ref:"§4 QA",                       imp:.60,urg:.42,diff:3,files:F("Lopardo---Darkstar"),tok:36,cost:1.8,ph:4,status:"todo",    ops:["LUT"]},
+];
+/* ====================================================================================== */
+const $ = s => document.querySelector(s), esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const qs = new URLSearchParams(location.search);
+const S = {theme:qs.get("theme")||"ares", label:qs.get("label")||"num", cine:qs.get("cine")||"on", scale:+(qs.get("scale")||1), metric:qs.get("metric")||CFG.metric, pin:null, hover:null};
+const id = t => "T"+String(t.n).padStart(2,"0");
+const Q = t => t.imp>=.5 ? (t.urg>=.5?"DO FIRST":"SCHEDULE") : (t.urg>=.5?"DELEGATE":"ELIMINATE");
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const hex2 = h => [1,3,5].map(i=>parseInt(h.substr(i,2),16));
+function mval(t){ return CFG.metrics[S.metric].get(t); }
+function mrange(){ const v=TASKS.map(mval); return [Math.min(...v),Math.max(...v)]; }
+function tOf(t){ const [a,b]=mrange(); return b===a?0:(mval(t)-a)/(b-a); }
+function colorAt(k){ const a=hex2(css("--easy")), b=hex2(css("--hard")); return `rgb(${a.map((v,i)=>Math.round(v+(b[i]-v)*k)).join(",")})`; }
+const ink = k => k>.55 ? "var(--ink2)" : "#0b0b0d";
+
+/* ---------------- radar ---------------- */
+const CX=300,CY=300,SPAN=400,R=292, P=t=>[CX+(t.urg-.5)*SPAN, CY-(t.imp-.5)*SPAN];
+function bearing(t){ const [x,y]=P(t); return Math.atan2(x-CX,-(y-CY)); }
+function radar(){
+  let s=`<div class="ph">PR NAV · PRIORITY MATRIX<span class="r">URGENCY → · IMPORTANCE ↑ · ${TASKS.length} CONTACTS</span></div><div class="rw"><div class="tilt" id="tilt"><svg viewBox="0 0 600 620" id="rsvg">
+  <defs><filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="glow2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <clipPath id="cc"><circle cx="${CX}" cy="${CY}" r="${R}"/></clipPath>
+  <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="rgba(var(--cool-rgb),.5)" stroke-width="1.6"/></pattern>
+  <radialGradient id="wd" cx="0" cy="1" r="1.1"><stop offset="0" stop-color="rgb(var(--red-rgb))" stop-opacity=".02"/><stop offset="1" stop-color="rgb(var(--red-rgb))" stop-opacity=".34"/></radialGradient>
+  <linearGradient id="sw" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="rgb(var(--red-rgb))" stop-opacity="0"/><stop offset="1" stop-color="rgb(var(--red-rgb))" stop-opacity=".5"/></linearGradient></defs>
+  <g clip-path="url(#cc)"><rect x="${CX}" y="8" width="${R}" height="${CY-8}" fill="url(#wd)"/><rect x="8" y="${CY}" width="${CX-8}" height="${R}" fill="url(#hatch)" opacity=".16"/>
+   <g class="sweep"><path d="M${CX} ${CY} L${CX} ${CY-R} A${R} ${R} 0 0 0 ${CX-R*Math.sin(.6)} ${CY-R*Math.cos(.6)} Z" fill="url(#sw)" opacity=".55" transform="rotate(.6 ${CX} ${CY}) scale(1,1)"/></g></g>
+  <g filter="url(#glow2)"><circle class="ring" cx="${CX}" cy="${CY}" r="${R}" stroke-width="2.2" style="stroke:rgba(var(--cool-rgb),.8)"/>${[196,100].map(r=>`<circle class="ring" cx="${CX}" cy="${CY}" r="${r}"/>`).join("")}</g>`;
+  for(let a=0;a<360;a+=10){ const L=a%30===0?11:5, rd=a*Math.PI/180; s+=`<line class="ring" x1="${CX+Math.sin(rd)*R}" y1="${CY-Math.cos(rd)*R}" x2="${CX+Math.sin(rd)*(R-L)}" y2="${CY-Math.cos(rd)*(R-L)}"/>`; }
+  s+=`<line x1="${CX-R}" y1="${CY}" x2="${CX+R}" y2="${CY}" stroke="var(--ink2)" stroke-width="2.4" opacity=".85" filter="url(#glow2)"/><line x1="${CX}" y1="${CY-R-8}" x2="${CX}" y2="${CY+R+8}" stroke="rgba(var(--cool-rgb),.7)" stroke-width="1"/>
+  <text x="${CX+R*.5}" y="64" text-anchor="middle" class="t2" style="font-size:12px;letter-spacing:.2em">DO FIRST</text><text x="${CX+R*.5}" y="80" text-anchor="middle" style="font-size:9px">IMPORTANT · URGENT</text>
+  <text x="${CX-R*.5}" y="64" text-anchor="middle" class="t2" style="font-size:12px;letter-spacing:.2em">SCHEDULE</text><text x="${CX-R*.5}" y="80" text-anchor="middle" style="font-size:9px">IMPORTANT · NOT URGENT</text>
+  <text x="${CX+R*.5}" y="548" text-anchor="middle" class="t2" style="font-size:12px;letter-spacing:.2em">DELEGATE</text><text x="${CX+R*.5}" y="564" text-anchor="middle" style="font-size:9px">URGENT · NOT IMPORTANT</text>
+  <text x="${CX-R*.5}" y="548" text-anchor="middle" class="t2" style="font-size:12px;letter-spacing:.2em">ELIMINATE</text><text x="${CX-R*.5}" y="564" text-anchor="middle" style="font-size:9px">NEITHER</text>`;
+  // rim beads: one per contact at its bearing (deadline bearing), brighter for urgent
+  TASKS.forEach(t=>{ const b=bearing(t); s+=`<circle cx="${CX+Math.sin(b)*R}" cy="${CY-Math.cos(b)*R}" r="${2+t.urg*3}" fill="var(--amber)" opacity="${.25+t.urg*.55}" filter="url(#glow2)"/>`; });
+  s+=`<g id="trail"></g><path d="M${CX} ${CY-15}l15 26h-30z" fill="var(--amber)" filter="url(#glow)"/><g id="cts" filter="url(#glow2)"></g></svg></div></div>
+  <div class="legend" id="rleg"></div>`;
+  $("#radarP").innerHTML=s; contacts(); legend();
+}
+function contacts(){
+  // greedy label placement: pinned first, then by priority; a label that would collide is hidden (still shown in the detail panel on hover)
+  const boxes=TASKS.map(t=>{ const [x,y]=P(t); return {x:x-12,y:y-12,w:24,h:24}; }), hit=(a,b)=>a.x<b.x+b.w&&b.x<a.x+a.w&&a.y<b.y+b.h&&b.y<a.y+a.h;
+  const order=TASKS.slice().sort((a,b)=>(S.pin===b.n)-(S.pin===a.n)||b.imp*b.urg-a.imp*a.urg), placed=[], show=new Map();
+  order.forEach(t=>{ const [x,y]=P(t), lab=S.label==="num"?id(t):t.name, w=lab.length*6.7+4, left=x>CX+110;
+    for(const side of (left?[-1,1]:[1,-1])){ const bx=side>0?x+13:x-13-w, r={x:bx,y:y-8,w,h:16};
+      if(bx<2||bx+w>598) continue; if(placed.some(p=>hit(p,r))||boxes.some((m,i)=>TASKS[i]!==t&&hit(m,r))) continue; placed.push(r); show.set(t.n,side); return; }
+    if(S.pin===t.n){ show.set(t.n,left?-1:1); } });
+  let s="";
+  TASKS.forEach(t=>{ const [x,y]=P(t), k=tOf(t), hot=k>.62, r=t.imp>.5&&t.urg>.5?10:8, fill=colorAt(k), stroke=hot?"var(--red-hi)":"var(--hot)";
+    const lab = S.label==="num" ? id(t) : t.name, side=show.get(t.n), tx=side>0?x+14:x-14, an=side>0?"start":"end";
+    let shape = t.status==="blocked" ? `<rect class="dm" x="${x-r*.8}" y="${y-r*.8}" width="${r*1.6}" height="${r*1.6}" fill="none" stroke="var(--red-hi)" stroke-width="1.8"/>`
+      : `<path class="dm" d="M${x} ${y-r}L${x+r} ${y}L${x} ${y+r}L${x-r} ${y}Z" fill="${t.status==="done"?"none":fill}" stroke="${stroke}" stroke-width="1.5" ${t.status==="done"?'stroke-dasharray="2 2"':""}/>`;
+    s+=`<g class="mk${S.pin===t.n?" sel":""}" data-k="t${t.n}" opacity="${t.status==="done"?.5:1}"><circle class="hit" cx="${x}" cy="${y}" r="18"/>${t.status==="running"?`<circle class="pr" cx="${x}" cy="${y}" r="8"/>`:""}${shape}
+      ${side?`<text x="${tx}" y="${y+3.5}" text-anchor="${an}" class="t2" style="font-size:10.5px">${esc(lab)}</text>`:""}</g>`; });
+  $("#cts").innerHTML=s;
+}
+function trail(t){ const g=$("#trail"); if(!t){g.innerHTML="";return;} const b=bearing(t), rx=CX+Math.sin(b)*R, ry=CY-Math.cos(b)*R, [x,y]=P(t);
+  g.innerHTML=`<line x1="${CX}" y1="${CY}" x2="${rx}" y2="${ry}" stroke="var(--amber)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="0.1 11" filter="url(#glow2)"/>
+   <circle cx="${rx}" cy="${ry}" r="9" fill="var(--amber)" filter="url(#glow)"/><path d="M${x} ${y-19}L${x+19} ${y}L${x} ${y+19}L${x-19} ${y}Z" fill="none" stroke="var(--red-hi)" stroke-width="1" opacity=".9"/>`; }
+function legend(){ const [a,b]=mrange(), m=CFG.metrics[S.metric];
+  $("#rleg").innerHTML=`<span>${m.label}</span><span>${m.fmt(a)}</span>${[0,.25,.5,.75,1].map(k=>`<i style="background:${colorAt(k)}"></i>`).join("")}<span>${m.fmt(b)}</span><span style="margin-left:auto">◇ TASK &nbsp; ▢ BLOCKED &nbsp; ◈ RUNNING &nbsp; ⬦ DONE &nbsp; ▲ NOW &nbsp; ● RIM = BEARING</span>`; }
+
+/* ---------------- journey strip ---------------- */
+function strip(){
+  const n=CFG.phases.length, live=CFG.livePhase;
+  let z=CFG.phases.map((p,i)=>{ const ts=TASKS.filter(t=>t.ph===i), st=i<live?"done":i===live?"live":"next", dn=ts.filter(t=>t.status==="done").length;
+    return `<div class="zone ${st}"><div class="z1">ZONE ${String(i+1).padStart(2,"0")} · ${p.n}</div><div class="z2">${p.s} · ${dn}/${ts.length} done</div>
+     <div class="zb">${ts.map(t=>{ const k=tOf(t); return `<span class="blk ${t.status==="done"?"done":t.status==="blocked"?"blocked":t.status==="running"?"run":""}${S.pin===t.n?" sel":""}" data-k="t${t.n}" style="background:${colorAt(k)};color:${ink(k)}">${id(t)}</span>`; }).join("")||'<span class="z2">—</span>'}</div><div class="zd">${p.d}</div></div>`; }).join("");
+  const m=CFG.metrics[S.metric], [a,b]=mrange();
+  $("#strip").innerHTML=`<div class="ph">JOURNEY · ZONE STRIP<span class="r">PHASE ${String(live+1).padStart(2,"0")} / ${String(n).padStart(2,"0")} · ${CFG.phases[live].n} · <span id="tclk"></span></span></div>
+   <div class="zones" style="grid-template-columns:repeat(${n},1fr)">${z}</div><div class="ruler"></div>
+   <div class="legend"><span>BLOCK = TASK · INTENSITY = ${m.label}</span><span>${m.fmt(a)}</span>${[0,.25,.5,.75,1].map(k=>`<i style="background:${colorAt(k)}"></i>`).join("")}<span>${m.fmt(b)}</span><span style="margin-left:auto">${m.unit}</span></div>`; }
+
+/* ---------------- batch wall (one tile per file × variants) ---------------- */
+let W=[]; // {name,base,stage:0..3, st:'q'|'p'|'d'|'f'}
+function buildWall(){ W=[]; const v=S.scale; let seed=11; const rnd=()=> (seed=(seed*16807)%2147483647)/2147483647;
+  for(let j=0;j<v;j++) FILES.forEach((f,i)=>{ W.push({name:v>1?f.replace(/\.jpg$/,`__v${j+1}.png`):f,base:f,stage:0,st:"q"}); });
+  const N=W.length, done=Math.round(N*.55); W.forEach((w,i)=>{ if(i<done){w.st="d";w.stage=3;} else if(i<done+4){w.st="p";w.stage=1+(i%2);} });
+  [Math.round(N*.2),Math.round(N*.4),Math.round(N*.09)].forEach(i=>{ if(W[i]){W[i].st="f";W[i].stage=2;} }); }
+function wall(){ const c=S.scale>1?26:13, cnt={d:0,p:0,f:0,q:0}; W.forEach(w=>cnt[w.st]++);
+  $("#wall").innerHTML=`<div class="ph">BATCH · <em>${CFG.ops.join(" → ")}</em><span class="r">[ ${cnt.d} / ${W.length} ]</span></div>
+  <div class="tiles" id="tiles" style="grid-template-columns:repeat(${c},1fr)">${W.map((w,i)=>`<i class="${w.st}${S.pin==="f"+i?" sel":""}" data-k="f${i}"></i>`).join("")}</div>
+  <div class="kv"><div><b id="kD">${cnt.d}</b><span>DONE</span></div><div><b id="kP">${cnt.p}</b><span>RUNNING</span></div><div><b id="kF">${cnt.f}</b><span>NEEDS REVIEW</span></div><div><b id="kQ">${cnt.q}</b><span>QUEUED</span></div></div>`; }
+function tick(){ const run=W.map((w,i)=>w.st==="p"?i:-1).filter(i=>i>=0); if(!run.length&&!W.some(w=>w.st==="q")) return;
+  const i=run[Math.floor(Math.random()*run.length)]; if(i!=null){ const w=W[i]; w.stage++; if(w.stage>=3){ w.st="d"; w.stage=3; } }
+  const nr=W.filter(w=>w.st==="p").length; if(nr<4){ const q=W.findIndex(w=>w.st==="q"); if(q>=0){ W[q].st="p"; W[q].stage=1; } }
+  const el=$("#tiles"); if(!el) return; [...el.children].forEach((e,j)=>{ const w=W[j]; e.className=w.st+(S.pin==="f"+j?" sel":""); });
+  const cnt={d:0,p:0,f:0,q:0}; W.forEach(w=>cnt[w.st]++); $("#kD").textContent=cnt.d; $("#kP").textContent=cnt.p; $("#kF").textContent=cnt.f; $("#kQ").textContent=cnt.q; $("#wall .r").textContent=`[ ${cnt.d} / ${W.length} ]`; }
+
+/* ---------------- detail panel ---------------- */
+function idle(){ return `<div class="ph">TASK DETAIL<span class="r">NO CONTACT</span></div><div class="idle"><b>HOVER</b> a diamond, block or tile — or <b>TAP</b> to pin it.<br><br>Contacts are tasks arriving from email and the PRD. Position = urgency × importance. Colour = <b>${CFG.metrics[S.metric].label}</b> (change it in the header).<br><br>${TASKS.filter(t=>Q(t)==="DO FIRST").length} in DO FIRST · ${TASKS.filter(t=>t.status==="blocked").length} blocked · ${TASKS.filter(t=>t.status==="running").length} running.</div>`; }
+function detailTask(t){ const k=tOf(t), m=CFG.metrics[S.metric], [a,b]=mrange(), on=Math.round(k*20)+1;
+  const files=t.files.slice(0,3);
+  return `<div class="d-id"><span>${id(t)}</span><span style="color:var(--muted)">${t.src==="EMAIL"?"✉ EMAIL":"▪ PRD"} · ${esc(t.ref)}</span><span class="pill ${t.status}">${t.status.toUpperCase()}</span></div>
+   <div class="d-t">${esc(t.title)}</div><div class="d-q">${Q(t)} · ZONE ${String(t.ph+1).padStart(2,"0")} ${CFG.phases[t.ph].n}</div>
+   <div class="kvg"><div><b>${Math.round(t.imp*100)}</b><span>IMPORTANCE</span></div><div><b>${Math.round(t.urg*100)}</b><span>URGENCY</span></div><div class="${S.metric==="difficulty"?"hl":""}"><b>${t.diff}/5</b><span>DIFFICULTY</span></div>
+   <div class="${S.metric==="files"?"hl":""}"><b>${t.files.length}</b><span>FILES</span></div><div class="${S.metric==="tokens"?"hl":""}"><b>${t.tok}k</b><span>EST. TOKENS</span></div><div class="${S.metric==="cost"?"hl":""}"><b>$${t.cost.toFixed(2)}</b><span>EST. COST</span></div></div>
+   <div class="mbar"><span>${m.label}</span><span class="segs">${Array.from({length:20},(_,i)=>`<i class="${i<on?"on":""}${i>=14&&i<on?" hot":""}"></i>`).join("")}</span><span>${m.fmt(mval(t))}</span></div>
+   <div class="chips">${CFG.ops.map(o=>`<span class="${t.ops.includes(o)?(t.status==="done"?"ok":"cur"):""}">${o}</span>`).join("")}</div>
+   ${files.length?`<div class="thumbs">${files.map(f=>`<img src="${CFG.dir}${encodeURI(f)}" alt="" title="${esc(f)}" onerror="this.remove()">`).join("")}</div><div class="src" style="margin-top:6px">${esc(files[0])}${t.files.length>1?` +${t.files.length-1} more`:""}</div>`:""}`; }
+function detailFile(w){ const pips=CFG.ops.map((o,i)=>`<span class="${w.stage>i?"ok":w.stage===i&&w.st==="p"?"cur":""}">${o}</span>`).join("");
+  return `<div class="d-id"><span>FILE</span><span class="pill ${w.st==="d"?"done":w.st==="f"?"blocked":w.st==="p"?"running":""}">${w.st==="d"?"DONE":w.st==="f"?"NEEDS REVIEW":w.st==="p"?"RUNNING":"QUEUED"}</span></div>
+   <div class="d-t" style="font-size:15px;word-break:break-all">${esc(w.name)}</div><div class="chips">${pips}</div>
+   <div class="thumbs"><img src="${CFG.dir}${encodeURI(w.base)}" alt="" onerror="this.remove()" style="height:110px;max-width:100%"></div>`; }
+function showDetail(k){ const el=$("#detail"); let h="";
+  if(!k) h=idle(); else if(k[0]==="t") h=detailTask(TASKS.find(t=>t.n===+k.slice(1))); else h=detailFile(W[+k.slice(1)]);
+  el.innerHTML=h; const t=k&&k[0]==="t"?TASKS.find(t=>t.n===+k.slice(1)):null; trail(t); }
+const keyOf = e => e.closest?.("[data-k]")?.dataset.k;
+const pinKey = () => S.pin==null?null:(typeof S.pin==="number"?"t"+S.pin:S.pin);
+document.addEventListener("pointerover",e=>{ const k=keyOf(e.target); if(k) showDetail(k); });
+document.addEventListener("pointerout",e=>{ if(keyOf(e.target) && !keyOf(e.relatedTarget)) showDetail(pinKey()); });
+document.addEventListener("click",e=>{ const k=keyOf(e.target); if(!k){ if(e.target.closest("#detail")||e.target.closest("header")) return; S.pin=null; } else { const v=k[0]==="t"?+k.slice(1):k; S.pin = S.pin===v?null:v; }
+  contacts(); strip(); wall(); showDetail(pinKey()); });
+
+/* ---------------- cinematic tilt parallax ---------------- */
+$("#radarP").addEventListener?.("pointermove",e=>{ if(document.body.dataset.cine==="off") return; const r=e.currentTarget.getBoundingClientRect(), x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+  const t=$("#tilt"); if(t) t.style.transform=`rotateX(${9-y*8}deg) rotateY(${-11+x*10}deg) scale(.97)`; });
+$("#radarP").addEventListener("pointerleave",()=>{ const t=$("#tilt"); if(t) t.style.transform=""; });
+
+/* ---------------- controls ---------------- */
+function mkMetric(){ const el=$("#cMetric"); el.innerHTML=`<label>BLOCK INTENSITY</label>`+Object.entries(CFG.metrics).map(([k,m])=>`<button data-v="${k}" aria-pressed="${S.metric===k}">${m.label}</button>`).join(""); }
+function sync(){ document.documentElement.dataset.theme=S.theme; document.body.dataset.cine=S.cine;
+  [["#cLabel",S.label],["#cCine",S.cine],["#cScale",String(S.scale)],["#cTheme",S.theme]].forEach(([s,v])=>document.querySelectorAll(s+" button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===v)));
+  mkMetric(); }
+function all(){ sync(); radar(); strip(); wall(); showDetail(pinKey()); }
+document.querySelector("header").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; const g=b.parentElement.id, v=b.dataset.v;
+  if(g==="cMetric") S.metric=v; else if(g==="cLabel") S.label=v; else if(g==="cCine") S.cine=v; else if(g==="cTheme") S.theme=v; else if(g==="cScale"){ S.scale=+v; S.pin=(S.pin&&typeof S.pin==="string")?null:S.pin; buildWall(); }
+  try{localStorage.hudTheme=S.theme}catch{} all(); });
+$("#proj").textContent=CFG.project;
+const t0=Date.now(); setInterval(()=>{ const d=Date.now()-t0+1391000, p=n=>String(n).padStart(2,"0"), s=`T ${p(Math.floor(d/3600000))}:${p(Math.floor(d/60000)%60)}:${p(Math.floor(d/1000)%60)}:${p(Math.floor(d/10)%100)}`; $("#clock").textContent=s; const tc=$("#tclk"); if(tc) tc.textContent=s; },83);
+if(qs.get("pin")){ const p=qs.get("pin"); S.pin = p[0]==="t"?+p.slice(1):p; }
+buildWall(); all();
+if(!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(tick,1100);
+</script></body></html>

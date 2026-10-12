@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "chromium": "148.0.7778.96",
+  "images": [
+    {
+      "slug": "agent-hud",
+      "sha256": "4866cede6f013e76719c62c86ed9876cc86f7b3cff9b55f6e5718b137afb6b16",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "slug": "build-board",
+      "sha256": "fe6ad00e7625c725754e2b074fd5ee21c90cdb186989481037f289a41c420236",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "slug": "decision-matrix",
+      "sha256": "e36a27d113f996019df7e39f64518fa4b222f5d730e84a84c90b809e271ff534",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "slug": "command-deck",
+      "sha256": "805468446d9b500e97ae4ae84994f30aed0a3dc64967383e9d0580e683a46109",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "slug": "command-deck-v2",
+      "sha256": "5611ce6b40562f17c9a171451c6fa23c26c1396182be3c805800bbef53dfba62",
+      "width": 1440,
+      "height": 900
+    }
+  ],
+  "source_hashes": {
+    "index.html": "9773abf096c3c08981adb0162113ae0b839ca3fa0a0edacfcc0fbbb1a9a554bb",
+    "board.html": "52b7e703658415124c5c41546a473103e7a1b8e0f65f0e42cbe8ceee2ddfbef7",
+    "matrix-journey.html": "618ee417239726e54ebdfaa23d173c794d53a33f1c30ca037f0ee7d0506668af",
+    "command-deck.html": "bfde326a61e2fb15450b79aae89890658ac1c638f9e36c5fe95bf7273da44335",
+    "v2/command-deck-v2.html": "10f626772ff6ef203bebd035cefc673e56cfec3bfb470b32dfd9df897b090626"
+  }
+}

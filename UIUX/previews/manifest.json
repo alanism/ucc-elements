@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "playwright": "1.60.0",
+  "chromium": "148.0.7778.96",
+  "viewport": [
+    1440,
+    1100
+  ],
+  "reduced_motion": true,
+  "source_hashes": {
+    "apple-devices": "494862908e25480fe016d38e7656a92e5410b5ee410a37ce1e60b0686ad2cb16",
+    "dj-decks": "cafe330a38e2e125021552bd0ca1093d756bb540c11d5b0cca36e28de84feca0",
+    "keyboard": "ec1aaaa78fc4b6b0332caf4ccfd087db68fa6c641dd104216dbfd9d8d3219fa5",
+    "midi-pad": "eb676082c1956aa2388f91000dec7cdd857cf4b170d1ded0d596c2d40a1c96b5",
+    "op-1": "cf4d236e15202ed077e24cc091fdb041b4b2eecc74ea3067cce05bc1e8a63c2f",
+    "speakers": "ba423fe37db8655b779e3c6e80269496f7df2d27f2f4845b3edc15f3e9f6e6ec",
+    "tp-7": "534160411673b76c5ca4a5272469a3165c8cd704aed93efec697e3230dca7926"
+  },
+  "images": [
+    {
+      "slug": "midi-keyboard",
+      "theme": "light",
+      "file": "midi-keyboard-light.png",
+      "sha256": "0409c9e7699c9245b9cc1e30333742ba79db78555ccaad4c17944fa7d9c1f418",
+      "width": 1098,
+      "height": 607
+    },
+    {
+      "slug": "midi-keyboard",
+      "theme": "dark",
+      "file": "midi-keyboard-dark.png",
+      "sha256": "20502a5e9938c3a04a4bf7f1c6bc345efecb62d84646446788614930ed09f71d",
+      "width": 1098,
+      "height": 607
+    },
+    {
+      "slug": "midi-pad",
+      "theme": "light",
+      "file": "midi-pad-light.png",
+      "sha256": "46eefae34297ff32dc4e4908468367e168c9468e41376155e85cba8f6b04c1be",
+      "width": 1138,
+      "height": 834
+    },
+    {
+      "slug": "midi-pad",
+      "theme": "dark",
+      "file": "midi-pad-dark.png",
+      "sha256": "fff31cec95bc0fdad4d2c74aeced06e2df88d635925771a5dc1fcd59503e9e55",
+      "width": 1138,
+      "height": 834
+    },
+    {
+      "slug": "synth-studio",
+      "theme": "light",
+      "file": "synth-studio-light.png",
+      "sha256": "0c827cf2e6255927c7d57b60695e16d1509f73c47e88d415f42daf974a7e428f",
+      "width": 1298,
+      "height": 464
+    },
+    {
+      "slug": "synth-studio",
+      "theme": "dark",
+      "file": "synth-studio-dark.png",
+      "sha256": "9776bd5cb40435856253e692c196cd1df3ef6f8fccb5744849677d2f7f772a44",
+      "width": 1298,
+      "height": 464
+    },
+    {
+      "slug": "dj-controller",
+      "theme": "light",
+      "file": "dj-controller-light.png",
+      "sha256": "4a9a70e12c213d786d4a1bddb083e7fadb6733f2ca2e079e705e3d8dbd59a3e1",
+      "width": 1120,
+      "height": 614
+    },
+    {
+      "slug": "dj-controller",
+      "theme": "dark",
+      "file": "dj-controller-dark.png",
+      "sha256": "f0d3ce7ee577ce727761e9466cf6376fa0d8eced81634565de99c3ac909c7300",
+      "width": 1120,
+      "height": 614
+    },
+    {
+      "slug": "compact-speaker",
+      "theme": "light",
+      "file": "compact-speaker-light.png",
+      "sha256": "5f52a6d70a1616981570275b9b8094b6805a7d97e9fbf15adc9273308517f4cb",
+      "width": 301,
+      "height": 432
+    },
+    {
+      "slug": "compact-speaker",
+      "theme": "dark",
+      "file": "compact-speaker-dark.png",
+      "sha256": "5f52a6d70a1616981570275b9b8094b6805a7d97e9fbf15adc9273308517f4cb",
+      "width": 301,
+      "height": 432
+    },
+    {
+      "slug": "portable-speaker",
+      "theme": "light",
+      "file": "portable-speaker-light.png",
+      "sha256": "b6c69e844eef8d1f0aa256c5f183ce87abd5d99bb9032adfdff488b85d793649",
+      "width": 411,
+      "height": 545
+    },
+    {
+      "slug": "portable-speaker",
+      "theme": "dark",
+      "file": "portable-speaker-dark.png",
+      "sha256": "e7b72476d69cffe644459e6329943430998572e9ddc6ba6df108a8b7409cf35a",
+      "width": 411,
+      "height": 545
+    },
+    {
+      "slug": "audio-recorder",
+      "theme": "light",
+      "file": "audio-recorder-light.png",
+      "sha256": "fe1d3795ecb04b963fe6b091eec19b02c11a02c7a1ec0cae6b52fbd958c2af39",
+      "width": 362,
+      "height": 522
+    },
+    {
+      "slug": "audio-recorder",
+      "theme": "dark",
+      "file": "audio-recorder-dark.png",
+      "sha256": "a8cec6b5bf84b58ead3a0aacaf703da5246fcbfc7b148910dc8c5f46018f8b9b",
+      "width": 362,
+      "height": 522
+    },
+    {
+      "slug": "desktop-setup",
+      "theme": "light",
+      "file": "desktop-setup-light.png",
+      "sha256": "1478a3648e3b3a56381e8048cca0a6cc187ed83048434597b699d683236d48b2",
+      "width": 592,
+      "height": 464
+    },
+    {
+      "slug": "desktop-setup",
+      "theme": "dark",
+      "file": "desktop-setup-dark.png",
+      "sha256": "773c4b845646208965a81068ba224443f8c482c5f856d76f53d3c181c5c3dd43",
+      "width": 592,
+      "height": 464
+    },
+    {
+      "slug": "all-in-one",
+      "theme": "light",
+      "file": "all-in-one-light.png",
+      "sha256": "86224ad5399bfa1c76d5a4fed43dac34b94b380537dafb69d85ab0e92d6cf2e8",
+      "width": 592,
+      "height": 464
+    },
+    {
+      "slug": "all-in-one",
+      "theme": "dark",
+      "file": "all-in-one-dark.png",
+      "sha256": "365a7a8086b872bb33fc521e4e1f7c7ecb35f2105ef4f81d300d0bce0f601ab9",
+      "width": 592,
+      "height": 464
+    },
+    {
+      "slug": "laptop",
+      "theme": "light",
+      "file": "laptop-light.png",
+      "sha256": "bd3253446a1561dfafaa7133b5ada76e898668ccea94a6ce4ef3e443865f095e",
+      "width": 695,
+      "height": 449
+    },
+    {
+      "slug": "laptop",
+      "theme": "dark",
+      "file": "laptop-dark.png",
+      "sha256": "97e8aca681923435f072f2230b625d10fd0c3926e280e2d93e23565ae1e7d73a",
+      "width": 695,
+      "height": 449
+    },
+    {
+      "slug": "tablet",
+      "theme": "light",
+      "file": "tablet-light.png",
+      "sha256": "0076b8e316c22c1aecd0337bd9beaff062a51d2a61fb8669653e656ffabad338",
+      "width": 695,
+      "height": 556
+    },
+    {
+      "slug": "tablet",
+      "theme": "dark",
+      "file": "tablet-dark.png",
+      "sha256": "b7b68b32b7d8c22b48decbe7e6f2592b0354b6b46fd831a86e869ea41b3d2bbe",
+      "width": 695,
+      "height": 556
+    },
+    {
+      "slug": "phone",
+      "theme": "light",
+      "file": "phone-light.png",
+      "sha256": "ec53317149ae4b7a2efa52eeb13f42d0271148caa5e6590dc08e15d007a6c3da",
+      "width": 490,
+      "height": 1097
+    },
+    {
+      "slug": "phone",
+      "theme": "dark",
+      "file": "phone-dark.png",
+      "sha256": "277391c57da3afe2c6212f4bfba95175f791ab0fb817fb9a91d858059d1b086b",
+      "width": 490,
+      "height": 1097
+    }
+  ]
+}

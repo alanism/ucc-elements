@@ -1,5 +1,37 @@
 # Learning log
 
+## 2026-10-13 — Dashboard and HUD showcase integration
+
+- Changed: Added five separately named digital dashboard/HUD studies to the atlas, with real-browser previews, shared search, top-level discovery links, independent working screens, direct screen URLs, and return navigation. Kept 63 controls, 12 devices, and five dashboards as separate inventories. Canonical prototype implementations remain unchanged. Published command decks replace optional machine-local thumbnail paths with a labeled synthetic frame; no personal images are uploaded.
+- Failure: Initial capture used Firebase clean URLs against a plain local HTTP server and received a missing-page response. A task-action assertion initially followed the automatically advancing suggestion instead of pinning the task. The prior day's local development server was no longer running when the existing regression script started.
+- Root cause: Development HTTP routing differs from Hosting redirects; suggested-next selection is intentionally dynamic; temporary dev-server sessions do not persist indefinitely.
+- Fix: Generated explicit `.html` links, which work locally and redirect correctly on Firebase; pinned the task before observing start/undo state; started the documented local server. No source behavior or test thresholds were changed.
+- Validation: Five initialized real-browser preview captures; a persistent integration check for inventory/search, all five wrapper/screen interactions, action/undo, mobile panning, Light/Dark gallery visibility, return links, and missing assets; existing comprehensive atlas/device regression; JavaScript syntax checks; both curated builds; identical repeated generation. Local proof verified all 54 payload files returned HTTP 200. Desktop 1440px and phone 390px were tested. Live release results follow below.
+- Prevention / suggested harness update: Keep inventory, preview hashes, and source hashes coupled; verify actual response status before capturing a screen; use explicit study links that work under both development and Hosting routing. Recheck a dev server before invoking a script that assumes its port is active.
+- Remaining limits: Prototype feeds and task data are simulations; no coding harness, VR runtime, physical-control binding, or actual video renderer was added. Agent HUD/Build Board retain a wide layout usable by horizontal panning on phones. External font CDNs remain dependencies.
+
+## 2026-10-12 — Publish the complete device gallery
+
+- Changed: Released the pending 63-control naming/discovery update, all 12 real-browser device previews, 24 finish images, and seven standalone studies to the dedicated UIUX and uncommoncore Hosting sites. Added a raw-template redirect in the current and legacy local shell files so the photographed `shell.html` URL opens the functioning atlas.
+- Failure: The live release lacked locally prepared Apple-inspired frames, MIDI instruments, DJ equipment, speakers, and recorder studies. Opening the raw shell file exposed unresolved placeholders and root-relative missing assets. One of 113 source tests hit its existing 1.5-second file-navigation timeout during concurrent browser QA.
+- Root cause: Prepared local assets had not crossed the deployment boundary; the source template was being used as a public preview. Concurrent browser startup exceeded a tight source-test navigation deadline.
+- Fix: Built curated payloads containing the atlas, previews, and public studies; deployed `uiux-nonhumanintelligence` in `nonhumanintelligence` and `uncommoncore` in `uncommoncore`; verified the actual public pages. Retried the 13 frame tests serially, which all passed without changing assertions or timeouts.
+- Validation: Deterministic generation, both JavaScript syntax checks, both builds, local comprehensive browser QA, and live QA on both hosts passed. Verified 63 controls, 12 previews, 63 code options, 1440px/390px Light/Dark layouts, search vocabulary/aliases, study/back links, representative controls, blank frame screens, and no page/console errors. All 37 dedicated release files returned HTTP 200. The actual raw-template URL redirected successfully. The full source suite had 112 passing tests and one navigation timeout; the complete affected frame group passed on retry.
+- Evidence: `/tmp/ucc-release-source-20261012.log`, `/tmp/ucc-release-frames-retry-20261012.log`, `/tmp/ucc-release-qa-local-20261012.log`, `/tmp/ucc-release-qa-live-20261012.log`, `/tmp/ucc-release-qa-root-live-20261012.log`, and the saved live equipment/frame screenshots under the chat's visualization directory.
+- Prevention / suggested harness update: Verify live study inventory and preview HTTP responses after deployment; link the deployed atlas as the review surface. Run source tests serially with other browser-heavy QA when preserving the existing 1.5-second navigation deadline.
+- Deviation: Added a narrow raw-template redirect to address the user's demonstrated broken local review URL. Preserved existing staged/untracked work and made no GitHub push in this release, consistent with the approved plan's separate push boundary.
+- Remaining risk: Physical MIDI hardware was not tested; existing mocked boundary tests and opt-in connection flow are preserved. Apple-inspired screens intentionally ship blank.
+
+## 2026-10-12 — Showcase release readiness
+
+- Changed: Recorded approval of the simple-name/device-gallery build plan and verified the existing generator, JavaScript syntax checks, standalone payload, and Firebase access to both intended sites. No element implementation changes or Hosting release have begun.
+- Failure: Installing the approved test-only `playwright==1.64.0` in an isolated Python environment failed with no matching distribution; the configured package index offers up to `1.60.0` for the current interpreter.
+- Root cause: The draft plan incorrectly assumed that the locally installed Node Playwright version established availability of the same Python package version.
+- Resolution: Pending approval for the smallest dependency pivot to Python Playwright `1.60.0`; no substitute installed.
+- Prevention: Check package availability for the actual interpreter and package ecosystem before approving a dependency pin. Record Node and Python browser tooling separately.
+- Suggested harness update: Add an interpreter-specific pinned-package availability check to readiness.
+- Firebase finding: `login:list` showed no authorized CLI accounts, but authenticated site-list calls succeeded through an existing credential. Confirm authenticated API access before diagnosing missing credentials or asking for a new login.
+
 ## 2026-10-08 — Unified Enochian Elements showcase
 
 - Changed: Combined 55 controls from three studies into one six-family catalog with a six-column editorial layout, Light/Dark page modes, Cinnabar signal color, top search and Code mode, and one code snippet open at a time. Removed visible outside lineage and Ember options. Deployed a dedicated Firebase Hosting site.

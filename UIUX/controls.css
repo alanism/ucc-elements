@@ -268,7 +268,7 @@
     box-shadow:inset 8px 10px 18px rgba(0,0,0,.22),inset -8px -10px 17px rgba(255,255,255,.88),0 1px 1px rgba(255,255,255,.9);pointer-events:none}
   .concave-top::after{content:"";position:absolute;inset:10%;border-radius:50%;background:radial-gradient(ellipse at 35% 24%,rgba(255,255,255,.55),transparent 48%);mix-blend-mode:screen}
   .concave-button[data-pressed="true"]{transform:translateY(9px) scale(.975)}
-  /* Code Veil global code-reveal control */
+  /* Code global code-reveal control */
   .code-toggle-card{min-height:250px}
   .d37-wrap{display:flex;align-items:center;gap:16px}
   .d37-track{width:132px;height:60px;border:0;border-radius:999px;background:#efefef;position:relative;cursor:pointer;outline-offset:6px;
@@ -343,7 +343,7 @@
   .lineage{font:500 10px var(--mono);letter-spacing:1.2px;text-transform:uppercase;color:#a3a3a8}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-  /* Code Veil (carried over from Volume I) */
+  /* Code (carried over from Volume I) */
   .d37-wrap{display:flex;align-items:center;gap:16px}
   .d37-track{width:132px;height:60px;border:0;border-radius:999px;background:#efefef;position:relative;cursor:pointer;
     box-shadow:inset 0 2px 6px rgba(0,0,0,.08),inset 0 -1px 2px rgba(255,255,255,.9)}
@@ -404,7 +404,7 @@
   .pzt .tg-k{top:4px;left:0;width:60px;height:36px;border-radius:18px;transform-origin:center}
   .pzt[aria-checked="true"] .pzt-line{background:var(--ink)}
 
-  /* Canticle Keys */
+  /* Enochian Synth Keyboard */
   .op{flex-direction:column;gap:16px}
   .op-top{display:flex;align-items:center;justify-content:space-between;width:100%;gap:14px}
   .op-disp{font:600 13px var(--mono);letter-spacing:1px;color:var(--ink);font-variant-numeric:tabular-nums}
@@ -612,7 +612,7 @@
   .lineage{font:500 10px var(--mono);letter-spacing:1.2px;text-transform:uppercase;color:#a3a3a8}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-  /* Code Veil (carried over from Volume I) */
+  /* Code (carried over from Volume I) */
   .d37-wrap{display:flex;align-items:center;gap:16px}
   .d37-track{width:132px;height:60px;border:0;border-radius:999px;background:#efefef;position:relative;cursor:pointer;
     box-shadow:inset 0 2px 6px rgba(0,0,0,.08),inset 0 -1px 2px rgba(255,255,255,.9)}
@@ -632,7 +632,7 @@
   .copy-code:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
   .code-snippet pre{margin:0;padding:16px;overflow:auto;white-space:pre;tab-size:2;font:600 12px/1.55 var(--mono);color:var(--accent)}
 
-  /* ── Lumen VU ── */
+  /* ── Enochian Analog Level Meter ── */
   .vu{--vu-bezel:linear-gradient(180deg,#f6f6f7,#e4e4e7);--vu-face:#fbfbfa;--vu-ink:#161616;--vu-sub:#808084;--vu-shroud:#dcdce0;--vu-glow:0 0 0 transparent;
     width:min(400px,100%);display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;border-radius:12px;background:var(--vu-bezel);
     box-shadow:0 12px 28px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.08),inset 0 1px 0 rgba(255,255,255,.95)}
@@ -665,7 +665,7 @@
   .halo-lbl.min{left:-14px}.halo-lbl.max{right:-16px}
   .halo-side{display:flex;flex-direction:column;gap:10px;align-items:center}
 
-  /* ── Cantor Ladder ── */
+  /* ── Enochian LED Level Meter ── */
   .lad{--lad-bg:#121214;--lad-off:rgba(255,255,255,.075);--lad-on:#F4A934;--lad-ink:#a9a9ae;
     width:min(440px,100%);padding:16px 16px 14px;border-radius:10px;background:var(--lad-bg);display:grid;gap:8px;
     box-shadow:0 14px 30px rgba(0,0,0,.22),inset 0 2px 8px rgba(0,0,0,.6)}
@@ -680,7 +680,7 @@
   .lad-segs i.hot.on,.lad-segs i.hot.hold{background:var(--accent);box-shadow:0 0 7px color-mix(in srgb,var(--accent) 65%,transparent)}
   .lad-nums span{font:500 8px var(--mono);color:var(--lad-ink);text-align:center;white-space:nowrap;overflow:visible;height:10px;line-height:10px}
 
-  /* ── Meridian Fader ── */
+  /* ── Enochian Pitch Slider ── */
   .mer{--m-plate:linear-gradient(180deg,#f5f5f6,#dadadd);--m-ink:#2a2a2d;--m-slot:#161618;--m-cap:linear-gradient(180deg,#fdfdfd,#d2d2d6 52%,#ececee);--m-capb:#a5a5aa;--m-led-off:#c3c3c7;
     display:flex;align-items:center;gap:26px;flex-wrap:wrap;justify-content:center}
   .mer[data-finish="obsidian"]{--m-plate:linear-gradient(180deg,#26262a,#121214);--m-ink:#d0d0d5;--m-slot:#000;--m-cap:linear-gradient(180deg,#45454a,#1b1b1e 55%,#2a2a2e);--m-capb:#050506;--m-led-off:#3a3a3e}
@@ -705,7 +705,7 @@
   .round-btn:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
   .round-lbl{font:500 11px var(--sans);color:var(--muted);margin-top:-6px}
 
-  /* ── Regie Bank ── */
+  /* ── Enochian DJ Mixer ── */
   .reg{--r-deck:#151517;--r-ink:#e2e2e5;--r-sub:#8d8d92;--r-slot:#000;--r-cap:linear-gradient(180deg,#3b3b40,#121214);--r-index:#f7f7f8;
     display:flex;gap:4px;align-items:flex-end;padding:22px 16px 16px;border-radius:12px;background:var(--r-deck);max-width:100%;
     box-shadow:0 16px 34px rgba(0,0,0,.26),inset 0 1px 0 rgba(255,255,255,.07)}
@@ -727,7 +727,7 @@
     transform:translateY(calc(var(--lift) * -4px));box-shadow:0 calc(var(--lift) * 4px) 0 #b9b4a6,0 calc(var(--lift) * 5px + 2px) calc(var(--lift) * 5px + 3px) rgba(0,0,0,.45)}
   .latch:focus-visible{outline:3px solid var(--accent);outline-offset:5px}
 
-  /* ── Aperture Scale ── */
+  /* ── Enochian Radio Tuner ── */
   .ap{--a-win:#0e0e10;--a-ink:#e6e6e9;--a-sub:#77777d;--a-frame:#1d1d20;--a-glass:rgba(255,255,255,.08);
     width:min(820px,100%);display:grid;gap:16px}
   .ap[data-finish="ivory"]{--a-win:#f6f5f1;--a-ink:#1b1b1d;--a-sub:#8a8a8f;--a-frame:#dcdce0;--a-glass:rgba(255,255,255,.55)}
@@ -750,7 +750,7 @@
   .bars i{width:5px;border-radius:1px;background:#d2d2d6}
   .bars i.on{background:var(--ink)}
 
-  /* ── Interlock Bank ── */
+  /* ── Enochian Input Selector ── */
   .ilk{--deck:#141416;--lbl:#e6e6e9;--sock:#060607;
     display:flex;gap:40px;padding:28px 30px 26px;border-radius:12px;background:var(--deck);flex-wrap:wrap;justify-content:center;
     box-shadow:0 16px 34px rgba(0,0,0,.26),inset 0 1px 0 rgba(255,255,255,.07)}
@@ -771,7 +771,7 @@
   .ilk-lbl{font:13px var(--sans);color:var(--lbl);min-width:86px}
   .ilk-lbl.sel{font-weight:600}
 
-  /* ── Lantern Row ── */
+  /* ── Enochian Light Switch Bank ── */
   .lan{--deck:#0d0d0f;--lbl:#f2f2f4;--off-a:#4b4b50;--off-b:#1d1d20;
     display:flex;gap:34px;padding:26px 28px 22px;border-radius:12px;background:var(--deck);flex-wrap:wrap;justify-content:center;
     box-shadow:0 16px 34px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.06)}
@@ -790,7 +790,7 @@
   .lan-cap[aria-pressed="true"] .lan-glow{opacity:1;transition:opacity .09s ease-in}
   .lan-lbl{font:12px var(--sans);color:var(--lbl)}
 
-  /* ── Strobe Platter ── */
+  /* ── Enochian Turntable ── */
   .tt{--plinth:linear-gradient(160deg,#f3f3f4,#d8d8db);--tt-ink:#2a2a2d;--tt-btn:linear-gradient(180deg,#fafafa,#dcdcdf);--tt-btnb:#a9a9ae;
     position:relative;width:min(420px,100%);aspect-ratio:340/300;border-radius:12px;background:var(--plinth);
     box-shadow:0 16px 34px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.9)}
@@ -822,7 +822,7 @@
   .tt-pitch{position:absolute;right:calc(12 / 340 * 100%);top:calc(266 / 300 * 100%);font:500 10px var(--mono);color:var(--tt-ink);opacity:.8;font-variant-numeric:tabular-nums}
   .tt-mark{position:absolute;right:calc(12 / 340 * 100%);top:calc(282 / 300 * 100%);font:500 7px var(--mono);letter-spacing:1px;color:var(--tt-ink);opacity:.55}
 
-  /* ── Transport Bank ── */
+  /* ── Enochian Tape Deck ── */
   .tp{--deck:#121214;--key:linear-gradient(180deg,#2d2d31,#18181a);--key-ink:#ececef;--key-sub:#8a8a90;--edge:#040405;--led-off:#2b2b2f;
     width:100%;max-width:1000px;display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:18px;padding:20px;border-radius:12px;background:var(--deck);
     box-shadow:0 16px 34px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.07)}
@@ -862,7 +862,7 @@
   .tp-key.refuse{animation:tpshake .34s}
   @keyframes tpshake{20%{translate:-3px 0}45%{translate:3px 0}70%{translate:-2px 0}100%{translate:0 0}}
 
-  /* ── Lumen Pad — Horologion materials: white case, recessed face, flat white keys, signal dots ── */
+  /* ── Enochian Macro Pad — Enochian Clock materials: white case, recessed face, flat white keys, signal dots ── */
   .lp{--k:clamp(46px,12.4vw,58px);--gap:calc(var(--k) * .17);
     --case:#fff;--face:#fff;--key:#fff;--ink:#111;--sub:#888;--dot-off:#dcdcdf;--screw:#c9c9cd;
     --case-shadow:0 14px 34px rgba(0,0,0,.12),0 2px 8px rgba(0,0,0,.08);
@@ -927,7 +927,7 @@
   .knob-cap::after{content:"";position:absolute;left:50%;top:15%;width:3px;height:27%;margin-left:-1.5px;border-radius:2px;background:#f7f7f8}
   .knob-lbl{font:600 8.5px var(--mono);letter-spacing:1px;text-transform:uppercase;color:var(--ink);border:1px solid var(--ink);border-radius:2px;padding:2px 5px}
 
-  /* ── Cadence Pads ── */
+  /* ── Enochian Drum Machine ── */
   .cp{--case:#fff;--pad:radial-gradient(ellipse at 50% 42%,#fff,#f0f0f2 82%);--pad-edge:#dedee2;--ink:#111;--sub:#8a8a8f;--btn:#fff;--btn-edge:#d4d4d8;--knob-ring:#dcdce0;
     --case-shadow:0 14px 34px rgba(0,0,0,.12),0 2px 8px rgba(0,0,0,.08);
     width:min(1000px,100%);display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:clamp(14px,2.4vw,28px);padding:clamp(16px,2.6vw,28px);border-radius:22px;background:var(--case);box-shadow:var(--case-shadow);transition:background .22s ease}
@@ -966,7 +966,7 @@
   .sq-btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
   @media (max-width:760px){.cp{grid-template-columns:minmax(0,1fr)}.cp-knobs{grid-template-columns:repeat(4,auto);justify-content:center}.cp-side{flex-direction:row;flex-wrap:wrap;justify-content:center}}
 
-  /* ── Penumbra Deck ── */
+  /* ── Enochian Video Editor ── */
   .pd{--deck:#151517;--ink:#f2f2f4;--sub:#8d8d92;--key:linear-gradient(180deg,#2c2c30,#1c1c1f);--key-edge:#050506;--slot:#000;--knob-ring:#2c2c30;--dot-off:#3a3a3f;
     --deck-shadow:0 18px 40px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.07);width:min(1040px,100%);display:grid;gap:16px}
   .pd[data-finish="ivory"]{--deck:#fff;--ink:#111;--sub:#7d7d82;--key:linear-gradient(180deg,#fff,#efeff1);--key-edge:#cdcdd1;--slot:#cfcfd3;--knob-ring:#dcdce0;--dot-off:#dcdcdf;
@@ -1013,7 +1013,7 @@
   @media (max-width:720px){.pd-monitor{grid-template-columns:minmax(0,1fr)}}
   @media (max-width:560px){.pd-deck{grid-template-columns:minmax(0,1fr);justify-items:center}.pd-zones{gap:7px}.pd-track{width:22px}}
 
-  /* ── Tally Keypad (keycaps share Volume I's mechanical keyboard construction) ── */
+  /* ── Enochian Number Pad (keycaps share Volume I's mechanical keyboard construction) ── */
   .nk-wrap{display:flex;gap:30px;align-items:center;justify-content:center;flex-wrap:wrap;width:100%}
   .nk{--u:clamp(44px,10.6vw,58px);--case:linear-gradient(180deg,#2e2e31,#1e1e21);--well:#0a0a0b;
     --cap:radial-gradient(ellipse at 50% 46%,#d7d7da 0%,#ececee 62%,#fbfbfc 100%);--cap-edge:#9b9ba0;--cap-b:#b8b8bd;--cap-ink:#29292c;
@@ -1048,7 +1048,7 @@
   .nk-tape{font:500 12px/1.75 var(--mono);color:var(--muted);border-top:1px dashed #cfcfd3;padding-top:8px;min-height:90px;font-variant-numeric:tabular-nums}
   .nk-tape div{display:flex;justify-content:space-between;gap:10px}
   .nk-tape b{color:var(--ink);font-weight:600}
-  /* ── Sigil Remote + screen ── */
+  /* ── Enochian Remote Control + screen ── */
   .rm-stage{display:flex;gap:30px;align-items:center;justify-content:center;flex-wrap:wrap;width:100%}
   .tv{width:min(340px,100%);aspect-ratio:16/10.4;border-radius:10px;background:#050506;padding:9px;box-shadow:0 14px 30px rgba(0,0,0,.25),inset 0 0 0 1px #000}
   .tv-screen{position:relative;width:100%;height:100%;border-radius:4px;overflow:hidden;background:#0d0d0f;color:#f7f7f8}
@@ -1107,7 +1107,7 @@
   .rm-vol button[data-down="true"],.rm-vol button:active{background:rgba(255,255,255,.08)}
   .rm-vol button:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
 
-  /* ── Orbit Wheel ── */
+  /* ── Enochian Scroll Wheel ── */
   .ip{--body:linear-gradient(180deg,#3b3b3f,#232326);--wheel:#151517;--wlbl:#c9c9ce;--center:linear-gradient(180deg,#36363a,#26262a);--bezel:#0b0b0c;
     width:min(232px,100%);padding:16px 16px 24px;border-radius:20px;background:var(--body);display:flex;flex-direction:column;align-items:center;gap:20px;
     box-shadow:0 18px 36px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.12);transition:background .22s}
@@ -1144,7 +1144,7 @@
   .ip-center:active,.ip-center[data-down="true"]{transform:scale(.97);box-shadow:inset 0 2px 4px rgba(0,0,0,.25)}
   .ip-press{position:absolute;inset:0;border-radius:50%;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 10%,rgba(127,127,127,.35),transparent 24%);transition:opacity .15s}
 
-  /* ── Excursion Pair ── */
+  /* ── Enochian Speaker Crossover ── */
   .ex{--baffle:#fff;--ink:#111;--sub:#7d7d82;--track:#e4e4e7;width:min(560px,100%);display:grid;gap:18px;padding:24px;border-radius:22px;background:var(--baffle);
     box-shadow:0 14px 34px rgba(0,0,0,.12),0 2px 8px rgba(0,0,0,.08);transition:background .22s}
   .ex[data-finish="obsidian"]{--baffle:#101012;--ink:#f7f7f8;--sub:#9a9aa0;--track:#2a2a2e;box-shadow:0 18px 42px rgba(0,0,0,.34),0 2px 8px rgba(0,0,0,.2)}
@@ -1169,7 +1169,7 @@
   .ex .knob-unit .pd-klbl{color:var(--ink)}
   @media (max-width:520px){.ex{padding:18px 14px}.ex-ctrl{grid-template-columns:1fr;justify-items:center}.xo{width:100%}}
 
-  /* ── Monitor Pair ── */
+  /* ── Enochian Stereo Speakers ── */
   .mn-stage{display:flex;gap:18px;justify-content:center;perspective:1300px;width:100%}
   .mn{--cab:linear-gradient(180deg,#fff,#f0f0f2);--cab-edge:#dcdce0;--ink:#111;--sub:#7d7d82;--wave:radial-gradient(circle,#fff 0 22%,#e3e3e6 52%,#f7f7f8 70%,#fff 74%);--rib:#ececee;--rib2:#dcdce0;
     position:relative;width:min(178px,43%);aspect-ratio:.68;transform-style:preserve-3d;will-change:transform}
@@ -1209,7 +1209,7 @@
   .mn-iec{width:30%;height:16px;border-radius:4px;background:#111;position:relative}
   .mn-iec::after{content:"";position:absolute;inset:4px 25%;border-radius:2px;background:#2a2a2e}
   .mn-model{font:600 7px var(--mono);letter-spacing:2px;color:var(--sub)}
-  /* ── Augur rangefinder ── */
+  /* ── Enochian Camera rangefinder ── */
   .cam{--top:linear-gradient(180deg,#fbfbfb,#e9e9eb);--top-s:#f6f6f7;--top-e:#d9d9dd;--skin:#f4f4f4;--chrome-a:#fbfbfc;--chrome-b:#a9a9ae;--ink:#111;--sub:#7d7d82;
     width:100%;display:grid;gap:18px}
   .cam[data-finish="obsidian"]{--top-s:#1f1f22;--top-e:#050506;--skin:#18181a;--chrome-a:#4a4a4f;--chrome-b:#0c0c0e;--ink:#f7f7f8;--sub:#9a9aa0}
@@ -1271,7 +1271,7 @@
   .shot-n{font:600 9px var(--mono);letter-spacing:1px;color:#8d8d92;display:flex;justify-content:space-between}
   .shot-v{font:600 9.5px var(--mono);letter-spacing:.6px;color:#f2f2f4}
   .shot-v.bad{color:var(--accent)}
-  /* ── Lodestar compass ── */
+  /* ── Enochian Compass compass ── */
   .cmpx{--case:#151517;--face:#2a2a2e;--ink:#ececef;--sub:#9a9aa0;--bz:#0b0b0c;--bz2:#3a3a3e;--needle-s:#f2f2f4;--hub:#0b0b0c;
     display:flex;flex-direction:column;align-items:center;perspective:1100px;width:240px;max-width:100%}
   .cmpx[data-finish="ivory"]{--case:#f1f1f2;--face:#fbfbfb;--ink:#111;--sub:#6e6e73;--bz:#d9d9dd;--bz2:#b9b9be;--needle-s:#1a1a1c;--hub:#fff}
@@ -1301,7 +1301,7 @@
   .cmp-band i{display:block;height:22px;border-radius:4px;background:linear-gradient(180deg,color-mix(in srgb,var(--case) 85%,#fff),var(--case));box-shadow:inset 0 0 0 1px rgba(0,0,0,.35),0 2px 3px rgba(0,0,0,.15)}
   .cmp-turns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 
-  /* ── Climate thermostat ── */
+  /* ── Enochian Thermostat thermostat ── */
   .th{--case:#fff;--ink:#111;--sub:#8a8a8f;--corner:#fff;--corner-sh:0 1px 4px rgba(0,0,0,.12),inset 0 1px 2px rgba(255,255,255,.9);--heat:var(--accent);--cool:#4a96e8;
     position:relative;width:min(340px,100%);aspect-ratio:1;border-radius:24px;background:var(--case);box-shadow:0 14px 34px rgba(0,0,0,.12),0 2px 8px rgba(0,0,0,.08);transition:background .22s}
   .th[data-finish="obsidian"]{--case:#101012;--ink:#f7f7f8;--sub:#9a9aa0;--corner:#202024;--corner-sh:0 3px 8px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.13);box-shadow:0 18px 42px rgba(0,0,0,.34),0 2px 8px rgba(0,0,0,.2)}
@@ -1319,7 +1319,7 @@
   .th-c i.cool{background:var(--cool)}
   .th-c.tl{top:10px;left:10px}.th-c.tr{top:10px;right:10px}.th-c.bl{bottom:10px;left:10px}.th-c.br{bottom:10px;right:10px}
   .th-note{font:500 11px var(--sans);color:var(--muted);text-align:center;max-width:360px}
-  /* ── Velocity + Triad share the Climate case: white rounded square, black round screen, corner keys ── */
+  /* ── Enochian Speedometer + Enochian System Monitor share the Enochian Thermostat case: white rounded square, black round screen, corner keys ── */
   .gauge-scr text.g-num{fill:#c9c9ce;font:500 10px var(--mono)}
   .gauge-scr .g-tick{stroke:#4a4a50} .gauge-scr .g-tick.maj{stroke:#c9c9ce}
   .gauge-scr .g-big{fill:#f7f7f8;font:300 46px var(--sans);letter-spacing:-1px}
@@ -1366,7 +1366,7 @@
   .mf-add input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
   .board[data-finish="obsidian"] .mf-add input{background:#1c1c1f;border-color:#2c2c30;color:#f7f7f8}
   @media (max-width:640px){.board{--cw:12px;--ch:20px;--fs:12px;padding:12px}.board-title{font-size:17px}}
-  /* ── Aemeth · angel voice channel (Sigillum Dei Aemeth, Sloane MS 3188) ── */
+  /* ── Enochian Voice Assistant · angel voice channel (Sigillum Dei Aemeth, Sloane MS 3188) ── */
   .ae-wrap{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:30px;align-items:center;width:100%;max-width:1060px}
   @media (max-width:900px){.ae-wrap{grid-template-columns:minmax(0,1fr);justify-items:center}}
   .ae-col{display:flex;flex-direction:column;align-items:center;gap:16px;min-width:0}
@@ -1464,7 +1464,7 @@
   .agl-scale{display:grid;grid-template-columns:96px minmax(0,1fr) 82px;gap:8px;font:500 8px var(--mono);color:var(--lad-ink)}
   .agl-scale span:nth-child(2){display:flex;justify-content:space-between}
   .agl-scale i{font-style:normal}
-  /* ── Triad Quota: subscription session / weekly / model caps with week pacing ── */
+  /* ── Enochian Usage Monitor: subscription session / weekly / model caps with week pacing ── */
   .qt-wrap{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:28px;align-items:center;width:100%;max-width:1040px}
   @media (max-width:900px){.qt-wrap{grid-template-columns:minmax(0,1fr);justify-items:center}}
   .qt-panel{display:grid;gap:14px;min-width:0;width:100%;max-width:520px}

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Enochian Decision Matrix — screen study</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme=enochian]{--void:#050506;--p0:#0a0a0b;--p1:#0e0e10;--r1:#121215;--r2:#1c1c20;--r3:#2a2a2e;--line:#1f1f23;--line2:#3a3a3e;
+ --ink:#f7f7f8;--ink2:#c9c9ce;--muted:#7b7b82;--dim:#4a4a50;--red:#cc0000;--red-hi:#ff4040;--ember:#ff5a1f;--amber:#f4a934;--hot:#fff3e6;--ok:255,225,205;
+ --red-rgb:204,0,0;--ember-rgb:255,90,31;--cool-rgb:169,173,189;--easy:#fff3e6;--hard:#3a0d0d}
+[data-theme=ares]{--void:#010507;--p0:#020a0e;--p1:#06151f;--r1:#081a26;--r2:#0d2432;--r3:#1b3646;--line:#102a38;--line2:#3c5666;
+ --ink:#efeaea;--ink2:#cdcacb;--muted:#6f8b99;--dim:#3d5866;--red:#d62832;--red-hi:#fc6253;--ember:#f2701e;--amber:#e8924f;--hot:#fff1e8;--ok:120,184,96;
+ --red-rgb:214,40,50;--ember-rgb:242,112,30;--cool-rgb:110,150,170;--easy:#efeaea;--hard:#2a0d14}
+*{box-sizing:border-box}html,body{margin:0;background:var(--void);color:var(--ink);font:400 12px "IBM Plex Sans",sans-serif}
+.mono{font-family:"IBM Plex Mono",monospace}
+header{display:flex;align-items:center;gap:18px;padding:14px 22px;border-bottom:1px solid var(--line)}
+header h1{font:500 15px "IBM Plex Sans";margin:0}header .cap{color:var(--muted);font:400 10.5px "IBM Plex Mono"}
+.seg{display:flex;gap:2px;background:var(--p0);border:1px solid var(--line2);border-radius:3px;padding:2px;margin-left:auto}
+.seg+.seg{margin-left:0}
+.seg button{background:none;border:0;padding:6px 12px;font:500 10px "IBM Plex Mono";letter-spacing:.1em;color:var(--muted);cursor:pointer;border-radius:2px}
+.seg button[aria-pressed=true]{background:var(--r2);color:var(--ink);box-shadow:inset 0 -1px 0 var(--red)}
+main{padding:14px 22px 30px;display:grid;gap:12px;max-width:1700px;margin:auto}
+.opt{display:none}.opt.on{display:grid;gap:12px}
+.note{font:400 11px/1.5 "IBM Plex Sans";color:var(--muted);max-width:920px;margin:0 0 2px}.note b{color:var(--ink2);font-weight:500}
+.panel{position:relative;background:linear-gradient(180deg,var(--p1),var(--p0));border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.ph{display:flex;align-items:baseline;gap:10px;padding:12px 16px 0;font:500 10px "IBM Plex Mono";letter-spacing:.12em;color:var(--ink2)}
+.ph .r{margin-left:auto;color:var(--muted)}.ph em{font-style:normal;color:var(--red-hi)}
+svg{display:block;width:100%;height:auto}
+text{font-family:"IBM Plex Mono",monospace;fill:var(--muted);letter-spacing:.06em}
+.t2{fill:var(--ink2)}.big{font:300 30px "IBM Plex Sans";fill:var(--ink);letter-spacing:0}
+.ln{stroke:var(--line2);fill:none}.ring{stroke:rgba(var(--cool-rgb),.38);fill:none}
+.gA{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:12px}
+.col{display:grid;gap:12px;align-content:start}
+.legend{display:flex;gap:6px;align-items:center;font:400 9.5px "IBM Plex Mono";color:var(--muted);padding:0 16px 12px}
+.legend i{display:block;width:14px;height:10px;border:1px solid var(--line2)}
+.tiles{display:grid;gap:3px;padding:12px 16px 6px}
+.tiles i{display:block;aspect-ratio:1;border:1px solid var(--line2);background:var(--p0)}
+.tiles i.d{background:rgba(var(--ok),.9);border-color:rgba(var(--ok),1)}
+.tiles i.p{background:rgba(var(--red-rgb),.15);border-color:var(--red-hi);box-shadow:0 0 8px rgba(var(--red-rgb),.8);animation:pl 1.6s ease-in-out infinite}
+.tiles i.f{background:var(--red);border-color:var(--red-hi)}
+@keyframes pl{50%{opacity:.35}}
+.kv{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border-top:1px solid var(--line)}
+.kv div{background:var(--p0);padding:10px 14px}.kv b{display:block;font:300 24px "IBM Plex Sans";color:var(--ink)}.kv span{font:400 9.5px "IBM Plex Mono";color:var(--muted);letter-spacing:.08em}
+.mk{cursor:pointer}.mk:hover .dm{stroke:var(--hot);stroke-width:2}
+#tip{position:fixed;pointer-events:none;z-index:9;background:var(--p0);border:1px solid var(--red-hi);padding:8px 10px;font:400 11px "IBM Plex Mono";color:var(--ink2);display:none;max-width:260px;line-height:1.5}
+#tip b{color:var(--ink);font-weight:500}
+@media (prefers-reduced-motion:reduce){.tiles i.p{animation:none}}
+</style></head><body>
+<header><h1>Agent HUD · decision matrix, journey &amp; difficulty</h1><span class="cap">Top Gun: Maverick UI inspiration · Enochian / Ares palettes kept</span>
+<div class="seg" id="optSeg"><button data-o="C" aria-pressed="true">★ RECOMMENDED</button><button data-o="A" aria-pressed="false">A · DARKSTAR RADAR</button><button data-o="B" aria-pressed="false">B · PLAN VIEW</button></div>
+<div class="seg" id="thSeg"><button data-t="ares" aria-pressed="true">ARES</button><button data-t="enochian" aria-pressed="false">ENOCHIAN</button></div></header>
+<main>
+<section class="opt on" id="optC">
+ <p class="note"><b>Recommended mix.</b> Option A's radar for the Eisenhower matrix + Option B's zone strip for the journey, with the difficulty blocks and the tile wall for batches.</p>
+ <div class="gA"><div class="col"><div class="panel" id="cRadar"></div></div>
+  <div class="col"><div class="panel" id="cZones"></div><div class="panel" id="cBatch"></div><div class="panel" id="cDiff"></div></div></div>
+</section>
+<section class="opt" id="optA">
+ <p class="note"><b>Option A — Darkstar radar.</b> Thin-line instrument look (Darkstar 10/19, PR NAV). The Eisenhower matrix <i>is</i> a radar: crosshair axes split the four quadrants, range rings fade outward, tasks are diamond contacts with a "+" size tag, and a dotted route links the do-first order. Timeline/journey is a node track; batch progress is the Tactical Auditorium 30 tile wall.</p>
+ <div class="gA"><div class="col"><div class="panel" id="radar"></div></div>
+  <div class="col"><div class="panel" id="aJourney"></div><div class="panel" id="aBatch"></div><div class="panel" id="aDiff"></div></div></div>
+</section>
+<section class="opt" id="optB">
+ <p class="note"><b>Option B — Plan view.</b> Filled-zone look (Early Dev 15 / Lopardo plan view). The same matrix as four tinted zone panels with gradient fills and diamond contacts; the timeline is the zone-column strip with a T-clock; difficulty is the amber block grid, light = easy → dark = hard; batch progress is the tile wall.</p>
+ <div class="panel" id="plan"></div>
+ <div class="panel" id="bZones"></div>
+ <div class="gA" style="grid-template-columns:1.25fr 1fr"><div class="panel" id="bDiff"></div><div class="panel" id="bBatch"></div></div>
+</section>
+</main><div id="tip"></div>
+<script>
+"use strict";
+// ---- sample data (tasks arrive from email + PRD) -------------------------------------------
+const T = [ // imp/urg 0..1, diff 1(easy)..5(hard)
+ {id:"T-01",t:"Reply to Aya re: release gate",src:"EMAIL",imp:.92,urg:.95,diff:1},
+ {id:"T-02",t:"Fix Hebrew RTL on mobile card",src:"PRD §4.2",imp:.8,urg:.78,diff:3},
+ {id:"T-03",t:"Approve ES audio inventory",src:"EMAIL",imp:.68,urg:.9,diff:2},
+ {id:"T-04",t:"Rotate ElevenLabs key",src:"EMAIL",imp:.73,urg:.62,diff:1},
+ {id:"T-05",t:"Four-language regression suite",src:"PRD §6",imp:.83,urg:.58,diff:4},
+ {id:"T-06",t:"Draft Writer's Board onboarding",src:"PRD §2",imp:.78,urg:.3,diff:5},
+ {id:"T-07",t:"48-dim ontology review",src:"PRD §1",imp:.88,urg:.22,diff:5},
+ {id:"T-08",t:"Learning-log retro",src:"PRD §9",imp:.6,urg:.18,diff:2},
+ {id:"T-09",t:"Refactor channel registry",src:"PRD §5",imp:.66,urg:.36,diff:4},
+ {id:"T-10",t:"Book vendor call",src:"EMAIL",imp:.3,urg:.82,diff:1},
+ {id:"T-11",t:"Expense receipts",src:"EMAIL",imp:.22,urg:.7,diff:1},
+ {id:"T-12",t:"Newsletter digest triage",src:"EMAIL",imp:.35,urg:.6,diff:2},
+ {id:"T-13",t:"Re-skin legacy export page",src:"PRD §8",imp:.2,urg:.25,diff:3},
+ {id:"T-14",t:"Explore alt. TTS voices",src:"EMAIL",imp:.28,urg:.12,diff:2},
+ {id:"T-15",t:"Archive old prototypes",src:"PRD §10",imp:.12,urg:.35,diff:1}];
+const J = [{n:"INTAKE",d:"D-14",s:"done"},{n:"TRIAGE",d:"D-10",s:"done"},{n:"PRD v1.1",d:"D-06",s:"done"},{n:"BUILD",d:"D-02",s:"active"},{n:"REVIEW",d:"D+03",s:"next"},{n:"SHIP",d:"D+07",s:"next"},{n:"LEARN",d:"D+10",s:"next"}];
+const BATCH = {total:203, done:142, running:6, failed:3};
+const DIFF = ["","TRIVIAL","EASY","MEDIUM","HARD","BRUTAL"];
+const Q = c => c.imp>=.5 ? (c.urg>=.5?"DO":"PLAN") : (c.urg>=.5?"DELEGATE":"DROP");
+const QN = {DO:"DO FIRST",PLAN:"SCHEDULE",DELEGATE:"DELEGATE",DROP:"ELIMINATE"};
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const hex2 = h => { h=h.replace("#",""); return [0,2,4].map(i=>parseInt(h.substr(i,2),16)); };
+function diffColor(d){ const a=hex2(css("--easy")), b=hex2(css("--hard")), k=(d-1)/4; return `rgb(${a.map((v,i)=>Math.round(v+(b[i]-v)*k)).join(",")})`; }
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const tip = document.getElementById("tip");
+document.addEventListener("mousemove",e=>{ const m=e.target.closest?.("[data-tip]"); if(!m){tip.style.display="none";return;}
+  tip.innerHTML=m.dataset.tip; tip.style.display="block"; tip.style.left=Math.min(innerWidth-280,e.clientX+14)+"px"; tip.style.top=(e.clientY+14)+"px"; });
+const tipOf = c => `<b>${c.id} · ${esc(c.t)}</b><br>${c.src} · ${QN[Q(c)]}<br>importance ${Math.round(c.imp*100)} · urgency ${Math.round(c.urg*100)}<br>difficulty ${c.diff}/5 ${DIFF[c.diff]}`;
+const diamond = (x,y,r,c,extra="") => `<g class="mk" data-tip="${esc(tipOf(c))}"><path class="dm" d="M${x} ${y-r}L${x+r} ${y}L${x} ${y+r}L${x-r} ${y}Z" fill="${diffColor(c.diff)}" stroke="${c.diff>=4?"var(--red-hi)":"var(--hot)"}" stroke-width="1.2"/>${extra}</g>`;
+const head = (t,r) => `<div class="ph">${t}<span class="r">${r||""}</span></div>`;
+
+// ---- shared: difficulty legend + batch tiles ----------------------------------------------
+const legend = () => `<div class="legend"><span>EASY</span>${[1,2,3,4,5].map(d=>`<i style="background:${diffColor(d)}" title="${DIFF[d]}"></i>`).join("")}<span>HARD</span><span style="margin-left:auto">${T.length} tasks · ${T.filter(c=>c.src==="EMAIL").length} email · ${T.filter(c=>c.src!=="EMAIL").length} PRD</span></div>`;
+function batch(cols){ const {total,done,running,failed}=BATCH; let h="";
+  for(let i=0;i<total;i++){ const c = i<done?"d": i<done+running?"p": i===done+running+3?"f":""; if(c==="f" && failed){} h+=`<i class="${i>=done&&i<done+running?"p":i<done?"d":""}"></i>`; }
+  // mark a few failed inside done region
+  const arr=[...Array(total)].map((_,i)=> i<done?"d": i<done+running?"p":""); [17,58,101].slice(0,failed).forEach(i=>arr[i]="f");
+  h = arr.map(c=>`<i class="${c}"></i>`).join("");
+  return head(`CUSTOMER PROFILES · <em>ENRICH</em>`,`[ ${done}/${total} ]`)+`<div class="tiles" style="grid-template-columns:repeat(${cols},1fr)">${h}</div>
+   <div class="kv"><div><b>${done}</b><span>DONE</span></div><div><b>${running}</b><span>RUNNING</span></div><div><b>${failed}</b><span>NEEDS REVIEW</span></div><div><b>${total-done-running}</b><span>QUEUED</span></div></div>`; }
+function diffGrid(cols,rows){ // one cell per task-hour; colour = difficulty, light easy → dark hard
+  const cells=[]; const rnd=(()=>{let s=7;return()=> (s=(s*16807)%2147483647)/2147483647})();
+  T.slice().sort((a,b)=>b.imp*b.urg-a.imp*a.urg).forEach(c=>{ const n=c.diff+1; for(let k=0;k<n;k++) cells.push(c); });
+  while(cells.length<cols*rows) cells.push(null);
+  return `<div class="tiles" style="grid-template-columns:repeat(${cols},1fr);gap:2px">${cells.slice(0,cols*rows).map(c=>c?`<i data-tip="${esc(tipOf(c))}" style="background:${diffColor(c.diff)};border-color:${c.diff>=4?"var(--line2)":"rgba(0,0,0,.35)"}"></i>`:`<i style="background:transparent;border-color:var(--line)"></i>`).join("")}</div>`; }
+
+// ---- OPTION A ------------------------------------------------------------------------------
+function radar(){ const C=300,S=400, P=(u,i)=>[C+(u-.5)*S, C-(i-.5)*S];
+  const pts=T.map(c=>({c,p:P(c.urg,c.imp)}));
+  const route=T.filter(c=>Q(c)==="DO").sort((a,b)=>b.imp*b.urg-a.imp*a.urg).map(c=>P(c.urg,c.imp));
+  let s=`<svg viewBox="0 0 600 640"><defs><clipPath id="cc"><circle cx="300" cy="300" r="292"/></clipPath>
+   <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="rgba(var(--ember-rgb),.5)" stroke-width="2"/></pattern>
+   <radialGradient id="wd" cx="0" cy="1" r="1"><stop offset="0" stop-color="rgb(var(--red-rgb))" stop-opacity=".02"/><stop offset="1" stop-color="rgb(var(--red-rgb))" stop-opacity=".30"/></radialGradient></defs>`;
+  s+=`<text x="16" y="26" class="t2" style="font-size:10px">PR NAV · MATRIX</text><text x="584" y="26" text-anchor="end" style="font-size:10px">URGENCY × IMPORTANCE</text>`;
+  s+=`<g clip-path="url(#cc)"><rect x="300" y="8" width="292" height="292" fill="url(#wd)"/><rect x="8" y="300" width="292" height="292" fill="url(#hatch)" opacity=".18"/></g>`;
+  s+=[292,196,100].map((r,i)=>`<circle class="ring" cx="300" cy="300" r="${r}" ${i===0?'stroke-width="1.4"':''}/>`).join("");
+  // radial ticks
+  for(let a=0;a<360;a+=10){ const r=a%30===0?10:5, rad=a*Math.PI/180; s+=`<line class="ring" x1="${300+Math.sin(rad)*292}" y1="${300-Math.cos(rad)*292}" x2="${300+Math.sin(rad)*(292-r)}" y2="${300-Math.cos(rad)*(292-r)}"/>`; }
+  s+=`<line class="ring" x1="8" y1="300" x2="592" y2="300" stroke="var(--line2)"/><line class="ring" x1="300" y1="8" x2="300" y2="592" stroke="var(--line2)"/>`;
+  s+=`<g class="ln" stroke-width="1.5"><path d="M20 24V8h14M580 24V8h-14M20 576v16h14M580 576v16h-14" /></g>`;
+  // quadrant labels
+  s+=`<text x="430" y="70" class="t2" style="font-size:11px">DO FIRST</text><text x="430" y="85" style="font-size:9px">IMPORTANT · URGENT</text>
+      <text x="170" y="70" text-anchor="end" class="t2" style="font-size:11px">SCHEDULE</text><text x="170" y="85" text-anchor="end" style="font-size:9px">IMPORTANT · NOT URGENT</text>
+      <text x="430" y="522" class="t2" style="font-size:11px">DELEGATE</text><text x="430" y="537" style="font-size:9px">URGENT · NOT IMPORTANT</text>
+      <text x="170" y="522" text-anchor="end" class="t2" style="font-size:11px">ELIMINATE</text><text x="170" y="537" text-anchor="end" style="font-size:9px">NEITHER</text>
+      <text x="304" y="22" style="font-size:9px">IMP +</text><text x="304" y="600" style="font-size:9px">IMP −</text><text x="14" y="296" style="font-size:9px">URG −</text><text x="586" y="296" text-anchor="end" style="font-size:9px">URG +</text>`;
+  if(route.length>1) s+=`<polyline points="${[[300,300],...route].map(p=>p.join(",")).join(" ")}" fill="none" stroke="var(--ink2)" stroke-width="1.2" stroke-dasharray="1 5" stroke-linecap="round"/>`;
+  s+=`<path d="M300 288l12 22h-24z" fill="var(--amber)"/>`; // "you are here"
+  pts.forEach(({c,p})=>{ const [x,y]=p; s+=diamond(x,y,c.imp>.5&&c.urg>.5?9:7,c,`<text x="${x+13}" y="${y-8}" class="t2" style="font-size:9.5px">+${c.diff}${c.src==="EMAIL"?"":" ▪"}</text>`); });
+  s+=`<text x="16" y="624" style="font-size:9px">◇ EMAIL   ◇▪ PRD   ▲ NOW   ····· DO-FIRST ROUTE</text><text x="584" y="624" text-anchor="end" style="font-size:9px">${T.filter(c=>Q(c)==="DO").length} CONTACTS IN DO-FIRST</text></svg>`;
+  return s+legend(); }
+function aJourney(){ const W=600,x0=44,dx=(W-2*x0)/(J.length-1),y=84; let s=`<svg viewBox="0 0 600 150"><text x="16" y="24" class="t2" style="font-size:10px">JOURNEY · PRD → SHIP</text><text x="584" y="24" text-anchor="end" style="font-size:10px">T D-00 · 04/07</text>`;
+  s+=`<line class="ln" x1="${x0}" y1="${y}" x2="${W-x0}" y2="${y}"/>`;
+  const ai=J.findIndex(j=>j.s==="active"); s+=`<line x1="${x0}" y1="${y}" x2="${x0+dx*ai}" y2="${y}" stroke="var(--ink2)" stroke-width="1.6"/><line x1="${x0+dx*ai}" y1="${y}" x2="${x0+dx*(ai+1)}" y2="${y}" stroke="var(--red-hi)" stroke-width="1.6" stroke-dasharray="1 5" stroke-linecap="round"/>`;
+  J.forEach((j,i)=>{ const x=x0+dx*i, f=j.s==="done"?"var(--ink2)":j.s==="active"?"var(--red)":"var(--p0)", st=j.s==="active"?"var(--red-hi)":j.s==="done"?"var(--ink2)":"var(--line2)";
+    s+=`<path d="M${x} ${y-10}L${x+10} ${y}L${x} ${y+10}L${x-10} ${y}Z" fill="${f}" stroke="${st}" stroke-width="1.4"/>`;
+    if(j.s==="active") s+=`<path d="M${x-26} ${y-26}h-6v6M${x+26} ${y-26}h6v6M${x-26} ${y+26}h-6v-6M${x+26} ${y+26}h6v-6" class="ln" stroke="var(--red-hi)"/>`;
+    s+=`<text x="${x}" y="${y-30}" text-anchor="middle" class="${j.s==="next"?"":"t2"}" style="font-size:9.5px">${j.n}</text><text x="${x}" y="${y+34}" text-anchor="middle" style="font-size:9px">${j.d}</text>`; });
+  return s+`</svg>`; }
+function renderA(){ document.getElementById("radar").innerHTML=radar();
+  document.getElementById("aJourney").innerHTML=aJourney();
+  document.getElementById("aBatch").innerHTML=batch(29);
+  document.getElementById("aDiff").innerHTML=head("DIFFICULTY · BLOCKS PER TASK","LIGHT = EASY · DARK = HARD")+diffGrid(30,3)+legend(); }
+
+// ---- OPTION B ------------------------------------------------------------------------------
+function plan(){ const W=1000,H=560,L=70,R=20,Tp=44,Bt=40, pw=(W-L-R), ph=(H-Tp-Bt), qx=L+pw/2, qy=Tp+ph/2;
+  const P=(u,i)=>[L+u*pw, Tp+(1-i)*ph];
+  let s=`<svg viewBox="0 0 ${W} ${H}"><defs>
+   <linearGradient id="gDo" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgb(var(--red-rgb))" stop-opacity=".55"/><stop offset="1" stop-color="rgb(var(--red-rgb))" stop-opacity=".05"/></linearGradient>
+   <linearGradient id="gPl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="rgb(var(--cool-rgb))" stop-opacity=".30"/><stop offset="1" stop-color="rgb(var(--cool-rgb))" stop-opacity=".03"/></linearGradient>
+   <linearGradient id="gDe" x1="1" y1="1" x2="0" y2="0"><stop offset="0" stop-color="rgb(var(--ember-rgb))" stop-opacity=".40"/><stop offset="1" stop-color="rgb(var(--ember-rgb))" stop-opacity=".03"/></linearGradient></defs>`;
+  s+=`<text x="${L}" y="26" class="t2" style="font-size:10px">PLAN VIEW · EISENHOWER MATRIX</text><text x="${W-R}" y="26" text-anchor="end" style="font-size:10px">T 00:23:11:39 · ${T.length} CONTACTS</text>`;
+  s+=`<rect x="${qx}" y="${Tp}" width="${pw/2}" height="${ph/2}" fill="url(#gDo)"/><rect x="${L}" y="${Tp}" width="${pw/2}" height="${ph/2}" fill="url(#gPl)"/><rect x="${qx}" y="${qy}" width="${pw/2}" height="${ph/2}" fill="url(#gDe)"/><rect x="${L}" y="${qy}" width="${pw/2}" height="${ph/2}" fill="var(--r1)" opacity=".5"/>`;
+  for(let k=0;k<=10;k++){ const x=L+pw*k/10,y=Tp+ph*k/10; s+=`<line x1="${x}" y1="${Tp}" x2="${x}" y2="${Tp+ph}" stroke="var(--line2)" stroke-dasharray="1 5" opacity="${k%5?.5:1}"/><line x1="${L}" y1="${y}" x2="${L+pw}" y2="${y}" stroke="var(--line2)" stroke-dasharray="1 5" opacity="${k%5?.5:1}"/>`;
+    s+=`<text x="${x}" y="${Tp+ph+16}" text-anchor="middle" style="font-size:9px">${k*10}</text><text x="${L-8}" y="${Tp+ph-ph*k/10+3}" text-anchor="end" style="font-size:9px">${k*10}</text>`; }
+  s+=`<rect x="${L}" y="${Tp}" width="${pw}" height="${ph}" class="ln"/><line x1="${qx}" y1="${Tp}" x2="${qx}" y2="${Tp+ph}" stroke="var(--ink2)"/><line x1="${L}" y1="${qy}" x2="${L+pw}" y2="${qy}" stroke="var(--ink2)"/>`;
+  s+=`<path d="M${qx} ${Tp+ph*.25}l6 6-6 6M${qx} ${Tp+ph*.75}l6 6-6 6" class="ln" stroke="var(--ink2)"/>`;
+  s+=`<text x="${qx+pw/2-12}" y="${Tp+22}" text-anchor="end" class="t2" style="font-size:11px">DO FIRST</text><text x="${L+12}" y="${Tp+22}" class="t2" style="font-size:11px">SCHEDULE</text><text x="${qx+pw/2-12}" y="${Tp+ph-12}" text-anchor="end" class="t2" style="font-size:11px">DELEGATE</text><text x="${L+12}" y="${Tp+ph-12}" class="t2" style="font-size:11px">ELIMINATE</text>`;
+  s+=`<text x="${L+pw/2}" y="${H-6}" text-anchor="middle" style="font-size:9px">URGENCY →</text><text transform="translate(14 ${Tp+ph/2}) rotate(-90)" text-anchor="middle" style="font-size:9px">IMPORTANCE →</text>`;
+  T.forEach(c=>{ const [x,y]=P(c.urg,c.imp); s+=diamond(x,y,8,c,`<text x="${c.urg>.72?x-12:x+12}" text-anchor="${c.urg>.72?"end":"start"}" y="${y+3}" class="t2" style="font-size:9.5px">${c.id.slice(2)} ${c.t.length>26?esc(c.t.slice(0,25))+"…":esc(c.t)} <tspan style="fill:var(--muted)">${c.src==="EMAIL"?"✉":"▪"}</tspan></text>`); });
+  return s+`</svg>`+legend(); }
+let UC=0;
+function zones(){ const U=++UC; const W=1000,H=210,L=20,R=20,n=J.length,zw=(W-L-R)/n,y0=44,y1=150;
+  let s=`<svg viewBox="0 0 ${W} ${H}"><defs><linearGradient id="zg${U}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="rgb(var(--red-rgb))" stop-opacity=".05"/><stop offset="1" stop-color="rgb(var(--red-rgb))" stop-opacity=".5"/></linearGradient>
+   <linearGradient id="zd${U}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="rgb(var(--cool-rgb))" stop-opacity=".03"/><stop offset="1" stop-color="rgb(var(--cool-rgb))" stop-opacity=".2"/></linearGradient></defs>
+   <text x="${L}" y="26" class="t2" style="font-size:10px">JOURNEY · ZONE STRIP</text><text x="${W-R}" y="26" text-anchor="end" style="font-size:10px">T 00:23:11:39 · ZONE 04 LIVE</text>`;
+  J.forEach((j,i)=>{ const x=L+zw*i; s+=`<rect x="${x}" y="${y0}" width="${zw}" height="${y1-y0}" fill="${j.s==="active"?"url(#zg${U})":j.s==="done"?"url(#zd${U})":"transparent"}" stroke="var(--line2)" stroke-dasharray="${j.s==="next"?"2 4":"0"}"/>`;
+    if(j.s==="active") s+=`<rect x="${x+zw-3}" y="${y0}" width="3" height="${y1-y0}" fill="var(--red-hi)"/>`;
+    s+=`<text x="${x+10}" y="${y0+18}" class="${j.s==="next"?"":"t2"}" style="font-size:10px">ZONE ${String(i+1).padStart(2,"0")}</text><text x="${x+10}" y="${y0+34}" style="font-size:9px">${j.n}</text>`;
+    const mx=x+zw/2,my=y0+68; s+=`<path d="M${mx} ${my-8}l8 8-8 8-8-8z" fill="${j.s==="done"?"var(--ink2)":j.s==="active"?"var(--red)":"var(--p0)"}" stroke="${j.s==="active"?"var(--red-hi)":"var(--line2)"}"/>`;
+    s+=`<text x="${x+10}" y="${y1+16}" style="font-size:9px">${j.d}</text>`; });
+  const ai=J.findIndex(j=>j.s==="active"); s+=`<path d="M${L+zw*ai+zw/2} ${y0+68} L${L+zw*(ai+1)+zw/2} ${y0+68}" stroke="var(--red-hi)" stroke-dasharray="1 5" stroke-linecap="round" stroke-width="1.4"/><path d="M${L+zw*(ai+1)} ${y0+60}l7 8-7 8z" fill="var(--red-hi)"/>`;
+  s+=`<line x1="${L}" y1="${y1+30}" x2="${W-R}" y2="${y1+30}" class="ln"/>`; for(let k=0;k<=60;k++){ const x=L+(W-L-R)*k/60; s+=`<line x1="${x}" y1="${y1+30}" x2="${x}" y2="${y1+30+(k%10?4:9)}" class="ln"/>`; }
+  return s+`</svg>`; }
+function renderC(){ document.getElementById("cRadar").innerHTML=radar(); document.getElementById("cZones").innerHTML=zones();
+  document.getElementById("cBatch").innerHTML=batch(29); document.getElementById("cDiff").innerHTML=head("DIFFICULTY · BLOCKS PER TASK","LIGHT = EASY · DARK = HARD")+diffGrid(30,3)+legend(); }
+function renderB(){ document.getElementById("plan").innerHTML=plan(); document.getElementById("bZones").innerHTML=zones();
+  document.getElementById("bDiff").innerHTML=head("DIFFICULTY · ACTIVE WORK BLOCKS","LIGHT = EASY · DARK = HARD")+diffGrid(32,3)+legend();
+  document.getElementById("bBatch").innerHTML=batch(24); }
+
+// ---- controls ------------------------------------------------------------------------------
+function theme(n){ document.documentElement.dataset.theme=n; document.querySelectorAll("#thSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.t===n)); try{localStorage.hudTheme=n}catch{} renderA(); renderB(); renderC(); }
+function opt(o){ document.getElementById("optC").classList.toggle("on",o==="C"); document.getElementById("optA").classList.toggle("on",o==="A"); document.getElementById("optB").classList.toggle("on",o==="B");
+  document.querySelectorAll("#optSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.o===o)); }
+document.getElementById("thSeg").onclick=e=>{const b=e.target.closest("button"); if(b) theme(b.dataset.t)};
+document.getElementById("optSeg").onclick=e=>{const b=e.target.closest("button"); if(b) opt(b.dataset.o)};
+const qs=new URLSearchParams(location.search); theme(qs.get("theme")||"ares"); opt(qs.get("opt")||"C");
+</script></body></html>

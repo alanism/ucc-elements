@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Enochian Build Board — screen study</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme=enochian]{
+  --void:#050506; --p0:#0a0a0b; --p1:#0e0e10; --r1:#121215; --r2:#1c1c20; --r3:#2a2a2e; --sel:#1a1214;
+  --line:#1f1f23; --line2:#3a3a3e; --litline:#4a3030;
+  --ink:#f7f7f8; --ink2:#c9c9ce; --num:#a9adbd; --muted:#7b7b82; --dim:#4a4a50;
+  --red:#cc0000; --red-hi:#ff4040; --ember:#ff5a1f; --amber:#f4a934; --hot:#fff3e6;
+  --red-rgb:204,0,0; --ember-rgb:255,90,31; --hot-rgb:255,243,230; --done-rgb:255,225,205; --card-rgb:14,14,17;
+}
+[data-theme=ares]{ /* sampled from Ares UI UX frames: blue-black ground, steel-teal line work, laser red, ember, OK green */
+  --void:#010507; --p0:#020a0e; --p1:#06151f; --r1:#081a26; --r2:#0d2432; --r3:#1b3646; --sel:#1d0c11;
+  --line:#102a38; --line2:#3c5666; --litline:#6a2430;
+  --ink:#efeaea; --ink2:#cdcacb; --num:#e6e4e8; --muted:#6f8b99; --dim:#3d5866;
+  --red:#d62832; --red-hi:#fc6253; --ember:#f2701e; --amber:#e8924f; --hot:#fff1e8;
+  --red-rgb:214,40,50; --ember-rgb:242,112,30; --hot-rgb:255,241,232; --done-rgb:120,184,96; --card-rgb:4,16,22;
+}
+:root{
+  --sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --ease:cubic-bezier(.65,0,.35,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--void);color:var(--ink);font-family:var(--sans);overflow:hidden}
+button{font:inherit;color:inherit}
+:focus-visible{outline:1px solid var(--red);outline-offset:2px}
+.hud{display:grid;grid-template-columns:290px 1fr 350px;grid-template-rows:1fr 190px;gap:10px;height:100vh;padding:10px}
+.panel{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--p1),var(--p0));border:1px solid var(--line);border-radius:3px}
+.panel::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.012) 0 1px,transparent 1px 3px)}
+.h{font-size:15px;font-weight:500;color:var(--ink);margin:0}
+.cap{font-size:11px;color:var(--muted);letter-spacing:.04em}
+.big{font-weight:300;font-size:60px;line-height:1;letter-spacing:-.02em;color:var(--num);font-variant-numeric:tabular-nums}
+.heat{background:linear-gradient(90deg,var(--red),var(--ember) 40%,var(--amber) 70%,var(--hot));-webkit-background-clip:text;background-clip:text;color:transparent}
+.mono{font-family:var(--mono)}
+
+/* ---------- left: agents ---------- */
+#left{padding:24px 12px 12px}
+.kpi{padding:0 10px}
+.kpi .big small{font-size:22px;color:var(--dim);margin-left:4px}
+.sub{display:flex;gap:20px;margin:16px 10px 22px}
+.sub b{display:block;font:300 22px var(--sans);color:var(--ink2);font-variant-numeric:tabular-nums}
+.roster{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.roster button{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:16px 34px 1fr auto;align-items:center;gap:10px;padding:8px 10px;background:var(--r1);border-radius:2px;cursor:pointer;transition:background .3s}
+.roster button:hover{background:var(--r2)}
+.roster button.live{background:linear-gradient(90deg,rgba(var(--red-rgb),.10),var(--r1) 60%)}
+.roster button[aria-pressed=true]{box-shadow:inset 2px 0 0 var(--red);background:var(--sel)}
+.rank{font:400 10px var(--mono);color:var(--dim)}
+.sigil{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:500 12px var(--sans);position:relative;background:conic-gradient(var(--red) var(--share,0deg),var(--r3) 0)}
+.sigil::before{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--p0)}
+.sigil span{position:relative}
+.nm{font-size:13px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.md{font:400 9.5px var(--mono);color:var(--muted);margin-top:2px}
+.st{font:500 9px var(--mono);letter-spacing:.08em;color:var(--dim);text-align:right;white-space:nowrap}
+.st i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--dim);margin-right:5px;vertical-align:1px}
+.st.working{color:var(--ember)} .st.working i{background:var(--ember);box-shadow:0 0 8px var(--ember)}
+.st.review{color:var(--red-hi)} .st.review i{background:var(--red);box-shadow:0 0 8px var(--red)}
+.st b{display:block;font-weight:400;color:var(--muted);margin-top:3px}
+
+/* ---------- center: board over field ---------- */
+#center{display:flex;flex-direction:column}
+#field,#fx{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+#field{transition:opacity 1.2s var(--ease)}
+#fx{z-index:5}
+.chead{position:relative;z-index:3;display:flex;align-items:flex-start;gap:28px;padding:22px 24px 0}
+.chead .big{font-size:46px;margin-top:8px}
+.views{margin-left:auto;display:flex;gap:2px;background:var(--p0);border:1px solid var(--line2);border-radius:3px;padding:2px}
+.views button{background:none;border:0;padding:6px 12px;font:500 10px var(--mono);letter-spacing:.1em;color:var(--muted);cursor:pointer;border-radius:2px}
+.views button[aria-pressed=true]{background:var(--r2);color:var(--ink);box-shadow:inset 0 -1px 0 var(--red)}
+.sweep{position:absolute;left:0;right:0;top:0;height:1px;z-index:4;background:linear-gradient(90deg,transparent,var(--red) 30%,var(--ember) 60%,var(--hot) 80%,transparent);opacity:.7;animation:sw 6s linear infinite}
+@keyframes sw{0%{transform:translateX(-60%)}100%{transform:translateX(60%)}}
+.board{position:relative;z-index:2;flex:1;min-height:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;padding:18px 20px 54px;
+  transform-origin:50% 0;transition:transform 1.3s var(--ease),opacity 1.1s var(--ease),filter 1.1s var(--ease)}
+#center[data-view=field] .board{transform:perspective(1500px) translateZ(-460px) rotateX(16deg);opacity:.05;filter:blur(2px);pointer-events:none}
+#center[data-view=board] #field{opacity:.22}
+#center[data-view=hybrid] #field{opacity:.7}
+#center[data-view=field] #field{opacity:1}
+.col{min-width:0;display:flex;flex-direction:column;min-height:0}
+.col h2{display:flex;align-items:center;gap:8px;font:500 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);margin:0 0 12px;padding-bottom:9px;border-bottom:1px solid var(--line2)}
+.col h2 i{width:7px;height:7px;border-radius:50%;background:rgb(var(--rgb));box-shadow:0 0 10px rgba(var(--rgb),.7)}
+.col h2 span{margin-left:auto;font:400 11px var(--mono);color:rgb(var(--rgb))}
+.cards{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:7px;
+  -webkit-mask-image:linear-gradient(180deg,#000 88%,transparent);mask-image:linear-gradient(180deg,#000 88%,transparent)}
+.more{font:400 10px var(--mono);color:var(--dim);padding:4px 2px}
+/* tier 1: full card (in progress / review) */
+.card{position:relative;background:rgba(var(--card-rgb),.88);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:3px;padding:11px 12px 10px;cursor:pointer;transition:opacity .35s,box-shadow .4s}
+#center[data-view=board] .card{background:rgba(var(--card-rgb),.94)}
+.card::before{content:"";position:absolute;left:-1px;right:-1px;top:-1px;height:2px;border-radius:3px 3px 0 0;background:linear-gradient(90deg,rgba(var(--rgb),.2),rgb(var(--rgb)),rgba(var(--rgb),.2))}
+.card.hotnow{box-shadow:0 0 0 1px rgba(var(--rgb),.28),0 0 26px -8px rgba(var(--rgb),.75)}
+.ctop{display:flex;align-items:center;gap:7px;font:500 9.5px var(--mono);letter-spacing:.06em;color:var(--muted)}
+.ctop code{color:var(--ink2);font:500 10px var(--mono)}
+.ctop .lane{margin-left:auto;text-transform:uppercase}
+.pres{width:7px;height:7px;border-radius:50%;background:rgb(var(--rgb));box-shadow:0 0 10px rgb(var(--rgb));animation:breathe 1.6s ease-in-out infinite}
+@keyframes breathe{50%{opacity:.35;box-shadow:0 0 3px rgb(var(--rgb))}}
+.card h3{font:400 13px/1.35 var(--sans);color:var(--ink);margin:8px 0 7px}
+.who{font:400 10px var(--mono);color:var(--muted)}
+.who b{font-weight:500;color:var(--ink2)}
+.strip{display:grid;grid-template-columns:repeat(18,1fr);gap:2px;height:12px;margin-top:9px;align-items:end}
+.strip i{display:block;background:rgb(var(--rgb));border-radius:1px;height:2px;opacity:.12;transition:height .45s,opacity .45s}
+.tokline{display:flex;justify-content:space-between;font:400 9px var(--mono);color:var(--dim);margin-top:5px}
+/* tier 2: compact row (waiting / planned) */
+.row{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:6px 8px;border-radius:2px;background:rgba(var(--card-rgb),.7);border:1px solid var(--r2);cursor:pointer;transition:opacity .35s}
+.row code{font:500 10px var(--mono);color:var(--ink2)}
+.row .t{font-size:11.5px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row[data-state=waiting] .t{color:var(--muted)}
+.pips{display:flex;gap:3px}
+.pips i{width:5px;height:5px;border-radius:50%;background:var(--r3)}
+.pips i.ok{background:rgb(var(--done-rgb));box-shadow:0 0 5px rgba(var(--done-rgb),.8)}
+.ini{font:500 9px var(--mono);color:var(--dim)}
+/* tier 3: done chip */
+.chips{display:flex;flex-wrap:wrap;gap:5px;align-content:flex-start}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:4px 7px 4px 6px;border-radius:2px;background:rgba(var(--done-rgb),.04);border:1px solid var(--line);font:500 9.5px var(--mono);color:var(--ink2);cursor:pointer;transition:opacity .35s}
+.chip i{width:5px;height:5px;border-radius:50%;background:rgb(var(--done-rgb));box-shadow:0 0 6px rgba(var(--done-rgb),.9)}
+.chip.fresh{animation:fresh 2.4s ease-out}
+@keyframes fresh{0%{background:rgba(var(--ember-rgb),.45);box-shadow:0 0 22px rgba(var(--ember-rgb),.8)}}
+/* focus / trace dimming */
+.board.dimmed [data-id]:not(.lit){opacity:.22}
+.lit.card,.lit.row,.lit.chip{border-color:var(--litline)}
+.cfoot{position:absolute;left:22px;right:22px;bottom:16px;z-index:4;display:flex;align-items:center;gap:12px;font:400 12px var(--sans);color:var(--muted)}
+.cfoot .src{font:400 10px var(--mono);color:var(--dim)}
+.cfoot .r{margin-left:auto;display:flex;align-items:center;gap:10px}
+.rb{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--muted);background:none;color:var(--muted);cursor:pointer;font:500 9px var(--mono)}
+.rb.sq{border-radius:5px}
+.rb[aria-pressed=true]{border-color:var(--red);color:var(--red)}
+.rb:hover{border-color:var(--ink);color:var(--ink)}
+
+/* ---------- right: stream + inspector ---------- */
+#right{padding:24px 0 0 18px}
+.clock{display:flex;justify-content:space-between;padding-right:20px;margin-top:20px}
+.clock span{font:400 10.5px var(--mono);color:var(--muted)}
+.icon{position:absolute;top:18px;right:18px;width:22px;height:22px;border:1px solid var(--line2);border-radius:50%;display:grid;place-items:center;color:var(--muted);font:500 10px var(--mono);background:none;cursor:pointer}
+#stream{list-style:none;margin:12px 0 0;padding:0;font:400 11px/1.38 var(--mono);position:absolute;left:0;right:0;top:86px;bottom:0;overflow:hidden;
+  -webkit-mask-image:linear-gradient(180deg,#000 75%,transparent);mask-image:linear-gradient(180deg,#000 75%,transparent)}
+#stream li{padding:7px 18px 8px;border-top:1px solid var(--r1);animation:in .5s ease-out}
+#stream li:nth-child(odd){background:rgba(255,255,255,.012)}
+@keyframes in{from{opacity:0;transform:translateY(-6px);background:rgba(var(--red-rgb),.18)}}
+.ts,.id{color:var(--dim)} .k-waiting{color:var(--muted)} .k-planned{color:var(--ink2)} .k-working{color:var(--ember)} .k-review{color:var(--red-hi)} .k-done{color:rgb(var(--done-rgb));text-shadow:0 0 8px rgba(var(--ember-rgb),.6)}
+.ag{color:var(--ink2)} .pj{color:var(--amber)} .tk{color:var(--muted)}
+#insp{position:absolute;inset:0;z-index:6;background:linear-gradient(180deg,var(--p1),var(--p0));padding:24px 20px;overflow:auto;transform:translateX(102%);transition:transform .45s var(--ease)}
+#insp.open{transform:none}
+#insp .x{position:absolute;top:18px;right:18px}
+#insp h3{font:400 18px/1.35 var(--sans);margin:12px 0 14px}
+#insp dl{margin:0;font-size:12px;line-height:1.55}
+#insp dt{font:500 9.5px var(--mono);letter-spacing:.1em;color:var(--muted);margin-top:14px}
+#insp dd{margin:4px 0 0;color:var(--ink2)}
+.pill{display:inline-flex;align-items:center;gap:6px;font:500 10px var(--mono);letter-spacing:.08em;padding:3px 8px;border:1px solid rgba(var(--rgb),.5);border-radius:2px;color:rgb(var(--rgb))}
+.pill i{width:6px;height:6px;border-radius:50%;background:rgb(var(--rgb));box-shadow:0 0 6px rgb(var(--rgb))}
+.deps{display:flex;flex-wrap:wrap;gap:5px}
+.deps button{all:unset;cursor:pointer}
+.ilog{list-style:none;padding:0;margin:4px 0 0;font:400 10.5px/1.5 var(--mono);color:var(--muted)}
+
+/* ---------- bottom ---------- */
+.bottom{grid-column:1/-1;display:grid;grid-template-columns:290px 1fr 1fr;gap:10px}
+.bottom .panel{padding:22px 24px 16px}
+.tabs{display:flex;gap:20px;position:absolute;bottom:16px;left:24px}
+.tabs button{background:none;border:0;padding:0;font:400 12px var(--sans);color:var(--muted);cursor:pointer}
+.tabs button[aria-selected=true]{color:var(--ink)}
+.io{display:flex;align-items:baseline;gap:10px;margin-top:12px}
+.io .big{font-size:46px}
+.io small{font:400 11px var(--mono);color:var(--muted)}
+.ws{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.wsr{display:grid;grid-template-columns:78px 1fr 64px;gap:12px;align-items:center;font:400 10px var(--mono);color:var(--muted)}
+.cells{display:flex;gap:3px}
+.cells i{flex:1;max-width:26px;height:11px;border-radius:1px;background:rgba(var(--rgb),.85);cursor:pointer;transition:background .5s}
+.cells i.s-waiting{background:var(--r2)} .cells i.s-planned{background:var(--line2)}
+.cells i.s-working{box-shadow:0 0 7px rgba(var(--ember-rgb),.8)} .cells i.s-review{box-shadow:0 0 7px rgba(var(--red-rgb),.9)}
+.cells i.s-done{background:rgb(var(--done-rgb));box-shadow:0 0 5px rgba(var(--done-rgb),.5)}
+.spend{display:grid;grid-template-columns:auto 1fr;gap:30px;margin-top:10px;align-items:end}
+.meters{display:flex;flex-direction:column;gap:9px;padding-bottom:4px}
+.meter{display:grid;grid-template-columns:110px 1fr 46px;gap:10px;align-items:center;font:400 10px var(--mono);color:var(--muted)}
+.segs{display:grid;grid-template-columns:repeat(24,1fr);gap:2px;height:9px}
+.segs i{background:var(--r2);border-radius:1px}
+.segs i.on{background:var(--ink2)} .segs i.on.w{background:var(--amber)} .segs i.on.r{background:var(--red);box-shadow:0 0 6px var(--red)}
+.note{position:absolute;right:24px;bottom:12px;font:400 9.5px var(--mono);color:var(--dim)}
+
+/* ---------- wire dialog ---------- */
+dialog{background:var(--p0);color:var(--ink);border:1px solid var(--line2);border-radius:4px;width:min(760px,92vw);padding:22px}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+dialog textarea,dialog input,dialog select{width:100%;background:var(--p0);color:var(--ink2);border:1px solid var(--line2);border-radius:2px;font:400 11.5px var(--mono);padding:8px}
+dialog textarea{height:140px;resize:vertical}
+dialog label{display:block;font:500 10px var(--mono);letter-spacing:.08em;color:var(--muted);margin:12px 0 5px}
+dialog .row2{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}
+dialog button{background:var(--r2);color:var(--ink);border:1px solid var(--line2);border-radius:2px;padding:7px 14px;font:500 11px var(--mono);cursor:pointer}
+dialog button.p{background:var(--red);border-color:var(--red)}
+#wireMsg{font:400 11px var(--mono);color:var(--amber);margin-left:auto}
+
+@media (prefers-reduced-motion:reduce){.sweep,#stream li,.pres,.chip.fresh{animation:none}.board,.card,#field{transition:none}}
+</style>
+</head>
+<body>
+<main class="hud">
+  <section class="panel" id="left" aria-label="Agents">
+    <div class="kpi">
+      <p class="h">Verified Done</p>
+      <div class="big" style="margin-top:12px"><span data-n="done">0</span><small>/<span data-n="totalCards">0</span></small></div>
+      <p class="cap" style="margin-top:12px">Tasks · equal weight · not release readiness</p>
+    </div>
+    <div class="sub">
+      <div><b data-n="inflight">0</b><span class="cap">In flight</span></div>
+      <div><b data-n="blocked">0</b><span class="cap">Blocked</span></div>
+      <div><b data-n="streams">0</b><span class="cap">Workstreams</span></div>
+    </div>
+    <p class="h" style="padding:0 10px">Agents</p>
+    <p class="cap" style="padding:0 10px;margin:4px 0 0;color:var(--red)">Persona · model · click to spotlight</p>
+    <ol class="roster" id="roster"></ol>
+  </section>
+
+  <section class="panel" id="center" data-view="hybrid" aria-label="Build board">
+    <canvas id="field" aria-hidden="true"></canvas>
+    <div class="sweep"></div>
+    <div class="chead">
+      <div><p class="h" id="boardTitle">Build Board</p><div class="big" data-n="events">0</div><p class="cap" style="margin-top:10px">Agent events this session</p></div>
+      <div class="views" role="group" aria-label="View">
+        <button id="themeBtn" title="Switch palette" style="color:var(--red)">ARES</button><button data-v="board" aria-pressed="false">BOARD</button><button data-v="hybrid" aria-pressed="true">HYBRID</button><button data-v="field" aria-pressed="false">FIELD</button>
+      </div>
+    </div>
+    <div class="board" id="board"></div>
+    <canvas id="fx" aria-hidden="true"></canvas>
+    <div class="cfoot">
+      <button class="rb sq" id="wireBtn" title="Wire a data source" aria-label="Wire a data source">⚙</button>
+      <span class="src" id="srcLbl">REPLAY · 4 new languages build</span>
+      <div class="r"><span id="cd">AUTO OFF</span>
+        <button class="rb" id="auto" aria-pressed="false" title="Wall mode: cycle views on a metronome" aria-label="Auto cycle">∞</button>
+        <button class="rb" id="pause" aria-pressed="false" aria-label="Pause">II</button></div>
+    </div>
+  </section>
+
+  <section class="panel" id="right" aria-label="Data stream">
+    <p class="h">Data Stream</p>
+    <button class="icon" id="wireBtn2" aria-label="Wire a data source">&gt;_</button>
+    <div class="clock"><span>Real-time</span><span id="clk"></span></div>
+    <ul id="stream" aria-live="off"></ul>
+    <aside id="insp" aria-label="Card inspector" aria-hidden="true"></aside>
+  </section>
+
+  <div class="bottom">
+    <section class="panel" aria-label="Tokens">
+      <p class="h">Tokens In<span style="color:var(--muted)">/Out</span></p>
+      <div class="io"><div class="big heat" data-n="tokIn" data-fmt="k">0</div></div>
+      <div class="io" style="margin-top:4px"><small>OUT</small><span style="font:300 20px var(--sans);color:var(--ink2)" data-n="tokOut" data-fmt="k">0</span></div>
+      <div class="tabs" role="tablist"><button role="tab" data-w="60000">Min</button><button role="tab" data-w="3600000" aria-selected="true">Hour</button><button role="tab" data-w="86400000">Day</button></div>
+    </section>
+    <section class="panel" aria-label="Workstreams">
+      <p class="h">Workstreams <span style="color:var(--muted)">· one cell per card</span></p>
+      <div class="ws" id="ws"></div>
+    </section>
+    <section class="panel" aria-label="Spend and quota">
+      <p class="h">Spend <span style="color:var(--muted)">&amp; Quota</span></p>
+      <div class="spend"><div class="big" data-n="cost" data-fmt="$">0</div><div class="meters" id="meters"></div></div>
+      <div class="note">DEMO RATES — edit CFG.providers</div>
+    </section>
+  </div>
+</main>
+
+<dialog id="wire">
+  <p class="h">Wire a data source</p>
+  <p class="cap">Two kinds of input. <b>Tasks</b> (rows with a <code>title</code>, or a kanban HTML board) build the board. <b>Events</b> (rows with <code>agent</code> + <code>kind</code>) move cards and light the field. Formats: JSON · NDJSON · CSV · XML · kanban HTML — auto-detected.</p>
+  <label for="fmt">FORMAT</label>
+  <select id="fmt"><option value="auto">auto-detect</option><option>json</option><option>ndjson</option><option>csv</option><option>xml</option><option value="kanban">kanban html</option></select>
+  <label for="payload">PAYLOAD</label>
+  <textarea id="payload" spellcheck="false">agent,model,kind,task,tokens_in,tokens_out
+John Carmack,GPT-6.1-Sol,task.working,NEW-01,24000,3100
+John Carmack,GPT-6.1-Sol,task.review,NEW-01,6000,900
+Nicholas Carlini,GPT-6.1-Sol,task.done,NEW-01,2000,400</textarea>
+  <label for="url">URL (polled every 5 s, or sse:https://…)</label>
+  <input id="url" placeholder="https://…/board.json   sse:https://…/events">
+  <div class="row2"><button class="p" id="ingest">Ingest</button><button id="connect">Connect URL</button><button id="sim">Replay: on</button><button id="reset">Restart replay</button><span id="wireMsg"></span><button id="close">Close</button></div>
+</dialog>
+
+<script type="application/json" id="seed">{"title": "4 New Languages \u00b7 Build Board", "cards": [{"id": "SH-01", "lane": "Shared", "title": "Inspect references and prior build lessons", "owner": "Boris Cherny", "model": "GPT-6.1-Sol", "role": "Codex intake", "state": "DONE", "acceptance": "Read all four guides plus Vietnamese/French records; separate source evidence, prior decisions and current authority.", "depends": [], "evidence": "Four DLIC guides; learning_logs.md; retrospective_build.md; docs/learning-log.md; French preparation/contracts.md"}, {"id": "SH-02", "lane": "Shared", "title": "Audit shared channel contracts", "owner": "Boris Cherny", "model": "GPT-6.1-Sol", "role": "council_contract_audit", "state": "DONE", "acceptance": "Trace strict channel/locale/asset allowlists and all runtime/server consumers; identify missing contracts.", "depends": ["SH-01"], "evidence": "council_contract_audit: actual caller map; no four-language plan found; two-entry registry and French-specific branching confirmed"}, {"id": "SH-03", "lane": "Shared", "title": "Audit audio operations and runtime prerequisites", "owner": "Mitchell Hashimoto", "model": "GPT-6-Luna", "role": "council_operations_audit", "state": "DONE", "acceptance": "Inspect tools without mutating receipts or making provider calls; document safe planning and resume requirements.", "depends": ["SH-01"], "evidence": "Read-only council_operations_audit report: Node v22.22.3, npm 10.9.8, ffmpeg/ffprobe available; no API calls/tests"}, {"id": "SH-04", "lane": "Shared", "title": "Approve the missing implementation plan", "owner": "Boris Cherny", "model": "GPT-6.1-Sol", "role": "Aya (Dot), delegated approver", "state": "DONE", "acceptance": "Aya creates and approves concrete versioned plan, language choices, schemas and validation under explicit owner delegation.", "depends": ["SH-02", "SH-03"], "evidence": "Aya-approved build-plan.md v1.1 and decisions.md; explicit owner delegation"}, {"id": "SH-05", "lane": "Shared", "title": "Verify approved execution readiness", "owner": "Nicholas Carlini", "model": "GPT-6.1-Sol", "role": "Codex + council_operations_audit", "state": "DONE", "acceptance": "Resolve safe checkout for dirty working tree; inspect credentials without disclosure; snapshot receipts; run baseline gates. No existing dependencies, permissions or secrets changed.", "depends": ["SH-04"], "evidence": "evidence/baseline.json; operations-audit.md; Aya approved shared dirty checkout; /tmp source backup; 2258 existing audio hashes"}, {"id": "SH-06", "lane": "Shared", "title": "Extend shared channel contracts and lifecycle", "owner": "John Carmack", "model": "GPT-6.1-Sol", "role": "council_contract_audit + Codex integration", "state": "DONE", "acceptance": "Implement approved IDs/locales/manifests/runtime branching; preserve Vietnamese/French parity, no cross-language fallback or stale playback.", "depends": ["SH-05"], "evidence": "evidence/final-validation.json (SHA-256 401c16dddce192aaebaaa09a5d3226e0f64d561fbce055e29ad6cd7ab5648982): six-channel geometry verified at 1440px and 390px; focused 2/2 and full channel suite 94/94 passed. \u00b7 evidence/manual-browser-checks.json (SHA-256 144cfbf339cdd591357040ff31c7510a4ff7b63b5df102cf81fa28b2e8aa87ba): clean localhost browser check confirmed selected-channel needle alignment and expected preview behavior."}, {"id": "SH-07", "lane": "Shared", "title": "Enforce PLAY-only preview boundary", "owner": "Nicholas Carlini", "model": "GPT-6.1-Sol", "role": "Codex integration", "state": "DONE", "acceptance": "New channels live:false; no mic/provider requests; existing Vietnamese/French LIVE unchanged. No new server catalogs or wire/schema permissions.", "depends": ["SH-06"], "evidence": "situational-boundary.test.js3pass; UI switch/direct mode/context acquisition guards"}, {"id": "SH-08", "lane": "Shared", "title": "Verify and publish the tracking artifact", "owner": "Raphael Schaad", "model": "GPT-6-Luna", "role": "Codex tracker", "state": "DONE", "acceptance": "Render exact task/model/language assignments, percentages, dependencies and voice mapping; check filters, mobile layout and deterministic output.", "depends": ["SH-01"], "evidence": "Re-rendered twice byte-identically; renderer validated 41 IDs/dependencies, 9 Shared + 8 tasks per language, and progress arithmetic. Headless system Chrome checked 32/41 overall and 6/8 each language, language/model/search/reset filters, 41-card reset, and zero console errors."}, {"id": "SH-09", "lane": "Shared", "title": "Record operations and final acceptance evidence", "owner": "Mitchell Hashimoto", "model": "GPT-6-Luna", "role": "Codex + council_operations_audit", "state": "DONE", "acceptance": "Update existing runbook/learning log with actual commands and outcomes; never claim deploy, audio, native or device passes from simulation.", "depends": ["ES-08", "HE-08", "JA-08", "ZH-08"], "evidence": "docs/runbook.md and docs/learning-log.md updated with the verified environment prerequisite and actual final totals. \u00b7 evidence/final-validation.json (SHA-256 401c16dddce192aaebaaa09a5d3226e0f64d561fbce055e29ad6cd7ab5648982) and evidence/regression-results.json (SHA-256 da7f350d1b07b31dab4a93e4c4fde828224670be6c63857b3d56697a6109c118): final validation gates passed. \u00b7 evidence/acceptance.json (SHA-256 f38a84f0744e4ed5a4d50791090cb7695c15402332800ff8706df190eb02e9d3): Aya renewed ACCEPT for LOCAL_AI_ASSISTED_PLAY_PREVIEW_ONLY."}, {"id": "ES-01", "lane": "Spanish", "title": "Resolve language policy and curriculum scope", "owner": "Boris Cherny", "model": "GPT-6.1-Sol", "role": "Aya (Dot), delegated approver", "state": "DONE", "acceptance": "Named Mexican target/register, t\u00fa/usted/ustedes and reviewed regional alternatives; lesson count and text-reveal policy.", "depends": ["SH-04"], "evidence": "Aya-approved build-plan.md v1.1 and decisions.md; explicit owner delegation"}, {"id": "ES-02", "lane": "Spanish", "title": "Map lessons, phrases and controlled changes", "owner": "John Carmack", "model": "GPT-6.1-Sol", "role": "council_contract_audit", "state": "DONE", "acceptance": "Map approved scope into MODEL, HEAR, RESPOND, CHANGE, CONTINUE with exact strings, meanings, roles, variants and useful cues. Preserve source provenance.", "depends": ["ES-01"], "evidence": "curriculum/spanish-v1/situations.json: 12 lessons, 60 canonical, 72 recording references; parser PASS"}, {"id": "ES-03", "lane": "Spanish", "title": "Review the exact text inventory", "owner": "Boris Cherny", "model": "GPT-6.1-Sol", "role": "hebrew_source_research", "state": "DONE", "acceptance": "Review source-bound language and controlled changes; record exact corpus hash and AI reviewer identity. Resolve guide-required specialist evidence honestly; no invented native sign-off.", "depends": ["ES-02"], "evidence": "evidence/spanish-text-review.json; exact final corpus SHA-256 accepted by separate GPT-6.1-Sol reviewer; Aya approved"}, {"id": "ES-04", "lane": "Spanish", "title": "Freeze audio inventory and voice routes", "owner": "Mitchell Hashimoto", "model": "GPT-6-Luna", "role": "council_operations_audit", "state": "DONE", "acceptance": "Bind user-selected voice, exact provider model/settings/locale, content and role into request fingerprints; deterministic two-run plan; read-only access/credit preflight.", "depends": ["ES-03", "SH-05"], "evidence": "Deterministic hash-bound render plan; selected voice/settings; independent AI ACCEPT receipt"}, {"id": "ES-05", "lane": "Spanish", "title": "Generate and verify ElevenLabs MP3s", "owner": "Mitchell Hashimoto", "model": "GPT-6-Luna", "role": "council_operations_audit", "state": "DONE", "acceptance": "Use authorized existing key after phrase mapping and exact inventory; record real attempts/accepted/reused/uncertain counts, decode all clips, verify hashes, no blind ambiguous retries. No invented total or replacement voice.", "depends": ["ES-04"], "evidence": "evidence/audio-generation.json; 71/72 references backed by accepted MP3s; 0 retries/uncertain rows; completed resume 0 dispatches; immutable promotion twice; full hash/decoder/QA verifier PASS."}, {"id": "ES-06", "lane": "Spanish", "title": "Integrate channel and language display", "owner": "Alan Cooper", "model": "GPT-6.1-Sol", "role": "Codex integration + hebrew_source_research", "state": "DONE", "acceptance": "Implement approved content/runtime/UI paths; actual script rendering and reveal/accessibility behavior; stop/cancel on switch, safe missing-audio state.", "depends": ["SH-06", "ES-03", "ES-05"], "evidence": "Language integration complete. Integrated browser checks passed across all 12 lessons and five canonical slots plus CHANGE alternate; first-scene MODEL/HEAR playback, missing/corrupt media, playback failure, rapid cancellation and disabled LIVE were covered. Full cross-channel regressions remain in task 07."}, {"id": "ES-07", "lane": "Spanish", "title": "Verify audio, switching and regressions", "owner": "John Carmack", "model": "GPT-6.1-Sol", "role": "council_contract_audit + hebrew_source_research", "state": "DONE", "acceptance": "Validate exact assets/locale/release identity, real browser playback and failure paths, script/Unicode, Vietnamese/French parity; run plan gates without mutating operational receipts.", "depends": ["ES-06", "SH-07"], "evidence": "evidence/final-validation.json (SHA-256 401c16dddce192aaebaaa09a5d3226e0f64d561fbce055e29ad6cd7ab5648982): geometry fixed, channel suite 94/94 PASS, check PASS, build PASS (5.21s). \u00b7 evidence/regression-results.json (SHA-256 da7f350d1b07b31dab4a93e4c4fde828224670be6c63857b3d56697a6109c118): required regression matrix PASS; 244 unit, 40 live, 167 KDLI distinct; credential reuse test had zero POSTs. \u00b7 evidence/manual-browser-checks.json (SHA-256 144cfbf339cdd591357040ff31c7510a4ff7b63b5df102cf81fa28b2e8aa87ba): clean localhost browser check passed after the geometry fix. \u00b7 evidence/audio-generation.json (SHA-256 d8fb813fb673b5623f8a53f92819f88ce08d6e51f6167aa0d0f2c0b97a607d64): verified generated assets and promotions."}, {"id": "ES-08", "lane": "Spanish", "title": "Aya acceptance and simulated user walkthrough", "owner": "Raphael Schaad", "model": "GPT-6.1-Sol", "role": "Aya (Dot), delegated approver", "state": "DONE", "acceptance": "Aya\u2019s final acceptance after browser, audio, switching and regression evidence passes. No native/device/human simulation claim. No production deploy.", "depends": ["ES-07"], "evidence": "evidence/acceptance.json (SHA-256 f38a84f0744e4ed5a4d50791090cb7695c15402332800ff8706df190eb02e9d3): decision ACCEPT; scope LOCAL_AI_ASSISTED_PLAY_PREVIEW_ONLY; refreshed receipt binds current regression and source evidence hashes."}, {"id": "HE-01", "lane": "Hebrew", "title": "Resolve language policy and curriculum scope", "owner": "Boris Cherny", "model": "GPT-6.1-Sol", "role": "Aya (Dot), delegated approver", "state": "DONE", "acceptance": "Separately sourced Modern Israeli Hebrew curriculum; exact approved source assets; gender/address, RTL/nikud/transliteration policy. Guide prohibits filling content gaps from model memory.", "depends": ["SH-04"], "evidence": "Aya-approved build-plan.md v1.1 and decisions.md; explicit owner delegation"}, {"id": "HE-02", "lane": "Hebrew", "title": "Map lessons, phrases and controlled changes", "owner": "John Carmack", "model": "GPT-6.1-Sol", "role": "hebrew_source_research", "state": "DONE", "acceptance": "Map approved scope into MODEL, HEAR, RESPOND, CHANGE, CONTINUE with exact strings, meanings, roles, variants and useful cues. Preserve source provenance.", "depends": ["HE-01"], "evidence": "curriculum/hebrew-v1/situations.json: 12 lessons, 60 canonical, 72 recording references; parser PASS"}, {"id": "HE-03", "lane": "Hebrew", "title": "Review the exact text inventory", "owner": "Boris Cherny", "model": "GPT-6.1-Sol", "role": "council_contract_audit", "state": "DONE", "acceptance": "Review source-bound language and controlled changes; record exact corpus hash and AI reviewer identity. Resolve guide-required specialist evidence honestly; no invented native sign-off.", "depends": ["HE-02"], "evidence": "evidence/hebrew-text-review.json; exact final corpus SHA-256 accepted by separate GPT-6.1-Sol reviewer; Aya approved"}, {"id": "HE-04", "lane": "Hebrew", "title": "Freeze audio inventory and voice routes", "owner": "Mitchell Hashimoto", "model": "GPT-6-Luna", "role": "council_operations_audit", "state": "DONE", "acceptance": "Bind user-selected voice, exact provider model/settings/locale, content and role into request fingerprints; deterministic two-run plan; read-only access/credit preflight.", "depends": ["HE-03", "SH-05"], "evidence": "Deterministic hash-bound render plan; selected voice/settings; independent AI ACCEPT receipt"}, {"id": "HE-05", "lane": "Hebrew", "title": "Generate and verify ElevenLabs MP3s", "owner": "Mitchell Hashimoto", "model": "GPT-6-Luna", "role": "council_operations_audit", "state": "DONE", "acceptance": "Use authorized existing key after phrase mapping and exact inventory; record real attempts/accepted/reused/uncertain counts, decode all clips, verify hashes, no blind ambiguous retries. No invented total or replacement voice.", "depends": ["HE-04"], "evidence": "evidence/audio-generation.json; 59/72 references backed by accepted MP3s; 0 retries/uncertain rows; completed resume 0 dispatches; immutable promotion twice; full hash/decoder/QA verifier PASS."}, {"id": "HE-06", "lane": "Hebrew", "title": "Integrate channel and language display", "owner": "Alan Cooper", "model": "GPT-6.1-Sol", "role": "Codex integration + hebrew_source_research", "state": "DONE", "acceptance": "Implement approved content/runtime/UI paths; actual script rendering and reveal/accessibility behavior; stop/cancel on switch, safe missing-audio state.", "depends": ["SH-06", "HE-03", "HE-05"], "evidence": "Language integration complete. Integrated browser checks passed across all 12 lessons and five canonical slots plus CHANGE alternate; first-scene MODEL/HEAR playback, missing/corrupt media, playback failure, rapid cancellation and disabled LIVE were covered. Full cross-channel regressions remain in task 07."}, {"id": "HE-07", "lane": "Hebrew", "title": "Verify audio, switching and regressions", "owner": "John Carmack", "model": "GPT-6.1-Sol", "role": "council_contract_audit + hebrew_source_research", "state": "DONE", "acceptance": "Validate exact assets/locale/release identity, real browser playback and failure paths, script/Unicode, Vietnamese/French parity; run plan gates without mutating operational receipts.", "depends": ["HE-06", "SH-07"], "evidence": "evidence/final-validation.json (SHA-256 401c16dddce192aaebaaa09a5d3226e0f64d561fbce055e29ad6cd7ab5648982): geometry fixed, channel suite 94/94 PASS, check PASS, build PASS (5.21s). \u00b7 evidence/regression-results.json (SHA-256 da7f350d1b07b31dab4a93e4c4fde828224670be6c63857b3d56697a6109c118): required regression matrix PASS; 244 unit, 40 live, 167 KDLI distinct; credential reuse test had zero POSTs. \u00b7 evidence/manual-browser-checks.json (SHA-256 144cfbf339cdd591357040ff31c7510a4ff7b63b5df102cf81fa28b2e8aa87ba): clean localhost browser check passed after the geometry fix. \u00b7 evidence/audio-generation.json (SHA-256 d8fb813fb673b5623f8a53f92819f88ce08d6e51f6167aa0d0f2c0b97a607d64): verified generated assets and promotions."}, {"id": "HE-08", "lane": "Hebrew", "title": "Aya acceptance and simulated user walkthrough", "owner": "Raphael Schaad", "model": "GPT-6.1-Sol", "role": "Aya (Dot), delegated approver", "state": "DONE", "acceptance": "Aya\u2019s final acceptance after browser, audio, switching and regression evidence passes. No native/device/human simulation claim. No production deploy.", "depends": ["HE-07"], "evidence": "evidence/acceptance.json (SHA-256 f38a84f0744e4ed5a4d50791090cb7695c15402332800ff8706df190eb02e9d3): decision ACCEPT; scope LOCAL_AI_ASSISTED_PLAY_PREVIEW_ONLY; refreshed receipt binds current regression and source evidence hashes."}, {"id": "JA-01", "lane": "Japanese", "title": "Resolve language policy and curriculum scope", "owner": "Boris Cherny", "model": "GPT-6.1-Sol", "role": "Aya (Dot), delegated approver", "state": "DONE", "acceptance": "Target variety and polite/plain roles; kana/kanji, romaji/furigana and reveal choices; exact lesson map and acceptable variants.", "depends": ["SH-04"], "evidence": "Aya-approved build-plan.md v1.1 and decisions.md; explicit owner delegation"}, {"id": "JA-02", "lane": "Japanese", "title": "Map lessons, phrases and controlled changes", "owner": "John Carmack", "model": "GPT-6.1-Sol", "role": "council_contract_audit", "state": "DONE", "acceptance": "Map approved scope into MODEL, HEAR, RESPOND, CHANGE, CONTINUE with exact strings, meanings, roles, variants and useful cues. Preserve source provenance.", "depends": ["JA-01"], "evidence": "curriculum/japanese-v1/situations.json: 12 lessons, 60 canonical, 72 recording references; parser PASS"}, {"id": "JA-03", "lane": "Japanese", "title": "Review the exact text inventory", "owner": "Boris Cherny", "model": "GPT-6.1-Sol", "role": "hebrew_source_research", "state": "DONE", "acceptance": "Review source-bound language and controlled changes; record exact corpus hash and AI reviewer identity. Resolve guide-required specialist evidence honestly; no invented native sign-off.", "depends": ["JA-02"], "evidence": "evidence/japanese-text-review.json; exact final corpus SHA-256 accepted by separate GPT-6.1-Sol reviewer; Aya approved"}, {"id": "JA-04", "lane": "Japanese", "title": "Freeze audio inventory and voice routes", "owner": "Mitchell Hashimoto", "model": "GPT-6-Luna", "role": "council_operations_audit", "state": "DONE", "acceptance": "Bind user-selected voice, exact provider model/settings/locale, content and role into request fingerprints; deterministic two-run plan; read-only access/credit preflight.", "depends": ["JA-03", "SH-05"], "evidence": "Deterministic hash-bound render plan; selected voice/settings; independent AI ACCEPT receipt"}, {"id": "JA-05", "lane": "Japanese", "title": "Generate and verify ElevenLabs MP3s", "owner": "Mitchell Hashimoto", "model": "GPT-6-Luna", "role": "council_operations_audit", "state": "DONE", "acceptance": "Use authorized existing key after phrase mapping and exact inventory; record real attempts/accepted/reused/uncertain counts, decode all clips, verify hashes, no blind ambiguous retries. No invented total or replacement voice.", "depends": ["JA-04"], "evidence": "evidence/audio-generation.json; 67/72 references backed by accepted MP3s; 0 retries/uncertain rows; completed resume 0 dispatches; immutable promotion twice; full hash/decoder/QA verifier PASS."}, {"id": "JA-06", "lane": "Japanese", "title": "Integrate channel and language display", "owner": "Alan Cooper", "model": "GPT-6.1-Sol", "role": "Codex integration + hebrew_source_research", "state": "DONE", "acceptance": "Implement approved content/runtime/UI paths; actual script rendering and reveal/accessibility behavior; stop/cancel on switch, safe missing-audio state.", "depends": ["SH-06", "JA-03", "JA-05"], "evidence": "Language integration complete. Integrated browser checks passed across all 12 lessons and five canonical slots plus CHANGE alternate; first-scene MODEL/HEAR playback, missing/corrupt media, playback failure, rapid cancellation and disabled LIVE were covered. Full cross-channel regressions remain in task 07."}, {"id": "JA-07", "lane": "Japanese", "title": "Verify audio, switching and regressions", "owner": "John Carmack", "model": "GPT-6.1-Sol", "role": "council_contract_audit + hebrew_source_research", "state": "DONE", "acceptance": "Validate exact assets/locale/release identity, real browser playback and failure paths, script/Unicode, Vietnamese/French parity; run plan gates without mutating operational receipts.", "depends": ["JA-06", "SH-07"], "evidence": "evidence/final-validation.json (SHA-256 401c16dddce192aaebaaa09a5d3226e0f64d561fbce055e29ad6cd7ab5648982): geometry fixed, channel suite 94/94 PASS, check PASS, build PASS (5.21s). \u00b7 evidence/regression-results.json (SHA-256 da7f350d1b07b31dab4a93e4c4fde828224670be6c63857b3d56697a6109c118): required regression matrix PASS; 244 unit, 40 live, 167 KDLI distinct; credential reuse test had zero POSTs. \u00b7 evidence/manual-browser-checks.json (SHA-256 144cfbf339cdd591357040ff31c7510a4ff7b63b5df102cf81fa28b2e8aa87ba): clean localhost browser check passed after the geometry fix. \u00b7 evidence/audio-generation.json (SHA-256 d8fb813fb673b5623f8a53f92819f88ce08d6e51f6167aa0d0f2c0b97a607d64): verified generated assets and promotions."}, {"id": "JA-08", "lane": "Japanese", "title": "Aya acceptance and simulated user walkthrough", "owner": "Raphael Schaad", "model": "GPT-6.1-Sol", "role": "Aya (Dot), delegated approver", "state": "DONE", "acceptance": "Aya\u2019s final acceptance after browser, audio, switching and regression evidence passes. No native/device/human simulation claim. No production deploy.", "depends": ["JA-07"], "evidence": "evidence/acceptance.json (SHA-256 f38a84f0744e4ed5a4d50791090cb7695c15402332800ff8706df190eb02e9d3): decision ACCEPT; scope LOCAL_AI_ASSISTED_PLAY_PREVIEW_ONLY; refreshed receipt binds current regression and source evidence hashes."}, {"id": "ZH-01", "lane": "Mandarin", "title": "Resolve language policy and curriculum scope", "owner": "Boris Cherny", "model": "GPT-6.1-Sol", "role": "Aya (Dot), delegated approver", "state": "DONE", "acceptance": "Spoken target/register; simplified/traditional characters, pinyin tone-mark/reveal policy; reviewed text/audio mapping and variants.", "depends": ["SH-04"], "evidence": "Aya-approved build-plan.md v1.1 and decisions.md; explicit owner delegation"}, {"id": "ZH-02", "lane": "Mandarin", "title": "Map lessons, phrases and controlled changes", "owner": "John Carmack", "model": "GPT-6.1-Sol", "role": "council_contract_audit", "state": "DONE", "acceptance": "Map approved scope into MODEL, HEAR, RESPOND, CHANGE, CONTINUE with exact strings, meanings, roles, variants and useful cues. Preserve source provenance.", "depends": ["ZH-01"], "evidence": "curriculum/mandarin-v1/situations.json: 12 lessons, 60 canonical, 72 recording references; parser PASS"}, {"id": "ZH-03", "lane": "Mandarin", "title": "Review the exact text inventory", "owner": "Boris Cherny", "model": "GPT-6.1-Sol", "role": "hebrew_source_research", "state": "DONE", "acceptance": "Review source-bound language and controlled changes; record exact corpus hash and AI reviewer identity. Resolve guide-required specialist evidence honestly; no invented native sign-off.", "depends": ["ZH-02"], "evidence": "evidence/mandarin-text-review.json; exact final corpus SHA-256 accepted by separate GPT-6.1-Sol reviewer; Aya approved"}, {"id": "ZH-04", "lane": "Mandarin", "title": "Freeze audio inventory and voice routes", "owner": "Mitchell Hashimoto", "model": "GPT-6-Luna", "role": "council_operations_audit", "state": "DONE", "acceptance": "Bind user-selected voice, exact provider model/settings/locale, content and role into request fingerprints; deterministic two-run plan; read-only access/credit preflight.", "depends": ["ZH-03", "SH-05"], "evidence": "Deterministic hash-bound render plan; selected voice/settings; independent AI ACCEPT receipt"}, {"id": "ZH-05", "lane": "Mandarin", "title": "Generate and verify ElevenLabs MP3s", "owner": "Mitchell Hashimoto", "model": "GPT-6-Luna", "role": "council_operations_audit", "state": "DONE", "acceptance": "Use authorized existing key after phrase mapping and exact inventory; record real attempts/accepted/reused/uncertain counts, decode all clips, verify hashes, no blind ambiguous retries. No invented total or replacement voice.", "depends": ["ZH-04"], "evidence": "evidence/audio-generation.json; 71/72 references backed by accepted MP3s; 0 retries/uncertain rows; completed resume 0 dispatches; immutable promotion twice; full hash/decoder/QA verifier PASS."}, {"id": "ZH-06", "lane": "Mandarin", "title": "Integrate channel and language display", "owner": "Alan Cooper", "model": "GPT-6.1-Sol", "role": "Codex integration + hebrew_source_research", "state": "DONE", "acceptance": "Implement approved content/runtime/UI paths; actual script rendering and reveal/accessibility behavior; stop/cancel on switch, safe missing-audio state.", "depends": ["SH-06", "ZH-03", "ZH-05"], "evidence": "Language integration complete. Integrated browser checks passed across all 12 lessons and five canonical slots plus CHANGE alternate; first-scene MODEL/HEAR playback, missing/corrupt media, playback failure, rapid cancellation and disabled LIVE were covered. Full cross-channel regressions remain in task 07."}, {"id": "ZH-07", "lane": "Mandarin", "title": "Verify audio, switching and regressions", "owner": "John Carmack", "model": "GPT-6.1-Sol", "role": "council_contract_audit + hebrew_source_research", "state": "DONE", "acceptance": "Validate exact assets/locale/release identity, real browser playback and failure paths, script/Unicode, Vietnamese/French parity; run plan gates without mutating operational receipts.", "depends": ["ZH-06", "SH-07"], "evidence": "evidence/final-validation.json (SHA-256 401c16dddce192aaebaaa09a5d3226e0f64d561fbce055e29ad6cd7ab5648982): geometry fixed, channel suite 94/94 PASS, check PASS, build PASS (5.21s). \u00b7 evidence/regression-results.json (SHA-256 da7f350d1b07b31dab4a93e4c4fde828224670be6c63857b3d56697a6109c118): required regression matrix PASS; 244 unit, 40 live, 167 KDLI distinct; credential reuse test had zero POSTs. \u00b7 evidence/manual-browser-checks.json (SHA-256 144cfbf339cdd591357040ff31c7510a4ff7b63b5df102cf81fa28b2e8aa87ba): clean localhost browser check passed after the geometry fix. \u00b7 evidence/audio-generation.json (SHA-256 d8fb813fb673b5623f8a53f92819f88ce08d6e51f6167aa0d0f2c0b97a607d64): verified generated assets and promotions."}, {"id": "ZH-08", "lane": "Mandarin", "title": "Aya acceptance and simulated user walkthrough", "owner": "Raphael Schaad", "model": "GPT-6.1-Sol", "role": "Aya (Dot), delegated approver", "state": "DONE", "acceptance": "Aya\u2019s final acceptance after browser, audio, switching and regression evidence passes. No native/device/human simulation claim. No production deploy.", "depends": ["ZH-07"], "evidence": "evidence/acceptance.json (SHA-256 f38a84f0744e4ed5a4d50791090cb7695c15402332800ff8706df190eb02e9d3): decision ACCEPT; scope LOCAL_AI_ASSISTED_PLAY_PREVIEW_ONLY; refreshed receipt binds current regression and source evidence hashes."}, {"id": "ES-09", "lane": "Spanish", "title": "Spanish final simulated user walkthrough", "owner": "Raphael Schaad", "model": "GPT-6.1-Sol", "role": "Codex parent via CUA", "state": "DONE", "acceptance": "Complete the owner-requested final browser simulation for this language. Record actual route/channel selection, representative MODEL/HEAR playback, reveal/hint behavior, scene and CHANGE alternate, viewport/script/RTL behavior where applicable, errors and screenshots. Fixes are tracked in SH-10. This is simulated browser use, not native-speaker or physical-device certification.", "depends": ["ES-08"], "evidence": "evidence/release-user-simulation.json (SHA-256 ce4f6622325ae815884b9b7278df4a98e2c25d6411dca54fa01872096417e17d): Spanish browser simulation PASS at desktop and 390px; channel selection, MODEL, target/English reveal, hint, lesson/CHANGE alternate and mobile card checked. Shared power-off/replay check also passed."}, {"id": "HE-09", "lane": "Hebrew", "title": "Hebrew final simulated user walkthrough", "owner": "Raphael Schaad", "model": "GPT-6.1-Sol", "role": "Codex parent via CUA", "state": "DONE", "acceptance": "Complete the owner-requested final browser simulation for this language. Record actual route/channel selection, representative MODEL/HEAR playback, reveal/hint behavior, scene and CHANGE alternate, viewport/script/RTL behavior where applicable, errors and screenshots. Fixes are tracked in SH-10. This is simulated browser use, not native-speaker or physical-device certification.", "depends": ["HE-08"], "evidence": "evidence/release-user-simulation.json (SHA-256 ce4f6622325ae815884b9b7278df4a98e2c25d6411dca54fa01872096417e17d): Hebrew browser simulation PASS at desktop and 390px; channel selection, MODEL, target/English reveal, hint, lesson/CHANGE alternate and mobile card checked. Shared power-off/replay check also passed."}, {"id": "JA-09", "lane": "Japanese", "title": "Japanese final simulated user walkthrough", "owner": "Raphael Schaad", "model": "GPT-6.1-Sol", "role": "Codex parent via CUA", "state": "DONE", "acceptance": "Complete the owner-requested final browser simulation for this language. Record actual route/channel selection, representative MODEL/HEAR playback, reveal/hint behavior, scene and CHANGE alternate, viewport/script/RTL behavior where applicable, errors and screenshots. Fixes are tracked in SH-10. This is simulated browser use, not native-speaker or physical-device certification.", "depends": ["JA-08"], "evidence": "evidence/release-user-simulation.json (SHA-256 ce4f6622325ae815884b9b7278df4a98e2c25d6411dca54fa01872096417e17d): Japanese browser simulation PASS at desktop and 390px; channel selection, MODEL, target/English reveal, hint, lesson/CHANGE alternate and mobile card checked. Shared power-off/replay check also passed."}, {"id": "ZH-09", "lane": "Mandarin", "title": "Mandarin final simulated user walkthrough", "owner": "Raphael Schaad", "model": "GPT-6.1-Sol", "role": "Codex parent via CUA", "state": "DONE", "acceptance": "Complete the owner-requested final browser simulation for this language. Record actual route/channel selection, representative MODEL/HEAR playback, reveal/hint behavior, scene and CHANGE alternate, viewport/script/RTL behavior where applicable, errors and screenshots. Fixes are tracked in SH-10. This is simulated browser use, not native-speaker or physical-device certification.", "depends": ["ZH-08"], "evidence": "evidence/release-user-simulation.json (SHA-256 ce4f6622325ae815884b9b7278df4a98e2c25d6411dca54fa01872096417e17d): Mandarin browser simulation PASS at desktop and 390px; channel selection, MODEL, target/English reveal, hint, lesson/CHANGE alternate and mobile card checked. Shared power-off/replay check also passed."}, {"id": "SH-10", "lane": "Shared", "title": "Fix findings from final four-language simulation", "owner": "John Carmack", "model": "GPT-6.1-Sol", "role": "Codex parent + integration agents", "state": "DONE", "acceptance": "Triage final browser-simulation and packaging findings; resolve any application or generated-package issue minimally. If no application issue exists, document that and avoid source changes.", "depends": ["ES-09", "HE-09", "JA-09", "ZH-09"], "evidence": "evidence/release-user-simulation.json (SHA-256 ce4f6622325ae815884b9b7278df4a98e2c25d6411dca54fa01872096417e17d): all four language flows PASS; no application findings or source changes required. \u00b7 evidence/release-build-inventory.json (SHA-256 2cc18341227238aa8f62dae0ae608a5185e5b9c907a155cb6095522ff929355f): package scan found three generated .DS_Store files in dist; only those generated copies were removed, then inventory scan PASS with no credential-pattern findings."}, {"id": "SH-11", "lane": "Shared", "title": "Run final cross-channel regression and build gates", "owner": "John Carmack", "model": "GPT-6.1-Sol", "role": "Codex test runner + parent", "state": "DONE", "acceptance": "After simulation fixes, rerun doctor, check, required unit/live/KDLI and all channel tests plus production build and four-language asset verifier. Record exact commands, counts, skips, hashes and status.", "depends": ["SH-10"], "evidence": "Parent reports latest node --test channel suite PASS: 94/94, zero failures/skips; log /tmp/aya-release-channels.log. \u00b7 Parent reports latest doctor/check/unit (244)/live (40) regression gates PASS; KDLI distinct coverage 167 with zero uncovered skips is recorded in evidence/regression-results.json. \u00b7 Latest production build PASS in 5.23s; log /tmp/four-language-release-build.log. \u00b7 evidence/release-built-assets.json confirms source/dist parity for 268 MP3s; evidence/release-build-inventory.json confirms 2893 packaged files and no credential-pattern findings after generated metadata cleanup."}, {"id": "SH-12", "lane": "Shared", "title": "Deploy approved frontend to Firebase Hosting site 104kdli", "owner": "Mitchell Hashimoto", "model": "GPT-6-Luna", "role": "Codex parent deployment operator", "state": "DONE", "acceptance": "Build and deploy Hosting only to site 104kdli in project uncommoncore using the cached Firebase CLI and existing firebase.json. Record the predeploy live version/release, exact deploy command/result, resulting version/release, uploaded files and URL. Do not deploy Cloud Run or alter Firebase configuration.", "depends": ["SH-11"], "evidence": "evidence/hosting-deployment.json (SHA-256 3ade502ebbbf996bb632639a08b602e0fa10bc3f5364ebf1ec26b4f8c4ebd8e4): Hosting-only deploy exited 0; 2893 files uploaded, including 287 new; read-only live channel snapshot confirms finalized version 7099c8503fbc4715 and release 1791625953950000."}, {"id": "SH-13", "lane": "Shared", "title": "Verify the deployed four-language site and live release", "owner": "John Carmack", "model": "GPT-6.1-Sol", "role": "Codex parent via CUA + read-only HTTP checks", "state": "DONE", "acceptance": "Verify the deployed version at https://104kdli.web.app and four language routes/channels, real mapped audio playback, key selection/reveal/hint paths, mobile Hebrew RTL layout, console/network health and unchanged /api/live routing. Record actual browser and HTTP evidence. No paid LIVE conversation or device certification claim.", "depends": ["SH-12"], "evidence": "evidence/production-asset-verification.json (SHA-256 1f4cdfa1b78dd829fb640e80d6eb6c8e72bba3226208b1a75c482701f034c34e): all 291 public files including 268 audio files verified against expected hashes. \u00b7 evidence/production-cua-simulation.json (SHA-256 f4049c9d3651d4628849691728c7445908e01fd72b61a743c172d82ea382e424): all four public language simulations PASS. \u00b7 evidence/production-browser-smoke.json (SHA-256 9c388902383ddfe244d8aedd3dcb768e74252c7afb530c71b9ac3361f352a704): four direct-entry routes pass; four-channel desktop/mobile flows and eight playback starts/ends pass with no errors or blocked-resource events. \u00b7 evidence/deployment-acceptance.json (SHA-256 2f41d9615f1dddd6298555a4552f06de0ee4cfcfbbb8b2d29f53a3611550c211): Aya ACCEPT for PUBLIC_FIREBASE_HOSTING_AI_ASSISTED_PLAY_PREVIEWS; all 10 bound evidence hashes match."}]}</script>
+<script>
+"use strict";
+/* ================= CONFIG ================= */
+const CFG = {
+  windowMs: 45000,
+  wall: { hybrid: 24000, field: 9000 },     // metronome when AUTO is on
+  stages: [
+    {id:"waiting", label:"Waiting on inputs"}, {id:"planned", label:"Planned"}, {id:"working", label:"In progress"},
+    {id:"review",  label:"Review"}, {id:"done", label:"Verified done"},
+  ],
+  // canvas light per theme (CSS tokens live in :root / [data-theme])
+  themes: {
+    enochian: { ground:"#0a0a0b", label:"#c9c9ce", core:"255,246,236", flare:"255,90,31", streak:"255,60,40",
+      wireDone:"255,243,230", wireBlock:"204,0,0", wireNext:"255,90,31",
+      stages:{ waiting:[110,110,118], planned:[201,201,206], working:[255,90,31], review:[204,0,0], done:[255,243,230] } },
+    ares: { ground:"#02090d", label:"#cdcacb", core:"242,255,236", flare:"120,184,96", streak:"214,40,50",
+      wireDone:"120,184,96", wireBlock:"214,40,50", wireNext:"242,112,30",
+      stages:{ waiting:[84,110,124], planned:[228,226,230], working:[214,40,50], review:[242,112,30], done:[120,184,96] } },
+  },
+  stateAlias: { WAITING:"waiting", BLOCKED:"waiting", BACKLOG:"planned", TODO:"planned", PLANNED:"planned",
+    IN_PROGRESS:"working", DOING:"working", WORKING:"working", REVIEW:"review", IN_REVIEW:"review", DONE:"done", VERIFIED:"done" },
+  kindToStage: { "task.waiting":"waiting","task.planned":"planned","task.created":"planned","task.working":"working",
+    "code.written":"working","task.review":"review","code.reviewed":"review","task.done":"done" },
+  modelProvider: [[/gpt|o\d|codex/i,"openai"],[/claude|opus|sonnet|fable|haiku/i,"anthropic"],[/nemotron|llama/i,"nvidia"]],
+  providers: {                              // USD / 1M tokens + daily token quota — DEMO values
+    openai:    {in:2.5, out:10, quota:12e6},
+    anthropic: {in:5,   out:25, quota:40e6},
+    nvidia:    {in:0,   out:0,  quota:20e6},
+  },
+  compactCap: 18,
+};
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const qs = new URLSearchParams(location.search);
+const SPEED = Math.max(.25, +qs.get("speed") || 1);
+const STAGE = Object.fromEntries(CFG.stages.map((s,i) => [s.id, {...s, i}]));
+let TH = null;
+function applyTheme(name){ if (!CFG.themes[name]) name = "ares"; TH = CFG.themes[name]; document.documentElement.dataset.theme = name;
+  for (const st of CFG.stages){ st.rgb = TH.stages[st.id]; STAGE[st.id].rgb = st.rgb; }
+  document.querySelectorAll("#themeBtn").forEach(b => b.textContent = name.toUpperCase()); try { localStorage.hudTheme = name; } catch {} }
+applyTheme(qs.get("theme") || (()=>{ try { return localStorage.hudTheme; } catch { return null; } })() || "ares");
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const rgbVar = id => `--rgb:${STAGE[id].rgb.join(",")}`;
+
+/* ================= STATE ================= */
+const B = { cards:new Map(), agents:new Map(), events:[], tok:[], comets:[], flares:[], total:0, cost:0, provUsed:{},
+  rejected:0, paused:false, pauseAt:0, focus:null, hover:null, inspect:null, view:"hybrid", auto:!!qs.get("wall"), seq:0, doneSeq:0 };
+const now = () => B.paused ? B.pauseAt : Date.now();
+const providerOf = m => (CFG.modelProvider.find(([re]) => re.test(m||"")) || [,"openai"])[1];
+const normState = s => CFG.stateAlias[String(s||"").toUpperCase().replace(/[\s-]+/g,"_")] || (STAGE[String(s).toLowerCase()] ? String(s).toLowerCase() : "planned");
+const splitDeps = d => Array.isArray(d) ? d : String(d||"").split(/[,;|]/).map(x => x.trim()).filter(x => x && x.toLowerCase()!=="none");
+
+function agentOf(name, model){
+  let a = B.agents.get(name);
+  if (!a){ a = {name, model:model||"—", tin:0, tout:0, done:0, state:"idle", last:0, on:"", lane:B.agents.size}; B.agents.set(name, a); }
+  if (model) a.model = model;
+  return a;
+}
+
+/* ================= TASKS (cards) ================= */
+function loadTasks(rows, replace){
+  if (replace){ B.cards.clear(); B.agents.clear(); }
+  for (const r of rows){
+    const id = String(r.id || r.key || r.task || "").trim(); if (!id || !(r.title || r.name)) { B.rejected++; continue; }
+    const c = B.cards.get(id) || {id, tin:0, tout:0, since:0, doneAt:0};
+    Object.assign(c, { title:r.title||r.name, lane:r.lane||r.workstream||r.language||r.project||"Unassigned", owner:r.owner||r.assignee||r.agent||"Unassigned",
+      model:r.model||c.model||"", role:r.role||"", acceptance:r.acceptance||r.description||"", evidence:r.evidence||"",
+      depends:splitDeps(r.depends), state:normState(r.state||r.status) });
+    if (c.state==="done" && !c.doneAt) c.doneAt = ++B.doneSeq;
+    B.cards.set(id, c); agentOf(c.owner, c.model);
+  }
+  render();
+}
+const ready = c => c.depends.every(d => !B.cards.has(d) || B.cards.get(d).state==="done");
+
+function moveCard(c, stage, actor){
+  if (!c || c.state===stage) return false;
+  const from = c.state;
+  flip(() => { c.state = stage; c.since = now(); if (stage==="done") { c.doneAt = ++B.doneSeq; c.fresh = performance.now(); } });
+  if (stage==="done"){
+    if (actor) actor.done++;
+    const unblocked = [...B.cards.values()].filter(x => x.state==="waiting" && x.depends.includes(c.id) && ready(x));
+    if (unblocked.length) setTimeout(() => { flip(() => unblocked.forEach(x => { x.state = "planned"; }));
+      unblocked.forEach(x => streamSys(`${x.id} : <span class="k-planned">UNBLOCKED</span> <span class="tk">by ${esc(c.id)}</span>`)); }, 650/SPEED);
+  }
+  return from;
+}
+
+/* ================= EVENTS ================= */
+function push(raw){
+  const kind = String(raw.kind||"").toLowerCase(), stage = CFG.kindToStage[kind];
+  if (!raw.agent || !stage){ B.rejected++; return false; }
+  const ts = toTs(raw.ts);
+  const a = agentOf(String(raw.agent), raw.model);
+  const id = raw.task ? String(raw.task) : "#" + (++B.seq).toString(16).padStart(5,"0");
+  let c = B.cards.get(id);
+  if (!c && raw.task){ // events-only feeds build their own board
+    c = {id, title:raw.label||raw.title||id, lane:raw.project||raw.lane||"Unassigned", owner:a.name, model:raw.model||a.model,
+      role:"", acceptance:"", evidence:"", depends:[], state:"planned", tin:0, tout:0, since:ts, doneAt:0};
+    B.cards.set(id, c); render();
+  }
+  const e = { ts, agent:a.name, kind, stage, task:id, tin:+raw.tokens_in||0, tout:+raw.tokens_out||0 };
+  a.tin += e.tin; a.tout += e.tout; a.last = ts; a.state = stage==="done" ? "idle" : stage; a.on = stage==="done" ? "" : id;
+  if (c){ c.tin += e.tin; c.tout += e.tout; moveCard(c, stage, a); }
+  const p = CFG.providers[providerOf(raw.model || a.model)] || {in:0,out:0,quota:1};
+  B.cost += (e.tin*p.in + e.tout*p.out)/1e6;
+  const pk = providerOf(raw.model || a.model); B.provUsed[pk] = (B.provUsed[pk]||0) + e.tin + e.tout;
+  e.intensity = Math.min(1, .25 + Math.log10(1 + e.tin + e.tout*4)/6);
+  B.events.push(e); B.tok.push({ts, tin:e.tin, tout:e.tout}); B.total++;
+  if (B.events.length > 6000) B.events.splice(0, 1500);
+  streamLine(e, a, c);
+  return true;
+}
+function toTs(v){ if (v==null || v==="") return Date.now(); const n = +v; if (!isNaN(n)) return n < 1e12 ? n*1000 : n; const d = Date.parse(v); return isNaN(d) ? Date.now() : d; }
+
+/* ================= ADAPTERS ================= */
+const Adapters = {
+  json: t => { const v = JSON.parse(t); return Array.isArray(v) ? v : (v.tasks || v.cards || v.events || v.data || v.items || [v]); },
+  ndjson: t => t.split(/\r?\n/).filter(l => l.trim()).map(l => JSON.parse(l)),
+  csv: t => { const rows=[]; let row=[], f="", q=false;
+    for (let i=0;i<t.length;i++){ const ch=t[i];
+      if (q){ if (ch==='"'){ if (t[i+1]==='"'){f+='"';i++;} else q=false; } else f+=ch; }
+      else if (ch==='"') q=true; else if (ch===','){row.push(f);f="";}
+      else if (ch==='\n'||ch==='\r'){ if (ch==='\r'&&t[i+1]==='\n') i++; row.push(f); rows.push(row); row=[]; f=""; }
+      else f+=ch; }
+    if (f || row.length){ row.push(f); rows.push(row); }
+    const [h, ...b] = rows.filter(r => r.some(x => x.trim()!==""));
+    return b.map(r => Object.fromEntries(h.map((k,i) => [k.trim(), (r[i]??"").trim()]))); },
+  xml: t => { const d = new DOMParser().parseFromString(t, "application/xml");
+    if (d.querySelector("parsererror")) throw new Error("XML parse error");
+    return [...d.documentElement.children].map(el => { const o={};
+      for (const a of el.attributes) o[a.name]=a.value;
+      for (const ch of el.children) o[ch.tagName]=ch.textContent.trim(); return o; }); },
+  kanban: t => { const d = new DOMParser().parseFromString(t, "text/html");
+    return [...d.querySelectorAll("section[data-state] article")].map(a => {
+      const ps = [...a.querySelectorAll("details p")], as = a.querySelector(".assignment");
+      const pick = l => { const p = ps.find(p => (p.querySelector("b")?.textContent||"").startsWith(l)); return p ? p.textContent.replace(/^[^:]*:\s*/,"").trim() : ""; };
+      return { id:a.querySelector("code")?.textContent.trim(), title:a.querySelector("h3")?.textContent.trim(), lane:a.dataset.language,
+        owner:(as?.innerHTML.split(/<br\s*\/?>/i)[0]||"").replace(/<[^>]+>/g,"").trim(), model:a.dataset.model,
+        role:(as?.textContent.split("·")[1]||"").trim(), state:a.closest("section").dataset.state,
+        acceptance:ps[0]?.textContent.trim()||"", depends:pick("Depends"), evidence:pick("Evidence") }; }); },
+};
+function detect(t){ t=t.trim(); if (t[0]==="<") return /<article[\s>]/i.test(t) && /data-state=/i.test(t) ? "kanban" : "xml";
+  if (t[0]==="[") return "json"; if (t[0]==="{") return /\}\s*\r?\n\s*\{/.test(t) ? "ndjson" : "json"; return "csv"; }
+function ingest(text, fmt="auto"){
+  const f = fmt==="auto" ? detect(text) : fmt, rows = Adapters[f](text);
+  if (!rows.length) return {format:f, rows:0, as:"nothing"};
+  const isTasks = f==="kanban" || rows.some(r => r && r.title && !r.kind);
+  if (isTasks){ Sim.stop(); loadTasks(rows, true); return {format:f, rows:rows.length, as:"tasks (board replaced)"}; }
+  const ts = rows.map(r => toTs(r.ts)), t0 = Math.min(...ts), span = Math.max(1, Math.max(...ts)-t0);
+  rows.forEach((r,i) => setTimeout(() => { r.ts = Date.now(); push(r); }, rows.length>1 ? ((ts[i]-t0)/span)*Math.min(12000, 500*rows.length) : 0));
+  return {format:f, rows:rows.length, as:"events (replaying)"};
+}
+let pollTimer=null, es=null;
+function connect(url){
+  clearInterval(pollTimer); es && es.close();
+  if (url.startsWith("sse:")){ es = new EventSource(url.slice(4)); es.onmessage = m => ingest(m.data); return "SSE"; }
+  const pull = () => fetch(url, {cache:"no-store"}).then(r => r.text()).then(t => ingest(t)).catch(err => msg("fetch failed: "+err.message));
+  pull(); pollTimer = setInterval(pull, 5000); return "poll 5s";
+}
+
+/* ================= REPLAY: dependency-respecting simulation of the real board ================= */
+const Sim = {
+  on:false, busy:new Map(), timer:null, doneAt:0,
+  start(){ this.on = true; this.reset(); clearInterval(this.timer); this.timer = setInterval(() => this.step(), 220); $("#sim").textContent = "Replay: on"; },
+  stop(){ this.on = false; clearInterval(this.timer); this.busy.clear(); $("#sim").textContent = "Replay: off"; },
+  reset(){ this.busy.clear(); this.doneAt = 0;
+    // a rewind is not work: no FLIP, no comets — just a quiet fade back to the start
+    for (const c of B.cards.values()){ c.state = c.depends.length ? "waiting" : "planned"; c.doneAt = 0; c.tin = c.tout = 0; }
+    B.comets.length = 0; render();
+    if (!RM) boardEl.animate([{opacity:0}, {opacity:1}], {duration:900, easing:"ease-out"});
+    streamSys(`<span class="k-planned">REPLAY</span> <span class="tk">— board rewound to start</span>`);
+    for (const a of B.agents.values()){ a.done = 0; a.state = "idle"; a.on = ""; } },
+  dur: (lo,hi) => (lo + Math.random()*(hi-lo))*1000/SPEED,
+  step(){
+    if (B.paused || !this.on) return; const t = Date.now(), cards = [...B.cards.values()];
+    if (cards.every(c => c.state==="done")){ if (!this.doneAt) this.doneAt = t; if (t - this.doneAt > 14000/SPEED) this.reset(); return; }
+    for (const a of B.agents.values()){
+      if (this.busy.has(a.name)) continue;
+      const c = cards.find(c => c.owner===a.name && c.state==="planned" && ready(c));
+      if (!c) continue;
+      this.busy.set(a.name, {id:c.id, phase:"working", end:t+this.dur(7,15), tick:t});
+      push({agent:a.name, model:c.model, kind:"task.working", task:c.id, tokens_in:800+Math.random()*2000|0, tokens_out:200});
+    }
+    for (const [owner, b] of this.busy){
+      const c = B.cards.get(b.id); if (!c){ this.busy.delete(owner); continue; }
+      const actor = b.phase==="review" ? b.reviewer : owner;
+      if (t >= b.tick){
+        const tin = Math.round(2500*Math.exp(Math.random()*3.2)), tout = Math.round(tin*(.08+Math.random()*.22));
+        push({agent:actor, model:B.agents.get(actor)?.model || c.model, kind: b.phase==="review" ? "task.review" : "task.working", task:c.id, tokens_in:tin, tokens_out:tout});
+        b.tick = t + this.dur(.5,1.4);
+      }
+      if (t >= b.end){
+        if (b.phase==="working"){
+          const others = [...B.agents.keys()].filter(n => n!==owner);
+          b.reviewer = others.find(n => !this.busy.has(n)) || others[Math.random()*others.length|0] || owner;
+          b.phase = "review"; b.end = t + this.dur(3,6); b.tick = t;
+        } else {
+          push({agent:owner, model:c.model, kind:"task.done", task:c.id, tokens_in:1500, tokens_out:900});
+          this.busy.delete(owner);
+        }
+      }
+    }
+  },
+};
+
+/* ================= BOARD RENDER (keyed, FLIP-animated) ================= */
+const boardEl = $("#board");
+function rectMap(){ const m = new Map(); boardEl.querySelectorAll("[data-id]").forEach(el => m.set(el.dataset.id, {r:el.getBoundingClientRect(), st:el.dataset.state})); return m; }
+function flip(mutate){
+  const before = rectMap(); mutate(); render();
+  if (RM) return;
+  const cr = centerEl.getBoundingClientRect();
+  boardEl.querySelectorAll("[data-id]").forEach(el => {
+    const b = before.get(el.dataset.id); if (!b) return;
+    const a = el.getBoundingClientRect(), dx = b.r.left - a.left, dy = b.r.top - a.top;
+    if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+    el.animate([{transform:`translate(${dx}px,${dy}px)`, opacity:.6}, {transform:"none", opacity:1}], {duration:720, easing:"cubic-bezier(.65,0,.35,1)"});
+    if (b.st !== el.dataset.state && B.view !== "field"){
+      B.comets.push({ax:b.r.left+b.r.width/2-cr.left, ay:b.r.top+b.r.height/2-cr.top, bx:a.left+a.width/2-cr.left, by:a.top+a.height/2-cr.top,
+        rgb:STAGE[el.dataset.state].rgb, born:performance.now(), done: el.dataset.state==="done"});
+    }
+  });
+}
+function cardHTML(c){
+  const s = c.state, own = c.owner.split(/\s+/).map(w => w[0]).join("").slice(0,2);
+  if (s==="working" || s==="review"){
+    const a = B.agents.get(c.owner);
+    return `<article class="card ${s}" data-id="${esc(c.id)}" data-state="${s}" data-owner="${esc(c.owner)}" style="${rgbVar(s)}" tabindex="0">
+      <div class="ctop"><span class="pres"></span><code>${esc(c.id)}</code><span class="lane">${esc(c.lane)}</span></div>
+      <h3>${esc(c.title)}</h3>
+      <div class="who"><b>${esc(c.owner)}</b> · ${esc(c.model || a?.model)}${c.role ? " · " + esc(c.role) : ""}</div>
+      <div class="strip">${"<i></i>".repeat(18)}</div>
+      <div class="tokline"><span class="tk-v">${fmt(c.tin,"k")} in · ${fmt(c.tout,"k")} out</span><span>${s==="review" ? "IN REVIEW" : "WORKING"}</span></div></article>`;
+  }
+  if (s==="done") return `<span class="chip" data-id="${esc(c.id)}" data-state="done" data-owner="${esc(c.owner)}" tabindex="0" title="${esc(c.title)}"><i></i>${esc(c.id)}</span>`;
+  const pips = c.depends.map(d => `<i class="${B.cards.get(d)?.state==="done" ? "ok" : ""}"></i>`).join("");
+  const blockers = c.depends.filter(d => B.cards.get(d)?.state!=="done");
+  return `<div class="row" data-id="${esc(c.id)}" data-state="${s}" data-owner="${esc(c.owner)}" tabindex="0" title="${esc(c.title)}${blockers.length ? " — blocked by " + esc(blockers.join(", ")) : ""}">
+    <code>${esc(c.id)}</code><span class="t">${esc(c.title)}</span><span class="pips">${pips || `<span class="ini">${esc(own)}</span>`}</span></div>`;
+}
+function render(){
+  const by = Object.fromEntries(CFG.stages.map(s => [s.id, []]));
+  for (const c of B.cards.values()) (by[c.state] || by.planned).push(c);
+  by.working.sort((a,b) => a.since-b.since); by.review.sort((a,b) => a.since-b.since); by.done.sort((a,b) => a.doneAt-b.doneAt);
+  boardEl.innerHTML = CFG.stages.map(st => {
+    const list = by[st.id], compact = st.id==="waiting" || st.id==="planned";
+    const shown = compact ? list.slice(0, CFG.compactCap) : list;
+    const inner = st.id==="done" ? `<div class="chips">${shown.map(cardHTML).join("")}</div>` : shown.map(cardHTML).join("");
+    return `<section class="col" data-stage="${st.id}" style="${rgbVar(st.id)}"><h2><i></i>${esc(st.label)}<span>${list.length}</span></h2>
+      <div class="cards">${inner}${list.length > shown.length ? `<div class="more">+${list.length-shown.length} more</div>` : ""}</div></section>`;
+  }).join("");
+  const p = performance.now();
+  boardEl.querySelectorAll(".chip").forEach(el => { const c = B.cards.get(el.dataset.id); if (c?.fresh && p - c.fresh < 2400) el.classList.add("fresh"); });
+  applyLit(); renderWS(); paintStrips();
+}
+function relatedSet(id){
+  const c = B.cards.get(id); if (!c) return null;
+  const s = new Set([id, ...c.depends]);
+  for (const x of B.cards.values()) if (x.depends.includes(id)) s.add(x.id);
+  return s;
+}
+function applyLit(){
+  const trace = B.hover || B.inspect;
+  const lit = trace ? relatedSet(trace) : B.focus ? new Set([...B.cards.values()].filter(c => c.owner===B.focus).map(c => c.id)) : null;
+  boardEl.classList.toggle("dimmed", !!lit);
+  boardEl.querySelectorAll("[data-id]").forEach(el => el.classList.toggle("lit", !!lit && lit.has(el.dataset.id)));
+}
+function paintStrips(){ // per-card activity strip: 18 buckets × 1.5 s of token load
+  const T = now(), cells = 18, bucket = 1500, act = new Map();
+  for (let i = B.events.length-1; i >= 0; i--){ const e = B.events[i], age = T - e.ts; if (age > cells*bucket) break; if (age < 0) continue;
+    let arr = act.get(e.task); if (!arr) act.set(e.task, arr = new Float32Array(cells)); arr[cells-1-Math.floor(age/bucket)] += e.tin + e.tout*4; }
+  boardEl.querySelectorAll(".card").forEach(el => {
+    const arr = act.get(el.dataset.id), is = el.querySelectorAll(".strip i"), c = B.cards.get(el.dataset.id);
+    let hot = false;
+    is.forEach((i, k) => { const v = arr ? Math.min(1, Math.log10(1 + arr[k])/5.2) : 0; i.style.height = (2 + v*10) + "px"; i.style.opacity = v ? .3 + v*.7 : .12; if (k > cells-4 && v > .5) hot = true; });
+    el.classList.toggle("hotnow", hot);
+    const tk = el.querySelector(".tk-v"); if (tk && c) tk.textContent = `${fmt(c.tin,"k")} in · ${fmt(c.tout,"k")} out`;
+  });
+}
+setInterval(paintStrips, 500);
+
+/* ---- board interactions ---- */
+boardEl.addEventListener("pointerover", e => { const el = e.target.closest("[data-id]"); const id = el ? el.dataset.id : null; if (id !== B.hover){ B.hover = id; applyLit(); } });
+boardEl.addEventListener("pointerleave", () => { B.hover = null; applyLit(); });
+boardEl.addEventListener("click", e => { const el = e.target.closest("[data-id]"); if (el) inspect(el.dataset.id); });
+boardEl.addEventListener("keydown", e => { if (e.key==="Enter" || e.key===" "){ const el = e.target.closest("[data-id]"); if (el){ e.preventDefault(); inspect(el.dataset.id); } } });
+boardEl.addEventListener("focusin", e => { const el = e.target.closest("[data-id]"); if (el){ B.hover = el.dataset.id; applyLit(); } });
+addEventListener("keydown", e => { if (e.key==="Escape" && B.inspect) inspect(null); });
+
+const inspEl = $("#insp");
+function inspect(id){
+  B.inspect = id; applyLit();
+  inspEl.classList.toggle("open", !!id); inspEl.setAttribute("aria-hidden", !id);
+  if (!id) return;
+  const c = B.cards.get(id); if (!c) return;
+  const dep = d => { const x = B.cards.get(d); const s = x ? x.state : "planned";
+    return `<button data-go="${esc(d)}"><span class="pill" style="${rgbVar(s)}"><i></i>${esc(d)}</span></button>`; };
+  const dependents = [...B.cards.values()].filter(x => x.depends.includes(id)).map(x => x.id);
+  const log = B.events.filter(e => e.task===id).slice(-8).reverse()
+    .map(e => `<li>${new Date(e.ts).toTimeString().slice(0,8)} <span class="k-${e.stage}">${e.kind.split(".")[1].toUpperCase()}</span> ${esc(e.agent)} · ${fmt(e.tin+e.tout,"k")}</li>`).join("");
+  inspEl.innerHTML = `<button class="icon x" id="ix" aria-label="Close inspector">✕</button>
+    <span class="pill" style="${rgbVar(c.state)}"><i></i>${esc(STAGE[c.state].label.toUpperCase())}</span>
+    <span class="mono" style="font-size:11px;color:var(--muted);margin-left:8px">${esc(c.id)} · ${esc(c.lane)}</span>
+    <h3>${esc(c.title)}</h3>
+    <dl><dt>ASSIGNMENT</dt><dd>${esc(c.owner)} · <b>${esc(c.model)}</b>${c.role ? " · " + esc(c.role) : ""}</dd>
+    ${c.acceptance ? `<dt>ACCEPTANCE</dt><dd>${esc(c.acceptance)}</dd>` : ""}
+    <dt>DEPENDS ON</dt><dd class="deps">${c.depends.length ? c.depends.map(dep).join("") : "None"}</dd>
+    <dt>UNLOCKS</dt><dd class="deps">${dependents.length ? dependents.map(dep).join("") : "None"}</dd>
+    ${c.evidence ? `<dt>EVIDENCE</dt><dd>${esc(c.evidence)}</dd>` : ""}
+    <dt>TOKENS</dt><dd class="mono">${fmt(c.tin,"k")} in · ${fmt(c.tout,"k")} out</dd>
+    <dt>RECENT EVENTS</dt><dd><ul class="ilog">${log || "<li>none this session</li>"}</ul></dd></dl>`;
+  $("#ix").onclick = () => inspect(null);
+  inspEl.querySelectorAll("[data-go]").forEach(b => b.onclick = () => inspect(b.dataset.go));
+}
+
+/* ================= FIELD (behind the board, aligned to its columns) ================= */
+const centerEl = $("#center"), fieldCv = $("#field"), ox = fieldCv.getContext("2d");
+const tc = document.createElement("canvas"), cx = tc.getContext("2d"), bc = document.createElement("canvas"), bx = bc.getContext("2d");
+const fxCv = $("#fx"), fx = fxCv.getContext("2d");
+let W=0, H=0, dpr=1;
+function resize(){ dpr = Math.min(2, devicePixelRatio||1); W = centerEl.clientWidth; H = centerEl.clientHeight;
+  for (const c of [fieldCv, tc, fxCv]){ c.width = W*dpr; c.height = H*dpr; }
+  bc.width = Math.max(1, W/4|0); bc.height = Math.max(1, H/4|0); }
+addEventListener("resize", resize);
+function colGeom(){ // offset* ignores CSS transforms → stays aligned while the board peels back
+  return [...boardEl.children].map(el => { const head = el.firstElementChild;
+    return {x:boardEl.offsetLeft + el.offsetLeft, w:el.offsetWidth, y:boardEl.offsetTop + el.offsetTop + head.offsetHeight + 4, h:Math.max(40, el.offsetHeight - head.offsetHeight - 4)}; });
+}
+const mix = (rgb, w) => rgb.map(c => Math.round(c + (255-c)*w));
+
+function drawField(){
+  const cols = colGeom(), T = now(), nA = Math.max(1, B.agents.size);
+  cx.setTransform(dpr,0,0,dpr,0,0); cx.globalCompositeOperation = "source-over"; cx.clearRect(0,0,W,H);
+  cols.forEach((g, s) => { const st = CFG.stages[s]; if (!st) return;
+    for (let a=0; a<nA; a++){ const sw = (g.w-10)/nA; cx.fillStyle = `rgba(${st.rgb},${a%2 ? .012 : .022})`; cx.fillRect(g.x+5+a*sw, g.y, sw*.86, g.h); } });
+  cx.globalCompositeOperation = "lighter";
+  let lo = 0; while (lo < B.events.length && T - B.events[lo].ts > CFG.windowMs) lo++;
+  for (let i = lo; i < B.events.length; i++){
+    const e = B.events[i], age = T - e.ts; if (age < 0) continue;
+    const s = STAGE[e.stage].i, g = cols[s], a = B.agents.get(e.agent); if (!g || !a) continue;
+    const sw = (g.w-10)/nA, x = g.x + 5 + a.lane*sw + sw*.43, y = g.y + (age/CFG.windowMs)*g.h;
+    // behind cards the field whispers (thin, stage-true colour); in FIELD view it carries the screen
+    const loud = B.view === "field", t01 = 1 - age/CFG.windowMs, fresh = Math.max(0, 1 - age/900);
+    const w = sw*(loud ? .78 : .62), h = loud ? 1.5 + e.intensity*2.6 : 1 + e.intensity*1.1;
+    const al = (e.intensity*(.25 + .75*t01)*.85 + fresh*.5) * (loud ? 1 : .55);
+    const c = mix(STAGE[e.stage].rgb, loud ? Math.pow(e.intensity,3)*.7 + fresh*.5 : Math.pow(e.intensity,3)*.25 + fresh*.2);
+    cx.fillStyle = `rgba(${c},${al*.10})`; cx.fillRect(x-w/2, y-h*(loud?3:2), w, h*(loud?6:4));
+    cx.fillStyle = `rgba(${c},${Math.min(1,al)})`; cx.fillRect(x-w/2, y-h/2, w, h);
+  }
+  cx.globalCompositeOperation = "source-over";
+  ox.setTransform(1,0,0,1,0,0); ox.globalCompositeOperation = "source-over"; ox.fillStyle = TH.ground; ox.fillRect(0,0,fieldCv.width,fieldCv.height);
+  bx.globalCompositeOperation = "copy"; bx.filter = RM ? "none" : "blur(3px)"; bx.drawImage(tc,0,0,bc.width,bc.height);
+  ox.globalCompositeOperation = "lighter"; ox.drawImage(bc,0,0,fieldCv.width,fieldCv.height); ox.drawImage(bc,0,0,fieldCv.width,fieldCv.height); ox.drawImage(tc,0,0);
+  ox.globalCompositeOperation = "source-over";
+  if (B.view === "field"){ // column heads stay readable when the cards have receded
+    ox.setTransform(dpr,0,0,dpr,0,0);
+    cols.forEach((g, s) => { const st = CFG.stages[s]; if (!st) return; const n = [...B.cards.values()].filter(c => c.state===st.id).length;
+      ox.fillStyle = `rgb(${st.rgb})`; ox.beginPath(); ox.arc(g.x+8, g.y-20, 3.5, 0, 7); ox.fill();
+      ox.font = "500 11px 'IBM Plex Sans',sans-serif"; ox.fillStyle = TH.label; ox.textBaseline = "middle"; ox.fillText(st.label.toUpperCase(), g.x+18, g.y-20);
+      ox.font = "300 34px 'IBM Plex Sans',sans-serif"; ox.fillStyle = `rgb(${st.rgb})`; ox.fillText(n, g.x+2, g.y+g.h-24); });
+  }
+}
+function centerOf(id){ const el = boardEl.querySelector(`[data-id="${CSS.escape(id)}"]`); if (!el) return null;
+  const r = el.getBoundingClientRect(), cr = centerEl.getBoundingClientRect(); return {x:r.left-cr.left, y:r.top-cr.top, w:r.width, h:r.height}; }
+function drawFx(){
+  fx.setTransform(dpr,0,0,dpr,0,0); fx.clearRect(0,0,W,H); fx.globalCompositeOperation = "lighter";
+  const p = performance.now();
+  // dependency wires for the traced card
+  const trace = B.view !== "field" && (B.hover || B.inspect);
+  if (trace && B.cards.has(trace)){
+    const c = B.cards.get(trace), t = centerOf(trace);
+    const wire = (fromId, toId, rgb, dash) => { const a = centerOf(fromId), b = centerOf(toId); if (!a || !b) return;
+      const ax = a.x + a.w/2, ay = a.y + a.h/2, bx2 = b.x + b.w/2, by2 = b.y + b.h/2, my = Math.min(ay, by2) - 40 - Math.abs(ax-bx2)*.08;
+      fx.setLineDash(dash ? [3,4] : []); fx.lineWidth = 1.2; fx.strokeStyle = `rgba(${rgb},.75)`;
+      fx.beginPath(); fx.moveTo(ax, ay); fx.bezierCurveTo(ax, my, bx2, my, bx2, by2); fx.stroke();
+      fx.setLineDash([]); fx.fillStyle = `rgba(${rgb},.9)`; fx.beginPath(); fx.arc(ax, ay, 2.5, 0, 7); fx.fill(); };
+    if (t){
+      c.depends.forEach(d => { const x = B.cards.get(d); wire(d, trace, x?.state==="done" ? TH.wireDone : TH.wireBlock, x?.state!=="done"); });
+      for (const x of B.cards.values()) if (x.depends.includes(trace)) wire(trace, x.id, TH.wireNext, true);
+    }
+  }
+  // comets: cards travelling between columns
+  B.comets = B.comets.filter(k => p - k.born < 1150);
+  for (const k of B.comets){
+    const life = (p - k.born)/720, q = Math.min(1, life), e2 = q<.5 ? 4*q*q*q : 1-Math.pow(-2*q+2,3)/2;
+    const mx = (k.ax+k.bx)/2, my = Math.min(k.ay, k.by) - 50;
+    const at = u => ({x:(1-u)*(1-u)*k.ax + 2*(1-u)*u*mx + u*u*k.bx, y:(1-u)*(1-u)*k.ay + 2*(1-u)*u*my + u*u*k.by});
+    if (life < 1){
+      for (let j = 0; j < 16; j++){ const u = Math.max(0, e2 - j*.025), pt = at(u), a = (1 - j/16)*.8;
+        fx.fillStyle = `rgba(${k.rgb},${a})`; fx.fillRect(pt.x-1.5, pt.y-1.5, 3, 3); }
+      const h = at(e2), g = fx.createRadialGradient(h.x,h.y,0,h.x,h.y,18);
+      g.addColorStop(0, `rgba(${TH.core},.95)`); g.addColorStop(.3, `rgba(${k.rgb},.5)`); g.addColorStop(1, `rgba(${k.rgb},0)`);
+      fx.fillStyle = g; fx.fillRect(h.x-18, h.y-18, 36, 36);
+    } else {
+      const r = (life-1)/.6, a = 1 - r; fx.strokeStyle = `rgba(${k.rgb},${a*.8})`; fx.lineWidth = 1.5;
+      fx.beginPath(); fx.arc(k.bx, k.by, 6 + r*26, 0, 7); fx.stroke();
+      if (k.done && !k.flared){ k.flared = true; if (!RM) B.flares.push({x:k.bx, y:k.by, born:p}); }
+    }
+  }
+  // flares: a task reaching verified done
+  B.flares = B.flares.filter(f => p - f.born < 2200);
+  for (const f of B.flares){ const a = Math.pow(1 - (p - f.born)/2200, 2), r = 26 + 90*a;
+    const g = fx.createRadialGradient(f.x,f.y,0,f.x,f.y,r);
+    g.addColorStop(0, `rgba(${TH.core},${.85*a})`); g.addColorStop(.25, `rgba(${TH.flare},${.4*a})`); g.addColorStop(1, `rgba(${TH.flare},0)`);
+    fx.fillStyle = g; fx.fillRect(f.x-r, f.y-r, r*2, r*2);
+    fx.fillStyle = `rgba(${TH.streak},${.14*a})`; fx.fillRect(0, f.y-1, W, 2); }
+  fx.globalCompositeOperation = "source-over";
+}
+
+/* ================= PANELS ================= */
+const shown = {}, target = {};
+function fmt(v, f){ if (f==="k") return v >= 1e6 ? (v/1e6).toFixed(2)+"M" : Math.round(v/1000).toLocaleString()+"k"; if (f==="$") return "$"+v.toFixed(2); return Math.round(v).toLocaleString(); }
+function tween(){ document.querySelectorAll("[data-n]").forEach(el => { const key = el.dataset.n, t = target[key]||0;
+  shown[key] = shown[key]==null ? t : shown[key] + (t-shown[key])*(RM ? 1 : .12); if (Math.abs(t-shown[key]) < .01) shown[key] = t;
+  el.textContent = fmt(shown[key], el.dataset.fmt); }); }
+let winTok = 3600000;
+function stats(){
+  const T = now(), cards = [...B.cards.values()];
+  let ti = 0, to = 0; for (const x of B.tok) if (T - x.ts < winTok){ ti += x.tin; to += x.tout; }
+  Object.assign(target, { done:cards.filter(c => c.state==="done").length, totalCards:cards.length,
+    inflight:cards.filter(c => c.state==="working" || c.state==="review").length, blocked:cards.filter(c => c.state==="waiting").length,
+    streams:new Set(cards.map(c => c.lane)).size, events:B.total, tokIn:ti, tokOut:to, cost:B.cost });
+  const all = [...B.agents.values()], tot = all.reduce((s,a) => s+a.tin+a.tout, 0) || 1;
+  $("#roster").innerHTML = all.slice().sort((a,b) => b.done-a.done || (b.tin+b.tout)-(a.tin+a.tout)).map((a,i) => {
+    const st = (T - a.last < 6000) ? a.state : "idle", ini = a.name.split(/\s+/).map(w => w[0]).join("").slice(0,2);
+    return `<li><button data-agent="${esc(a.name)}" aria-pressed="${B.focus===a.name}" class="${st!=="idle" ? "live" : ""}"><span class="rank">${i+1}</span>
+      <span class="sigil" style="--share:${((a.tin+a.tout)/tot*360).toFixed(1)}deg"><span>${esc(ini)}</span></span>
+      <span style="min-width:0"><div class="nm">${esc(a.name)}</div><div class="md">${esc(a.model)} · ${fmt(a.tin+a.tout,"k")}</div></span>
+      <span class="st ${st}"><i></i>${st==="idle" ? "IDLE" : esc(a.on)}<b>${a.done} done</b></span></button></li>`; }).join("");
+  $("#meters").innerHTML = Object.entries(CFG.providers).map(([k,p]) => { const u = (B.provUsed[k]||0)/p.quota, on = Math.round(Math.min(1,u)*24);
+    return `<div class="meter"><span>${k.toUpperCase()}</span><span class="segs">${Array.from({length:24}, (_,i) => `<i class="${i<on ? "on" : ""} ${i>=19 ? "r" : i>=14 ? "w" : ""}"></i>`).join("")}</span><span style="text-align:right">${(u*100).toFixed(1)}%</span></div>`; }).join("");
+    const d = new Date(); $("#clk").textContent = d.toTimeString().slice(0,8).replace(/:/g,".") + "   " + d.toISOString().slice(5,10).replace("-",".");
+}
+setInterval(stats, 1000);
+$("#roster").addEventListener("click", e => { const b = e.target.closest("[data-agent]"); if (!b) return;
+  B.focus = B.focus===b.dataset.agent ? null : b.dataset.agent; applyLit(); stats(); });
+function renderWS(){
+  const lanes = new Map(); for (const c of B.cards.values()){ if (!lanes.has(c.lane)) lanes.set(c.lane, []); lanes.get(c.lane).push(c); }
+  $("#ws").innerHTML = [...lanes].slice(0, 7).map(([lane, cs]) => { const d = cs.filter(c => c.state==="done").length;
+    return `<div class="wsr"><span>${esc(lane.toUpperCase())}</span><span class="cells">${cs.map(c => `<i class="s-${c.state}" style="${rgbVar(c.state)}" data-go="${esc(c.id)}" title="${esc(c.id)} · ${esc(c.title)}"></i>`).join("")}</span>
+      <span style="text-align:right">${d}/${cs.length}</span></div>`; }).join("");
+}
+$("#ws").addEventListener("click", e => { const i = e.target.closest("[data-go]"); if (i) inspect(i.dataset.go); });
+const streamEl = $("#stream");
+function streamLine(e, a, c){
+  if (B.paused) return;
+  const li = document.createElement("li");
+  li.innerHTML = `<span class="ts">${new Date(e.ts).toISOString()}</span><br><span class="id">${esc(e.task)}</span> : <span class="k-${e.stage}">${esc(e.kind.toUpperCase())}</span> from <span class="ag">${esc(a.name)}</span>`
+    + (c ? `<br><span class="tk">lane —</span> <span class="pj">"${esc(c.lane)}"</span>` : "") + (e.tin || e.tout ? ` <span class="tk">tok — ${fmt(e.tin,"k")}/${fmt(e.tout,"k")}</span>` : "");
+  streamEl.prepend(li); while (streamEl.children.length > 40) streamEl.lastChild.remove();
+}
+function streamSys(html){ if (B.paused) return; const li = document.createElement("li");
+  li.innerHTML = `<span class="ts">${new Date().toISOString()}</span><br>${html}`; streamEl.prepend(li); }
+
+/* ================= CONTROLS ================= */
+function setView(v){ B.view = v; centerEl.dataset.view = v; document.querySelectorAll(".views button[data-v]").forEach(b => b.setAttribute("aria-pressed", b.dataset.v===v)); }
+$("#themeBtn").onclick = () => { applyTheme(document.documentElement.dataset.theme==="ares" ? "enochian" : "ares"); render(); stats(); };
+document.querySelectorAll(".views button[data-v]").forEach(b => b.onclick = () => { setView(b.dataset.v); if (B.auto) toggleAuto(); });
+let nextFlip = 0;
+function toggleAuto(){ B.auto = !B.auto; $("#auto").setAttribute("aria-pressed", B.auto); nextFlip = performance.now() + CFG.wall[B.view==="field" ? "field" : "hybrid"]; if (!B.auto) $("#cd").textContent = "AUTO OFF"; }
+$("#auto").onclick = toggleAuto;
+$("#pause").onclick = ev => { B.paused = !B.paused; if (B.paused) B.pauseAt = Date.now(); ev.currentTarget.setAttribute("aria-pressed", B.paused); ev.currentTarget.textContent = B.paused ? "▶" : "II"; };
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => { winTok = +b.dataset.w; document.querySelectorAll(".tabs button").forEach(x => x.setAttribute("aria-selected", x===b)); stats(); });
+const dlg = $("#wire"), msg = t => $("#wireMsg").textContent = t;
+$("#wireBtn").onclick = $("#wireBtn2").onclick = () => dlg.showModal();
+$("#close").onclick = () => dlg.close();
+$("#ingest").onclick = () => { try { const r = ingest($("#payload").value, $("#fmt").value); msg(`${r.rows} rows · ${r.format} · ${r.as} · rejected ${B.rejected}`);
+  if (r.as.startsWith("tasks")) $("#srcLbl").textContent = "PASTED BOARD · live"; } catch(err){ msg("✕ " + err.message); } };
+$("#connect").onclick = () => { const u = $("#url").value.trim(); if (!u) return msg("enter a URL"); try { msg("connected · " + connect(u)); $("#srcLbl").textContent = "LIVE · " + new URL(u.replace(/^sse:/,"")).host; } catch(err){ msg("✕ " + err.message); } };
+$("#sim").onclick = () => Sim.on ? Sim.stop() : Sim.start();
+$("#reset").onclick = () => { if (!Sim.on) Sim.start(); else Sim.reset(); };
+
+function frame(tp){
+  if (B.auto && !B.paused){ const left = nextFlip - tp; $("#cd").textContent = Math.max(0, Math.ceil(left/1000)) + " sec";
+    if (left <= 0){ setView(B.view==="field" ? "hybrid" : "field"); nextFlip = tp + CFG.wall[B.view==="field" ? "field" : "hybrid"]; } }
+  drawField(); drawFx(); tween(); requestAnimationFrame(frame);
+}
+
+/* ================= BOOT ================= */
+window.HUD = { push, ingest, connect, loadTasks, CFG, state:B, sim:Sim, setView, inspect };
+resize();
+const seed = JSON.parse($("#seed").textContent);
+if (seed.title) $("#boardTitle").textContent = seed.title;
+loadTasks(seed.cards || seed, true);
+if (qs.get("view")) setView(qs.get("view"));
+if (B.auto){ B.auto = false; toggleAuto(); }
+if (qs.get("src")){ connect(qs.get("src")); $("#srcLbl").textContent = "LIVE · " + qs.get("src"); }
+else if (qs.get("mode")==="snapshot") $("#srcLbl").textContent = "SNAPSHOT · as recorded";
+else Sim.start();
+stats(); requestAnimationFrame(frame);
+</script>
+</body>
+</html>

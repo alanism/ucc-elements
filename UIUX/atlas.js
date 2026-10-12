@@ -1,5 +1,6 @@
 const items = [...document.querySelectorAll('.atlas-item:not(.code-veil-item)')]
   .sort((a, b) => Number(a.style.getPropertyValue('--item-order')) - Number(b.style.getPropertyValue('--item-order')));
+const searchItems = [...items, ...document.querySelectorAll('.study-item')];
 const search = document.querySelector('#atlas-search');
 const results = document.querySelector('#search-results');
 const codeControl = document.querySelector('#code-control');
@@ -24,7 +25,7 @@ function showResults() {
   const query = search.value.trim().toLocaleLowerCase();
   results.replaceChildren();
   if (!query) return closeResults();
-  const matches = items.filter(item => item.dataset.name.toLocaleLowerCase().includes(query) || item.dataset.group.toLocaleLowerCase().includes(query)).slice(0, 12);
+  const matches = searchItems.filter(item => item.dataset.name.toLocaleLowerCase().includes(query) || item.dataset.group.toLocaleLowerCase().includes(query) || (item.dataset.searchTerms || "").toLocaleLowerCase().includes(query)).slice(0, 12);
   if (matches.length) {
     for (const item of matches) {
       const button = document.createElement('button');
@@ -69,7 +70,7 @@ function setTheme(theme) {
   document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#09090a' : '#ffffff';
   document.querySelectorAll('[data-theme-option]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.themeOption === theme)));
   for (const group of document.querySelectorAll('.source .rthemes')) {
-    if (group.closest('[data-name="Obsidian Dial"], [data-name="Ivory Dial"]')) continue;
+    if (group.closest('[data-name="Enochian Rotary Knob 01"], [data-name="Enochian Rotary Knob 02"]')) continue;
     const desired = group.querySelector(`[data-finish="${theme === 'dark' ? 'obsidian' : 'ivory'}"]`) || group.querySelector(`[data-theme="${theme === 'dark' ? 'black' : 'light'}"]`) || group.querySelector(`[data-theme="${theme === 'dark' ? 'black' : 'white'}"]`);
     if (desired && desired.getAttribute('aria-pressed') !== 'true') desired.click();
   }
@@ -122,9 +123,10 @@ document.addEventListener('keydown', event => {
   if (event.key === 'Escape' && !codeDrawer.hidden) document.querySelector('#close-code').click();
 });
 document.querySelector('#copy-selected-code').addEventListener('click', async event => {
+  const button = event.currentTarget;
   await navigator.clipboard.writeText(selectedCode.textContent);
-  event.currentTarget.textContent = 'Copied';
-  setTimeout(() => { event.currentTarget.textContent = 'Copy code'; }, 1500);
+  button.textContent = 'Copied';
+  setTimeout(() => { button.textContent = 'Copy code'; }, 1500);
 });
 
 const expectedCount = Number(document.querySelector("#catalog").dataset.controlCount);

@@ -1,36 +1,50 @@
 # Enochian Elements
 
-One interactive showcase of 63 Enochian controls for mini-apps and AI-guided device interfaces. The public page is [`UIUX/index.html`](UIUX/index.html); controls appear once, ordered by action, state, choice and value, navigation, time and playback, then signal and feedback. The top bar owns search, Light/Dark, sound, and the single Code mode.
+A working showcase of **63 controls, 12 device studies, and 5 dashboards and HUDs** with familiar names: Enochian Synth Keyboard, Enochian DJ Mixer, Enochian Stereo Speakers, and Enochian Toggle Switch 01–06. Digital screen studies support coding agents and harnesses, VR interfaces, and video production, alongside the tactile controls and blank device frames.
 
-## Local preview
+- `index.html` — main entry page, device previews, and direct study links.
+- `UIUX/index.html` — complete control catalog, device gallery, Light/Dark, search, sound, and one Code drawer.
+- `UIUX/studies/` — seven standalone instrument/frame pages, generated from the source studies.
+- `UIUX/previews/` — 24 actual browser captures, both finishes, with recorded source hashes and browser version.
+
+Search accepts familiar terms such as **keyboard, MIDI, mixer, speakers, recorder, MacBook**, and the earlier element names. The full approved name map is in [the build plan](docs/build-plan-showcase-names.md).
+
+## Preview
 
 ```bash
-python3 -m http.server 8080
+python3 -m http.server 8080 --bind 127.0.0.1
 ```
 
-Open <http://localhost:8080/UIUX/>. The page uses IBM Plex web fonts and Motion from a CDN; controls retain an immediate-transition fallback if Motion is unavailable.
+Open <http://127.0.0.1:8080/> or <http://127.0.0.1:8080/UIUX/>. The original controls use IBM Plex and Motion CDNs, with an immediate-transition fallback for Motion. New study pages are self-contained.
 
-## Source and build
+## Sources
 
-- `enochian_knobs_keys/index.html` — foundation controls
-- `enochian_knobs_keys/volume-3/index.html` — compact controls
-- `enochian_knobs_keys/volume-2/index.html` — instrument controls
-- `scripts/generate_uiux.py` — extracts and scopes all 63 controls into one page; requires Python 3 and Beautiful Soup 4
-- `UIUX/shell.html`, `UIUX/atlas.css`, `UIUX/atlas.js` — showcase layout and global behavior
+The original foundation, compact, and instrument sources remain in `enochian_knobs_keys/index.html`, `volume-3/index.html`, and `volume-2/index.html`. The new sources were imported from `alanism/Enochian-UI-UX-Elements` commit `0c02c6e87bc69b714e73ff99d0335fcdef1f6b54`.
 
-Regenerate after editing a source control:
+| Source folder | Study |
+| --- | --- |
+| `keyboard` | Enochian MIDI Keyboard |
+| `midi-pad` | Enochian MIDI Pad |
+| `op-1` | Enochian Synth Studio |
+| `dj-decks` | Enochian DJ Controller |
+| `speakers` | Enochian Compact Speaker and Portable Speaker |
+| `tp-7` | Enochian Audio Recorder |
+| `apple-devices` | Desktop Setup, All-in-One Setup, Laptop, Tablet, and Phone frames |
+
+MIDI connections are optional and explicit. The audio recorder captures generated demo audio, the synth studio records note events, and the voice assistant is a simulation. No microphone capture is included. All five device screens ship empty; these are independent Apple-inspired frames, without OS emulation or official product affiliation.
+
+## Build and release
 
 ```bash
 python3 scripts/generate_uiux.py
 python3 scripts/build_uiux.py
+python3 scripts/build_uiux.py --showcase
 ```
 
-The second command creates the standalone `.uiux-dist` payload. See [`docs/operations.md`](docs/operations.md) for release and monitoring steps.
+After changing a composed instrument or device frame, recapture previews before generating. The build rejects stale previews. See [operations](docs/operations.md) for the capture commands, isolated test environment, validation, and the two focused Firebase release commands.
 
-## Design language
-
-Black and white are the page modes; Cinnabar `#CC0000` is the signal color. Individual instruments retain Ivory and Obsidian material finishes. Controls expose state through their physical motion, readout, and ARIA attributes.
+The atlas payload is `.uiux-dist`; the root showcase payload is `.showcase-dist`. Tests, QA artifacts, local-only directories, and the duplicate `index 2.html` are excluded. The root build preserves the Vietnamese runtime and audio routes. The `104kdli` site is not a release target.
 
 ## License
 
-See the license files in the repository and source folder for the terms that apply to each asset.
+See the repository and source license files for the terms that apply to each asset. Reference attributions remain in the study documentation.

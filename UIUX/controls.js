@@ -133,7 +133,7 @@ function bindFinish(groupId, targetId, after){
   });
 }
 
-/* ── Code Veil ── */
+/* ── Code ── */
 const veil=$("veil");
 const veilSpring = new Spring(0, SNAP, x => { $("veilKnob").style.transform=`translateX(${x}px)`; });
 bindFinish("veilFinish","veil");
@@ -141,7 +141,7 @@ veil.addEventListener("click", () => {
   const on = !document.body.classList.contains("show-code");
   document.body.classList.toggle("show-code", on);
   veil.setAttribute("aria-checked", String(on));
-  $("veilLabel").textContent = on ? "CODE VISIBLE" : "CODE HIDDEN";
+  $("veilLabel").textContent = on ? "Hide code" : "Show code";
   veilSpring.to(on ? 72 : 0);
   $$(".code-snippet").forEach(s => { s.inert = !on; s.setAttribute("aria-hidden", String(!on)); });
   thock();
@@ -204,7 +204,7 @@ function makeToggle(btn, knob, { travel, pinch=false, axis="x", onChange }){
   return { set, get:()=>on };
 }
 
-/* ── Seeker Orb ── */
+/* ── Enochian Search Field ── */
 const RS_ITEMS=$$("article.unit[id^='c-']").map(a=>({ id:a.id, name:a.querySelector(".cap span").textContent.split(" · ")[0], sect:(()=>{ let p=a.parentElement.previousElementSibling; while(p && !p.classList.contains("section-title")) p=p.previousElementSibling; return p?p.textContent:""; })() }));
 (() => {
   const rs=$("rs"), ball=$("rsBall"), field=$("rsField"), input=$("rsInput"), list=$("rsList"); let open=false, sel=0, hits=[];
@@ -240,7 +240,7 @@ const RS_ITEMS=$$("article.unit[id^='c-']").map(a=>({ id:a.id, name:a.querySelec
   render();
 })();
 
-/* ── Canticle Keys ── */
+/* ── Enochian Synth Keyboard ── */
 (() => {
   const WHITE=[["C",0,"a"],["D",2,"s"],["E",4,"d"],["F",5,"f"],["G",7,"g"],["A",9,"h"],["B",11,"j"]];
   const BLACK=[["C♯",1,"w",1],["D♯",3,"e",2],["F♯",6,"t",4],["G♯",8,"y",5],["A♯",10,"u",6]];
@@ -280,7 +280,7 @@ const RS_ITEMS=$$("article.unit[id^='c-']").map(a=>({ id:a.id, name:a.querySelec
   $("opDown").onclick=()=>shift(-1); $("opUp").onclick=()=>shift(1);
 })();
 
-/* ── Triad Action Keys ── */
+/* ── Enochian Button Bank 02 ── */
 (() => {
   const btns=$$("#tpb .rb");
   const read=()=>{ const on=btns.filter(b=>b.getAttribute("aria-pressed")==="true").map(b=>b.closest(".col-u").querySelector(".lbl").textContent); $("tpbRead").innerHTML=`<b>${on.length?on.join(" · "):"none"}</b> latched`; };
@@ -288,7 +288,7 @@ const RS_ITEMS=$$("article.unit[id^='c-']").map(a=>({ id:a.id, name:a.querySelec
   read();
 })();
 
-/* ── Cinnabar Key ── */
+/* ── Enochian Push Button 02 ── */
 (() => {
   const b=$("pcb"), led=$("pcbLed"); let taps=0, holds=0, timer=0, held=false, active=false, ledT=0;
   const read=last=>$("pcbRead").innerHTML=`<b>${taps}</b> tap${taps===1?"":"s"} · ${holds} hold${holds===1?"":"s"}${last?` · last: ${last}`:""}`;
@@ -303,10 +303,10 @@ const RS_ITEMS=$$("article.unit[id^='c-']").map(a=>({ id:a.id, name:a.querySelec
   b.addEventListener("click", e=>e.preventDefault());
 })();
 
-/* ── Hollow Gate ── */
+/* ── Enochian Push Switch ── */
 $("ccv").addEventListener("click", () => { const b=$("ccv"), v=b.getAttribute("aria-pressed")!=="true"; b.setAttribute("aria-pressed",String(v)); $("ccvLed").classList.toggle("on",v); v?thock():clack(); $("ccvRead").innerHTML=v?"<b>on</b> · lamp lit":"<b>off</b> · lamp dark"; });
 
-/* ── Pulse Grid ── */
+/* ── Enochian Pop Buttons ── */
 (() => {
   const bs=$$("#fp .fp-b"); let tray=1, busy=false;
   const read=()=>$("fpRead").innerHTML=`<b>${bs.filter(b=>b.getAttribute("aria-pressed")==="true").length} of 6</b> popped · tray ${tray}`;
@@ -332,14 +332,14 @@ makeToggle($("io"), $("io").querySelector(".tg-k"), { travel:44, onChange:on=>$(
 makeToggle($("pz"), $("pz").querySelector(".tg-k"), { travel:36, pinch:true, onChange:on=>{ $("pzLed").classList.toggle("on",on); $("pzRead").innerHTML=`<b>${on?"on":"off"}</b>`; } });
 makeToggle($("pzt"), $("pzt").querySelector(".tg-k"), { travel:()=>$("pzt").clientWidth-60, pinch:true, onChange:on=>{ $("pztLed").classList.toggle("on",on); $("pztRead").innerHTML=on?"<b>on</b> · knob over the lamp":"<b>off</b> · knob at rest"; } });
 
-/* ── Triune Switch ── */
+/* ── Enochian Toggle Bank 02 ── */
 (() => {
   const tracks=$$("#ts .ts-track");
   const read=()=>$("tsRead").innerHTML=`<b>${tracks.map(t=>t.getAttribute("aria-checked")==="true"?"ON":"OFF").join(" – ")}</b>`;
   tracks.forEach(t => makeToggle(t, t.querySelector(".ts-th"), { travel:58, axis:"y", onChange:on=>{ t.closest(".ts-u").querySelector(".dot").classList.toggle("on",on); read(); } }));
 })();
 
-/* ── Triune Beacon ── */
+/* ── Enochian Rocker Switch Bank ── */
 (() => {
   const ps=$$("#ls .ls-p"), lamps=$$("#lsx .lamp-b");
   const read=()=>{ const on=ps.filter(p=>p.getAttribute("aria-pressed")==="true").map(p=>p.querySelector(".n").textContent); $("lsRead").innerHTML=`<b>${on.length} on</b>${on.length?" · "+on.join(" · "):" · all dark"}`; ps.forEach((p,i)=>lamps[i].classList.toggle("on",p.getAttribute("aria-pressed")==="true")); };
@@ -374,7 +374,7 @@ for(let i=0;i<=10;i++) $("sqTicks").appendChild(document.createElement("i"));
 makeHSlider($("sq"), { value:.4, steps:10, fmt:v=>`step ${Math.round(v*10)}`, onChange:v=>{ const s=Math.round(v*10); $("sqRead").innerHTML=`<b>step ${s}</b> of 10`; $$("#sqTicks i").forEach((t,i)=>t.classList.toggle("on",i<=s)); } });
 makeHSlider($("dmp"), { value:.2, fmt:v=>`${Math.round(v*100)}`, onChange:v=>$("dmpRead").innerHTML=`<b>${Math.round(v*100)}</b> / 100` });
 
-/* ── Orbit Gate ── */
+/* ── Enochian Rotary Switch ── */
 (() => {
   const k=$("rk"), rot=$("rkRot"); let on=false, a=0, drag=false, last=null, moved=0;
   const sp=new Spring(0, HEAVY, x=>{ rot.style.transform=`rotate(${x.toFixed(2)}deg)`; }, .05);
@@ -388,7 +388,7 @@ makeHSlider($("dmp"), { value:.2, fmt:v=>`${Math.round(v*100)}`, onChange:v=>$("
   k.addEventListener("keydown", e=>{ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); set(!on); } else if(e.key==="ArrowRight"||e.key==="ArrowUp"){ e.preventDefault(); set(true); } else if(e.key==="ArrowLeft"||e.key==="ArrowDown"){ e.preventDefault(); set(false); } });
 })();
 
-/* ── Sigil Controller ── */
+/* ── Enochian Joystick ── */
 (() => {
   const base=$("jpBase"), stick=$("jp"), dot=$("jpDot"), arena=$("jpArena"), MAX=26;
   const S={ x:0, y:0, px:85, py:75, drag:false, keys:new Set(), readAt:0 };
@@ -418,7 +418,7 @@ makeHSlider($("dmp"), { value:.2, fmt:v=>`${Math.round(v*100)}`, onChange:v=>$("
   dot.style.transform=`translate(${S.px}px,${S.py}px)`;
 })();
 
-/* ── Aether Orb ── */
+/* ── Enochian Bouncing Balls ── */
 (() => {
   const units=$$("#bb .bb-u"), G=1800; let bounces=0;
   const balls=units.map(u=>({ el:u.querySelector(".bb-ball"), sh:u.querySelector(".bb-shadow"), y:0, vy:0, sq:0, live:false }));
@@ -536,7 +536,7 @@ function bindFinish(groupId, targetId, after){
   });
 }
 
-/* ── Code Veil ── */
+/* ── Code ── */
 const veil=$("veil");
 const veilSpring = new Spring(0, SNAP, x => { $("veilKnob").style.transform=`translateX(${x}px)`; });
 bindFinish("veilFinish","veil");
@@ -544,7 +544,7 @@ veil.addEventListener("click", () => {
   const on = !document.body.classList.contains("show-code");
   document.body.classList.toggle("show-code", on);
   veil.setAttribute("aria-checked", String(on));
-  $("veilLabel").textContent = on ? "CODE VISIBLE" : "CODE HIDDEN";
+  $("veilLabel").textContent = on ? "Hide code" : "Show code";
   veilSpring.to(on ? 72 : 0);
   $$(".code-snippet").forEach(s => { s.inert = !on; s.setAttribute("aria-hidden", String(!on)); });
   thock();
@@ -574,7 +574,7 @@ function makeRotary(el, knob, { value=0.5, onChange, arc=270, cfg=HEAVY }={}){
   return { set, get:()=>v };
 }
 
-/* ═════════ Lumen VU + Cantor Ladder (shared signal) ═════════ */
+/* ═════════ Enochian Analog Level Meter + Enochian LED Level Meter (shared signal) ═════════ */
 const SIG = { on:true, gain:0.62, ch:{ L:{n:0,lvl:-90,p:0,v:0,lad:-90,hold:-90,holdAt:0}, R:{n:0,lvl:-90,p:0,v:0,lad:-90,hold:-90,holdAt:0} }, peakUntil:{L:0,R:0}, lampTest:0, ladMode:"peak", ladHold:true };
 const vuPos = db => Math.pow(10, db/20) / Math.pow(10, 3/20);
 const vuAng = p => -44 + p*88;
@@ -721,7 +721,7 @@ function makeFader({ track, cap, min, max, step, value, pad, detent=null, zone=0
 }
 addEventListener("resize", () => faders.forEach(f=>f.refresh()));
 
-/* ═════════ Meridian Fader ═════════ */
+/* ═════════ Enochian Pitch Slider ═════════ */
 let PITCH=0, PITCH_RANGE=8;
 function drawMerScale(){
   const svg=$("merScale"); svg.innerHTML=""; const H=260, pad=24, k=PITCH_RANGE/8;
@@ -748,7 +748,7 @@ $$("[data-range]").forEach(b => b.onclick = () => {
 });
 bindFinish("merFinish","mer");
 
-/* ═════════ Regie Bank ═════════ */
+/* ═════════ Enochian DJ Mixer ═════════ */
 function drawRegScale(svg, kind){
   const H=190, pad=20;
   const marks = kind==="level" ? [[0,"0"],[-6,"6"],[-12,"12"],[-18,"18"],[-24,"24"],[-30,"30"],[-36,"∞"]] : [[12,"+12"],[6,"6"],[3,"3"],[0,"0"],[-3,"3"],[-6,"6"],[-12,"12"]];
@@ -785,7 +785,7 @@ $$("[data-preset]").forEach(b => b.onclick = () => {
 regRead();
 bindFinish("regFinish","reg");
 
-/* ═════════ Aperture Scale ═════════ */
+/* ═════════ Enochian Radio Tuner ═════════ */
 const BANDS = {
   fm:{ min:87.5, max:108, step:0.1, ppu:70, major:1, mid:0.5, dec:1, unit:"MHz", word:"megahertz", label:"FM · MHz", stations:[88.9,91.5,93.1,95.7,98.3,100.7,102.9,105.1,107.3], magnet:0.25, reach:0.6, value:98.3 },
   mw:{ min:530, max:1710, step:10, ppu:1.2, major:100, mid:50, dec:0, unit:"kHz", word:"kilohertz", label:"MW · kHz", stations:[610,770,880,1010,1130,1260,1480,1600], magnet:25, reach:60, value:880 }
@@ -880,7 +880,7 @@ drawStrip(); apRender(apV);
 new ResizeObserver(()=>apRender(apV)).observe($("apWin"));
 bindFinish("apFinish","ap");
 
-/* ═════════ Interlock Bank ═════════ */
+/* ═════════ Enochian Input Selector ═════════ */
 const liftSprings = new Map();
 $$(".ilk-cap").forEach(c => {
   const start = parseFloat(c.style.getPropertyValue("--lift")) || 1;
@@ -914,7 +914,7 @@ filCaps.forEach(c => c.addEventListener("click", () => {
 }));
 bindFinish("ilkFinish","ilk");
 
-/* ═════════ Lantern Row ═════════ */
+/* ═════════ Enochian Light Switch Bank ═════════ */
 const lanCaps=$$(".lan-cap");
 function lanRead(){
   const on=lanCaps.filter(c=>c.getAttribute("aria-pressed")==="true").map(c=>c.dataset.k);
@@ -929,7 +929,7 @@ $("lanAll").onclick=()=>{ lanCaps.forEach((c,i)=>setTimeout(()=>c.setAttribute("
 $("lanNone").onclick=()=>{ lanCaps.forEach(c=>c.setAttribute("aria-pressed","false")); lanRead(); thock(); };
 bindFinish("lanFinish","lan");
 
-/* ═════════ Strobe Platter ═════════ */
+/* ═════════ Enochian Turntable ═════════ */
 const TT = { running:true, rpm:33, ang:0, ring:[0,0], w:33.333*6, pos:134, held:false, lastA:0, lastT:0 };
 const nominalW = () => (TT.rpm===45?45:33.333)*6;
 TT.w=nominalW();
@@ -998,7 +998,7 @@ $$(".tt-spd").forEach(b => b.onclick = () => {
 bindFinish("ttFinish","tt");
 addLoop(ttTick);
 
-/* ═════════ Transport Bank ═════════ */
+/* ═════════ Enochian Tape Deck ═════════ */
 const SEGS = { a:[13,4,"h"], b:[22,13,"v"], c:[22,31,"v"], d:[13,40,"h"], e:[4,31,"v"], f:[4,13,"v"], g:[13,22,"h"] };
 const DIGITS = ["abcdef","bc","abged","abgcd","fgbc","afgcd","afgedc","abc","abcdefg","abcdfg"];
 function segPts(cx,cy,o,l=15,t=4){
@@ -1078,7 +1078,7 @@ function tpTick(dt, now){
 bindFinish("tpFinish","tp");
 renderTP();
 
-/* ═════════ Lumen Pad ═════════ */
+/* ═════════ Enochian Macro Pad ═════════ */
 const LP_LAYERS = {
   build:  { toggles:["watch","lint","test","types"],   on:[true,false,true,false], acts:{ run:"run build", ok:"accept change", no:"discard change", ship:"open branch", console:"open console" } },
   review: { toggles:["diff","blame","notes","focus"],  on:[true,false,false,true], acts:{ run:"re-run checks", ok:"approve", no:"request changes", ship:"merge when green", console:"open thread" } },
@@ -1167,7 +1167,7 @@ function knobUnit(num, label, lblClass){
   return u;
 }
 
-/* ═════════ Cadence Pads ═════════ */
+/* ═════════ Enochian Drum Machine ═════════ */
 const CP_VOICES=["kick","sub","snare","clap","hat","open hat","rim","shaker","tom lo","tom mid","tom hi","bell","crash","ride","zap","blip"];
 const CP_FN=["1/4","1/8","1/16","1/32","swing 50","swing 54","swing 62","swing 70","kit a","kit b","metronome","clear","tempo −","tempo +","tap tempo","latch"];
 const RATES=[4,8,16,32];
@@ -1362,7 +1362,7 @@ $("cpKit").onclick=()=>{ CP.kit=CP.kit==="A"?"B":"A"; kitLabel(); tick(); cpDisp
 bindFinish("cpFinish","cp");
 cpDisp();
 
-/* ═════════ Penumbra Deck ═════════ */
+/* ═════════ Enochian Video Editor ═════════ */
 const PD={ z:Array(8).fill(0), exposure:0, contrast:0, shadows:0, highlights:0, blacks:0, whites:0, frame:288, before:false, inF:null, outF:null };
 const PD_W=320, PD_H=180, pdBase=new Float32Array(PD_W*PD_H);
 const ROMAN=["I","II","III","IV","V","VI","VII","VIII"];
@@ -1502,7 +1502,7 @@ pdDots(); pdRequest(); pdInfo();
 accentHooks.push(pdRequest);
 bindFinish("pdFinish","pd");
 
-/* ═════════ Tally Keypad ═════════ */
+/* ═════════ Enochian Number Pad ═════════ */
 const NK={ acc:null, op:null, entry:"1280", fresh:false, mem:[null,null,null,null,null], tape:[["640 × 2","1,280"]], msgT:0 };
 const OPS={ "+":"+", "-":"−", "*":"×", "/":"÷" };
 const nkNum = s => s===""||s==="-" ? 0 : parseFloat(s);
@@ -1599,7 +1599,7 @@ function bands(){
   return { low:avg(20,250), high:avg(3000,12000) };
 }
 
-/* ═════════ Sigil Remote ═════════ */
+/* ═════════ Enochian Remote Control ═════════ */
 const TV_ITEMS=[["Vigil","V","#46464b","#121214"],["Choir","C","#5b5b61","#1c1c1f"],["Aether","A","#2c2c30","#060607"],["Triune","T","#6c6c72","#242427"],
                 ["Cantor","C","#424247","#101012"],["Meridian","M","#606066","#17171a"],["Regie","R","#38383c","#0b0b0d"],["Strobe","S","#76767c","#2a2a2e"]];
 const TV={ power:true, view:"grid", f:0, open:0, playing:false, prog:TV_ITEMS.map((_,i)=>[.62,.18,0,.4,0,.85,.05,0][i]), vol:8, muted:false, osdT:0 };
@@ -1702,9 +1702,9 @@ function tvTick(dt){
 bindFinish("rmFinish","rm");
 tvRender();
 
-/* ═════════ Orbit Wheel ═════════ */
-const IP_SONGS=[["Vigil at Dawn","Horologion",214],["Choir of Detents","Choir Dial",187],["Three Gates","Triune Gate",242],["Aether Static","Aether Receiver",199],["Ivory Hour","Ivory Dial",226],["Code Veil","The Code Veil",171],
-  ["Cantor Rising","Cantor Ladder",233],["Meridian Drift","Meridian Fader",205],["Lantern Hours","Lantern Row",258],["Strobe at 33","Strobe Platter",219],["Memory Stop","Transport Bank",184],["Penumbra","Penumbra Deck",263]];
+/* ═════════ Enochian Scroll Wheel ═════════ */
+const IP_SONGS=[["Vigil at Dawn","Enochian Clock",214],["Choir of Detents","Enochian Stepped Knob",187],["Three Gates","Enochian Toggle Bank 01",242],["Aether Static","Enochian Radio Player",199],["Ivory Hour","Enochian Rotary Knob 02",226],["Code","Enochian Code Toggle",171],
+  ["Cantor Rising","Enochian LED Level Meter",233],["Meridian Drift","Enochian Pitch Slider",205],["Lantern Hours","Enochian Light Switch Bank",258],["Strobe at 33","Enochian Turntable",219],["Memory Stop","Enochian Tape Deck",184],["Penumbra","Enochian Video Editor",263]];
 const IP={ stack:[], playing:false, track:0, queue:IP_SONGS.map((_,i)=>i), pos:48, vol:60, clicker:true, repeat:"Off", shuffle:false, scrub:false, volUntil:0, lastNow:0 };
 const IP_ROWS=7;
 const ipTime = s => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`;
@@ -1814,7 +1814,7 @@ IP.stack=[Object.assign({ sel:0, top:0 }, ipMain())];
 bindFinish("ipFinish","ip");
 ipRender();
 
-/* ═════════ Excursion Pair ═════════ */
+/* ═════════ Enochian Speaker Crossover ═════════ */
 const EX={ src:"off", f:120, xo:2000, dir:1, wAmp:0, tAmp:0, t:0, readAt:0 };
 let EXA=null;
 const fFromN=n=>20*Math.pow(800,n), nFromF=f=>Math.log(f/20)/Math.log(800);
@@ -1879,7 +1879,7 @@ $$("[data-src]").forEach(b => b.onclick = () => {
 xoSet(EX.xo); exRead();
 bindFinish("exFinish","ex");
 
-/* ═════════ Monitor Pair ═════════ */
+/* ═════════ Enochian Stereo Speakers ═════════ */
 const mnPulse={ "-1":0, "1":0 }; let mnT=0, mnFlipped=false;
 const mnFlip=new Spring(0, HEAVY, a => { $("mnL").style.transform=`rotateY(${a.toFixed(2)}deg)`; $("mnR").style.transform=`rotateY(${a.toFixed(2)}deg)`; }, 0.05);
 const mnVolSp=new Spring(-135+MON.vol/100*270, HEAVY, a => $("mnVolCap").style.transform=`rotate(${a.toFixed(2)}deg)`, 0.05);
@@ -1932,7 +1932,7 @@ watch($("mnStage"), () => addLoop(mnTick));
 bindFinish("mnFinish","mnStage");
 mnRender();
 
-/* ═════════ Augur rangefinder ═════════ */
+/* ═════════ Enochian Camera rangefinder ═════════ */
 const CAM_SPEEDS=["A","1","2","4","8","15","30","60","125","250","500","1000","2000","4000"];
 const CAM_F=[1.4,2,2.8,4,5.6,8,11,16];
 const CAM_SCENES={ portrait:{ d:1.2, ev:7 }, street:{ d:3, ev:12 }, far:{ d:Infinity, ev:14 } };
@@ -2116,7 +2116,7 @@ $("camFLbl").textContent=`f/${CAM_F[CAM.fi]}`; $("camDLbl").textContent=camFmtD(
 camDrawScene(); camRenderFinder(); camMeter();
 bindFinish("camFinish","cam");
 
-/* ═════════ Lodestar compass ═════════ */
+/* ═════════ Enochian Compass compass ═════════ */
 const angDiff=(a,b)=>((a-b+540)%360+360)%360-180;
 const CMP={ heading:62, bearing:60, needle:-62, vel:0, open:true, wander:false, wanderT:0, readAt:0, wasOn:false };
 const WIND=["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
@@ -2182,7 +2182,7 @@ $("cmpLatch").onclick=()=>{ CMP.open=!CMP.open; lidSp.to(CMP.open?0:-180); thock
 bindFinish("cmpFinish","cmpx");
 cmpRender(); addLoop(cmpTick);
 
-/* ═════════ Climate thermostat ═════════ */
+/* ═════════ Enochian Thermostat thermostat ═════════ */
 const TH={ mode:"heat", fan:"auto", eco:false, sched:true, target:21.5, cur:19.4, rh:42, out:7, unit:"C", hvac:"idle", readAt:0 };
 const TH_MODES=["off","heat","cool","auto"], TH_MIN=10, TH_MAX=32;
 const thTemps=[]; for(let t=TH_MIN;t<=TH_MAX+1e-9;t+=.5) thTemps.push(+t.toFixed(1));
@@ -2255,7 +2255,7 @@ $$("[data-unit]").forEach(b=>b.onclick=()=>{ TH.unit=b.dataset.unit; $$("[data-u
 bindFinish("thFinish","th");
 thRender();
 
-/* ═════════ Velocity speedometer ═════════ */
+/* ═════════ Enochian Speedometer speedometer ═════════ */
 const VL={ v:0, unit:"mph", gas:false, brake:false, cruise:false, cruiseAt:0, limit:false, limitAt:0, trip:0, odo:4213.0, readAt:0, drawnUnit:null };
 const VL_C=120, vlPt=(r,a)=>[VL_C+r*Math.sin(a*Math.PI/180), VL_C-r*Math.cos(a*Math.PI/180)];
 const vlMax=()=>VL.unit==="mph"?160:260, vlConv=mph=>VL.unit==="mph"?mph:mph*1.609344;
@@ -2325,7 +2325,7 @@ $("vlLimit").onclick=()=>{ VL.limit=!VL.limit; VL.limitAt=Math.max(20,Math.round
 bindFinish("vlFinish","vl");
 vlBuild(); vlLamps();
 
-/* ═════════ Triad system monitor ═════════ */
+/* ═════════ Enochian System Monitor system monitor ═════════ */
 const TR_CORES=Math.min(16, navigator.hardwareConcurrency||8), TR_RAM=navigator.deviceMemory ? Math.max(4,navigator.deviceMemory) : 16;
 const TR={ sel:"cpu", stress:0, cpu:.24, gpu:.12, ram:.58, tc:46, tg:44, t:0, cores:Array(TR_CORES).fill(.2), readAt:0 };
 const TR_R={ cpu:98, gpu:82, ram:66 }, trArcs={};
@@ -2405,7 +2405,7 @@ function flapTick(dt, now){
 function boardCols(el, cols){ el.innerHTML=cols.map(([n,w])=>`<span style="width:calc(var(--cw) * ${w} + ${(w-1)*2}px)">${n}</span>`).join(""); }
 const hhmm=m=>{ m=((Math.floor(m)%1440)+1440)%1440; return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0"); };
 
-/* ═════════ Departures ═════════ */
+/* ═════════ Enochian Flight Board ═════════ */
 const FB_COLS=[["TIME",5],["DESTINATION",12],["FLIGHT",6],["GATE",3],["REMARKS",12]], FB_ROWS=8;
 const FB_CITIES=["NEW YORK","BERLIN","LONDON","TOKYO","HONG KONG","MADRID","SYDNEY","TORONTO","PARIS","ROME","SEOUL","LISBON","OSLO","DUBAI","SINGAPORE","MEXICO CITY","REYKJAVIK","NAIROBI","LIMA","ZURICH","CAPE TOWN","HELSINKI"];
 const FB_AIR=["UC","EN","AE","VG","HR","LX","SA","OR"];
@@ -2447,7 +2447,7 @@ $$("[data-fbs]").forEach(b=>b.onclick=()=>{ FB.speed=+b.dataset.fbs; $$("[data-f
 bindFinish("fbFinish","fb");
 fbRender();
 
-/* ═════════ Manifest task board ═════════ */
+/* ═════════ Enochian Task Board task board ═════════ */
 const MF_COLS=[["ETA",5],["TASK",18],["TICKET",7],["PR",5],["STATUS",13]], MF_ROWS=8;
 const MF_AUTO={ QUEUED:"BUILDING", BUILDING:"TESTING", MERGING:"SHIPPED" };
 const MF_ACT={ "IN REVIEW":["MERGING","approve"], "CHECKS FAILED":["BUILDING","retry"], "BLOCKED":["QUEUED","unblock"] };
@@ -2507,7 +2507,7 @@ $("mfForm").addEventListener("submit", e=>{
 bindFinish("mfFinish","mf");
 mfRender();
 
-/* ═════════ Aemeth · angel voice channel ═════════ */
+/* ═════════ Enochian Voice Assistant · angel voice channel ═════════ */
 (() => {
   const ae=$("ae"), ORDER=["off","idle","ready","listening","speaking"];
   const LABEL={ off:"OFF", idle:"MINIMAL", ready:"READY", listening:"LISTENING", speaking:"ANGEL SPEAKING" };
@@ -2690,7 +2690,7 @@ mfRender();
   $$("[data-ccompact]").forEach(b=>b.onclick=()=>compact(b.dataset.ccompact));
   $$("[data-cnew]").forEach(b=>b.onclick=newThread);
 
-  /* ── Lumen Context: twin VU faces on a compressed scale ── */
+  /* ── Enochian Context Meter 01: twin VU faces on a compressed scale ── */
   (() => {
     const el=$("cv"), K=Math.log(.708)/Math.log(ADVISE), pos=u=>Math.pow(clamp(u/S.win,0,1.02),K), ang=p=>-44+clamp(p,-.02,1.04)*88;
     const N={ a:{ p:pos(S.a.used), v:0 }, b:{ p:pos(S.b.used), v:0 } }, parts={};
@@ -2737,7 +2737,7 @@ mfRender();
     rebuild(); views.push({ el, frame, paint, rebuild }); bindFinish("cvFinish","cv");
   })();
 
-  /* ── Cantor Agents: one ladder row per agent ── */
+  /* ── Enochian Agent Monitor: one ladder row per agent ── */
   (() => {
     const el=$("ca"), rowsEl=$("caRows"), rowCache=new Map();
     const lit=r=>Math.round(clamp(Math.log10(Math.max(r,1)/100)/Math.log10(200),0,1)*20);
@@ -2777,7 +2777,7 @@ mfRender();
     views.push({ el, frame:()=>paint(), paint }); bindFinish("caFinish","ca"); paint(true);
   })();
 
-  /* ── Triad Context: think, build, agents ── */
+  /* ── Enochian Context Meter 03: think, build, agents ── */
   (() => {
     const el=$("ct"), svg=$("ctSvg"), R={ a:98, b:82, g:66 }, arcs={}; let sel="a";
     Object.entries(R).forEach(([k,r])=>{ const C=2*Math.PI*r;
@@ -2806,7 +2806,7 @@ mfRender();
     views.push({ el, frame:()=>paint(), paint }); bindFinish("ctFinish","ct"); paint(true);
   })();
 
-  /* ── Velocity Context: two needles, 0 to the window ── */
+  /* ── Enochian Context Meter 02: two needles, 0 to the window ── */
   (() => {
     const el=$("cx"), C=120, pt=(r,a)=>[C+r*Math.sin(a*Math.PI/180), C-r*Math.cos(a*Math.PI/180)];
     const ang=u=>-120+clamp(u/S.win,0,1.02)*240; let p={}, nA=S.a.used, nB=S.b.used;
@@ -2851,7 +2851,7 @@ mfRender();
     set(think, build){ if(think!=null) S.a.used=+think; if(build!=null) S.b.used=+build; paintAll(true); }, pause(){ S.run=false; paintAll(true); } };
 })();
 
-/* ═════════ Triad Quota: session / weekly / model cap with week pacing ═════════ */
+/* ═════════ Enochian Usage Monitor: session / weekly / model cap with week pacing ═════════ */
 (() => {
   const PROV=[{ name:"CLAUDE", model:"OPUS", modelLong:"Opus weekly" },{ name:"CHATGPT", model:"REASONING", modelLong:"reasoning models" },{ name:"OTHER", model:"PREMIUM", modelLong:"premium model" }];
   const STYLE=[{ name:"light", rate:.95, p:.55, share:.3 },{ name:"steady", rate:1.55, p:.75, share:.45 },{ name:"heavy", rate:2.6, p:.9, share:.62 }];
@@ -3258,7 +3258,7 @@ function blip(freq){
 function renderRadio(instant=false){
   const palette=radioPalettes[radioTheme];
   $("radio").dataset.theme=radioTheme;
-  $("radio").setAttribute("aria-label", ({light:"Ivory",red:"Cinnabar",black:"Obsidian"}[radioTheme])+" Aether Receiver");
+  $("radio").setAttribute("aria-label", ({light:"Ivory",red:"Cinnabar",black:"Obsidian"}[radioTheme])+" Enochian Radio Player");
   document.querySelectorAll("#radioThemes button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.theme===radioTheme)));
   $("pwrBtn").setAttribute("aria-checked", String(radioOn));
   $("pdot").style.background=radioOn?palette.powerOn:palette.powerOff;
@@ -3461,7 +3461,7 @@ function pressureToggle(btnId,caseId,get,set){
   $(btnId).onclick=()=>{ensureAudio();if(AC)AC.resume();const on=!get();set(on);$(btnId).setAttribute("aria-pressed",String(on));
     $(btnId).textContent=on?"PRESSURE SOUND · ON":"PRESSURE SOUND · OFF";if(!on)$(caseId).dataset.pressure="";if(on)pressureTick(30);};
 }
-/* Vigil Clock (60 s and up): watch its countdown from outside, so the original timer code stays untouched */
+/* Enochian Countdown Timer (60 s and up): watch its countdown from outside, so the original timer code stays untouched */
 (function(){
   let on=false,lastSec=-1,lastMode="ready";
   pressureToggle("timerPressure","timerCase",()=>on,v=>on=v);
@@ -3481,7 +3481,7 @@ function vigilThemes(groupId,caseId){$(groupId).addEventListener("click",e=>{con
   document.querySelectorAll("#"+groupId+" button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));});}
 function vigilFormat(ms){const tenths=Math.max(0,Math.ceil(ms/100)),mins=Math.floor(tenths/600),secs=Math.floor((tenths%600)/10),tenth=tenths%10;return `${String(mins).padStart(2,"0")}:${String(secs).padStart(2,"0")}.${tenth}`;}
 
-/* Vigil 90: one sweep of the red hand is the whole 90-second interval */
+/* Enochian 90 Second Timer: one sweep of the red hand is the whole 90-second interval */
 (function(){
   const svg=$("v90Svg"),CX=152,CY=152,R=137,C=2*Math.PI*R,SCY=103;
   const prog=vigilEl(svg,"circle",{cx:CX,cy:CY,r:R,fill:"none",class:"timer-progress","stroke-width":7,"stroke-dasharray":C,"stroke-dashoffset":C,"stroke-linecap":"round",transform:`rotate(-90 ${CX} ${CY})`});
@@ -3534,7 +3534,7 @@ function vigilFormat(ms){const tenths=Math.max(0,Math.ceil(ms/100)),mins=Math.fl
   (function loop(){render();requestAnimationFrame(loop);})();
 })();
 
-/* Pomodoro Vigil: one face is one cycle; focus in red, break in ink, a dot per finished focus */
+/* Enochian Pomodoro Timer: one face is one cycle; focus in red, break in ink, a dot per finished focus */
 (function(){
   const svg=$("pomoSvg"),CX=152,CY=152,R=137,SCY=103;
   const P={focus:25,brk:5,long:15,longOn:true,auto:true,speed:1,phase:"focus",count:0,rem:25*60000,mode:"ready",last:0};
@@ -3709,66 +3709,66 @@ const abUnits=[...document.querySelectorAll("#abtns .abunit")].map((unit)=>{
   return { render, lit, set:(v,instant)=>{ latched=v; held=false; render(instant); } };
 });
 
-/* Code Veil drives a page-wide, copyable code layer */
+/* Code drives a page-wide, copyable code layer */
 const CODE_SPRING={type:"spring",stiffness:500,damping:32,mass:1};
 const CODE_SNIPPETS=[
-  {id:"codeToggle",title:"The Code Veil",code:String.raw`const spring = { type: "spring", stiffness: 500, damping: 32 };
+  {id:"codeToggle",title:"Enochian Code Toggle",code:String.raw`const spring = { type: "spring", stiffness: 500, damping: 32 };
 <motion.button role="switch" aria-checked={showCode} data-finish={finish}
   animate={{ backgroundColor: showCode ? "#CC0000" : finish === "obsidian" ? "#171719" : "#EFEFEF" }}
   transition={spring} onClick={() => setShowCode(v => !v)}>
   <motion.span animate={{ x: showCode ? 72 : 0 }} transition={spring} />
 </motion.button>`},
-  {id:"darkDial",title:"Obsidian Dial",code:String.raw`const value = useMotionValue(0.05);
+  {id:"darkDial",title:"Enochian Rotary Knob 01",code:String.raw`const value = useMotionValue(0.05);
 const rotation = useTransform(value, [0, 1], [-135, 135]);
 <motion.div role="slider" aria-valuenow={Math.round(value.get()*100)}
   drag="y" dragMomentum={false} style={{ rotate: rotation }} />
 /* data-finish="obsidian|ivory" swaps materials without resetting value */`},
-  {id:"lightDial",title:"Ivory Dial",code:String.raw`.light-base { background:#EFEFEF; border-radius:50%; }
+  {id:"lightDial",title:"Enochian Rotary Knob 02",code:String.raw`.light-base { background:#EFEFEF; border-radius:50%; }
 .light-knob {
   background:#FFF;
   box-shadow:6px 8px 16px rgba(0,0,0,.16);
 }
 .dot { background:#CC0000; }
 .dial[data-finish="obsidian"] .light-knob { background:#1d1d20; }`},
-  {id:"stepDial",title:"Choir Dial",code:String.raw`const stepWidth = trackWidth / (steps - 1);
+  {id:"stepDial",title:"Enochian Stepped Knob",code:String.raw`const stepWidth = trackWidth / (steps - 1);
 const index = clamp(Math.round(x.get() / stepWidth), 0, steps - 1);
 animate(x, index * stepWidth,
   { type:"spring", stiffness:600, damping:32, mass:.8 });
 // Arrow keys ±1 · PageUp/PageDown ±2 · Home/End
 // data-finish="ivory|obsidian" changes material only; detent stays selected.`},
-  {id:"npill",title:"Ordinal Veil",code:String.raw`<LayoutGroup>
+  {id:"npill",title:"Enochian Segment Selector",code:String.raw`<LayoutGroup>
   {options.map(option => <button key={option}>
     {selected === option &&
       <motion.span layoutId="active-pill" transition={spring} />}
     <span>{option}</span>
   </button>)}
 </LayoutGroup>`},
-  {id:"triple",title:"Triune Gate",code:String.raw`.triple { display:flex; gap:72px; }
+  {id:"triple",title:"Enochian Toggle Bank 01",code:String.raw`.triple { display:flex; gap:72px; }
 .tunit { width:56px; } /* absolute thumb needs a flex width */
 .tthumb { width:56px; height:100px; }
 const travel = (176 - 100) / 2;
 animate(thumb, { y: on ? -travel : travel }, snapSpring);
 .triple[data-finish="obsidian"] .tthumb { background:#171719; }`},
-  {id:"radio",title:"Aether Receiver",code:String.raw`<div className="radio" data-theme={theme}>
+  {id:"radio",title:"Enochian Radio Player",code:String.raw`<div className="radio" data-theme={theme}>
   <button role="switch" aria-checked={playing}>Power</button>
   <div className="grill" />
   <div role="slider" aria-valuenow={volume} className="rknob" />
 </div>
 /* light · #CC0000 red · #121214 black theme tokens */`},
-  {id:"clkBrand",title:"Horologion",code:String.raw`function tickClock(now = new Date()) {
+  {id:"clkBrand",title:"Enochian Clock",code:String.raw`function tickClock(now = new Date()) {
   hourHand.style.transform = "rotate(" + ((now.getHours()%12)*30 + now.getMinutes()*.5) + "deg)";
   minuteHand.style.transform = "rotate(" + (now.getMinutes()*6 + now.getSeconds()*.1) + "deg)";
   secondHand.style.transform = "rotate(" + (now.getSeconds()*6) + "deg)";
   requestAnimationFrame(() => tickClock(new Date()));
 }
 /* data-finish="ivory|obsidian" changes case, face, hands, marks, and corners. */`},
-  {id:"timerCase",title:"Vigil Clock",code:String.raw`const presets = [60, 5*60, 10*60, 25*60];
+  {id:"timerCase",title:"Enochian Countdown Timer",code:String.raw`const presets = [60, 5*60, 10*60, 25*60];
 const endAt = Date.now() + remainingMs;
 const remaining = Math.max(0, endAt - Date.now());
 const elapsedRatio = 1 - remaining / durationMs;
 progressCircle.setAttribute("stroke-dashoffset", circumference * (1-elapsedRatio));
 // Derive every frame from wall time so background tabs do not lose time.`},
-  {id:"mechanicalKeyboard",title:"Mechanical Keyboard",code:String.raw`const keySpring = { type:"spring", stiffness:780, damping:34, mass:.45 };
+  {id:"mechanicalKeyboard",title:"Enochian Typing Keyboard",code:String.raw`const keySpring = { type:"spring", stiffness:780, damping:34, mass:.45 };
 function setKeyDown(key, down) {
   key.dataset.pressed = String(down);
   animate(key, down ? { y:5, scale:.985 } : { y:0, scale:1 }, keySpring);
@@ -3776,7 +3776,7 @@ function setKeyDown(key, down) {
 // Render each key as a native button. Cinnabar keys use #CC0000.
 // data-finish="ivory|obsidian" swaps typing-key material and ink only.
 // Pointer and keyboard events share the same press/release path.`},
-  {id:"concaveButton",title:"Push Button",code:String.raw`const pressSpring = { type:"spring", stiffness:720, damping:32, mass:.55 };
+  {id:"concaveButton",title:"Enochian Push Button 01",code:String.raw`const pressSpring = { type:"spring", stiffness:720, damping:32, mass:.55 };
 function renderPress(down) {
   button.setAttribute("aria-pressed", String(down));
   animate(button, down ? { y:9, scale:.975 } : { y:0, scale:1 }, pressSpring);
@@ -3784,11 +3784,11 @@ function renderPress(down) {
   dish.style.boxShadow = down ? DISH_DOWN : DISH_REST;
 }
 // The radial-gradient cap and inset shadows create the concavity.`},
-  {id:"abtns",title:"The Three Keys",code:String.raw`const press = { type:"spring", stiffness:650, damping:26, mass:.6 };
+  {id:"abtns",title:"Enochian Button Bank 01",code:String.raw`const press = { type:"spring", stiffness:650, damping:26, mass:.6 };
 animate(button, pressed ? { y:6, scale:.94 } : { y:0, scale:1 }, press);
 animate(socket, { boxShadow: pressed ? SOCKET_DEEP : SOCKET_REST });
 // Native <button>; latch changes on click, momentary follows hold.`},
-  {id:"v90Case",title:"Vigil 90",code:String.raw`// One sweep = 90 seconds: 4° per second, labels every 10 s, 90 at the top.
+  {id:"v90Case",title:"Enochian 90 Second Timer",code:String.raw`// One sweep = 90 seconds: 4° per second, labels every 10 s, 90 at the top.
 const angle = (1 - remainingMs / 90000) * 360;
 secondHand.setAttribute("transform", "rotate(" + angle + " 152 152)");
 // Soft ticks for the last three seconds, a chime pair between rounds.
@@ -3803,7 +3803,7 @@ function pressureTick(secLeft) {
   if (hot) voice(t + .5, 1320, .08, 0);                           // off-beat tick
 }
 timerCase.dataset.pressure = running && secLeft <= 10 ? "hot" : ""; // digits go red`},
-  {id:"pomoCase",title:"Pomodoro Vigil",code:String.raw`// One face is one cycle: focus + break minutes around 360°.
+  {id:"pomoCase",title:"Enochian Pomodoro Timer",code:String.raw`// One face is one cycle: focus + break minutes around 360°.
 const deg = 360 / (focus + brk);
 const pos = phase === "focus" ? frac * focus : focus + frac * brk;   // minutes into the cycle
 focusArc.setAttribute("d", arc(0, Math.min(pos, focus) * deg));      // red
@@ -3831,7 +3831,7 @@ let codeVisible=false;
 const codeToggle=$("codeToggle"),codeKnob=codeToggle.querySelector(".d37-knob");
 function renderCodeLayer(instant=false){
   codeToggle.setAttribute("aria-checked",String(codeVisible));
-  $("codeToggleLabel").textContent=codeVisible?"CODE VISIBLE":"CODE HIDDEN";
+  $("codeToggleLabel").textContent=codeVisible?"Hide code":"Show code";
   document.body.classList.toggle("show-code",codeVisible);
   document.querySelectorAll(".code-snippet").forEach(p=>{p.inert=!codeVisible;p.setAttribute("aria-hidden",String(!codeVisible));});
   const move=instant||reduce?{duration:0}:CODE_SPRING;
@@ -3847,4 +3847,4 @@ codeToggle.addEventListener("pointerdown",()=>animate(codeToggle,{scale:.97},{du
 renderCodeLayer(true);
 
 }
-import("./atlas.js?v=02caaaaac6a2");
+import("./atlas.js?v=7f4c849380fa");

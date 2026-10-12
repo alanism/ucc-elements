@@ -2,3 +2,7 @@
 .firebase/
 .uiux-dist/
 firebase-debug.log
+
+.showcase-dist/
+.qa/
+__pycache__/

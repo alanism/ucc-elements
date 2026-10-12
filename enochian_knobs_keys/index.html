@@ -280,7 +280,7 @@
     box-shadow:inset 8px 10px 18px rgba(0,0,0,.22),inset -8px -10px 17px rgba(255,255,255,.88),0 1px 1px rgba(255,255,255,.9);pointer-events:none}
   .concave-top::after{content:"";position:absolute;inset:10%;border-radius:50%;background:radial-gradient(ellipse at 35% 24%,rgba(255,255,255,.55),transparent 48%);mix-blend-mode:screen}
   .concave-button[data-pressed="true"]{transform:translateY(9px) scale(.975)}
-  /* Code Veil global code-reveal control */
+  /* Code global code-reveal control */
   .code-toggle-card{min-height:250px}
   .d37-wrap{display:flex;align-items:center;gap:16px}
   .d37-track{width:132px;height:60px;border:0;border-radius:999px;background:#efefef;position:relative;cursor:pointer;outline-offset:6px;
@@ -315,7 +315,14 @@
   <div class="portable"><strong>Portable by design.</strong> No hosted design service is required. The controls are self-contained, accessible, and ready to adapt.</div>
   <nav class="atlas-map" aria-label="Control atlas guide">
     <h3>Find the right pattern</h3>
-    <ul><li><strong>Tune a value</strong> with a rotary dial.</li><li><strong>Choose a fixed position</strong> with a detented dial or sliding ordinal control.</li><li><strong>Combine independent states</strong> with the Triune Gate.</li><li><strong>Control playback</strong> with the Aether Receiver or Horologion.</li><li><strong>Measure elapsed time</strong> with the Vigil Clock, <strong>run 90-second intervals</strong> with Vigil 90, or <strong>work in Pomodoro cycles</strong> with Pomodoro Vigil.</li><li><strong>Type with tactile feedback</strong> on the Mechanical Keyboard.</li><li><strong>Trigger an action</strong> with the Push Button or Three Keys.</li><li><strong>Inspect the construction</strong> by opening the Code Veil.</li></ul>
+    <p><a href="op-1/index.html">Canticle / OP study</a> — a composed instrument surface with playable keys, four encoders, and note-event tape.</p>
+    <p><a href="speakers/index.html">Enochian Speakers</a> — woven grille, twin drivers, tactile volume controls, and switchable speaker finishes.</p>
+    <p><a href="tp-7/index.html">Enochian Audio Recorder</a> — tactile scrub wheel, generated-demo recording, transport keys, and silver/dark finishes.</p>
+    <p><a href="dj-decks/index.html">Enochian DJ Controller</a> — jog wheels, two-channel mixing, EQ, faders, and Cinnabar performance pads.</p>
+    <p><a href="keyboard/index.html">Enochian MIDI Keyboard</a> — playable keys, touch strips, eight encoders, and a dual-row pad bank.</p>
+    <p><a href="midi-pad/index.html">Enochian MIDI Pad</a> — a sixteen-pad controller with local sound, scene sequencing, and optional MIDI output.</p>
+    <p><a href="apple-devices/index.html">Enochian Device Frames</a> — White/Obsidian display, desktop, laptop, tablet, and phone shells with empty screen slots and matching accessories.</p>
+    <ul><li><strong>Tune a value</strong> with a rotary dial.</li><li><strong>Choose a fixed position</strong> with a detented dial or sliding ordinal control.</li><li><strong>Combine independent states</strong> with the Enochian Toggle Bank 01.</li><li><strong>Control playback</strong> with the Enochian Radio Player or Enochian Clock.</li><li><strong>Measure elapsed time</strong> with the Enochian Countdown Timer, <strong>run 90-second intervals</strong> with Enochian 90 Second Timer, or <strong>work in Pomodoro cycles</strong> with Enochian Pomodoro Timer.</li><li><strong>Type with tactile feedback</strong> on the Enochian Typing Keyboard.</li><li><strong>Trigger an action</strong> with the Enochian Push Button 01 or Enochian Button Bank 01.</li><li><strong>Inspect the construction</strong> by opening the Code.</li></ul>
   </nav>
 </header>
 <div class="accentrow">Signal accent:
@@ -323,25 +330,25 @@
 </div>
 
 <div class="section-title">Inspect the construction</div>
-<div class="cap"><span>The Code Veil · reveal the implementation</span><span class="pill">CODE HIDDEN / VISIBLE</span></div>
+<div class="cap"><span>Enochian Code Toggle · Show or hide implementation code</span><span class="pill">Show code / VISIBLE</span></div>
 <div class="grid"><div class="card code-toggle-card">
-  <p class="component-copy">The Code Veil turns the atlas from a visual catalogue into a practical reference. Switch it on to reveal a copyable implementation fragment beneath every control.</p>
-  <div class="rthemes" id="codeVeilFinish" role="group" aria-label="Code Veil finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+  <p class="component-copy">Enochian Code Toggle turns the atlas from a visual catalogue into a practical reference. Switch it on to reveal a copyable implementation fragment beneath every control.</p>
+  <div class="rthemes" id="codeVeilFinish" role="group" aria-label="Code finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
   <div class="d37-wrap">
     <button class="d37-track" id="codeToggle" data-finish="ivory" role="switch" aria-checked="false" aria-label="Show code snippets">
       <span class="d37-knob" aria-hidden="true"></span>
     </button>
-    <span class="d37-label" id="codeToggleLabel" aria-live="polite">CODE HIDDEN</span>
+    <span class="d37-label" id="codeToggleLabel" aria-live="polite">Show code</span>
   </div>
   <div class="hint">pointer or keyboard · Space / Enter · every revealed pattern is copyable</div>
 </div></div>
 
 <div class="section-title">Value controls</div>
-<div class="cap"><span>Obsidian Dial · rotary volume control</span><span class="pill">5% · CONTINUOUS · 80%</span></div>
+<div class="cap"><span>Enochian Rotary Knob 01 · Bar position marker</span><span class="pill">5% · CONTINUOUS · 80%</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">A dark, high-contrast dial with a signal-colored position marker. Use it when a value control should feel substantial and remain legible at a glance.</p>
-  <div class="rthemes" id="darkDialFinish" role="group" aria-label="Obsidian Dial finish"><button type="button" data-finish="ivory" aria-pressed="false">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="true">OBSIDIAN</button></div>
-  <div class="dial" id="darkDial" data-finish="obsidian" role="slider" tabindex="0" aria-label="Obsidian Dial volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="5" aria-valuetext="5 percent">
+  <div class="rthemes" id="darkDialFinish" role="group" aria-label="Enochian Rotary Knob 01 finish"><button type="button" data-finish="ivory" aria-pressed="false">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="true">OBSIDIAN</button></div>
+  <div class="dial" id="darkDial" data-finish="obsidian" role="slider" tabindex="0" aria-label="Enochian Rotary Knob 01 volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="5" aria-valuetext="5 percent">
     <svg class="ticks" id="darkTicks" viewBox="0 0 220 220"></svg>
     <div class="dark-base"></div><div class="dark-knob" id="darkKnob"><div class="dash"></div></div>
   </div>
@@ -350,11 +357,11 @@
   <div class="hint">drag ↕ · ←/→ keys · Home/End</div>
 </div></div>
 
-<div class="cap"><span>Ivory Dial · light rotary control</span><span class="pill">0–100%</span></div>
+<div class="cap"><span>Enochian Rotary Knob 02 · Dot position marker</span><span class="pill">0–100%</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">The same value model in a quieter finish. A single signal dot marks the current position without adding visual weight.</p>
-  <div class="rthemes" id="lightDialFinish" role="group" aria-label="Ivory Dial finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
-  <div class="dial" id="lightDial" data-finish="ivory" role="slider" tabindex="0" aria-label="Ivory Dial volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50 percent">
+  <div class="rthemes" id="lightDialFinish" role="group" aria-label="Enochian Rotary Knob 02 finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+  <div class="dial" id="lightDial" data-finish="ivory" role="slider" tabindex="0" aria-label="Enochian Rotary Knob 02 volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50 percent">
     <div class="light-base"></div><div class="light-knob" id="lightKnob"><div class="dot"></div></div>
   </div>
   <div class="readout"><b id="lightVal">50%</b></div>
@@ -362,14 +369,14 @@
 </div></div>
 
 <div class="section-title">Discrete choice controls</div>
-<div class="cap"><span>Choir Dial · fixed-position rotary selector</span><span class="pill">3 · 5 · 7 · 10</span></div>
+<div class="cap"><span>Enochian Stepped Knob · Fixed-position selector</span><span class="pill">3 · 5 · 7 · 10</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">For ordered choices where landing between values would be meaningless. Select the number of detents and the dial redraws its scale while preserving an explicit position.</p>
-  <div class="rthemes" id="choirFinish" role="group" aria-label="Choir Dial finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+  <div class="rthemes" id="choirFinish" role="group" aria-label="Enochian Stepped Knob finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
   <div class="stepbar" id="nbar" role="group" aria-label="Number of steps">
     <button data-n="3">3</button><button data-n="5">5</button><button data-n="7" aria-pressed="true">7</button><button data-n="10">10</button>
   </div>
-  <div class="dial" id="stepDial" data-finish="ivory" role="slider" tabindex="0" aria-label="Choir Dial" aria-valuemin="1" aria-valuemax="7" aria-valuenow="4" aria-valuetext="Step 4 of 7">
+  <div class="dial" id="stepDial" data-finish="ivory" role="slider" tabindex="0" aria-label="Enochian Stepped Knob" aria-valuemin="1" aria-valuemax="7" aria-valuenow="4" aria-valuetext="Step 4 of 7">
     <svg class="ticks" id="stepTicks" viewBox="0 0 220 220"></svg>
     <div class="light-base"></div><div class="light-knob" id="stepKnob"><div class="dot"></div></div>
   </div>
@@ -378,9 +385,9 @@
   <div class="hint">drag ↕ · click a tick · ←/→ keys</div>
 </div></div>
 
-<div class="cap"><span>Ordinal Veil · sliding segmented control</span><span class="pill">3 · 5 · 7 · 10</span></div>
+<div class="cap"><span>Enochian Segment Selector · Sliding selection marker</span><span class="pill">3 · 5 · 7 · 10</span></div>
 <div class="grid"><div class="card">
-  <p class="component-copy">The Choir Dial's fixed-choice logic in a compact horizontal form. One active marker glides between options so a change in state never feels like a teleport.</p>
+  <p class="component-copy">The Enochian Stepped Knob's fixed-choice logic in a compact horizontal form. One active marker glides between options so a change in state never feels like a teleport.</p>
   <div class="stepbar" id="nbar2" role="group" aria-label="Number of options">
     <button data-n="3">3</button><button data-n="5" aria-pressed="true">5</button><button data-n="7">7</button><button data-n="10">10</button>
   </div>
@@ -389,11 +396,11 @@
   <div class="hint">the sliding pill glides on one spring — same pattern as CALM/PRESSURE</div>
 </div></div>
 
-<div class="cap"><span>Triune Gate · three independent switches</span><span class="pill">UP = ON</span></div>
+<div class="cap"><span>Enochian Toggle Bank 01 · Three vertical switches; foundation design</span><span class="pill">UP = ON</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">Three binary decisions in one visible instrument. Each column moves independently while the readout exposes the complete configuration.</p>
-  <div class="rthemes" id="triuneFinish" role="group" aria-label="Triune Gate finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
-  <div class="triple" id="triple" data-finish="ivory" role="group" aria-label="Triune Gate switches">
+  <div class="rthemes" id="triuneFinish" role="group" aria-label="Enochian Toggle Bank 01 finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+  <div class="triple" id="triple" data-finish="ivory" role="group" aria-label="Enochian Toggle Bank 01 switches">
     <div class="tunit"><div class="tdot"></div><div class="ttrack"><div class="tthumb" role="switch" tabindex="0" aria-checked="false" aria-label="Switch 1"><div class="well"></div><div class="well"></div></div></div></div>
     <div class="tunit"><div class="tdot"></div><div class="ttrack"><div class="tthumb" role="switch" tabindex="0" aria-checked="false" aria-label="Switch 2"><div class="well"></div><div class="well"></div></div></div></div>
     <div class="tunit"><div class="tdot"></div><div class="ttrack"><div class="tthumb" role="switch" tabindex="0" aria-checked="false" aria-label="Switch 3"><div class="well"></div><div class="well"></div></div></div></div>
@@ -404,7 +411,7 @@
 </div></div>
 
 <div class="section-title">Playback and time</div>
-<div class="cap"><span>Aether Receiver · rotary radio player</span><span class="pill">OFFLINE / ENOCHIAN</span></div>
+<div class="cap"><span>Enochian Radio Player · Power, playback, and volume</span><span class="pill">OFFLINE / ENOCHIAN</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">Playback treated as a physical object. The grill, power control, signal LEDs, and volume dial each carry part of the state.</p>
   <div class="rthemes" id="radioThemes" role="group" aria-label="Radio finish">
@@ -432,11 +439,11 @@
   <div class="hint">power click also starts a soft WebAudio static bed · knob = gain + meter</div>
 </div></div>
 
-<div class="cap"><span>Horologion · live clock and playback state</span><span class="pill">IDENTITY × 3</span></div>
+<div class="cap"><span>Enochian Clock · Analog face and digital time</span><span class="pill">IDENTITY × 3</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">A readable analog face with live digital time. The signal-colored second hand and arc make time visible without competing with the primary hands.</p>
-  <div class="rthemes" id="clockFinish" role="group" aria-label="Horologion finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
-  <div class="clkcase" id="clockCase" data-finish="ivory" role="group" aria-label="Horologion clock and playback state">
+  <div class="rthemes" id="clockFinish" role="group" aria-label="Enochian Clock finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+  <div class="clkcase" id="clockCase" data-finish="ivory" role="group" aria-label="Enochian Clock clock and playback state">
     <div class="clkdial">
       <svg id="clkSvg" viewBox="0 0 272 272" style="position:absolute;inset:0"></svg>
       <div class="clkbrand" id="clkBrand"></div>
@@ -456,7 +463,7 @@
   <div class="hint">live time · cinnabar arc = seconds · ←/→ changes identity · speaker toggles playback</div>
 </div></div>
 
-<div class="cap"><span>Vigil Clock · elapsed-time countdown</span><span class="pill">60 SEC · 5 / 10 / 25 MIN</span></div>
+<div class="cap"><span>Enochian Countdown Timer · Preset durations</span><span class="pill">60 SEC · 5 / 10 / 25 MIN</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">Duration made legible through three synchronized signals: a digital readout, an increasing elapsed-time arc, and a remaining-time subdial.</p>
   <div class="rthemes" id="timerThemes" role="group" aria-label="Timer finish">
@@ -470,7 +477,7 @@
     <button type="button" data-seconds="1500" aria-pressed="false">25 MIN</button>
     <button type="button" id="timerPressure" aria-pressed="false">PRESSURE SOUND · OFF</button>
   </div>
-  <div class="timercase" id="timerCase" data-theme="white" data-progress="0" role="group" aria-label="Vigil Clock countdown timer">
+  <div class="timercase" id="timerCase" data-theme="white" data-progress="0" role="group" aria-label="Enochian Countdown Timer countdown timer">
     <div class="timerdial">
       <svg class="timer-svg" id="timerSvg" viewBox="0 0 304 304" aria-hidden="true"></svg>
       <div class="timer-brand">Enochian</div>
@@ -487,10 +494,10 @@
   <div class="hint">top-left starts/stops · top-right resets · cinnabar arc increases with elapsed time · upper subdial tracks remaining minutes</div>
 </div></div>
 
-<div class="cap"><span>Vigil 90 · ninety-second interval timer</span><span class="pill">90 SEC · ONCE / ×4 / LOOP</span></div>
+<div class="cap"><span>Enochian 90 Second Timer · Single, repeated, or looped intervals</span><span class="pill">90 SEC · ONCE / ×4 / LOOP</span></div>
 <div class="grid"><div class="card">
-  <p class="component-copy">The Vigil Clock on a 90-second face. One sweep of the red hand is the whole interval, so the hand's position tells you the time left without reading the digits. Use it for rest between sets, a 90-second pitch, or the ninety-second rule for letting a feeling pass. Repeat it and the upper subdial counts rounds. The last three seconds tick so you don't need to look.</p>
-  <div class="rthemes" id="v90Themes" role="group" aria-label="Vigil 90 finish">
+  <p class="component-copy">The Enochian Countdown Timer on a 90-second face. One sweep of the red hand is the whole interval, so the hand's position tells you the time left without reading the digits. Use it for rest between sets, a 90-second pitch, or the ninety-second rule for letting a feeling pass. Repeat it and the upper subdial counts rounds. The last three seconds tick so you don't need to look.</p>
+  <div class="rthemes" id="v90Themes" role="group" aria-label="Enochian 90 Second Timer finish">
     <button type="button" data-theme="white" aria-pressed="true">IVORY</button>
     <button type="button" data-theme="black" aria-pressed="false">OBSIDIAN</button>
   </div>
@@ -500,7 +507,7 @@
     <button type="button" data-rounds="0" aria-pressed="false">LOOP</button>
     <button type="button" id="v90Pressure" aria-pressed="false">PRESSURE SOUND · OFF</button>
   </div>
-  <div class="timercase" id="v90Case" data-theme="white" role="group" aria-label="Vigil 90 interval timer">
+  <div class="timercase" id="v90Case" data-theme="white" role="group" aria-label="Enochian 90 Second Timer interval timer">
     <div class="timerdial">
       <svg class="timer-svg" id="v90Svg" viewBox="0 0 304 304" aria-hidden="true"></svg>
       <div class="timer-brand">Enochian</div>
@@ -517,7 +524,7 @@
   <div class="hint">top-left starts/stops · top-right resets · one sweep of the red hand = 90 seconds · upper subdial counts rounds · soft ticks in the last three seconds</div>
 </div></div>
 
-<div class="cap"><span>Pomodoro Vigil · focus and break cycles</span><span class="pill">25 + 5 · 50 + 10 · LONG BREAK AFTER 4</span></div>
+<div class="cap"><span>Enochian Pomodoro Timer · Focus and break cycles</span><span class="pill">25 + 5 · 50 + 10 · LONG BREAK AFTER 4</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">One whole Pomodoro cycle on one face. The ring is 30 minutes long and the last five minutes are shaded as the break. The red arc fills while you focus and an ink arc continues into the break, so the face shows where you are in the cycle as well as how long is left. The upper subdial fills one dot per completed focus session. After four, a 15-minute long break follows.</p>
   <div class="rthemes" id="pomoThemes" role="group" aria-label="Pomodoro finish">
@@ -554,10 +561,10 @@
 </div></div>
 
 <div class="section-title">Trigger controls</div>
-<div class="cap"><span>Mechanical Keyboard · tactile text input</span><span class="pill">POINTER / KEYBOARD</span></div>
+<div class="cap"><span>Enochian Typing Keyboard · Mechanical text keys</span><span class="pill">POINTER / KEYBOARD</span></div>
 <div class="grid"><div class="card keyboard-card">
   <p class="component-copy">A compact mechanical board with deep key travel, Cinnabar modifier keys, and the Enochian brandmark. Every key visibly bottoms out when tapped.</p>
-  <div class="rthemes" id="keyboardFinish" role="group" aria-label="Mechanical Keyboard finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
+  <div class="rthemes" id="keyboardFinish" role="group" aria-label="Enochian Typing Keyboard finish"><button type="button" data-finish="ivory" aria-pressed="true">IVORY</button><button type="button" data-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div>
   <div class="mk-scroll">
     <div class="mk-rig" id="mechanicalKeyboard" data-finish="ivory" role="group" aria-label="Enochian mechanical keyboard">
       <output class="mk-display" id="keyboardDisplay" aria-live="polite">Enochian</output>
@@ -568,7 +575,7 @@
   <div class="hint">matte concave Cinnabar keys · Ivory / Obsidian typing keys · pointer tap or Space / Enter visibly depresses each key</div>
 </div></div>
 
-<div class="cap"><span>Push Button · concave momentary control</span><span class="pill">PRESS / RELEASE</span></div>
+<div class="cap"><span>Enochian Push Button 01 · Press and release</span><span class="pill">PRESS / RELEASE</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">A single-purpose actuator with a dished surface, a visible socket, and enough vertical travel to make the press unmistakable.</p>
   <div class="concave-stage">
@@ -581,13 +588,13 @@
   <div class="hint">dished Ivory cap · Cinnabar signal · pointer or Space / Enter · momentary return</div>
 </div></div>
 
-<div class="cap"><span>The Three Keys · tactile action controls</span><span class="pill">MOMENTARY / LATCH</span></div>
+<div class="cap"><span>Enochian Button Bank 01 · Three buttons; momentary or latch</span><span class="pill">MOMENTARY / LATCH</span></div>
 <div class="grid"><div class="card">
   <p class="component-copy">Three arcade-style controls with a physical press, visible socket, and immediate signal response. Use momentary behavior for hold actions or latch behavior for persistent state.</p>
   <div class="stepbar" id="abMode" role="group" aria-label="Button behavior">
     <button data-m="moment" aria-pressed="true">momentary</button><button data-m="latch" aria-pressed="false">latch</button>
   </div>
-  <div class="abtns" id="abtns" role="group" aria-label="The Three Keys">
+  <div class="abtns" id="abtns" role="group" aria-label="Enochian Button Bank 01">
     <div class="abunit"><div class="aled"></div><div class="asocket"><button class="abtn ab-red" aria-label="Cinnabar key"></button></div></div>
     <div class="abunit"><div class="aled"></div><div class="asocket"><button class="abtn ab-white" aria-label="Ivory key"></button></div></div>
     <div class="abunit"><div class="aled"></div><div class="asocket"><button class="abtn ab-black" aria-label="Obsidian key"></button></div></div>
@@ -874,7 +881,7 @@ function blip(freq){
 function renderRadio(instant=false){
   const palette=radioPalettes[radioTheme];
   $("radio").dataset.theme=radioTheme;
-  $("radio").setAttribute("aria-label", ({light:"Ivory",red:"Cinnabar",black:"Obsidian"}[radioTheme])+" Aether Receiver");
+  $("radio").setAttribute("aria-label", ({light:"Ivory",red:"Cinnabar",black:"Obsidian"}[radioTheme])+" Enochian Radio Player");
   document.querySelectorAll("#radioThemes button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.theme===radioTheme)));
   $("pwrBtn").setAttribute("aria-checked", String(radioOn));
   $("pdot").style.background=radioOn?palette.powerOn:palette.powerOff;
@@ -1077,7 +1084,7 @@ function pressureToggle(btnId,caseId,get,set){
   $(btnId).onclick=()=>{ensureAudio();if(AC)AC.resume();const on=!get();set(on);$(btnId).setAttribute("aria-pressed",String(on));
     $(btnId).textContent=on?"PRESSURE SOUND · ON":"PRESSURE SOUND · OFF";if(!on)$(caseId).dataset.pressure="";if(on)pressureTick(30);};
 }
-/* Vigil Clock (60 s and up): watch its countdown from outside, so the original timer code stays untouched */
+/* Enochian Countdown Timer (60 s and up): watch its countdown from outside, so the original timer code stays untouched */
 (function(){
   let on=false,lastSec=-1,lastMode="ready";
   pressureToggle("timerPressure","timerCase",()=>on,v=>on=v);
@@ -1097,7 +1104,7 @@ function vigilThemes(groupId,caseId){$(groupId).addEventListener("click",e=>{con
   document.querySelectorAll("#"+groupId+" button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));});}
 function vigilFormat(ms){const tenths=Math.max(0,Math.ceil(ms/100)),mins=Math.floor(tenths/600),secs=Math.floor((tenths%600)/10),tenth=tenths%10;return `${String(mins).padStart(2,"0")}:${String(secs).padStart(2,"0")}.${tenth}`;}
 
-/* Vigil 90: one sweep of the red hand is the whole 90-second interval */
+/* Enochian 90 Second Timer: one sweep of the red hand is the whole 90-second interval */
 (function(){
   const svg=$("v90Svg"),CX=152,CY=152,R=137,C=2*Math.PI*R,SCY=103;
   const prog=vigilEl(svg,"circle",{cx:CX,cy:CY,r:R,fill:"none",class:"timer-progress","stroke-width":7,"stroke-dasharray":C,"stroke-dashoffset":C,"stroke-linecap":"round",transform:`rotate(-90 ${CX} ${CY})`});
@@ -1150,7 +1157,7 @@ function vigilFormat(ms){const tenths=Math.max(0,Math.ceil(ms/100)),mins=Math.fl
   (function loop(){render();requestAnimationFrame(loop);})();
 })();
 
-/* Pomodoro Vigil: one face is one cycle; focus in red, break in ink, a dot per finished focus */
+/* Enochian Pomodoro Timer: one face is one cycle; focus in red, break in ink, a dot per finished focus */
 (function(){
   const svg=$("pomoSvg"),CX=152,CY=152,R=137,SCY=103;
   const P={focus:25,brk:5,long:15,longOn:true,auto:true,speed:1,phase:"focus",count:0,rem:25*60000,mode:"ready",last:0};
@@ -1325,66 +1332,66 @@ const abUnits=[...document.querySelectorAll("#abtns .abunit")].map((unit)=>{
   return { render, lit, set:(v,instant)=>{ latched=v; held=false; render(instant); } };
 });
 
-/* Code Veil drives a page-wide, copyable code layer */
+/* Code drives a page-wide, copyable code layer */
 const CODE_SPRING={type:"spring",stiffness:500,damping:32,mass:1};
 const CODE_SNIPPETS=[
-  {id:"codeToggle",title:"The Code Veil",code:String.raw`const spring = { type: "spring", stiffness: 500, damping: 32 };
+  {id:"codeToggle",title:"Enochian Code Toggle",code:String.raw`const spring = { type: "spring", stiffness: 500, damping: 32 };
 <motion.button role="switch" aria-checked={showCode} data-finish={finish}
   animate={{ backgroundColor: showCode ? "#CC0000" : finish === "obsidian" ? "#171719" : "#EFEFEF" }}
   transition={spring} onClick={() => setShowCode(v => !v)}>
   <motion.span animate={{ x: showCode ? 72 : 0 }} transition={spring} />
 </motion.button>`},
-  {id:"darkDial",title:"Obsidian Dial",code:String.raw`const value = useMotionValue(0.05);
+  {id:"darkDial",title:"Enochian Rotary Knob 01",code:String.raw`const value = useMotionValue(0.05);
 const rotation = useTransform(value, [0, 1], [-135, 135]);
 <motion.div role="slider" aria-valuenow={Math.round(value.get()*100)}
   drag="y" dragMomentum={false} style={{ rotate: rotation }} />
 /* data-finish="obsidian|ivory" swaps materials without resetting value */`},
-  {id:"lightDial",title:"Ivory Dial",code:String.raw`.light-base { background:#EFEFEF; border-radius:50%; }
+  {id:"lightDial",title:"Enochian Rotary Knob 02",code:String.raw`.light-base { background:#EFEFEF; border-radius:50%; }
 .light-knob {
   background:#FFF;
   box-shadow:6px 8px 16px rgba(0,0,0,.16);
 }
 .dot { background:#CC0000; }
 .dial[data-finish="obsidian"] .light-knob { background:#1d1d20; }`},
-  {id:"stepDial",title:"Choir Dial",code:String.raw`const stepWidth = trackWidth / (steps - 1);
+  {id:"stepDial",title:"Enochian Stepped Knob",code:String.raw`const stepWidth = trackWidth / (steps - 1);
 const index = clamp(Math.round(x.get() / stepWidth), 0, steps - 1);
 animate(x, index * stepWidth,
   { type:"spring", stiffness:600, damping:32, mass:.8 });
 // Arrow keys ±1 · PageUp/PageDown ±2 · Home/End
 // data-finish="ivory|obsidian" changes material only; detent stays selected.`},
-  {id:"npill",title:"Ordinal Veil",code:String.raw`<LayoutGroup>
+  {id:"npill",title:"Enochian Segment Selector",code:String.raw`<LayoutGroup>
   {options.map(option => <button key={option}>
     {selected === option &&
       <motion.span layoutId="active-pill" transition={spring} />}
     <span>{option}</span>
   </button>)}
 </LayoutGroup>`},
-  {id:"triple",title:"Triune Gate",code:String.raw`.triple { display:flex; gap:72px; }
+  {id:"triple",title:"Enochian Toggle Bank 01",code:String.raw`.triple { display:flex; gap:72px; }
 .tunit { width:56px; } /* absolute thumb needs a flex width */
 .tthumb { width:56px; height:100px; }
 const travel = (176 - 100) / 2;
 animate(thumb, { y: on ? -travel : travel }, snapSpring);
 .triple[data-finish="obsidian"] .tthumb { background:#171719; }`},
-  {id:"radio",title:"Aether Receiver",code:String.raw`<div className="radio" data-theme={theme}>
+  {id:"radio",title:"Enochian Radio Player",code:String.raw`<div className="radio" data-theme={theme}>
   <button role="switch" aria-checked={playing}>Power</button>
   <div className="grill" />
   <div role="slider" aria-valuenow={volume} className="rknob" />
 </div>
 /* light · #CC0000 red · #121214 black theme tokens */`},
-  {id:"clkBrand",title:"Horologion",code:String.raw`function tickClock(now = new Date()) {
+  {id:"clkBrand",title:"Enochian Clock",code:String.raw`function tickClock(now = new Date()) {
   hourHand.style.transform = "rotate(" + ((now.getHours()%12)*30 + now.getMinutes()*.5) + "deg)";
   minuteHand.style.transform = "rotate(" + (now.getMinutes()*6 + now.getSeconds()*.1) + "deg)";
   secondHand.style.transform = "rotate(" + (now.getSeconds()*6) + "deg)";
   requestAnimationFrame(() => tickClock(new Date()));
 }
 /* data-finish="ivory|obsidian" changes case, face, hands, marks, and corners. */`},
-  {id:"timerCase",title:"Vigil Clock",code:String.raw`const presets = [60, 5*60, 10*60, 25*60];
+  {id:"timerCase",title:"Enochian Countdown Timer",code:String.raw`const presets = [60, 5*60, 10*60, 25*60];
 const endAt = Date.now() + remainingMs;
 const remaining = Math.max(0, endAt - Date.now());
 const elapsedRatio = 1 - remaining / durationMs;
 progressCircle.setAttribute("stroke-dashoffset", circumference * (1-elapsedRatio));
 // Derive every frame from wall time so background tabs do not lose time.`},
-  {id:"mechanicalKeyboard",title:"Mechanical Keyboard",code:String.raw`const keySpring = { type:"spring", stiffness:780, damping:34, mass:.45 };
+  {id:"mechanicalKeyboard",title:"Enochian Typing Keyboard",code:String.raw`const keySpring = { type:"spring", stiffness:780, damping:34, mass:.45 };
 function setKeyDown(key, down) {
   key.dataset.pressed = String(down);
   animate(key, down ? { y:5, scale:.985 } : { y:0, scale:1 }, keySpring);
@@ -1392,7 +1399,7 @@ function setKeyDown(key, down) {
 // Render each key as a native button. Cinnabar keys use #CC0000.
 // data-finish="ivory|obsidian" swaps typing-key material and ink only.
 // Pointer and keyboard events share the same press/release path.`},
-  {id:"concaveButton",title:"Push Button",code:String.raw`const pressSpring = { type:"spring", stiffness:720, damping:32, mass:.55 };
+  {id:"concaveButton",title:"Enochian Push Button 01",code:String.raw`const pressSpring = { type:"spring", stiffness:720, damping:32, mass:.55 };
 function renderPress(down) {
   button.setAttribute("aria-pressed", String(down));
   animate(button, down ? { y:9, scale:.975 } : { y:0, scale:1 }, pressSpring);
@@ -1400,11 +1407,11 @@ function renderPress(down) {
   dish.style.boxShadow = down ? DISH_DOWN : DISH_REST;
 }
 // The radial-gradient cap and inset shadows create the concavity.`},
-  {id:"abtns",title:"The Three Keys",code:String.raw`const press = { type:"spring", stiffness:650, damping:26, mass:.6 };
+  {id:"abtns",title:"Enochian Button Bank 01",code:String.raw`const press = { type:"spring", stiffness:650, damping:26, mass:.6 };
 animate(button, pressed ? { y:6, scale:.94 } : { y:0, scale:1 }, press);
 animate(socket, { boxShadow: pressed ? SOCKET_DEEP : SOCKET_REST });
 // Native <button>; latch changes on click, momentary follows hold.`},
-  {id:"v90Case",title:"Vigil 90",code:String.raw`// One sweep = 90 seconds: 4° per second, labels every 10 s, 90 at the top.
+  {id:"v90Case",title:"Enochian 90 Second Timer",code:String.raw`// One sweep = 90 seconds: 4° per second, labels every 10 s, 90 at the top.
 const angle = (1 - remainingMs / 90000) * 360;
 secondHand.setAttribute("transform", "rotate(" + angle + " 152 152)");
 // Soft ticks for the last three seconds, a chime pair between rounds.
@@ -1419,7 +1426,7 @@ function pressureTick(secLeft) {
   if (hot) voice(t + .5, 1320, .08, 0);                           // off-beat tick
 }
 timerCase.dataset.pressure = running && secLeft <= 10 ? "hot" : ""; // digits go red`},
-  {id:"pomoCase",title:"Pomodoro Vigil",code:String.raw`// One face is one cycle: focus + break minutes around 360°.
+  {id:"pomoCase",title:"Enochian Pomodoro Timer",code:String.raw`// One face is one cycle: focus + break minutes around 360°.
 const deg = 360 / (focus + brk);
 const pos = phase === "focus" ? frac * focus : focus + frac * brk;   // minutes into the cycle
 focusArc.setAttribute("d", arc(0, Math.min(pos, focus) * deg));      // red
@@ -1447,7 +1454,7 @@ let codeVisible=false;
 const codeToggle=$("codeToggle"),codeKnob=codeToggle.querySelector(".d37-knob");
 function renderCodeLayer(instant=false){
   codeToggle.setAttribute("aria-checked",String(codeVisible));
-  $("codeToggleLabel").textContent=codeVisible?"CODE VISIBLE":"CODE HIDDEN";
+  $("codeToggleLabel").textContent=codeVisible?"Hide code":"Show code";
   document.body.classList.toggle("show-code",codeVisible);
   document.querySelectorAll(".code-snippet").forEach(p=>{p.inert=!codeVisible;p.setAttribute("aria-hidden",String(!codeVisible));});
   const move=instant||reduce?{duration:0}:CODE_SPRING;

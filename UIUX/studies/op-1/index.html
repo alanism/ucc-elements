@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="An Enochian instrument study: playable Synth keys, tactile encoders, and a note-event tape.">
+<title>Enochian Synth Studio — Enochian</title>
+<style>
+[hidden]{display:none!important}
+.under-instrument>span{min-width:0;max-width:100%;overflow-wrap:anywhere}.instrument #note-readout{font-size:clamp(16px,1.4vw,22px)}
+.nav a{min-height:44px;display:inline-flex;align-items:center}.finish button{min-height:44px}.docs summary{min-height:44px;align-items:center}
+.instrument[data-key-hints=false] .hint{visibility:hidden}
+.round-cap small{color:var(--ink)}.record .round-cap small{color:#202124}
+@font-face{font-family:Plex;src:local('IBM Plex Sans'),local('IBM Plex Sans Regular');font-weight:100 900}
+:root{color-scheme:dark;--canvas:#202124;--text:#ededeb;--muted:#a6a8a8;--line:#414346;--blue:#25aeec;--green:#05d68b;--orange:#ff682d;--white:#fafaf5;--sans:Plex,'Arial Narrow','Helvetica Neue',Arial,sans-serif;--mono:'IBM Plex Mono',Consolas,monospace}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--text);font:14px var(--sans);min-width:280px}button,a,summary,[role=slider]{-webkit-tap-highlight-color:transparent}button{font:inherit}button:focus-visible,a:focus-visible,summary:focus-visible,[role=slider]:focus-visible,.hardware-scroll:focus-visible{outline:3px solid var(--blue);outline-offset:4px}button{cursor:pointer}a{color:inherit;text-decoration:none}a:hover{text-decoration:underline}
+.shell{max-width:1400px;margin:auto;padding:0 46px}.nav{height:82px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:24px}.wordmark{font-size:12px;letter-spacing:3px;display:flex;gap:13px;align-items:center}.mark{width:23px;height:23px;display:inline-block;border:1px solid currentColor;position:relative;transform:rotate(45deg)}.mark:before,.mark:after{content:'';position:absolute;background:currentColor}.mark:before{width:1px;height:31px;left:10px;top:-5px}.mark:after{height:1px;width:31px;top:10px;left:-5px}.nav-right{display:flex;align-items:center;gap:28px;font-size:11px;letter-spacing:1.2px}.finish{display:flex;gap:3px}.finish button{border:1px solid var(--line);background:transparent;color:var(--muted);padding:9px 12px;font-size:10px;letter-spacing:1px}.finish button[aria-pressed=true]{background:#ededeb;color:#222;border-color:#ededeb}.intro{display:flex;align-items:end;justify-content:space-between;margin:36px 0 27px;gap:24px}.eyebrow{font:10px var(--mono);letter-spacing:1.7px;color:var(--muted);margin:0 0 11px}h1{font-size:29px;font-weight:400;letter-spacing:-.9px;margin:0}h1 span{color:var(--muted)}.serial{text-align:right;font:10px/1.8 var(--mono);color:var(--muted)}
+.hardware-scroll{width:100%;overflow-x:auto;padding:8px 5px 32px;scrollbar-color:#737578 transparent;scrollbar-width:thin}.instrument{--well:#dddeda;--cap:#eeefeb;--ink:#555c61;--rim:#5e6264;--edge:#b6bbb8;--lift:0 3px 0 #bdc2c0,0 8px 10px #242d3330,inset 0 1px 2px #ffffff;--lift-lo:0 1px 0 #b6bbb8,0 2px 3px #242d3320;position:relative;background:#dce0dc;border-radius:22px;min-width:1050px;width:100%;aspect-ratio:2.8;padding:18px 49px 18px 18px;color:var(--ink);box-shadow:inset 0 2px 2px #fff9,inset 0 -2px 2px #9aa29f,0 3px 0 #868d89,0 24px 30px #0004,0 45px 70px #0002;user-select:none;color-scheme:light}
+.instrument[data-finish=obsidian]{--well:#35383b;--cap:#4b4f51;--ink:#d3d8d8;--rim:#171a1c;--edge:#25292c;--lift:0 3px 0 #25292b,0 8px 10px #0005,inset 0 1px 2px #fff3;--lift-lo:0 1px 0 #25292b,0 2px 3px #0003;background:#33373a;box-shadow:inset 0 2px 2px #fff3,inset 0 -2px 2px #141719,0 3px 0 #17191b,0 24px 30px #0005,0 45px 70px #0003}
+.hardware{height:100%;display:grid;grid-template-rows:39fr 17fr 44fr;gap:3px;background:var(--rim);border:1px solid var(--rim);border-radius:6px;overflow:hidden}.top-band{display:grid;grid-template-columns:12fr 12fr 24fr repeat(4,13fr);gap:3px;min-height:0}.cell{background:var(--well);border-radius:3px;position:relative;min-width:0;min-height:0}.grille{background-color:var(--well);display:grid;place-items:center}.grille:after{content:'';width:66%;height:78%;background:radial-gradient(circle,#373c40 1.3px,transparent 1.9px) 0 0/8px 8px;border-radius:44%}.master-unit{display:grid;grid-template-rows:65fr 35fr;gap:3px;background:var(--rim)}.master-cell{display:grid;place-items:center;align-content:center;gap:9px}.master-label{font:8px var(--mono);letter-spacing:1px}.master-button{border:0;border-radius:50%;width:50px;height:50px;background:var(--cap);box-shadow:var(--lift);color:var(--ink);font-size:21px}.master-button[aria-pressed=true]{color:#1088b9}.mini-status{display:flex;align-items:center;justify-content:space-around;font:9px/1.5 var(--mono);text-align:center}.mini-status strong{font-weight:500;font-size:15px}.oled{background:#0c1011;border-radius:3px;padding:12px 14px;color:#d8e7e8;box-shadow:inset 0 1px 6px #000;position:relative;overflow:hidden}.oled-top,.oled-bottom{display:flex;justify-content:space-between;gap:8px;font:9px var(--mono);letter-spacing:.4px;position:relative;z-index:2}.oled-top{color:var(--blue)}.oled-bottom{position:absolute;bottom:11px;left:14px;right:14px;color:#9aabaa}.screen-graphic{width:100%;height:calc(100% - 37px);margin-top:6px;display:block}#note-readout{position:absolute;top:40%;left:0;right:0;text-align:center;font:22px var(--mono);pointer-events:none}#note-readout:empty{display:none}.encoder-cell{display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:12px 5px 11px;--role:var(--blue)}.encoder-cell:nth-last-child(3){--role:var(--green)}.encoder-cell:nth-last-child(2){--role:var(--white)}.encoder-cell:last-child{--role:var(--orange)}.encoder-label{font:9px var(--mono);text-transform:uppercase;letter-spacing:1px}.encoder{width:78%;aspect-ratio:1;border:2px solid #7c858c;border-radius:50%;background:linear-gradient(135deg,#ffffff38,#747d8420);display:grid;place-items:center;touch-action:none;cursor:ns-resize;max-width:111px}.encoder-cap{width:62%;aspect-ratio:1;border-radius:50%;background:var(--role);display:grid;place-items:center;box-shadow:inset 0 2px 3px #ffffff70,0 3px 0 color-mix(in srgb,var(--role) 62%,#455058),0 9px 12px #28343d50}.encoder-cap:after{content:'';width:7%;height:63%;border-radius:10px;background:#17344524;box-shadow:inset 1px 0 2px #0002;transform:translateY(-8%)}.encoder-value{font:11px var(--mono);min-height:13px}.function-row{display:grid;grid-template-columns:repeat(17,1fr);gap:3px;min-height:0}.key-button{border:0;display:grid;place-items:center;padding:0;color:var(--ink);background:var(--well);border-radius:3px;min-width:0;position:relative}.round-cap{width:70%;aspect-ratio:1;border-radius:50%;background:var(--cap);box-shadow:var(--lift);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:19px;pointer-events:none;max-width:54px}.round-cap small{font:7px var(--mono);text-transform:uppercase;letter-spacing:.1px}.key-button[aria-pressed=true] .round-cap,.key-button:active .round-cap{transform:translateY(2px);box-shadow:var(--lift-lo)}.key-button[aria-pressed=true]:after{content:'';width:3px;height:3px;position:absolute;bottom:4px;left:calc(50% - 1px);border-radius:50%;background:var(--blue)}.key-button.mode{color:#0786bc}.key-button.mode[data-mode=tape]{color:#c14c21}.key-button:disabled{cursor:default;opacity:.5}.lower{display:grid;grid-template-columns:3fr 14fr;gap:3px;min-height:0}.utility-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:3px}.utility-grid .round-cap{font-size:20px;width:70%}.record .round-cap{background:var(--orange);color:#fff;box-shadow:inset 0 1px 2px #ffbc9d,0 3px 0 #c8542a,0 7px 10px #242d3340}.op-kb{display:grid;grid-template-rows:34fr 66fr;gap:3px;min-height:0}.op-row-b{position:relative;background:var(--well);border-radius:3px}.op-row-w{display:grid;grid-template-columns:repeat(14,1fr);gap:3px;background:var(--rim)}
+/* Adapted from volume-3 Enochian Synth Keyboard: square wells, pill caps, round accidentals and explicit down state. */
+.op-cell{position:relative;background:var(--well);display:grid;place-items:center;border:0;padding:0;cursor:pointer;touch-action:none;min-width:0;color:var(--ink);border-radius:3px}.op-row-b .op-cell{position:absolute;top:0;width:calc(100% / 14);height:100%;box-shadow:0 0 0 1px var(--rim)}.op-cap{display:block;border-radius:999px;background:var(--cap);box-shadow:var(--lift);transition:transform .06s ease,box-shadow .06s ease;pointer-events:none}.op-row-w .op-cap{width:65%;height:86%;display:grid;align-content:end;padding-bottom:12px;text-align:center;font:8px var(--mono)}.op-row-b .op-cap{width:62%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:#22272b;box-shadow:inset 0 1px 2px #ffffff24,0 3px 0 #0b0f12,0 7px 9px #24313a40;color:#c4cacb;font:8px var(--mono)}.op-cell[data-down=true] .op-cap{transform:translateY(2px) scale(.97);box-shadow:var(--lift-lo);background:var(--blue);color:#092c3d}.op-cell .n{position:absolute;bottom:3px;font:7px var(--mono);color:var(--ink);pointer-events:none}.end-strip{position:absolute;right:13px;top:25px;bottom:24px;width:22px;display:flex;align-items:center;flex-direction:column;justify-content:space-between}.end-strip .vents{font-size:15px;line-height:.6;letter-spacing:3px;writing-mode:vertical-rl;color:#677078}.end-strip .brand{writing-mode:vertical-rl;transform:rotate(180deg);font:11px var(--sans);letter-spacing:2px}.end-strip .index{font:7px var(--mono)}
+.under-instrument{margin:0 5px;display:flex;justify-content:space-between;align-items:center;gap:18px;font:10px var(--mono);color:var(--muted);letter-spacing:.3px}.status-dot{display:inline-block;width:5px;height:5px;background:var(--green);border-radius:50%;margin-right:8px}#live-status{color:#d1d6d4}.scroll-hint{display:none}.notes{display:grid;grid-template-columns:1.3fr 1fr;gap:64px;padding:38px 0 30px}.notes h2{font-size:16px;font-weight:400;margin:0 0 10px}.notes p{font-size:12px;line-height:1.8;color:var(--muted);margin:0;max-width:600px}.interaction-legend{display:flex;gap:24px;align-items:start;padding-top:1px;font:9px/1.7 var(--mono);color:var(--muted)}.interaction-legend strong{display:block;font-weight:400;color:var(--text);font-size:11px;margin-bottom:6px}.docs{border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:40px}.docs details{padding:19px 0}.docs summary{cursor:pointer;font-size:11px;letter-spacing:1px;list-style:none;display:flex;justify-content:space-between}.docs summary:after{content:'+'}.docs details[open] summary:after{content:'−'}.docs .content{font-size:12px;line-height:1.8;color:var(--muted);padding-top:18px}.docs h3{font-size:12px;color:var(--text);font-weight:500}.docs pre{white-space:pre-wrap;overflow-wrap:anywhere;font:10px/1.7 var(--mono);background:#181a1c;padding:16px;color:#c5d4d6}kbd{font:10px var(--mono);padding:2px 4px;background:#333639;border:1px solid #53575a;border-radius:3px}.footer{font:9px var(--mono);display:flex;justify-content:space-between;color:#888d8e;border-top:1px solid var(--line);padding:20px 0 30px;gap:15px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:1000px){.shell{padding:0 24px}.nav-right{gap:15px}.notes{gap:30px}.scroll-hint{display:block;color:var(--muted);font:10px var(--mono);margin:0 5px 15px}.intro{margin-top:28px}.instrument{min-width:1050px}}
+@media(max-width:600px){.shell{padding:0 16px}.nav{height:70px}.nav-right{gap:12px}.finish button{padding:8px}.wordmark{font-size:10px;letter-spacing:1.5px}.mark{width:17px;height:17px}.mark:before{left:7px;top:-3px;height:21px}.mark:after{top:7px;left:-3px;width:21px}.nav-right a{font-size:9px}.serial{display:none}h1{font-size:25px}.intro{margin-bottom:20px}.notes{grid-template-columns:1fr;gap:25px;padding-top:30px}.docs{grid-template-columns:1fr;gap:0}.docs details+details{border-top:1px solid var(--line)}.under-instrument{align-items:start;flex-direction:column;gap:10px}.footer{font-size:8px}.hardware-scroll{padding-bottom:24px}.interaction-legend{justify-content:space-between}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
+@media(max-width:1152px){.scroll-hint{display:block;color:var(--muted);font:10px var(--mono);margin:0 5px 15px}}
+@media(max-width:350px){.nav{height:auto;min-height:70px;flex-wrap:wrap;gap:10px;padding:12px 0}.nav-right{max-width:100%}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="nav"><a class="wordmark" href="/UIUX" aria-label="Enochian control atlas"><span class="mark" aria-hidden="true"></span>ENOCHIAN</a><div class="nav-right"><a href="/UIUX">CONTROL ATLAS ↗</a><div class="finish" role="group" aria-label="Instrument finish"><button data-set-finish="ivory" aria-pressed="true">IVORY</button><button data-set-finish="obsidian" aria-pressed="false">OBSIDIAN</button></div></div></header>
+<main>
+<div class="intro"><div><p class="eyebrow">INSTRUMENT STUDY / 001</p><h1>Enochian <span>Synth Studio</span></h1></div><div class="serial">TWO OCTAVES · FOUR ENCODERS<br>ENO–024 / BROWSER INSTRUMENT</div></div>
+<div class="scroll-hint">↔ Scroll the instrument. Full-size controls, even on a small screen.</div>
+<div class="hardware-scroll" tabindex="0" aria-label="Instrument chassis; scroll horizontally on small screens">
+<section id="instrument" class="instrument" data-finish="ivory" aria-label="Enochian Synth Studio">
+<div class="hardware">
+<div class="top-band">
+<div class="cell grille" aria-hidden="true"></div>
+<div class="master-unit"><div class="cell master-cell"><button id="sound-toggle" class="master-button" aria-pressed="false" aria-label="Enable sound" title="Sound off. Click to enable.">◉</button><span class="master-label" id="sound-label">SOUND OFF</span></div><div class="cell mini-status"><span>OCT<br><strong id="octave-readout">4</strong></span><span>HELD<br><strong id="held-readout">0</strong></span></div></div>
+<div class="oled" id="screen" role="img" aria-label="Synth screen. No notes held."><div class="oled-top"><span id="screen-mode">SYNTH / 01</span><span id="screen-state">READY</span></div><svg class="screen-graphic" id="waveform" viewBox="0 0 240 94" aria-hidden="true"><path d="M0 47H240M0 22H240M0 72H240" stroke="#253033" fill="none" stroke-width=".5"/><path id="wave-path" d="M0 47L20 27L40 67L60 27L80 67L100 27L120 67L140 27L160 67L180 27L200 67L220 27L240 47" stroke="#25aeec" fill="none" stroke-width="1.5"/></svg><svg class="screen-graphic" id="tape-reels" viewBox="0 0 240 94" aria-hidden="true" hidden><g fill="none" stroke="#d8e7e8" stroke-width="1.3"><g class="reel" style="transform-origin:61px 44px"><circle cx="61" cy="44" r="32"/><circle cx="61" cy="44" r="8"/><path d="M61 13V34M34 59L52 49M88 59L70 49"/></g><g class="reel" style="transform-origin:179px 44px"><circle cx="179" cy="44" r="32"/><circle cx="179" cy="44" r="8"/><path d="M179 13V34M152 59L170 49M206 59L188 49"/></g><path d="M62 76L85 87H156L179 76" stroke="#ff682d"/></g><text x="120" y="48" text-anchor="middle" fill="#05d68b" font-family="monospace" font-size="10" id="tape-time">0.0s</text></svg><span id="note-readout"></span><div class="oled-bottom"><span id="screen-detail">TRIANGLE + SINE</span><span id="screen-preset">DEFAULT</span></div></div>
+<div class="cell encoder-cell"><span class="encoder-label">01 / pitch</span><div class="encoder" id="encoder-pitch" data-encoder="pitch" tabindex="0" role="slider" aria-label="Pitch" aria-orientation="vertical" aria-valuemin="-12" aria-valuemax="12" aria-valuenow="0" aria-valuetext="0 semitones"><span class="encoder-cap"></span></div><output class="encoder-value" id="value-pitch">0 st</output></div>
+<div class="cell encoder-cell"><span class="encoder-label">02 / tone</span><div class="encoder" id="encoder-tone" data-encoder="tone" tabindex="0" role="slider" aria-label="Tone" aria-orientation="vertical" aria-valuemin="200" aria-valuemax="8000" aria-valuenow="2400" aria-valuetext="2400 Hz"><span class="encoder-cap"></span></div><output class="encoder-value" id="value-tone">2.40 kHz</output></div>
+<div class="cell encoder-cell"><span class="encoder-label">03 / release</span><div class="encoder" id="encoder-release" data-encoder="release" tabindex="0" role="slider" aria-label="Release" aria-orientation="vertical" aria-valuemin="0.05" aria-valuemax="2" aria-valuenow="0.4" aria-valuetext="0.40 seconds"><span class="encoder-cap"></span></div><output class="encoder-value" id="value-release">0.40 s</output></div>
+<div class="cell encoder-cell"><span class="encoder-label">04 / level</span><div class="encoder" id="encoder-level" data-encoder="level" tabindex="0" role="slider" aria-label="Level" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="100" aria-valuenow="65" aria-valuetext="65 percent"><span class="encoder-cap"></span></div><output class="encoder-value" id="value-level">65 %</output></div>
+</div>
+<div class="function-row" id="function-row"><button class="key-button mode" data-mode="synth" aria-label="Synth mode" aria-pressed="true"><span class="round-cap">∿<small>synth</small></span></button><button class="key-button mode" data-mode="tape" aria-label="Tape mode" aria-pressed="false"><span class="round-cap">◎◎<small>tape</small></span></button><button class="key-button" id="loop-toggle" aria-label="Loop tape" aria-pressed="false"><span class="round-cap">↻<small>loop</small></span></button><button class="key-button" id="clear-tape" aria-label="Clear tape"><span class="round-cap">×<small>clear</small></span></button><button class="key-button" id="undo-clear" aria-label="Undo clear" disabled><span class="round-cap">↶<small>undo</small></span></button><div id="presets" style="display:contents"></div><button class="key-button" id="panic" aria-label="Release all notes"><span class="round-cap">⊥<small>all off</small></span></button><button class="key-button" id="key-hints" aria-label="Show computer key hints" aria-pressed="true"><span class="round-cap">⌨<small>keys</small></span></button><button class="key-button" id="help-button" aria-label="Open playing guide"><span class="round-cap">?<small>guide</small></span></button><button class="key-button" id="code-button" aria-label="Open reusable elements"><span class="round-cap">⌘<small>code</small></span></button></div>
+<div class="lower"><div class="utility-grid"><button class="key-button" id="octave-down" aria-label="Octave down"><span class="round-cap">−<small>octave</small></span></button><button class="key-button" id="octave-up" aria-label="Octave up"><span class="round-cap">+<small>octave</small></span></button><button class="key-button" id="home-tape" aria-label="Rewind tape to start"><span class="round-cap">|◀<small>home</small></span></button><button class="key-button record" id="record" aria-label="Arm recording" aria-pressed="false"><span class="round-cap">●<small>record</small></span></button><button class="key-button" id="play" aria-label="Play tape" aria-pressed="false"><span class="round-cap">▶<small>play</small></span></button><button class="key-button" id="stop" aria-label="Stop tape"><span class="round-cap">■<small>stop</small></span></button><button class="key-button" id="previous-preset" aria-label="Previous preset"><span class="round-cap">‹<small>preset</small></span></button><button class="key-button" id="next-preset" aria-label="Next preset"><span class="round-cap">›<small>preset</small></span></button><button class="key-button" id="reset-params" aria-label="Reset parameters to default"><span class="round-cap">↺<small>reset</small></span></button></div><div id="keyboard" class="op-kb" role="group" aria-label="Two octave keyboard; A S D F G H J, W E T Y U. Z and X change octave."><div class="op-row-b" id="op-black"></div><div class="op-row-w" id="op-white"></div></div></div>
+</div><div class="end-strip" aria-hidden="true"><span class="vents">••••••</span><span class="brand">ENOCHIAN / SYNTH</span><span class="index">024</span></div>
+</section></div>
+<div class="under-instrument"><span><i class="status-dot"></i><span id="live-status" role="status">Ready · sound off · play visually or enable sound</span></span><span id="tape-readout">NOTE-EVENT TAPE · 0 EVENTS · STOP</span></div>
+<div class="notes"><div><h2>A small instrument. A complete control language.</h2><p>Enochian Synth Keyboard, recast as a pocket studio. Press and hold a note, shape it with four encoders, then capture a phrase on the note-event tape. A study of physical interaction — not a hardware emulation.</p></div><div class="interaction-legend"><div><strong>PRESS / HOLD</strong>A–J · W E T Y U<br>Two octaves · chords</div><div><strong>DRAG / TURN</strong>Vertical encoder drag<br>Double-click to reset</div><div><strong>ARM / PLAY</strong>Record → Play → notes<br>Stop → Play to listen</div></div></div>
+<div class="docs"><details id="help-panel"><summary>01 / PLAYING GUIDE</summary><div class="content"><p><strong>Sound is off on arrival.</strong> Enable the small master button to create a Web Audio context. Notes remain visible when muted. This study records note events in memory, not audio; refreshing clears your tape.</p><h3>Keyboard & touch</h3><p>First octave: <kbd>A S D F G H J</kbd> white keys; <kbd>W E T Y U</kbd> accidentals. Second: <kbd>K L ; ' ] \\ /</kbd> white; <kbd>O P [ = Backspace</kbd> accidentals. Focus any note then hold <kbd>Space</kbd> or <kbd>Enter</kbd>. Glide while holding; independent touch contacts and computer chords coexist. <kbd>Z</kbd> / <kbd>X</kbd> shift the octave. Leaving the window releases all notes.</p><h3>Encoders & tape</h3><p>Drag upwards to increase. Arrow keys change one step; Page Up / Down change ten; Home / End set the limits. Double-click returns that encoder to the Canticle default. Presets 1–8 are real parameter sets. Record arms a new take; Play starts capture. Stop finishes it, then Play replays it. Loop repeats a take. Clear has one-level undo. Home stops and rewinds.</p><p>No sequencer, mixer, audio export, or hardware firmware is implied. Playback uses your current sound settings and the original recorded MIDI pitches.</p></div></details><details id="code-panel"><summary>02 / REUSABLE ELEMENTS</summary><div class="content"><p>Self-contained HTML, CSS, and JavaScript. No libraries, remote fonts, or network requests. The four role colors are a deliberate exception to the atlas’s red signal, requested for this study.</p><h3>Synth key</h3><pre><code>&lt;button class="op-cell" data-note="0" aria-label="C4"&gt;
+  &lt;span class="op-cap"&gt;&lt;/span&gt;
+&lt;/button&gt;
+/* Use .op-row-w for pills; .op-row-b for round caps.
+   data-down="true" is the shared active-state contract. */</code></pre><h3>Encoder & event contracts</h3><pre><code>&lt;div class="encoder" data-encoder="tone" role="slider" tabindex="0"
+  aria-label="Tone" aria-orientation="vertical"&gt;
+  &lt;span class="encoder-cap"&gt;&lt;/span&gt;
+&lt;/div&gt;
+// See makeKnob(element, { min, max, step, value, fmt, onChange }).
+// Events bubble from #instrument:
+instrument.addEventListener('canticle:note', ({detail}) =&gt; {
+  // { phase: 'on' | 'off', note: 0..23, midi, hz, source }
+});
+instrument.addEventListener('canticle:parameter', ({detail}) =&gt; {
+  // { parameter: 'pitch'|'tone'|'release'|'level', value, unit }
+});</code></pre><p><strong>Source map:</strong> <code>volume-3/index.html</code> Enochian Synth Keyboard supplies <code>.op-cell / .op-cap / .op-row-w / .op-row-b</code>, note mapping, triangle + sine voice and envelope. Its Spring supplies damped cap motion. <code>volume-2/index.html</code> supplies makeKnob and the arm / play / stop transport state pattern. Adapted here with source ownership, graph cleanup and a real note-event tape.</p></div></details></div>
+</main><footer class="footer"><span>ENOCHIAN — CONTROL ATLAS / STUDY 001</span><span>OP-1 INSPIRED · INDEPENDENT STUDY · NOT AFFILIATED</span></footer>
+</div>
+<script>
+'use strict';
+const $=id=>document.getElementById(id), $$=selector=>[...document.querySelectorAll(selector)];
+const instrument=$('instrument'), keyboard=$('keyboard');
+const NAMES=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
+// Canticle construction adapted from volume-3, expanded to two octaves.
+const WHITE=[[0,'a'],[2,'s'],[4,'d'],[5,'f'],[7,'g'],[9,'h'],[11,'j'],[12,'k'],[14,'l'],[16,';'],[17,"'"],[19,']'],[21,'\\'],[23,'/']];
+const BLACK=[[1,'w',1],[3,'e',2],[6,'t',4],[8,'y',5],[10,'u',6],[13,'o',8],[15,'p',9],[18,'[',11],[20,'=',12],[22,'Backspace',13]];
+const cells=new Map();
+for(const [note,key,pos] of [...WHITE,...BLACK]){const b=document.createElement('button');b.type='button';b.className='op-cell';b.dataset.note=note;b.dataset.down='false';b.setAttribute('aria-label',NAMES[note%12]+(4+Math.floor(note/12)));b.setAttribute('aria-pressed','false');b.innerHTML=`<span class="op-cap"><span class="hint">${key==='Backspace'?'⌫':key.toUpperCase()}</span></span><span class="n">${NAMES[note%12]}</span>`;if(pos!==undefined){b.style.left=`calc(100% / 14 * ${pos} - 100% / 28)`;$('op-black').append(b)}else $('op-white').append(b);cells.set(note,b)}
+for(let i=1;i<=8;i++){const b=document.createElement('button');b.className='key-button';b.dataset.preset=i;b.setAttribute('aria-label','Preset '+i);b.setAttribute('aria-pressed',String(i===1));b.innerHTML=`<span class="round-cap">${i}<small>preset</small></span>`;$('presets').append(b)}
+/* Source ownership is per input, not per note. Releasing one input cannot silence another. */
+let octave=4;
+const params={pitch:0,tone:2400,release:.4,level:65};
+const owners=new Map(), activeNotes=new Map();
+const frequency=midi=>440*2**((midi-69)/12);
+const emit=(name,detail)=>instrument.dispatchEvent(new CustomEvent(name,{detail,bubbles:true}));
+function renderNotes(){
+  for(const [note,cell] of cells){const down=[...activeNotes.values()].some(v=>v.note===note);cell.dataset.down=String(down);cell.setAttribute('aria-pressed',String(down));cell.setAttribute('aria-label',NAMES[note%12]+(octave+Math.floor(note/12)))}
+  $('held-readout').textContent=activeNotes.size;
+  $('octave-readout').textContent=octave;
+  const labels=[...activeNotes.values()].map(v=>NAMES[((v.midi%12)+12)%12]+(Math.floor(v.midi/12)-1));
+  $('note-readout').textContent=labels.slice(0,3).join(' · ')+(labels.length>3?' +'+(labels.length-3):'');
+  $('screen-state').textContent=labels.length?`${labels.length} HELD`:'READY';
+  $('screen').setAttribute('aria-label',`${view==='tape'?'Tape':'Synth'} screen. ${labels.length?labels.join(', '):'No notes held'}.`);
+  if(view==='tape')renderTape();
+  $('live-status').textContent=labels.length?`${labels.join(' + ')} · ${[...activeNotes.values()].at(-1).hz.toFixed(1)} Hz`:(audioEngine.enabled?'Ready · sound on · play a note':'Ready · sound off · play visually or enable sound');
+}
+function noteOn(note,source,midi=12*(octave+1)+note){
+  if(owners.has(source))return;const key=note+':'+midi;
+  let voice=activeNotes.get(key),fresh=!voice;
+  if(fresh){voice={key,note,midi,hz:frequency(midi+params.pitch),sources:new Set()};activeNotes.set(key,voice);audioEngine.start(voice)}
+  voice.sources.add(source);owners.set(source,key);
+  if(fresh)emit('canticle:note',{phase:'on',note,midi,hz:voice.hz,source});renderNotes();
+}
+function noteOff(source){
+  const key=owners.get(source);if(key===undefined)return;
+  owners.delete(source);const voice=activeNotes.get(key);if(!voice)return;
+  voice.sources.delete(source);
+  if(!voice.sources.size){audioEngine.stop(key);activeNotes.delete(key);emit('canticle:note',{phase:'off',note:voice.note,midi:voice.midi,hz:voice.hz,source})}
+  renderNotes();
+}
+const KEYS=Object.fromEntries([...WHITE,...BLACK].map(([note,key])=>[key.toLowerCase(),note]));
+keyboard.addEventListener('keydown',e=>{
+  if(e.ctrlKey||e.metaKey||e.altKey)return;const key=e.key.toLowerCase(),cell=e.target.closest('[data-note]');
+  if(cell&&(key===' '||key==='enter')){e.preventDefault();if(!e.repeat)noteOn(Number(cell.dataset.note),'focus:'+key);return}
+  if(KEYS[key]!==undefined){e.preventDefault();if(!e.repeat)noteOn(KEYS[key],'key:'+key)}
+});
+document.addEventListener('keyup',e=>{const key=e.key.toLowerCase();noteOff('focus:'+key);noteOff('key:'+key)});
+const pointers=new Map();
+const noteAt=e=>{const cell=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-note]');return cell&&keyboard.contains(cell)?Number(cell.dataset.note):null};
+keyboard.addEventListener('pointerdown',e=>{
+  const note=noteAt(e);if(note===null||e.button!==0)return;
+  e.preventDefault();cells.get(note).focus({preventScroll:true});pointers.set(e.pointerId,note);
+  try{keyboard.setPointerCapture(e.pointerId)}catch(_){}
+  noteOn(note,'pointer:'+e.pointerId);
+});
+keyboard.addEventListener('pointermove',e=>{
+  if(!pointers.has(e.pointerId))return;const next=noteAt(e);if(next===pointers.get(e.pointerId))return;
+  noteOff('pointer:'+e.pointerId);pointers.set(e.pointerId,next);if(next!==null)noteOn(next,'pointer:'+e.pointerId);
+});
+function releasePointer(e){if(!pointers.has(e.pointerId))return;pointers.delete(e.pointerId);noteOff('pointer:'+e.pointerId)}
+for(const type of ['pointerup','pointercancel','lostpointercapture'])keyboard.addEventListener(type,releasePointer);
+const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
+function allOff(){for(const source of [...owners.keys()])noteOff(source);for(const id of pointers.keys()){try{keyboard.releasePointerCapture(id)}catch(_){}}pointers.clear()}
+function shiftOctave(delta){allOff();octave=clamp(octave+delta,1,7);$('octave-down').disabled=octave===1;$('octave-up').disabled=octave===7;renderNotes()}
+$('octave-down').addEventListener('click',()=>shiftOctave(-1));
+$('octave-up').addEventListener('click',()=>shiftOctave(1));
+keyboard.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;const key=e.key.toLowerCase();if(key==='z'||key==='x'){e.preventDefault();if(!e.repeat)shiftOctave(key==='z'?-1:1)}});
+window.addEventListener('blur',allOff);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)allOff()});
+window.addEventListener('pagehide',allOff);
+$('panic').addEventListener('click',allOff);
+const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+let inView=true;
+const springs=[];
+// Damped Spring adapted from volume-3 (substepped integration, sleeps at rest).
+class Spring{
+  constructor(value,onUpdate){this.x=this.t=value;this.v=0;this.raf=0;this.on=onUpdate;onUpdate(value);springs.push(this)}
+  set(value){this.x=this.t=value;this.v=0;if(this.raf)cancelAnimationFrame(this.raf);this.raf=0;this.on(value)}
+  to(value){this.t=value;if(reduced.matches||document.hidden||!inView){this.set(value);return}if(!this.raf){this.last=performance.now();this.raf=requestAnimationFrame(this.step)}}
+  step=now=>{if(document.hidden||!inView||reduced.matches){this.set(this.t);return}let dt=Math.min(.05,(now-this.last)/1000);this.last=now;while(dt>0){const h=Math.min(1/240,dt);this.v+=(-220*(this.x-this.t)-26*this.v)*h;this.x+=this.v*h;dt-=h}if(Math.abs(this.x-this.t)<.0005&&Math.abs(this.v)<.002){this.set(this.t);return}this.on(this.x);this.raf=requestAnimationFrame(this.step)};
+}
+// makeKnob keyboard/quantization contract adapted from volume-2/index.html.
+function makeKnob(el,{value,min,max,step,fmt,onChange}){
+  let v=value;const normalize=x=>(x-min)/(max-min);
+  const sp=new Spring(normalize(v),x=>el.querySelector('.encoder-cap').style.transform=`rotate(${-135+x*270}deg)`);
+  el.setAttribute('aria-valuemin',min);el.setAttribute('aria-valuemax',max);
+  function set(x,instant=false){const next=Number(clamp(Math.round(x/step)*step,min,max).toFixed(4)),changed=next!==v;v=next;instant?sp.set(normalize(v)):sp.to(normalize(v));el.setAttribute('aria-valuenow',v);el.setAttribute('aria-valuetext',fmt(v));if(changed)onChange(v)}
+  let pointer=null,startY=0,startValue=0;
+  el.addEventListener('pointerdown',e=>{if(e.button!==0||pointer!==null)return;e.preventDefault();el.focus({preventScroll:true});pointer=e.pointerId;startY=e.clientY;startValue=v;el.setPointerCapture(pointer)});
+  el.addEventListener('pointermove',e=>{if(e.pointerId===pointer)set(startValue+(startY-e.clientY)/160*(max-min),true)});
+  const release=e=>{if(e.pointerId!==pointer)return;const id=pointer;pointer=null;try{if(el.hasPointerCapture(id))el.releasePointerCapture(id)}catch(_){}};
+  for(const type of ['pointerup','pointercancel','lostpointercapture'])el.addEventListener(type,release);
+  window.addEventListener('blur',()=>{pointer=null});
+  el.addEventListener('dblclick',()=>set(value));
+  el.addEventListener('keydown',e=>{const d={ArrowRight:step,ArrowUp:step,ArrowLeft:-step,ArrowDown:-step,PageUp:step*10,PageDown:-step*10}[e.key];if(d!==undefined){e.preventDefault();set(v+d)}else if(e.key==='Home'||e.key==='End'){e.preventDefault();set(e.key==='Home'?min:max)}});
+  set(v,true);return {set,get:()=>v,spring:sp};
+}
+const PARAMS={pitch:{min:-12,max:12,step:1,unit:'semitones',fmt:v=>`${v} semitones`,display:v=>`${v>0?'+':''}${v} st`},tone:{min:200,max:8000,step:50,unit:'Hz',fmt:v=>`${v} Hz`,display:v=>`${(v/1000).toFixed(2)} kHz`},release:{min:.05,max:2,step:.05,unit:'seconds',fmt:v=>`${v.toFixed(2)} seconds`,display:v=>`${v.toFixed(2)} s`},level:{min:0,max:100,step:1,unit:'percent',fmt:v=>`${v} percent`,display:v=>`${v} %`}};
+const knobs={};
+function parameterChanged(parameter,value){params[parameter]=value;$('value-'+parameter).textContent=PARAMS[parameter].display(value);for(const voice of activeNotes.values())voice.hz=frequency(voice.midi+params.pitch);audioEngine.update();emit('canticle:parameter',{parameter,value,unit:PARAMS[parameter].unit});renderNotes()}
+for(const [name,cfg] of Object.entries(PARAMS))knobs[name]=makeKnob($('encoder-'+name),{...cfg,value:params[name],onChange:v=>parameterChanged(name,v)});
+/* Canticle's triangle + sine voice and envelope, routed through a bounded output bus. */
+const audioEngine={
+  ctx:null,master:null,analyser:null,voices:new Map(),graphs:new Set(),enabled:false,busy:false,
+  async toggle(){
+    if(this.busy)return;
+    if(this.enabled){this.enabled=false;this.update();this.voices.clear();for(const graph of this.graphs)this.release(graph,.02);this.render();renderNotes();return}
+    this.busy=true;
+    try{
+      if(!this.ctx){
+        const Constructor=window.AudioContext||window.webkitAudioContext;
+        if(!Constructor)throw new Error('Web Audio is not supported');
+        this.ctx=new Constructor();this.master=this.ctx.createGain();
+        const limiter=this.ctx.createDynamicsCompressor();limiter.threshold.value=-6;limiter.knee.value=6;limiter.ratio.value=8;
+        this.analyser=this.ctx.createAnalyser();this.analyser.fftSize=1024;
+        this.master.connect(limiter).connect(this.analyser).connect(this.ctx.destination);
+        this.master.gain.value=params.level/100*.18;
+      }
+      await this.ctx.resume();
+      if(this.ctx.state!=='running')throw new Error('Browser did not enable audio');
+      this.enabled=true;this.update();for(const voice of activeNotes.values())this.start(voice);
+    }catch(error){this.enabled=false;$('live-status').textContent='Audio unavailable · '+error.message}
+    finally{this.busy=false;this.render();if(this.enabled)renderNotes()}
+  },
+  render(){
+    $('sound-toggle').setAttribute('aria-pressed',String(this.enabled));
+    $('sound-toggle').setAttribute('aria-label',this.enabled?'Mute sound':'Enable sound');
+    $('sound-toggle').title=this.enabled?'Sound on. Click to mute.':'Sound off. Click to enable.';
+    $('sound-label').textContent=this.enabled?'SOUND ON':'SOUND OFF';
+  },
+  start(voice){
+    if(!this.enabled||this.voices.has(voice.key)||this.ctx.state!=='running')return;
+    const a=this.ctx,t=a.currentTime,o=a.createOscillator(),o2=a.createOscillator(),g2=a.createGain(),f=a.createBiquadFilter(),g=a.createGain();
+    o.type='triangle';o.frequency.value=voice.hz;o2.type='sine';o2.frequency.value=voice.hz*2;g2.gain.value=.25;
+    f.type='lowpass';f.frequency.value=params.tone;f.Q.value=.5;
+    o.connect(f);o2.connect(g2).connect(f);f.connect(g).connect(this.master);
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.22,t+.005);g.gain.exponentialRampToValueAtTime(.09,t+.3);
+    const graph={o,o2,g,g2,f};this.voices.set(voice.key,graph);this.graphs.add(graph);
+    o.onended=()=>{this.graphs.delete(graph);for(const node of [o,o2,g,g2,f])node.disconnect()};o.start(t);o2.start(t);
+  },
+  stop(note,fast=false){
+    const v=this.voices.get(note);if(!v)return;this.voices.delete(note);
+    this.release(v,fast?.02:params.release);
+  },
+  release(v,duration){
+    const t=this.ctx.currentTime;
+    if(v.g.gain.cancelAndHoldAtTime)v.g.gain.cancelAndHoldAtTime(t);else v.g.gain.cancelScheduledValues(t);
+    v.g.gain.setTargetAtTime(.0001,t,duration/6);v.o.stop(t+duration+.03);v.o2.stop(t+duration+.03);
+  },
+  update(){
+    if(!this.ctx)return;const t=this.ctx.currentTime;
+    this.master.gain.setTargetAtTime(this.enabled?params.level/100*.18:0,t,.005);
+    for(const [note,graph] of this.voices){const voice=activeNotes.get(note);if(!voice)continue;
+      graph.o.frequency.setTargetAtTime(voice.hz,t,.01);graph.o2.frequency.setTargetAtTime(voice.hz*2,t,.01);graph.f.frequency.setTargetAtTime(params.tone,t,.01);
+    }
+  }
+};
+$('sound-toggle').addEventListener('click',()=>audioEngine.toggle());
+audioEngine.render();
+// Enochian Tape Deck's interlocked arm/play/stop pattern, operating on real note events.
+let view='synth';
+const tape={mode:'stop',armed:false,events:[],duration:0,position:0,start:0,index:0,timer:0,loop:false};
+function setView(mode){
+  view=mode;for(const b of $$('[data-mode]'))b.setAttribute('aria-pressed',String(b.dataset.mode===mode));
+  $('waveform').toggleAttribute('hidden',mode!=='synth');$('tape-reels').toggleAttribute('hidden',mode!=='tape');
+  $('screen-mode').textContent=mode==='tape'?'TAPE / NOTE EVENTS':'SYNTH / '+String(selectedPreset).padStart(2,'0');
+  $('screen-detail').textContent=mode==='tape'?'IN-MEMORY NOTE TAPE':'TRIANGLE + SINE';
+  renderNotes();renderTape();
+}
+let selectedPreset=1;
+function renderTape(){
+  const state=tape.mode==='record'?'RECORD':tape.mode==='play'?'PLAY':tape.armed?'ARMED':'STOP';
+  $('record').setAttribute('aria-pressed',String(tape.armed||tape.mode==='record'));
+  $('play').setAttribute('aria-pressed',String(tape.mode==='play'||tape.mode==='record'));
+  $('tape-readout').textContent=`NOTE-EVENT TAPE · ${tape.events.length} EVENTS · ${state}`;
+  $('tape-time').textContent=tape.position.toFixed(1)+'s';
+  if(view==='tape')$('screen-state').textContent=state;
+  if(!reduced.matches&&inView&&!document.hidden)for(const reel of $$('.reel'))reel.style.transform=`rotate(${tape.position*90}deg)`;
+}
+function releasePlayback(){for(const source of [...owners.keys()])if(source.startsWith('tape:'))noteOff(source)}
+function stopTape(){
+  if(tape.mode==='record'){
+    allOff();tape.duration=Math.max(.05,(performance.now()-tape.start)/1000);tape.position=tape.duration;
+  }else if(tape.mode==='play')tape.position=Math.min(tape.duration,(performance.now()-tape.start)/1000);
+  tape.mode='stop';tape.armed=false;clearTimeout(tape.timer);tape.timer=0;releasePlayback();renderTape();
+}
+function tickTape(){
+  tape.timer=0;if(tape.mode==='stop')return;
+  tape.position=(performance.now()-tape.start)/1000;
+  if(tape.mode==='record'){
+    renderTape();if(tape.position>=60){stopTape();$('live-status').textContent='Capture stopped · 60-second take limit';return}
+    tape.timer=setTimeout(tickTape,40);return;
+  }
+  while(tape.index<tape.events.length&&tape.events[tape.index].time<=tape.position){
+    const event=tape.events[tape.index++],source='tape:'+event.note;
+    if(event.phase==='on')noteOn(event.note,source,event.midi);else noteOff(source);
+  }
+  renderTape();
+  if(tape.position>=tape.duration){
+    if(tape.loop){releasePlayback();tape.index=0;tape.position=0;tape.start=performance.now();renderTape();tape.timer=setTimeout(tickTape,1);return}
+    stopTape();return;
+  }
+  const next=tape.events[tape.index]?.time??tape.duration;
+  tape.timer=setTimeout(tickTape,Math.max(1,Math.min(40,(next-tape.position)*1000)));
+}
+$('record').addEventListener('click',()=>{
+  setView('tape');if(tape.mode!=='stop'){$('live-status').textContent='Stop the tape before arming a new take';return}
+  tape.armed=!tape.armed;renderTape();$('live-status').textContent=tape.armed?'Record armed · Play starts a new take, replacing the previous phrase':'Record disarmed';
+});
+$('play').addEventListener('click',()=>{
+  if(tape.mode!=='stop')return;setView('tape');
+  if(tape.armed){allOff();clearedTake=null;$('undo-clear').disabled=true;tape.events=[];tape.duration=0;tape.position=0;tape.mode='record';tape.armed=false}
+  else{if(!tape.events.some(e=>e.phase==='on')){$('live-status').textContent='Tape is empty · Record, then Play, then hold notes';return}tape.mode='play';tape.index=0}
+  tape.start=performance.now();renderTape();tickTape();
+});
+$('stop').addEventListener('click',stopTape);
+instrument.addEventListener('canticle:note',e=>{
+  if(tape.mode!=='record'||e.detail.source.startsWith('tape:'))return;
+  const {phase,note,midi}=e.detail;
+  tape.events.push({phase,note,midi,time:(performance.now()-tape.start)/1000});renderTape();
+  if(tape.events.length>=4096)queueMicrotask(()=>{if(tape.mode==='record'){stopTape();$('live-status').textContent='Capture stopped · event limit reached'}});
+});
+for(const type of ['blur','pagehide'])window.addEventListener(type,stopTape);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopTape()});
+renderNotes();renderTape();
+let clearedTake=null;
+$('loop-toggle').addEventListener('click',()=>{tape.loop=!tape.loop;$('loop-toggle').setAttribute('aria-pressed',String(tape.loop));renderTape()});
+$('home-tape').addEventListener('click',()=>{stopTape();tape.position=0;setView('tape')});
+$('clear-tape').addEventListener('click',()=>{
+  stopTape();if(tape.events.length)clearedTake={events:tape.events.map(e=>({...e})),duration:tape.duration};
+  tape.events=[];tape.duration=tape.position=0;$('undo-clear').disabled=!clearedTake;setView('tape');$('live-status').textContent='Tape cleared · Undo restores the previous phrase';
+});
+$('undo-clear').addEventListener('click',()=>{
+  if(!clearedTake)return;stopTape();tape.events=clearedTake.events;tape.duration=clearedTake.duration;tape.position=0;clearedTake=null;$('undo-clear').disabled=true;setView('tape');$('live-status').textContent='Previous phrase restored';
+});
+const PRESETS=[
+  ['DEFAULT',[0,2400,.4,65]],['MELLOW',[0,900,.7,60]],['BRIGHT',[0,6500,.6,55]],['SUB OCTAVE',[-12,800,.25,70]],
+  ['PLUCK',[0,3800,.05,65]],['OPEN',[0,8000,1,55]],['OCTAVE',[12,4200,.35,50]],['LONG RELEASE',[0,1800,2,65]]
+];
+function applyPreset(number){
+  selectedPreset=number;const [name,values]=PRESETS[number-1];
+  ['pitch','tone','release','level'].forEach((key,i)=>knobs[key].set(values[i]));
+  for(const b of $$('[data-preset]'))b.setAttribute('aria-pressed',String(Number(b.dataset.preset)===number));
+  $('screen-preset').textContent=name;if(view==='synth')$('screen-mode').textContent='SYNTH / '+String(number).padStart(2,'0');
+  renderNotes();
+}
+for(const b of $$('[data-preset]')){
+  const number=Number(b.dataset.preset),name=PRESETS[number-1][0];b.title='Preset '+number+' · '+name;b.setAttribute('aria-label',b.title);
+  b.addEventListener('click',()=>applyPreset(number));
+}
+$('previous-preset').addEventListener('click',()=>applyPreset((selectedPreset+6)%8+1));
+$('next-preset').addEventListener('click',()=>applyPreset(selectedPreset%8+1));
+$('reset-params').addEventListener('click',()=>applyPreset(1));
+applyPreset(1);
+function setFinish(finish){
+  if(!['ivory','obsidian'].includes(finish))finish='ivory';instrument.dataset.finish=finish;
+  for(const b of $$('[data-set-finish]'))b.setAttribute('aria-pressed',String(b.dataset.setFinish===finish));
+  try{localStorage.setItem('enochian-canticle-finish',finish)}catch(_){}
+}
+for(const b of $$('[data-set-finish]'))b.addEventListener('click',()=>setFinish(b.dataset.setFinish));
+try{setFinish(localStorage.getItem('enochian-canticle-finish')||'ivory')}catch(_){setFinish('ivory')}
+for(const b of $$('[data-mode]'))b.addEventListener('click',()=>setView(b.dataset.mode));
+for(const [buttonId,panelId] of [['help-button','help-panel'],['code-button','code-panel']]){
+  const button=$(buttonId),panel=$(panelId);button.setAttribute('aria-controls',panelId);button.setAttribute('aria-expanded','false');
+  button.addEventListener('click',()=>{panel.open=!panel.open;button.setAttribute('aria-expanded',String(panel.open));if(panel.open)panel.querySelector('summary').focus()});
+  panel.addEventListener('toggle',()=>button.setAttribute('aria-expanded',String(panel.open)));
+}
+instrument.dataset.keyHints='true';$('key-hints').setAttribute('aria-label','Computer key hints');
+$('key-hints').addEventListener('click',()=>{const shown=$('key-hints').getAttribute('aria-pressed')!=='true';$('key-hints').setAttribute('aria-pressed',String(shown));instrument.dataset.keyHints=String(shown)});
+const settleSprings=()=>{for(const spring of springs)spring.set(spring.t)};
+if('IntersectionObserver' in window)new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;if(!inView)settleSprings();else renderTape()}).observe(instrument);
+reduced.addEventListener('change',()=>{if(reduced.matches)settleSprings()});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)settleSprings()});
+
+</script>
+</body>
+</html>

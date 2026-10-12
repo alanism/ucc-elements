@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en" data-theme="ares">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Enochian Command Deck 02 — screen study</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* =============================================================================================
+   COMMAND DECK v2 — lead designer: Jayse Hansen · interaction: Raphael Schaad · feel: Andy Allen
+   System rules (see design-brief.md):
+   · ONE accent (red) = "needs you now" (blocked, needs-review, DO FIRST). Everything else is neutral.
+   · Shape language:  ◇ task   ▢ blocked task   ○ phase milestone   ■ file
+   · Type ramp (×1.618 from 11): 11 · 18 · 29 · 47      Weights: 400 / 600 only
+   · Space ramp: 4 · 8 · 16 · 24 · 48                   Grid: 12 columns (6 × 2), 16 gutter, 24 margin
+   · Motion: one-shot, per-element, purposeful (arrive · select · settle). No loops except none.
+   ============================================================================================= */
+:root,[data-theme=obsidian],[data-theme=enochian]{   /* ENOCHIAN · OBSIDIAN (dark). [data-theme=enochian] kept as an alias for old links. */
+  color-scheme:dark; --selglow:rgba(169,173,189,.95); --tint-red:1; --tint-cool:1; --on-red:#fff;
+  --void:#050506; --p0:#0a0a0b; --p1:#0e0e10; --r1:#121215; --r2:#1c1c20; --r3:#2a2a2e;
+  --line:#1f1f23; --line2:#3a3a3e; --ink:#f7f7f8; --ink2:#c9c9ce; --muted:#8a8a92; --dim:#4a4a50;
+  --red:#cc0000; --red-hi:#ff4040; --ember:#ff5a1f; --hot:#fff3e6; --ok:255,225,205;
+  --red-rgb:204,0,0; --cool-rgb:169,173,189; --easy:#fff3e6; --hard:#3a0d0d;
+}
+[data-theme=white]{   /* ENOCHIAN · WHITE (light). Same roles as Obsidian: white panels, ink text, one red accent. Light = easy, dark = hard still holds. */
+  color-scheme:light; --selglow:rgba(14,14,16,.28); --tint-red:.55; --tint-cool:1; --on-red:#fff;
+  --void:#efeeeb; --p0:#ffffff; --p1:#fbfbfa; --r1:#f5f4f2; --r2:#ebeae7; --r3:#d8d7d3;
+  --line:#e3e2de; --line2:#b9b8b3; --ink:#0e0e10; --ink2:#36363c; --muted:#66666e; --dim:#a2a2a8;
+  --red:#cc0000; --red-hi:#cc0000; --ember:#e0480f; --hot:#3c3c42; --ok:30,30,34;
+  --red-rgb:204,0,0; --cool-rgb:84,88,102; --easy:#ffffff; --hard:#2a0808;
+}
+[data-theme=ares]{
+  color-scheme:dark; --selglow:rgba(110,150,170,.95); --tint-red:1; --tint-cool:1; --on-red:#fff;
+  --void:#010507; --p0:#020a0e; --p1:#06151f; --r1:#081a26; --r2:#0d2432; --r3:#1b3646;
+  --line:#102a38; --line2:#3c5666; --ink:#efeaea; --ink2:#cdcacb; --muted:#7f9aa8; --dim:#3d5866;
+  --red:#d62832; --red-hi:#fc6253; --ember:#f2701e; --hot:#fff1e8; --ok:120,184,96;
+  --red-rgb:214,40,50; --cool-rgb:110,150,170; --easy:#efeaea; --hard:#2a0d14;
+}
+:root{ --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace; --ease:cubic-bezier(.2,.7,.2,1) }
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--void);color:var(--ink);font:400 11px/16px var(--sans);font-variant-numeric:tabular-nums;display:grid;grid-template-rows:auto minmax(0,1fr);gap:16px;padding:16px 24px 24px;min-height:720px}
+html[data-bw="1"]{filter:grayscale(1)}
+html[data-flip="1"] body{transform:rotate(180deg)}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:1px solid var(--ink);outline-offset:2px}
+.lb{font:600 11px/16px var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.mu{color:var(--muted)} .ink2{color:var(--ink2)} .acc{color:var(--red-hi)} .mono{font-family:var(--mono)}
+.t18{font:600 18px/24px var(--sans)} .n29{font:400 29px/32px var(--sans)} .n47{font:400 47px/48px var(--sans);letter-spacing:-.01em}
+
+/* ---- header ---- */
+header{display:flex;align-items:center;gap:8px 16px;flex-wrap:wrap;min-height:32px}
+@media (min-width:1100px){ header .brand{flex:0 1 auto} header .sp{flex:1 1 0;min-width:0} #proj{display:none} .brand .sim{margin-left:0} }
+.brand{display:flex;align-items:center;gap:16px}
+.sim{font:600 11px/16px var(--mono);letter-spacing:.12em;color:var(--muted);border:1px solid var(--line2);padding:0 8px;border-radius:2px}
+.seg{display:flex;align-items:center;border:1px solid var(--line2);border-radius:2px;background:var(--p0)}
+.seg>.lb{padding:0 8px;color:var(--muted)}
+.seg button{height:24px;padding:0 8px;font:600 11px/24px var(--mono);letter-spacing:.08em;color:var(--muted);border-left:1px solid var(--line)}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed=true]{color:var(--ink);background:var(--r2);box-shadow:inset 0 -2px 0 var(--ink2)}
+.sp{flex:1}
+
+/* ---- deck ---- */
+.deck{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:minmax(0,1fr) 232px;gap:16px;min-height:0}
+.panel{position:relative;display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--p0);border:1px solid var(--line);border-radius:2px}
+.ph{display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-bottom:1px solid var(--line);flex:none}
+.ph .lb:first-child{color:var(--ink2)}.ph .r{margin-left:auto;color:var(--muted)}
+.pb{flex:1;min-height:0;overflow:auto}
+#qP{grid-column:1/4}#mP{grid-column:4/10}#dP{grid-column:10/13}#jP{grid-column:1/9}#bP{grid-column:9/13}
+
+/* ---- queue ---- */
+.hero{display:flex;align-items:flex-end;gap:16px;padding:16px 16px 8px}
+.hero .n47{color:var(--ink)} .hero .t{padding-bottom:8px}
+.chips{display:flex;gap:4px;flex-wrap:wrap;padding:8px 16px 16px;border-bottom:1px solid var(--line)}
+.chip{height:24px;padding:0 8px;border:1px solid var(--line2);border-radius:2px;font:600 11px/22px var(--mono);letter-spacing:.08em;color:var(--muted)}
+.chip:hover{color:var(--ink)}.chip[aria-pressed=true]{color:var(--ink);background:var(--r2);border-color:var(--ink2)}
+.chip b{font-weight:400;color:var(--muted);margin-left:4px}
+.qlist{overflow:auto;flex:1;min-height:0}
+.qg{position:sticky;top:0;z-index:1;display:flex;gap:8px;padding:8px 16px;background:var(--p0);border-bottom:1px solid var(--line)}
+.qg .r{margin-left:auto}
+.qg.acc{box-shadow:inset 3px 0 0 var(--ink)}
+.qr{display:grid;grid-template-columns:24px 16px minmax(0,1fr) 32px 40px;gap:8px;align-items:center;width:100%;height:32px;padding:0 16px;text-align:left;border-bottom:1px solid var(--line);border-left:2px solid transparent}
+.qr:hover,.qr.hv{background:var(--r1)}
+.qr[aria-selected=true]{background:var(--r2);border-left-color:var(--ink)}
+.qr .nm{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--ink2)}
+.qr[aria-selected=true] .nm{color:var(--ink);font-weight:600}
+.qr .rk,.qr .sr,.qr .mv{font:400 11px/16px var(--mono);color:var(--muted)}.qr .mv{text-align:right;color:var(--ink2)}
+.qr.dim{opacity:.35}.qr.done .nm{text-decoration:line-through;text-decoration-color:var(--dim)}
+.qr svg{display:block}
+.qfoot{display:flex;align-items:center;min-height:32px;padding:0 16px;border-top:1px solid var(--line);color:var(--muted);flex:none}
+.empty{padding:24px 16px;color:var(--muted)}.empty b{display:block;color:var(--ink2);font-weight:600;margin-bottom:4px}
+
+/* ---- matrix ---- */
+#mx{position:relative;flex:1;min-height:0;overflow:hidden;background:radial-gradient(60% 70% at 50% 50%,rgba(var(--cool-rgb),.07),transparent 70%)}
+#mx svg{display:block;touch-action:none;user-select:none}
+svg text{font:400 11px/16px var(--mono);fill:var(--muted);letter-spacing:.06em}
+svg text.k{font-weight:600;fill:var(--ink2);letter-spacing:.12em}
+svg text.t{fill:var(--ink2)}
+.mk{cursor:grab}.mk:active{cursor:grabbing}.mk .hit{fill:transparent}
+.mk.off{opacity:.14;pointer-events:none}
+.mk.sel{filter:drop-shadow(0 0 6px var(--selglow))}
+.mk.sel text.t,.mk.hv text.t{fill:var(--ink);font-weight:600}
+.mk.hv .shape,.mk:hover .shape{stroke:var(--ink)}
+.intro .mk{animation:arrive .42s var(--ease) both;animation-delay:var(--d,0ms)}
+@keyframes arrive{from{opacity:0;transform:translateY(6px)}}
+.pulse{fill:none;stroke:var(--ink);stroke-width:1;transform-box:fill-box;transform-origin:center;animation:ring .7s var(--ease) 1 both}
+@keyframes ring{from{opacity:.9;transform:scale(.6)}to{opacity:0;transform:scale(2.2)}}
+.mfoot{display:flex;align-items:center;gap:16px;min-height:40px;padding:0 16px;border-top:1px solid var(--line);flex:none;flex-wrap:wrap;color:var(--muted)}
+.mfoot .rmp{display:flex;align-items:center;gap:4px}.mfoot .rmp i{display:block;width:16px;height:8px;border:1px solid var(--line2)}
+.mfoot .sh{display:inline-flex;align-items:center;gap:4px}
+.mfoot .rmp{margin-left:auto}
+
+/* ---- dock ---- */
+.dk{padding:16px;display:flex;flex-direction:column;gap:16px}
+.dk .row{display:flex;align-items:center;gap:8px}
+.pill{margin-left:auto;font:600 11px/16px var(--mono);letter-spacing:.08em;padding:0 8px;border:1px solid var(--line2);border-radius:2px;color:var(--ink2)}
+.pill.blocked,.pill.f{color:var(--red-hi);border-color:var(--red-hi)}.pill.done,.pill.d{color:rgb(var(--ok));border-color:rgba(var(--ok),.6)}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.stats>div{background:var(--p0);padding:8px}.stats .n29{display:block}
+.stats>div.on{box-shadow:inset 0 -2px 0 var(--ink2)}.stats>div.on .n29{color:var(--ink)}.stats>div:not(.on) .n29{color:var(--ink2)}
+.steps{display:flex;gap:4px;flex-wrap:wrap}
+.step{font:600 11px/16px var(--mono);letter-spacing:.08em;padding:0 8px;border:1px solid var(--line2);border-radius:2px;color:var(--muted)}
+.step.ok{color:rgb(var(--ok));border-color:rgba(var(--ok),.6)}.step.cur{color:var(--ink);border-color:var(--ink2)}
+.thumbs{display:flex;gap:8px}
+.th{position:relative;height:56px;flex:1;max-width:96px;border:1px solid var(--line2);background:var(--r1);overflow:hidden}
+.th img{width:100%;height:100%;object-fit:cover;filter:grayscale(.6) contrast(1.1) brightness(.9);display:block}
+.th.big{max-width:none;height:160px;flex:1 1 100%}
+.th .ni{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font:600 11px var(--mono);letter-spacing:.2em}
+.acts{display:flex;gap:8px}
+.btn{height:32px;padding:0 16px;border:1px solid var(--line2);border-radius:2px;font:600 11px/30px var(--mono);letter-spacing:.12em;color:var(--ink2)}
+.btn:hover{border-color:var(--ink2);color:var(--ink)}
+.btn.p{background:var(--ink);border-color:var(--ink);color:var(--void)}.btn.p:hover{background:var(--hot)}
+.btn.w{border-color:var(--red-hi);color:var(--red-hi)}
+.btn.w.p{background:var(--red);border-color:var(--red-hi);color:var(--on-red)}
+
+/* ---- journey ---- */
+.jA{position:relative;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));padding:16px 16px 8px;min-height:100%}
+.jA .trk{position:absolute;top:28px;left:calc(16px + (100% - 32px) / var(--n) / 2);width:calc((100% - 32px) * (var(--n) - 1) / var(--n));border-top:1px dashed var(--line2)}
+.jA .trk.dn{width:calc((100% - 32px) / var(--n) * var(--live));border-top:1px solid var(--ink2)}
+.jc{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
+.jn{position:relative;width:24px;height:24px;display:grid;place-items:center}
+.jn i{display:block;width:12px;height:12px;border-radius:50%;border:1.5px solid var(--muted);background:var(--p0)}
+.jc.done .jn i{background:var(--ink2);border-color:var(--ink2)}
+.jc.live .jn i{background:var(--ink);border-color:var(--ink);box-shadow:0 0 0 4px rgba(var(--cool-rgb),.3)}
+.jc.on .jn i{outline:1px solid var(--ink);outline-offset:4px}
+.jl{text-align:center;line-height:16px}.jl .lb{display:block;color:var(--ink2)}.jc.next .jl .lb{color:var(--muted)}.jc.live .jl .lb{color:var(--ink)}
+.jst{display:flex;flex-direction:column;gap:0;align-items:center}
+.gl{min-height:24px;padding:0 8px 0 4px;display:flex;align-items:center;gap:4px;border-radius:2px;color:var(--ink2)}.gl:hover,.gl.hv{background:var(--r2)}.gl[aria-pressed=true]{outline:1px solid var(--ink)}.gl.dim{opacity:.2}
+.jB{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));min-height:100%}
+.zc{display:flex;flex-direction:column;gap:8px;padding:8px 8px 8px;border-left:1px solid var(--line);min-width:0;position:relative}
+.zc:first-child{border-left:0}
+.zc.live{background:linear-gradient(180deg,rgba(var(--cool-rgb),.16),transparent 70%);box-shadow:inset 0 2px 0 var(--ink)}
+.zc.done{background:linear-gradient(180deg,rgba(var(--cool-rgb),.07),transparent 70%)}
+.zc.on{outline:1px solid var(--ink2);outline-offset:-1px}
+.zh{display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-width:0}.zh .lb{color:var(--ink2)}.zc.next .zh .lb{color:var(--muted)}
+.zl{display:flex;flex-wrap:wrap;gap:4px}
+.zchip{height:24px;display:inline-flex;align-items:center;gap:4px;padding:0 4px 0 0;border:1px solid var(--line2);border-radius:2px;font:600 11px/16px var(--mono);color:var(--ink2)}
+.zchip:hover,.zchip.hv{border-color:var(--ink2)}.zchip[aria-pressed=true]{border-color:var(--ink);color:var(--ink)}.zchip.dim{opacity:.2}
+.zf{margin-top:auto}
+
+/* ---- batch ---- */
+.wall{display:flex;flex-wrap:wrap;padding:16px;align-content:flex-start}
+.tl{display:block;width:var(--ts,14px);height:var(--ts,14px);border:1px solid var(--line2);background:transparent;cursor:pointer}
+.tl.d{background:rgba(var(--cool-rgb),.42);border-color:rgba(var(--cool-rgb),.7)}
+.tl.p{border-color:var(--ink2);background:repeating-linear-gradient(135deg,var(--ink2) 0 1px,transparent 1px 4px)}
+.tl.f{background:var(--red);border-color:var(--ink);box-shadow:inset 0 0 0 2px var(--p0);display:grid;place-items:center}
+.tl.f::after{content:"!";font:600 14px/1 var(--mono);color:var(--on-red)}
+.wall.sm .tl.f::after{content:""}
+.tl.sel{outline:1px solid var(--ink);outline-offset:2px}
+.tl.mute{opacity:.18}
+.bfoot{display:flex;align-items:center;gap:8px 16px;min-height:40px;padding:8px 16px;border-top:1px solid var(--line);flex:none;flex-wrap:wrap;color:var(--muted)}
+.bfoot .chip{height:24px}.bfoot .sw{display:inline-block;width:8px;height:8px;margin-right:4px;border:1px solid var(--line2);vertical-align:-1px}
+.bfoot .sw.d{background:rgba(var(--cool-rgb),.42);border-color:rgba(var(--cool-rgb),.7)}.bfoot .sw.f{background:var(--red);border-color:var(--red-hi)}.bfoot .sw.p{background:repeating-linear-gradient(135deg,var(--ink2) 0 1px,transparent 1px 3px);border-color:var(--ink2)}
+.bfoot .eta{flex:1 0 100%}
+
+/* ---- toast ---- */
+#toast{position:fixed;left:24px;bottom:24px;z-index:9;display:none;align-items:center;gap:16px;padding:8px 8px 8px 16px;background:var(--r2);border:1px solid var(--line2);border-radius:2px;color:var(--ink)}
+#toast.on{display:flex;animation:arrive .25s var(--ease) both}
+#toast button{height:24px;padding:0 8px;border:1px solid var(--ink2);border-radius:2px;font:600 11px/22px var(--mono);letter-spacing:.12em}
+
+@media (max-width:520px){ header{gap:8px} .seg>.lb{display:none} .seg button{padding:0 6px} .stats{grid-template-columns:repeat(2,minmax(0,1fr))} body{padding:8px 8px 16px} #mP{min-height:420px} .ph{padding:0 8px} .hero,.chips{padding-left:8px;padding-right:8px} .qr{padding:0 8px;grid-template-columns:24px 16px minmax(0,1fr) 40px} .qr .sr{display:none} .dk{padding:8px} .wall{padding:8px} }
+@media (max-width:1100px){
+  body{height:auto;display:block}.deck{display:flex;flex-direction:column}
+  #qP,#mP,#dP,#jP,#bP{grid-column:auto}#mP{min-height:560px}#qP{max-height:480px}#jP{min-height:232px}
+  header{margin-bottom:16px}
+}
+@media (prefers-reduced-motion:reduce){.intro .mk,.pulse,#toast.on{animation:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><span class="lb" id="proj"></span><span class="sim" title="All data in this prototype is synthetic">SIMULATED DATA</span><span class="lb mu" id="clock"></span></div>
+  <div class="sp"></div>
+  <div class="seg" id="gView" role="group" aria-label="Design option"><button data-v="a">A · DARKSTAR</button><button data-v="b">B · PLAN VIEW</button></div>
+  <div class="seg" id="gMetric" role="group" aria-label="Block intensity"><span class="lb">INTENSITY</span></div>
+  <div class="seg" id="gTheme" role="group" aria-label="Theme"><button data-v="ares" title="Ares · dark, navy + crimson">ARES</button><button data-v="obsidian" title="Enochian Obsidian · dark, black + red">OBSIDIAN</button><button data-v="white" title="Enochian White · light, white + red">WHITE</button></div>
+  <div class="seg" id="gReview" role="group" aria-label="Review aids"><span class="lb">REVIEW</span><button data-v="bw">B/W</button><button data-v="flip">FLIP</button></div>
+</header>
+
+<main class="deck">
+  <section class="panel" id="qP" aria-label="Next up"></section>
+  <section class="panel" id="mP" aria-label="Priority matrix">
+    <div class="ph"><span class="lb">PRIORITY MATRIX</span><span class="lb r" id="mHead"></span></div>
+    <div id="mx"></div>
+    <div class="mfoot" id="mFoot"></div>
+  </section>
+  <section class="panel" id="dP" aria-label="Task detail"></section>
+  <section class="panel" id="jP" aria-label="Journey"></section>
+  <section class="panel" id="bP" aria-label="Batch"></section>
+</main>
+<div id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo">UNDO</button></div>
+
+<script>
+"use strict";
+/* ===========================================================================================
+   TEMPLATE — everything project-specific lives in CFG + TASKS. Swap them; every panel follows.
+   =========================================================================================== */
+const CFG = {
+  project: "ENOCHIAN · PRODUCTION PIPELINE",
+  dir: "/UIUX/studies/agent-hud/demo-frame.svg?frame=",
+  metrics: {   // Add a metric = add a line. Light = low, dark = high.
+    difficulty: {label:"DIFFICULTY", short:"DIFF",   get:t=>t.diff,         fmt:v=>`${v}/5`,          unit:"1 trivial → 5 brutal"},
+    files:      {label:"FILES",      short:"FILES",  get:t=>t.files.length, fmt:v=>`${v}`,            unit:"files touched"},
+    tokens:     {label:"TOKENS",     short:"TOKENS", get:t=>t.tok,          fmt:v=>`${v}k`,           unit:"est. tokens"},
+    cost:       {label:"COST",       short:"COST",   get:t=>t.cost,         fmt:v=>`$${v.toFixed(2)}`,unit:"est. USD"},
+  },
+  metric: "difficulty",
+  phases: [{n:"INGEST",s:"load originals",d:"D-06"},{n:"RESIZE",s:"1920w · 4K",d:"D-04"},{n:"GRADE",s:"apply LUT",d:"D-01"},
+           {n:"EXPORT",s:"PNG-16",d:"D+02"},{n:"QA",s:"proof vs LUT",d:"D+04"},{n:"DELIVER",s:"handoff",d:"D+06"}],
+  livePhase: 2,
+  ops: ["RESIZE","LUT","PNG"],
+};
+const FILES = ["Lopardo---Darkstar-10.jpg","Lopardo---Darkstar-11.jpg","Lopardo---Darkstar-17.jpg","Lopardo---Darkstar-19.jpg","Lopardo---Darkstar-2.jpg","Lopardo---Darkstar-25.jpg","Lopardo---Darkstar-28.jpg","Lopardo---Darkstar-3.jpg","Lopardo---Darkstar-31.jpg","Lopardo---Darkstar-32.jpg","Lopardo---Early-Dev-15.jpg","Lopardo---Early-Dev-6.jpg","Lopardo---Maps-32.jpg","Lopardo---Maps-8.jpg","Lopardo---Tactical-Auditorium-24_extra.jpg","Lopardo---Tactical-Auditorium-30.jpg","TG_COLLECT_030_00000_adj.jpg","TG_COLLECT_033_00000_adj.jpg","TG_COLLECT_036_00000.jpg","TG_COLLECT_040_00000.jpg","TG_COLLECT_041_00000.jpg","TG_COLLECT_047_00000.jpg","TG_TK_Darkstar_Cockpit_Map_v1_C-100.jpg","TG_TK_TacAud_Full_01_0000.jpg","TG_TK_TacAud_Right_01_0000_adj.jpg","Top-Gun_Maverick_thumbnail.jpg"];
+const F = p => FILES.filter(n=>n.startsWith(p));
+// imp / urg 0..1 · diff 1..5 · tok = est. k tokens · status todo|running|done|blocked · ph = index into CFG.phases
+const TASKS = [
+ {n:1, name:"Reply: 4K spec",   title:"Reply to Aya — confirm 4K delivery spec",         src:"EMAIL", ref:"Aya · re: delivery spec",    imp:.92,urg:.94,diff:1,files:[],tok:3, cost:.03,ph:0,status:"todo",   ops:[]},
+ {n:2, name:"Export Darkstar",  title:"Export Darkstar set to PNG-16",                   src:"PRD",   ref:"§3.1 Export",                imp:.84,urg:.76,diff:2,files:F("Lopardo---Darkstar"),tok:22,cost:1.1,ph:3,status:"running",ops:["PNG"]},
+ {n:3, name:"LUT · COLLECT",    title:"Apply ARES LUT to TG_COLLECT frames",             src:"PRD",   ref:"§2.2 Grade",                 imp:.90,urg:.62,diff:4,files:F("TG_COLLECT"),tok:48,cost:2.4,ph:2,status:"running",ops:["LUT"]},
+ {n:4, name:"Fix Maps banding", title:"Fix banding in gradients after LUT (Maps)",       src:"EMAIL", ref:"Mitchell · banding on Maps", imp:.74,urg:.86,diff:4,files:F("Lopardo---Maps"),tok:60,cost:3.1,ph:2,status:"blocked",ops:["LUT"]},
+ {n:5, name:"Resize TacAud",    title:"Resize Tactical Auditorium set to 1920w",         src:"PRD",   ref:"§2.1 Resize",                imp:.70,urg:.60,diff:2,files:[...F("Lopardo---Tactical"),...F("TG_TK_TacAud")],tok:12,cost:.6,ph:1,status:"done",ops:["RESIZE"]},
+ {n:6, name:"Strip EXIF",       title:"Strip EXIF and embed sRGB profile",               src:"PRD",   ref:"§3.4 Metadata",              imp:.80,urg:.38,diff:2,files:FILES,tok:30,cost:1.5,ph:4,status:"todo",   ops:["PNG"]},
+ {n:7, name:"Match Early-Dev",  title:"Color-match the Early-Dev pair to the Darkstar grade",src:"PRD",ref:"§2.4 Grade",                imp:.62,urg:.28,diff:5,files:F("Lopardo---Early"),tok:90,cost:4.8,ph:2,status:"todo",ops:["LUT"]},
+ {n:8, name:"Contact sheet",    title:"Build a contact sheet of all 26 frames",          src:"PRD",   ref:"§5 Review aids",             imp:.72,urg:.18,diff:3,files:FILES,tok:40,cost:2.0,ph:4,status:"todo",   ops:["PNG"]},
+ {n:9, name:"LUT naming",       title:"Write the LUT naming convention",                 src:"PRD",   ref:"§1 Conventions",             imp:.56,urg:.10,diff:1,files:[],tok:4, cost:.05,ph:0,status:"todo",   ops:[]},
+ {n:10,name:"Approve crops",    title:"Get sign-off on crop ratios",                     src:"EMAIL", ref:"Aya · crop ratios",          imp:.64,urg:.90,diff:1,files:[],tok:3, cost:.03,ph:1,status:"todo",   ops:["RESIZE"]},
+ {n:11,name:"Rename files",     title:"Rename files to the project scheme",              src:"EMAIL", ref:"Ashley · naming",            imp:.34,urg:.78,diff:1,files:FILES,tok:6,cost:.10,ph:0,status:"todo",   ops:[]},
+ {n:12,name:"Reply: invoice",   title:"Reply to invoice question",                       src:"EMAIL", ref:"Vendor · invoice #4471",     imp:.16,urg:.68,diff:1,files:[],tok:2, cost:.02,ph:5,status:"todo",   ops:[]},
+ {n:13,name:"Archive originals",title:"Archive originals to cold storage",               src:"PRD",   ref:"§6 Retention",               imp:.24,urg:.30,diff:2,files:FILES,tok:2,cost:.02,ph:5,status:"todo",   ops:[]},
+ {n:14,name:"Grain preset",     title:"Try a film-grain preset on three frames",         src:"EMAIL", ref:"Aria · grain idea",          imp:.30,urg:.08,diff:3,files:F("Lopardo---Darkstar").slice(0,3),tok:35,cost:1.7,ph:2,status:"todo",ops:["LUT"]},
+ {n:15,name:"2× upscale thumb", title:"Upscale the thumbnail 2× without halos",          src:"PRD",   ref:"§7 Marketing",               imp:.40,urg:.54,diff:3,files:F("Top-Gun"),tok:25,cost:1.2,ph:1,status:"todo",   ops:["RESIZE"]},
+ {n:16,name:"PNG-8 vs 16",      title:"Compare PNG-8 vs PNG-16 file sizes",              src:"PRD",   ref:"§3.5 Export",                imp:.52,urg:.50,diff:3,files:F("TG_TK"),tok:28,cost:1.4,ph:3,status:"running",ops:["PNG"]},
+ {n:17,name:"Cockpit map 4K",   title:"Re-render the cockpit map at 4K with LUT",        src:"PRD",   ref:"§2.6 Hero asset",            imp:.94,urg:.44,diff:5,files:F("TG_TK_Darkstar"),tok:70,cost:3.5,ph:1,status:"todo",ops:["RESIZE","LUT"]},
+ {n:18,name:"Proof vs LUT",     title:"Proof pass: compare graded frames against LUT",   src:"PRD",   ref:"§4 QA",                      imp:.60,urg:.40,diff:3,files:F("Lopardo---Darkstar"),tok:36,cost:1.8,ph:4,status:"todo",ops:["LUT"]},
+];
+/* =========================================================================================== */
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const qs = new URLSearchParams(location.search);
+const S = { view:qs.get("v")==="b"?"b":"a", theme:({ares:"ares",obsidian:"obsidian",enochian:"obsidian",white:"white"})[qs.get("theme")]||"ares", metric:qs.get("metric")in CFG.metrics?qs.get("metric"):CFG.metric,
+            filter:qs.get("filter")||"all", phase:qs.get("phase")!=null?+qs.get("phase"):null, sel:null, hov:null, scale:+(qs.get("scale")||1), bw:qs.get("bw")==="1", flip:qs.get("flip")==="1",
+            intro:qs.get("intro")!=="0", pulse:false, drag:null };
+const H = [];                                             // undo stack
+const byN = n => TASKS.find(t=>t.n===n);
+const id2 = t => String(t.n).padStart(2,"0");
+const quad = t => t.imp>=.5 ? (t.urg>=.5?"DO FIRST":"SCHEDULE") : (t.urg>=.5?"DELEGATE":"ELIMINATE");
+const QSUB = {"DO FIRST":"IMPORTANT · URGENT","SCHEDULE":"IMPORTANT · NOT URGENT","DELEGATE":"URGENT · NOT IMPORTANT","ELIMINATE":"NEITHER"};
+const QR = {"DO FIRST":0,"SCHEDULE":1,"DELEGATE":2,"ELIMINATE":3};
+const ordered = () => TASKS.slice().sort((a,b)=>(a.status==="done")-(b.status==="done") || QR[quad(a)]-QR[quad(b)] || b.imp*b.urg-a.imp*a.urg);
+const pass = t => (S.filter==="all"||(S.filter==="blocked"?t.status==="blocked":t.src===S.filter)) && (S.phase==null||t.ph===S.phase);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const hex2 = h => [1,3,5].map(i=>parseInt(h.substr(i,2),16));
+const M = () => CFG.metrics[S.metric];
+const mval = t => M().get(t);
+function mrange(){ const v=TASKS.map(mval); return [Math.min(...v),Math.max(...v)]; }
+const kOf = t => { const [a,b]=mrange(); return b===a?0:(mval(t)-a)/(b-a); };
+function colorAt(k){ const a=hex2(css("--easy")), b=hex2(css("--hard")); return `rgb(${a.map((v,i)=>Math.round(v+(b[i]-v)*k)).join(",")})`; }
+const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+
+/* ---------- glyphs: ◇ task · ▢ blocked · dashed = done · outer ring = running ---------- */
+function shapeAt(t,x,y,r){
+  const f=colorAt(kOf(t));
+  if(t.status==="blocked") return `<rect class="shape" x="${x-r*.8}" y="${y-r*.8}" width="${r*1.6}" height="${r*1.6}" fill="${f}" stroke="var(--red-hi)" stroke-width="1.75"/>`;
+  const d=`M${x} ${y-r}L${x+r} ${y}L${x} ${y+r}L${x-r} ${y}Z`, done=t.status==="done";
+  return (t.status==="running"?`<path d="M${x} ${y-r-4}L${x+r+4} ${y}L${x} ${y+r+4}L${x-r-4} ${y}Z" fill="none" stroke="var(--ink2)" stroke-width="1" opacity=".6"/>`:"")
+    + `<path class="shape" d="${d}" fill="${done?"none":f}" stroke="var(--ink2)" stroke-width="1.25" ${done?'stroke-dasharray="2 2"':""}/>`;
+}
+const gsvg = (t,s=16) => `<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" aria-hidden="true">${shapeAt(t,s/2,s/2,s/2-3)}</svg>`;
+
+/* ---------- actions ---------- */
+function toast(msg, undo=true){ $("#toastMsg").textContent=msg; $("#toastUndo").style.display=undo?"":"none"; const t=$("#toast"); t.classList.remove("on"); void t.offsetWidth; t.classList.add("on"); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove("on"),5000); }
+function setPos(t,imp,urg,why){ const from=quad(t); H.push({t:"move",n:t.n,imp:t.imp,urg:t.urg}); t.imp=clamp(Math.round(imp*100)/100,0,1); t.urg=clamp(Math.round(urg*100)/100,0,1); const to=quad(t);
+  toast(from===to?`T${id2(t)} · urg ${Math.round(t.urg*100)} · imp ${Math.round(t.imp*100)}`:`T${id2(t)} moved: ${from} → ${to}`); }
+function setStatus(t,st){ H.push({t:"status",n:t.n,status:t.status}); const from=t.status; t.status=st; toast(`T${id2(t)} ${from} → ${st}`); }
+function undo(){ const e=H.pop(); if(!e){ toast("Nothing to undo.",false); return; }
+  if(e.t==="move"){ const t=byN(e.n); t.imp=e.imp; t.urg=e.urg; } else if(e.t==="status") byN(e.n).status=e.status; else if(e.t==="retry"){ W[e.i].st=e.st; W[e.i].stage=e.stage; }
+  toast("Undone.",false); all(); }
+function select(k,{scroll=true}={}){ S.sel = S.sel===k ? null : k; S.pulse=true; all(); if(scroll&&S.sel) $(`.qr[data-k="${S.sel}"]`)?.scrollIntoView({block:"nearest"}); }
+
+/* ---------- queue ---------- */
+function renderQueue(){
+  const open=TASKS.filter(t=>t.status!=="done"), df=open.filter(t=>quad(t)==="DO FIRST"), ord=ordered();
+  const cnt = f => f==="all"?TASKS.length:f==="blocked"?TASKS.filter(t=>t.status==="blocked").length:TASKS.filter(t=>t.src===f).length;
+  let rows="", last="", i=0;
+  ord.forEach(t=>{ const g=t.status==="done"?"DONE":quad(t); if(g!==last){ const n=ord.filter(x=>(x.status==="done"?"DONE":quad(x))===g).length; rows+=`<div class="qg lb ${g==="DO FIRST"?"acc":"mu"}"><span>${g}</span><span class="r mu">${n}</span></div>`; last=g; }
+    i++; const on=pass(t), sel=S.sel==="t"+t.n;
+    rows+=`<button class="qr${on?"":" dim"}${t.status==="done"?" done":""}" role="option" data-k="t${t.n}" aria-selected="${sel}" tabindex="${sel||(!S.sel&&i===1)?0:-1}" aria-label="${esc(t.title)}, ${g.toLowerCase()}, ${t.status}">
+      <span class="rk">${id2(t)}</span>${gsvg(t)}<span class="nm">${esc(t.name)}</span><span class="sr">${t.src==="EMAIL"?"EM":"PRD"}</span><span class="mv">${M().fmt(mval(t))}</span></button>`; });
+  const chip=(f,l)=>`<button class="chip" data-f="${f}" aria-pressed="${S.filter===f}">${l}<b>${cnt(f)}</b></button>`;
+  $("#qP").innerHTML=`<div class="ph"><span class="lb">NEXT UP</span><span class="lb r">IMP × URG</span></div>
+   <div class="hero"><span class="n47">${String(df.length).padStart(2,"0")}</span><span class="t"><span class="lb acc">DO FIRST</span><br><span class="mu">of ${open.length} open · ${TASKS.filter(t=>t.status==="blocked").length} blocked · ${TASKS.filter(t=>t.status==="running").length} running</span></span></div>
+   <div class="chips" role="group" aria-label="Filter tasks">${chip("all","ALL")}${chip("EMAIL","EMAIL")}${chip("PRD","PRD")}${chip("blocked","BLOCKED")}${S.phase!=null?`<button class="chip" data-clearphase aria-pressed="true" aria-label="Clear phase filter">${CFG.phases[S.phase].n} ✕</button>`:""}</div>
+   <div class="qlist" role="listbox" aria-label="Tasks by priority">${TASKS.some(pass)?rows:'<div class="empty"><b>No tasks match.</b>Clear the filter to see all 18.</div>'}</div>
+   <div class="qfoot">↑↓ SELECT · ⇧+ARROWS MOVE · Z UNDO</div>`;
+}
+
+/* ---------- matrix ---------- */
+let G=null;
+function geom(w,h){
+  // The radar needs ~440 px of width to keep 18 labelled contacts apart; below that it falls back to the rectangular plot (same data, same interactions).
+  if(S.view==="a"&&w>=440){ const cx=w/2, cy=h/2, R=Math.min(w/2-48,h/2-24), Hh=R*.69;   // 48 px side gutter keeps the URG ± axis labels inside the viewport
+    return {kind:"a",w,h,cx,cy,R,H:Hh, map:t=>[cx+(t.urg-.5)*2*Hh, cy-(t.imp-.5)*2*Hh], inv:(x,y)=>[(x-cx)/(2*Hh)+.5, .5-(y-cy)/(2*Hh)]}; }
+  const L=48,Rr=16,T=16,B=40, pw=w-L-Rr, ph=h-T-B;
+  const iy=.1, Y=v=>T+ph*(iy+(1-v)*(1-2*iy));          // 10 % vertical inset: corners stay free for the quadrant labels
+  return {kind:"b",w,h,x0:L,y0:T,pw,ph,Y, map:t=>[L+t.urg*pw, Y(t.imp)], inv:(x,y)=>[(x-L)/pw, 1-((y-T)/ph-iy)/(1-2*iy)]};
+}
+function frameA(g){ const {w,h,cx,cy,R,H:Hh}=g; let s=`<defs><radialGradient id="gdo" gradientUnits="userSpaceOnUse" cx="${cx+Hh}" cy="${cy-Hh}" r="${Hh*1.7}"><stop offset="0" stop-color="rgb(var(--red-rgb))" style="stop-opacity:calc(.22*var(--tint-red))"/><stop offset="1" stop-color="rgb(var(--red-rgb))" style="stop-opacity:calc(0*var(--tint-red))"/></radialGradient>
+   <clipPath id="cc"><circle cx="${cx}" cy="${cy}" r="${R}"/></clipPath></defs>
+   <rect x="${cx}" y="${cy-R}" width="${R}" height="${R}" fill="url(#gdo)" clip-path="url(#cc)"/>
+   <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="var(--line2)"/>
+   ${[.33,.66].map(k=>`<circle cx="${cx}" cy="${cy}" r="${R*k}" fill="none" stroke="var(--line)" stroke-dasharray="1 5"/>`).join("")}`;
+  for(let a=0;a<360;a+=10){ const L=a%30===0?8:4, r=a*Math.PI/180; s+=`<line x1="${cx+Math.sin(r)*R}" y1="${cy-Math.cos(r)*R}" x2="${cx+Math.sin(r)*(R-L)}" y2="${cy-Math.cos(r)*(R-L)}" stroke="var(--line2)"/>`; }
+  s+=`<line x1="${cx-R}" y1="${cy}" x2="${cx+R}" y2="${cy}" stroke="var(--line2)"/><line x1="${cx}" y1="${cy-R}" x2="${cx}" y2="${cy+R}" stroke="var(--line2)"/>`;
+  [-1,-.5,.5,1].forEach(k=>{ s+=`<line x1="${cx+k*Hh}" y1="${cy-3}" x2="${cx+k*Hh}" y2="${cy+3}" stroke="var(--muted)"/><line x1="${cx-3}" y1="${cy+k*Hh}" x2="${cx+3}" y2="${cy+k*Hh}" stroke="var(--muted)"/>`; });
+  const lab=(x,y,q,an)=>`<text class="k" x="${x}" y="${y}" text-anchor="${an}" ${q==="DO FIRST"?'style="fill:var(--red-hi);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px"':""}>${q}</text>${w>=520?`<text x="${x}" y="${y+16}" text-anchor="${an}">${QSUB[q]}</text>`:""}`;
+  s+=lab(w-16,28,"DO FIRST","end")+lab(16,28,"SCHEDULE","start")+lab(w-16,h-28,"DELEGATE","end")+lab(16,h-28,"ELIMINATE","start");
+  s+=`<text x="${cx}" y="${cy-R-8}" text-anchor="middle">IMP +</text><text x="${cx}" y="${cy+R+16}" text-anchor="middle">IMP −</text><text x="${cx-R-8}" y="${cy+4}" text-anchor="end">URG −</text><text x="${cx+R+8}" y="${cy+4}" text-anchor="start">URG +</text>`;
+  return s; }
+function frameB(g){ const {w,h,x0,y0,pw,ph,Y}=g, mx=x0+pw/2, my=Y(.5); let s=`<defs>
+   <linearGradient id="gdo" gradientUnits="userSpaceOnUse" x1="${x0+pw}" y1="${y0}" x2="${mx}" y2="${my}"><stop offset="0" stop-color="rgb(var(--red-rgb))" style="stop-opacity:calc(.24*var(--tint-red))"/><stop offset="1" stop-color="rgb(var(--red-rgb))" style="stop-opacity:calc(0*var(--tint-red))"/></linearGradient>
+   <linearGradient id="gsc" gradientUnits="userSpaceOnUse" x1="${x0}" y1="${y0}" x2="${mx}" y2="${my}"><stop offset="0" stop-color="rgb(var(--cool-rgb))" style="stop-opacity:calc(.12*var(--tint-cool))"/><stop offset="1" stop-color="rgb(var(--cool-rgb))" style="stop-opacity:calc(0*var(--tint-cool))"/></linearGradient>
+   <linearGradient id="gde" gradientUnits="userSpaceOnUse" x1="${x0+pw}" y1="${y0+ph}" x2="${mx}" y2="${my}"><stop offset="0" stop-color="rgb(var(--cool-rgb))" style="stop-opacity:calc(.08*var(--tint-cool))"/><stop offset="1" stop-color="rgb(var(--cool-rgb))" style="stop-opacity:calc(0*var(--tint-cool))"/></linearGradient></defs>
+   <rect x="${mx}" y="${y0}" width="${pw/2}" height="${my-y0}" fill="url(#gdo)"/><rect x="${x0}" y="${y0}" width="${pw/2}" height="${my-y0}" fill="url(#gsc)"/><rect x="${mx}" y="${my}" width="${pw/2}" height="${y0+ph-my}" fill="url(#gde)"/>`;
+  [.25,.75].forEach(k=>{ s+=`<line x1="${x0+pw*k}" y1="${y0}" x2="${x0+pw*k}" y2="${y0+ph}" stroke="var(--line)" stroke-dasharray="1 5"/><line x1="${x0}" y1="${Y(k)}" x2="${x0+pw}" y2="${Y(k)}" stroke="var(--line)" stroke-dasharray="1 5"/>`; });
+  s+=`<rect x="${x0}" y="${y0}" width="${pw}" height="${ph}" fill="none" stroke="var(--line2)"/><line x1="${mx}" y1="${y0}" x2="${mx}" y2="${y0+ph}" stroke="var(--muted)"/><line x1="${x0}" y1="${my}" x2="${x0+pw}" y2="${my}" stroke="var(--muted)"/>`;
+  [0,25,50,75,100].forEach(v=>{ const x=x0+pw*v/100, y=Y(v/100); s+=`<text x="${x}" y="${y0+ph+16}" text-anchor="${v===0?"start":v===100?"end":"middle"}">${v}</text><text x="${x0-8}" y="${y+4}" text-anchor="end">${v}</text>`; });
+  s+=`<text class="k" x="${x0+pw/2}" y="${h-4}" text-anchor="middle">URGENCY →</text><text class="k" transform="translate(12 ${y0+ph/2}) rotate(-90)" text-anchor="middle">IMPORTANCE →</text>`;
+  const lab=(x,y,q,an)=>`<text class="k" x="${x}" y="${y}" text-anchor="${an}" ${q==="DO FIRST"?'style="fill:var(--red-hi);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px"':""}>${q}</text>${w>=520?`<text x="${x}" y="${y+16}" text-anchor="${an}">${QSUB[q]}</text>`:""}`;
+  s+=lab(x0+pw-12,y0+24,"DO FIRST","end")+lab(x0+12,y0+24,"SCHEDULE","start")+lab(x0+pw-12,y0+ph-24,"DELEGATE","end")+lab(x0+12,y0+ph-24,"ELIMINATE","start");
+  return s; }
+function renderMatrix(){
+  const host=$("#mx"), w=host.clientWidth, h=host.clientHeight; if(w<80||h<80) return;
+  const g=G=geom(w,h), sel=S.sel, order=TASKS.slice().sort((a,b)=>("t"+a.n===sel)-("t"+b.n===sel)||b.imp*b.urg-a.imp*a.urg).reverse();
+  // greedy tag placement (right, left, above, below); tags are 2 digits so collisions are rare
+  const pts=TASKS.map(t=>({t,p:g.map(t)})), boxes=pts.map(({p})=>({x:p[0]-10,y:p[1]-10,w:20,h:20})), hit=(a,b)=>a.x<b.x+b.w&&b.x<a.x+a.w&&a.y<b.y+b.h&&b.y<a.y+a.h, placed=[], where=new Map();
+  pts.slice().sort((a,b)=>b.t.imp*b.t.urg-a.t.imp*a.t.urg).forEach(({t,p})=>{ const lab=(t.n===+(sel||"").slice(1)&&sel[0]==="t")?`${id2(t)} · ${M().fmt(mval(t))}`:id2(t), tw=lab.length*6.6+2;
+    for(const [dx,dy,an] of [[14,4,"start"],[-14,4,"end"],[0,-14,"middle"],[0,22,"middle"]]){ const x=p[0]+dx, bx=an==="start"?x:an==="end"?x-tw:x-tw/2, r={x:bx,y:p[1]+dy-11,w:tw,h:14};
+      if(bx<2||bx+tw>w-2||r.y<2||r.y+r.h>h-2) continue; if(placed.some(q=>hit(q,r))||boxes.some((m,i)=>pts[i].t!==t&&hit(m,r))) continue; placed.push(r); where.set(t.n,{x,y:p[1]+dy,an,lab}); return; }
+    // no collision-free slot: take the first slot that stays inside the plot (overlap beats clipping), else pin to the nearest edge
+    for(const [dx,dy,an] of [[14,4,"start"],[-14,4,"end"],[0,-14,"middle"],[0,22,"middle"]]){ const x=p[0]+dx, bx=an==="start"?x:an==="end"?x-tw:x-tw/2, y=p[1]+dy;
+      if(bx>=2&&bx+tw<=w-2&&y-11>=2&&y+3<=h-2){ where.set(t.n,{x,y,an,lab}); return; } }
+    where.set(t.n,{x:clamp(p[0]-tw/2,2,w-2-tw),y:clamp(p[1]+22,14,h-4),an:"start",lab}); });
+  let s=`<svg id="msvg" width="${w}" height="${h}" role="img" aria-label="Priority matrix: ${TASKS.filter(t=>quad(t)==="DO FIRST"&&t.status!=="done").length} tasks in DO FIRST of ${TASKS.length}. The ranked list on the left is the accessible equivalent.">`+(g.kind==="a"?frameA(g):frameB(g))+`<g id="cts" class="${S.intro?"intro":""}">`;
+  order.forEach((t,i)=>{ const [x,y]=g.map(t), k="t"+t.n, on=pass(t), isSel=sel===k, r=t.imp>.5&&t.urg>.5?9:8, tg=where.get(t.n);
+    s+=`<g class="mk${on?"":" off"}${isSel?" sel":""}" data-k="${k}" style="--d:${i*18}ms"><circle class="hit" cx="${x}" cy="${y}" r="22"/>${isSel?`<circle class="${S.pulse?"pulse":""}" cx="${x}" cy="${y}" r="16" fill="none" stroke="var(--ink)" stroke-width="1"/>`:""}${shapeAt(t,x,y,r)}<text class="t" x="${tg.x}" y="${tg.y}" text-anchor="${tg.an}">${tg.lab}</text></g>`; });
+  s+=`</g><g id="drag"></g></svg>`;
+  host.innerHTML=s; S.pulse=false; if(S.intro) setTimeout(()=>{ S.intro=false; $("#cts")?.classList.remove("intro"); },900);
+  const shown=TASKS.filter(pass).length; $("#mHead").textContent=`${shown} OF ${TASKS.length} SHOWN${S.view==="a"&&g.kind==="b"?" · COMPACT PLOT":""}`;
+  const [a,b]=mrange(), m=M();
+  const lg=(st,l)=>`<span class="sh">${gsvg({...TASKS[0],status:st,diff:3},16).replace(/fill="rgb[^"]*"/,'fill="none"')}${l}</span>`;
+  $("#mFoot").innerHTML=`${lg("todo","TASK")}${lg("blocked","BLOCKED")}${lg("running","RUNNING")}${lg("done","DONE")}
+    <span class="rmp"><span>${m.label}</span><span>${m.fmt(a)}</span>${[0,.25,.5,.75,1].map(k=>`<i style="background:${colorAt(k)}"></i>`).join("")}<span>${m.fmt(b)}</span></span>`;
+}
+
+/* ---------- dock ---------- */
+const keyTask = k => k&&k[0]==="t" ? byN(+k.slice(1)) : null;
+function dockTask(t){ const m=S.metric, hl=x=>m===x?" on":"", st=t.status, acts=
+   st==="todo"?[["running","START",1],["blocked","BLOCK",0]] : st==="running"?[["done","MARK DONE",1],["blocked","BLOCK",0]] : st==="blocked"?[["todo","UNBLOCK",1]] : [["todo","REOPEN",0]];
+  const files=t.files.slice(0,3);
+  return `<div class="dk"><div class="row"><span class="lb">T${id2(t)}</span><span class="mu">${t.src==="EMAIL"?"✉ EMAIL":"▪ PRD"} · ${esc(t.ref)}</span><span class="pill ${st}">${st.toUpperCase()}</span></div>
+   <div><div class="t18">${esc(t.title)}</div><div class="lb ${quad(t)==="DO FIRST"?"acc":"mu"}" style="margin-top:8px">${quad(t)} · PHASE ${String(t.ph+1).padStart(2,"0")} ${CFG.phases[t.ph].n}</div></div>
+   <div class="stats"><div><span class="n29">${Math.round(t.imp*100)}</span><span class="mu lb">IMPORTANCE</span></div><div><span class="n29">${Math.round(t.urg*100)}</span><span class="mu lb">URGENCY</span></div><div class="${hl("difficulty").trim()}"><span class="n29">${t.diff}/5</span><span class="mu lb">DIFFICULTY</span></div>
+   <div class="${hl("files").trim()}"><span class="n29">${t.files.length}</span><span class="mu lb">FILES</span></div><div class="${hl("tokens").trim()}"><span class="n29">${t.tok}k</span><span class="mu lb">TOKENS</span></div><div class="${hl("cost").trim()}"><span class="n29">$${t.cost.toFixed(2)}</span><span class="mu lb">COST</span></div></div>
+   ${t.ops.length?`<div class="steps">${CFG.ops.map(o=>`<span class="step${t.ops.includes(o)?(st==="done"?" ok":" cur"):""}">${o}</span>`).join("")}</div>`:""}
+   ${files.length?`<div><div class="thumbs">${files.map(f=>`<div class="th" title="${esc(f)}"><img src="${CFG.dir}${encodeURI(f)}" alt="" onerror="this.parentNode.innerHTML='<span class=ni>NO IMAGE</span>'"></div>`).join("")}</div><div class="mu" style="margin-top:8px">${esc(files[0])}${t.files.length>1?` +${t.files.length-1} more`:""}</div></div>`:""}
+   <div class="acts">${acts.map(([to,l,p])=>`<button class="btn${p?" p":""}" data-st="${to}">${l}</button>`).join("")}</div></div>`; }
+function dockFile(i){ const w=W[i], lab={d:"DONE",f:"NEEDS REVIEW",p:"RUNNING",q:"QUEUED"}[w.st];
+  return `<div class="dk"><div class="row"><span class="lb">FILE ${String(i+1).padStart(3,"0")}</span><span class="pill ${w.st}">${lab}</span></div>
+   <div class="t18" style="word-break:break-all">${esc(w.name)}</div>
+   <div class="steps">${CFG.ops.map((o,j)=>`<span class="step${w.stage>j?" ok":w.stage===j&&w.st==="p"?" cur":""}">${o}</span>`).join("")}</div>
+   <div class="thumbs"><div class="th big"><img src="${CFG.dir}${encodeURI(w.base)}" alt="" onerror="this.parentNode.innerHTML='<span class=ni>NO IMAGE</span>'"></div></div>
+   ${w.st==="f"?`<div class="mu">Stopped at ${CFG.ops[Math.min(w.stage,CFG.ops.length-1)]}. Retry re-queues this file only.</div><div class="acts"><button class="btn p w" data-retry="${i}">RETRY</button></div>`:""}</div>`; }
+function renderDock(){ const k=S.hov&&S.hov!==S.sel?S.hov:S.sel, pre=!!(S.hov&&S.hov!==S.sel);
+  // Idle = verbs over nouns (Schaad): offer the next action instead of an empty box. Suggestion only; nothing is selected or changed until the user acts.
+  S.sug = k ? null : (ordered().find(t=>t.status==="todo"&&quad(t)==="DO FIRST")||null);
+  const body = k ? (k[0]==="t" ? dockTask(keyTask(k)) : dockFile(+k.slice(1))) : S.sug ? dockTask(S.sug)
+     : `<div class="dk"><div class="empty" style="padding:0"><b>Nothing urgent.</b>No open DO FIRST task is waiting to start.</div></div>`;
+  $("#dP").innerHTML=`<div class="ph"><span class="lb">${!k&&S.sug?"SUGGESTED NEXT":"DETAIL"}</span><span class="lb r">${!k?(S.sug?"DO FIRST #1":"—"):pre?"PREVIEW":"PINNED"}</span></div><div class="pb">${body}</div>`; }
+
+/* ---------- journey ---------- */
+function journey(){ const n=CFG.phases.length, live=CFG.livePhase, a=S.view==="a";
+  const cols=CFG.phases.map((p,i)=>{ const ts=TASKS.filter(t=>t.ph===i), st=i<live?"done":i===live?"live":"next", dn=ts.filter(t=>t.status==="done").length, on=S.phase===i;
+    if(a) return `<div class="jc ${st}${on?" on":""}"><button class="jn" data-ph="${i}" aria-pressed="${on}" aria-label="Phase ${i+1} ${p.n}, ${dn} of ${ts.length} done. Toggle filter."><i></i></button>
+      <div class="jl"><span class="lb">${p.n}</span><span class="mu">${dn}/${ts.length} · ${p.d}</span></div>
+      <div class="jst">${ts.map(t=>`<button class="gl${pass(t)?"":" dim"}" data-k="t${t.n}" aria-pressed="${S.sel==="t"+t.n}" aria-label="T${id2(t)} ${esc(t.name)}">${gsvg(t)}<span class="mono">${id2(t)}</span></button>`).join("")}</div></div>`;
+    return `<div class="zc ${st}${on?" on":""}"><button class="zh" data-ph="${i}" aria-pressed="${on}" aria-label="Phase ${i+1} ${p.n}. Toggle filter."><span class="lb">${String(i+1).padStart(2,"0")} ${p.n}</span><span class="mu">${p.s}</span></button>
+      <div class="zl">${ts.map(t=>`<button class="zchip${pass(t)?"":" dim"}" data-k="t${t.n}" aria-pressed="${S.sel==="t"+t.n}" aria-label="T${id2(t)} ${esc(t.name)}">${gsvg(t)}${id2(t)}</button>`).join("")}</div>
+      <div class="zf mu">${dn}/${ts.length} done · ${p.d}${st==="live"?" · ▲ NOW":""}</div></div>`; }).join("");
+  $("#jP").innerHTML=`<div class="ph"><span class="lb">JOURNEY</span><span class="lb r">PHASE ${String(live+1).padStart(2,"0")} / ${String(n).padStart(2,"0")} · ${CFG.phases[live].n} · <span id="tclk"></span></span></div>
+   <div class="pb">${a?`<div class="jA" style="--n:${n};--live:${live}"><div class="trk"></div><div class="trk dn"></div>${cols}</div>`:`<div class="jB" style="--n:${n}">${cols}</div>`}</div>`; }
+
+/* ---------- batch wall ---------- */
+let W=[], T0=Date.now(), doneLog=[];
+function buildWall(){ W=[]; doneLog=[]; const v=S.scale; for(let j=0;j<v;j++) FILES.forEach(f=>W.push({name:v>1?f.replace(/\.jpg$/,`__v${j+1}.png`):f,base:f,stage:0,st:"q"}));
+  const N=W.length, d=Math.round(N*.55); W.forEach((w,i)=>{ if(i<d){w.st="d";w.stage=3;} else if(i<d+4){w.st="p";w.stage=1+(i%2);} });
+  [.2,.4,.09].forEach(f=>{ const w=W[Math.round(N*f)]; if(w){w.st="f";w.stage=2;} }); }
+const cnt = () => { const c={d:0,p:0,f:0,q:0}; W.forEach(w=>c[w.st]++); return c; };
+function renderWall(){ const c=cnt(), ts=S.scale>1?10:28, gp=S.scale>1?2:4;
+  $("#bP").innerHTML=`<div class="ph"><span class="lb">BATCH</span><span class="lb mu">${CFG.ops.join(" → ")}</span><span class="lb r" id="bCount">[ ${c.d} / ${W.length} ]</span></div>
+   <div class="pb"><div class="wall${ts<16?" sm":""}" id="wall" style="--ts:${ts}px;gap:${gp}px">${W.map((w,i)=>`<i class="tl ${w.st}${S.sel==="f"+i?" sel":""}" data-k="f${i}" title="${esc(w.name)}"></i>`).join("")}</div></div>
+   <div class="bfoot" id="bFoot"></div>`; foot(); }
+function foot(){ const c=cnt(), now=Date.now(), recent=doneLog.filter(t=>now-t<60000), el=Math.min(60,(now-T0)/1000);
+  const rate=recent.length>=2&&el>=8?recent.length/el*60:null, left=c.q+c.p, eta=rate&&left?Math.round(left/rate*60):null;
+  const msg = left===0 ? "BATCH COMPLETE" : rate ? `≈ ${Math.round(rate)} / MIN · ETA ${String(Math.floor(eta/60)).padStart(2,"0")}:${String(eta%60).padStart(2,"0")}` : "CALIBRATING…";
+  const el2=$("#bFoot"); if(!el2) return;
+  el2.innerHTML=`<span><i class="sw d"></i>DONE ${c.d}</span><span><i class="sw p"></i>RUNNING ${c.p}</span><button class="chip" id="nextF" ${c.f?"":"disabled"} aria-label="Select next file that needs review"><i class="sw f"></i>NEEDS REVIEW ${c.f}</button><span><i class="sw"></i>QUEUED ${c.q}</span><span class="eta lb">${msg} · SIMULATED</span>`;
+  const bc=$("#bCount"); if(bc) bc.textContent=`[ ${c.d} / ${W.length} ]`; }
+function tick(){ const run=W.map((w,i)=>w.st==="p"?i:-1).filter(i=>i>=0); if(!run.length&&!W.some(w=>w.st==="q")) return foot();
+  const i=run[Math.floor(Math.random()*run.length)]; if(i!=null){ const w=W[i]; w.stage++; if(w.stage>=3){ w.st="d"; w.stage=3; doneLog.push(Date.now()); } }
+  if(W.filter(w=>w.st==="p").length<4){ const q=W.findIndex(w=>w.st==="q"); if(q>=0){ W[q].st="p"; W[q].stage=1; } }
+  $$("#wall .tl").forEach((e,j)=>{ e.className="tl "+W[j].st+(S.sel==="f"+j?" sel":""); }); foot(); if(S.sel&&S.sel[0]==="f"&&!S.hov) renderDock(); }
+
+/* ---------- header + all ---------- */
+function renderHeader(){ $("#proj").textContent=CFG.project;
+  $("#gMetric").innerHTML=`<span class="lb">INTENSITY</span>`+Object.entries(CFG.metrics).map(([k,m])=>`<button data-v="${k}" aria-pressed="${S.metric===k}">${m.short}</button>`).join("");
+  [["#gView",S.view],["#gTheme",S.theme]].forEach(([s,v])=>$$(s+" button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===v)));
+  $$("#gReview button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v==="bw"?S.bw:S.flip));
+  document.documentElement.dataset.theme=S.theme; document.documentElement.dataset.bw=S.bw?1:0; document.documentElement.dataset.flip=S.flip?1:0; }
+let PX=-1,PY=-1,KB=false;                                   // KB: keyboard drove the last change → a resting mouse must not hijack the dock
+document.addEventListener("pointermove",e=>{ if(Math.hypot(e.clientX-PX,e.clientY-PY)>2) KB=false; PX=e.clientX; PY=e.clientY; },{passive:true});
+function all(){ renderHeader(); renderQueue(); renderMatrix(); journey(); renderWall();
+  // re-rendering removes the node under the cursor without firing pointerout → recompute hover from the live pointer position
+  S.hov = S.drag||KB||PX<0 ? null : (document.elementFromPoint(PX,PY)?.closest?.("[data-k]")?.dataset.k||null); renderDock(); hl(); }
+
+/* ---------- events ---------- */
+document.addEventListener("click",e=>{
+  if(e.target.closest("#msvg")&&S.dragMoved){ S.dragMoved=false; return; }
+  const b=e.target.closest("button,[data-k]"); if(!b) return;
+  if(b.closest("header")){ const g=b.parentElement.id, v=b.dataset.v; if(!v) return;
+    if(g==="gView") S.view=v; else if(g==="gMetric") S.metric=v; else if(g==="gTheme") S.theme=v; else if(g==="gReview"){ if(v==="bw") S.bw=!S.bw; else S.flip=!S.flip; }
+    S.intro=false; return all(); }
+  if(b.dataset.f){ S.filter=b.dataset.f; return all(); }
+  if("clearphase" in b.dataset){ S.phase=null; return all(); }
+  if(b.dataset.ph!=null){ const i=+b.dataset.ph; S.phase=S.phase===i?null:i; return all(); }
+  if(b.dataset.st){ const t=keyTask(S.sel)||S.sug; if(t){ setStatus(t,b.dataset.st); all(); } return; }
+  if(b.dataset.retry){ const i=+b.dataset.retry, w=W[i]; H.push({t:"retry",i,st:w.st,stage:w.stage}); w.st="p"; w.stage=Math.min(w.stage,2); toast(`File ${String(i+1).padStart(3,"0")} re-queued`); return all(); }
+  if(b.id==="nextF"){ const fs=W.map((w,i)=>w.st==="f"?i:-1).filter(i=>i>=0); const cur=S.sel&&S.sel[0]==="f"?+S.sel.slice(1):-1; const nx=fs.find(i=>i>cur)??fs[0]; S.sel="f"+nx; S.pulse=true; return all(); }
+  if(b.id==="toastUndo") return undo();
+  const k=b.dataset.k; if(k&&!b.classList.contains("off")) select(k,{scroll:!b.classList.contains("qr")});
+});
+document.addEventListener("pointerover",e=>{ const k=e.target.closest?.("[data-k]")?.dataset.k; if(!k||S.drag||k===S.hov) return; S.hov=k; hl(); renderDock(); });
+document.addEventListener("pointerout",e=>{ const el=e.target.closest?.("[data-k]"); if(!el||el.contains(e.relatedTarget)) return; if(e.relatedTarget?.closest?.("[data-k]")) return; S.hov=null; hl(); renderDock(); });
+function hl(){ $$(".hv").forEach(e=>e.classList.remove("hv")); if(S.hov) $$(`[data-k="${S.hov}"]`).forEach(e=>e.classList.add("hv")); }
+/* drag a contact: live readout, guide lines, snap to 1 point, commit on release (undoable) */
+document.addEventListener("pointerdown",e=>{ const mk=e.target.closest?.("#msvg .mk"); if(!mk||e.button) return; const t=keyTask(mk.dataset.k); if(!t) return; const r=$("#msvg").getBoundingClientRect();
+  S.drag={t,x0:e.clientX,y0:e.clientY,r,moved:false,from:{imp:t.imp,urg:t.urg}}; mk.setPointerCapture?.(e.pointerId); });
+document.addEventListener("pointermove",e=>{ const d=S.drag; if(!d) return; if(!d.moved&&Math.hypot(e.clientX-d.x0,e.clientY-d.y0)<5) return; d.moved=true; S.dragMoved=true;
+  const [urg,imp]=G.inv(e.clientX-d.r.left,e.clientY-d.r.top), t=d.t; d.imp=clamp(Math.round(imp*100)/100,0,1); d.urg=clamp(Math.round(urg*100)/100,0,1);
+  const tmp={...t,imp:d.imp,urg:d.urg}, [x,y]=G.map(tmp), mk=$(`#msvg .mk[data-k="t${t.n}"]`);
+  mk?.setAttribute("transform",`translate(${x-G.map(t)[0]} ${y-G.map(t)[1]})`);
+  $("#drag").innerHTML=`<line x1="${x}" y1="0" x2="${x}" y2="${G.h}" stroke="var(--ink2)" stroke-dasharray="2 4" opacity=".5"/><line x1="0" y1="${y}" x2="${G.w}" y2="${y}" stroke="var(--ink2)" stroke-dasharray="2 4" opacity=".5"/>
+    <text class="k" x="${G.w/2}" y="${G.kind==="a"?16:12}" text-anchor="middle" style="fill:var(--ink)">T${id2(t)} · URG ${Math.round(d.urg*100)} · IMP ${Math.round(d.imp*100)} · ${quad(tmp)}</text>`; });
+document.addEventListener("pointerup",()=>{ const d=S.drag; if(!d) return; S.drag=null; if(!d.moved) return; const t=d.t; const imp=d.imp, urg=d.urg; t.imp=d.from.imp; t.urg=d.from.urg; setPos(t,imp,urg); S.sel="t"+t.n; S.pulse=true; all(); setTimeout(()=>{S.dragMoved=false},0); });
+document.addEventListener("keydown",e=>{ if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return; KB=true;
+  if((e.key==="z"||e.key==="Z")&&!e.shiftKey){ e.preventDefault(); return undo(); }
+  if(e.key==="Escape"){ S.sel=null; return all(); }
+  if(!e.key.startsWith("Arrow")) return; e.preventDefault();
+  const t=keyTask(S.sel);
+  if(e.shiftKey&&t){ const d=.05; setPos(t,t.imp+(e.key==="ArrowUp"?d:e.key==="ArrowDown"?-d:0),t.urg+(e.key==="ArrowRight"?d:e.key==="ArrowLeft"?-d:0)); return all(); }
+  if(e.key==="ArrowUp"||e.key==="ArrowDown"){ const ord=ordered().filter(pass); if(!ord.length) return; const i=ord.findIndex(x=>"t"+x.n===S.sel), j=clamp((i<0?(e.key==="ArrowDown"?0:ord.length-1):i+(e.key==="ArrowDown"?1:-1)),0,ord.length-1); S.sel="t"+ord[j].n; S.pulse=true; all(); $(`.qr[data-k="${S.sel}"]`)?.scrollIntoView({block:"nearest"}); $(`.qr[data-k="${S.sel}"]`)?.focus({preventScroll:true}); } });
+new ResizeObserver(()=>{ if(!S.drag) renderMatrix(); }).observe($("#mx"));
+setInterval(()=>{ const d=Date.now()-T0+1391000, p=n=>String(n).padStart(2,"0"), s=`T ${p(Math.floor(d/3600000))}:${p(Math.floor(d/60000)%60)}:${p(Math.floor(d/1000)%60)}`; $("#clock").textContent=s; const tc=$("#tclk"); if(tc) tc.textContent=s; },1000);
+if(qs.get("sel")){ const p=qs.get("sel"); S.sel=p; }
+buildWall(); all(); $("#clock").textContent="T 00:23:11";
+if(qs.get("sim")!=="0") setInterval(tick,1100);
+window.__deck={S,TASKS,H,get W(){return W},quad,pass,select,undo,all,ordered,get G(){return G}};
+</script>
+</body>
+</html>

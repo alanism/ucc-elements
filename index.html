@@ -198,6 +198,8 @@
       font-size: 12px;
       color: var(--text-muted);
     }
+
+.study-hub{margin-top:64px}.study-hub h2,.pattern-links h2{font-size:24px;letter-spacing:-.5px;margin:0 0 12px}.hub-intro{color:var(--text-muted);line-height:1.6;margin:0 0 28px}.hub-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.hub-study{display:flex;flex-direction:column;color:var(--text);text-decoration:none;border-top:1px solid var(--border);padding-top:18px;min-width:0}.hub-preview{display:grid;place-items:center;position:relative;overflow:hidden;aspect-ratio:16/10;background:#141416;padding:18px}.hub-preview img{position:absolute;top:18px;left:18px;width:calc(100% - 36px);height:calc(100% - 36px);object-fit:contain;min-height:0}.hub-study h3{font-size:19px;margin:18px 0 8px}.hub-study p{font-size:14px;color:var(--text-muted);line-height:1.6;margin:0 0 18px}.hub-study>span{font:12px var(--mono);color:var(--text);margin-top:auto}.hub-study:hover h3{text-decoration:underline;text-underline-offset:4px}.hub-study:focus-visible,.pattern-links a:focus-visible{outline:2px solid var(--accent);outline-offset:5px}.pattern-links{margin-top:48px;border-top:1px solid var(--border);padding-top:24px}.pattern-links a{display:inline-block;color:var(--text-muted);font-size:14px;line-height:1.5;margin:10px 24px 6px 0;text-underline-offset:4px}@media(max-width:650px){.hub-grid{grid-template-columns:1fr}.hub-study h3{font-size:18px}}
   </style>
 </head>
 <body>
@@ -216,23 +218,27 @@
       <article class="card">
         <div class="card-header">
           <h2 class="card-title">Enochian Knobs &amp; Keys</h2>
-          <span class="card-meta">v1.2 · Atlas Online</span>
+          <span class="card-meta">63 controls · 12 device studies · 5 dashboards</span>
         </div>
         <p class="card-desc">
-          Tactile hardware-inspired control atlas featuring Obsidian &amp; Ivory continuous dials, detented choir selectors, synchronized ARIA telemetry, WebAudio micro-haptics, and live countdown instruments.
+          Play keyboards and MIDI pads, mix sound, try tactile switches and timers, or explore Apple-inspired frames with blank screens. Every device uses a familiar name and opens as a working study.
         </p>
-        <div class="tags">
-          <span class="tag">ROTARY DIALS</span>
-          <span class="tag">DETENT SELECTORS</span>
-          <span class="tag">HOROLOGION</span>
-          <span class="tag">WEBAUDIO</span>
-          <span class="tag">MOTION</span>
-        </div>
+        <div class="tags"><span class="tag">KEYBOARDS</span><span class="tag">MIDI PADS</span><span class="tag">DJ CONTROLLERS</span><span class="tag">SPEAKERS</span><span class="tag">RECORDERS</span><span class="tag">DEVICE FRAMES</span></div>
         <div class="actions">
-          <a class="btn-primary" href="/enochian_knobs_keys">Launch Instrument Atlas &rarr;</a>
-          <a class="btn-secondary" href="/enochian_knobs_keys/toggle">Toggle Study &rarr;</a>
+          <a class="btn-primary" href="/UIUX">Open the full showcase &rarr;</a>
+          <a class="btn-secondary" href="/UIUX#dashboards">Dashboards &amp; HUDs &rarr;</a>
+          <a class="btn-secondary" href="/enochian_knobs_keys/toggle">Code toggle study &rarr;</a>
         </div>
       </article>
+<section class="study-hub" aria-labelledby="hub-devices"><h2 id="hub-devices">Devices &amp; instruments</h2><p class="hub-intro">Play, mix, record a demo, or explore a blank device frame.</p><div class="hub-grid"><!-- STUDY_LINKS -->
+<a class="hub-study" href="/UIUX/studies/keyboard/"><div class="hub-preview"><img class="preview-dark" src="/UIUX/previews/midi-keyboard-dark.png?v=20502a5e9938" width="1098" height="607" loading="lazy" alt="Enochian MIDI Keyboard — dark finish preview"></div><h3>Enochian MIDI Keyboard</h3><p>25 notes, touch strips, encoders, and chord pads. Optional MIDI output.</p><span>Open study →</span></a>
+<a class="hub-study" href="/UIUX/studies/midi-pad/"><div class="hub-preview"><img class="preview-dark" src="/UIUX/previews/midi-pad-dark.png?v=fff31cec95bc" width="1138" height="834" loading="lazy" alt="Enochian MIDI Pad — dark finish preview"></div><h3>Enochian MIDI Pad</h3><p>16 pads, three scenes, and a step sequencer. Optional MIDI output.</p><span>Open study →</span></a>
+<a class="hub-study" href="/UIUX/studies/op-1/"><div class="hub-preview"><img class="preview-dark" src="/UIUX/previews/synth-studio-dark.png?v=9776bd5cb404" width="1298" height="464" loading="lazy" alt="Enochian Synth Studio — dark finish preview"></div><h3>Enochian Synth Studio</h3><p>A playable keyboard, four encoders, and a note-event recorder.</p><span>Open study →</span></a>
+<a class="hub-study" href="/UIUX/studies/dj-decks/"><div class="hub-preview"><img class="preview-dark" src="/UIUX/previews/dj-controller-dark.png?v=f0d3ce7ee577" width="1120" height="614" loading="lazy" alt="Enochian DJ Controller — dark finish preview"></div><h3>Enochian DJ Controller</h3><p>Two jog decks, cues, EQ, channel faders, and a crossfader.</p><span>Open study →</span></a>
+<a class="hub-study" href="/UIUX/studies/speakers/"><div class="hub-preview"><img class="preview-dark" src="/UIUX/previews/portable-speaker-dark.png?v=e7b72476d69c" width="411" height="545" loading="lazy" alt="Enochian Portable Speaker — dark finish preview"></div><h3>Enochian Speakers</h3><p>Twin drivers, a carry handle, input selection, and playback controls.</p><span>Open study →</span></a>
+<a class="hub-study" href="/UIUX/studies/tp-7/"><div class="hub-preview"><img class="preview-dark" src="/UIUX/previews/audio-recorder-dark.png?v=a8cec6b5bf84" width="362" height="522" loading="lazy" alt="Enochian Audio Recorder — dark finish preview"></div><h3>Enochian Audio Recorder</h3><p>Record and replay locally generated demo audio. No microphone capture.</p><span>Open study →</span></a>
+<a class="hub-study" href="/UIUX/studies/apple-devices/"><div class="hub-preview"><img class="preview-dark" src="/UIUX/previews/desktop-setup-dark.png?v=773c4b845646" width="592" height="464" loading="lazy" alt="Enochian Desktop Setup — dark finish preview"></div><h3>Enochian Device Frames</h3><p>Display and mini desktop with an empty 16:9 screen slot.</p><span>Open study →</span></a>
+<!-- END_STUDY_LINKS --></div></section><nav class="pattern-links" aria-label="More control patterns"><h2>More control patterns</h2><a href="/UIUX#showcase-typing-keyboard">Enochian Typing Keyboard</a><a href="/UIUX#showcase-synth-keyboard">Enochian Synth Keyboard</a><a href="/UIUX#showcase-dj-mixer">Enochian DJ Mixer</a><a href="/UIUX#showcase-drum-machine">Enochian Drum Machine</a><a href="/UIUX#showcase-turntable">Enochian Turntable</a><a href="/UIUX#showcase-stereo-speakers">Enochian Stereo Speakers</a><a href="/UIUX#showcase-voice-assistant">Enochian Voice Assistant</a></nav>
     </main>
   </div>
 
