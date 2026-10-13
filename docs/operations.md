@@ -14,7 +14,9 @@ Open `http://127.0.0.1:8080/` or `/UIUX/`. The catalog has **63 original control
 
 `/UIUX#dashboards` contains Agent HUD, Build Board, Decision Matrix, Command Deck, Command Deck 02, and Light Table. Canonical prototypes remain under `prototypes/agent-hud/`; publication copies and their navigation wrappers are generated under `UIUX/studies/agent-hud/`. Each wrapper has a direct screen link for embedding and a return link to the collection. Coding harness, VR, and content-production use cases are described as intended uses; current demos run simulated data.
 
-The dedicated payload contains 58 public files: the existing 37 plus six dashboard wrappers, six screen pages, six preview images, one preview manifest, one synthetic thumbnail asset, and Light Table's optional public browser configuration. Dashboard page/image/config URLs carry content versions. The build checks the source hashes and captured preview hashes, and stops if they no longer agree. Extend `HUDS` in the generator for future additions and recapture their rendered screens before release. The hero and root dashboard counts are derived from that inventory.
+The dedicated payload contains 60 public files: the existing 37 plus six dashboard wrappers, six screen pages, eight preview images, one preview manifest, one synthetic thumbnail asset, and Light Table's optional public browser configuration. Dashboard page/image/config URLs carry content versions. The build checks the source hashes and captured preview hashes, and stops if they no longer agree. Extend `HUDS` in the generator for future additions and recapture their rendered screens before release. The hero and root dashboard counts are derived from that inventory.
+
+Agent HUD and Build Board previews follow the gallery Light/Dark switch (Ivory/Enochian). Their links carry the selected palette into the screen; the authored palette button also exposes Ivory Glass and, on the board, Ares. Capture both `*-hud.png` and `*-hud-light.png` when either source changes, and record their hashes in the dashboard manifest (`images` and `light_images`). `board.src.html` is the editable seed template; `board.html` is the seeded runtime.
 
 Agent HUD and Build Board keep their authored wide composition inside a horizontal scrolling container on phones. Matrix/deck pages retain their own responsive behavior and independent themes. The default public views use Enochian palettes; no external feed connects automatically. Optional machine-local command-deck thumbnails become a labeled synthetic frame in public copies.
 
@@ -68,7 +70,7 @@ python3 scripts/build_uiux.py
 python3 scripts/build_uiux.py --showcase
 ```
 
-The dedicated payload contains **37 public files**: one atlas page, four assets, seven study pages, 24 previews, and the preview manifest. The root payload adds tracked public source/Vietnamese runtime files and the landing page. It uses explicit public roots, excludes dotfiles, tests, source documentation, QA reports, untracked files, and local-only artifacts. Newly approved public source files must be staged or committed before the root build. Neither payload publishes the untracked `enochian_knobs_keys/index 2.html` or Weyland workspace.
+The dedicated payload contains **60 public files**, including the device and dashboard studies, captured previews, manifests, and optional Light Table configuration. The root payload adds tracked public source/Vietnamese runtime files and the landing page. It uses explicit public roots, excludes dotfiles, tests, source documentation, QA reports, untracked files, and local-only artifacts. Newly approved public source files must be staged or committed before the root build. Neither payload publishes the untracked `enochian_knobs_keys/index 2.html` or Weyland workspace.
 
 Both output directories require their build markers before the builder replaces them. Do not point Hosting at the raw repository.
 

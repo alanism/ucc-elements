@@ -1,5 +1,22 @@
 # Learning log
 
+## 2026-10-13 — Publish HUD palette updates
+
+- Changed: Published the revised Agent HUD and Build Board, including the editable board source template. Gallery Light/Dark selects Ivory/Enochian previews and passes that palette into each screen. Ivory Glass remains available through the authored palette button.
+- Failure / root cause: The previous gallery had one dark preview per HUD and wrappers pinned the dark default, so source palette additions were invisible in the collection.
+- Fix: Added two captured Ivory previews, explicit palette links, wrapper query propagation, and light-preview hash/inventory validation. Used an isolated release checkout to keep unrelated unfinished prototype edits out of the deployment.
+- Prevention / harness update: Dashboard tests now assert six visible previews in each gallery theme, palette-bearing links, Ivory/Glass cycling, and preserved pause/board interactions at desktop and phone widths.
+- Validation: Generator/syntax checks passed; repeat generation produced identical HTML/CSS/JS hashes. Dedicated/root builds passed (60/2264 files). The six-screen HUD regression and focused desktop/phone palette flow passed with no runtime, console, or missing-asset errors. Browser plugin unavailable; existing isolated Playwright environment used without new dependencies.
+- Remaining limits: Demos use simulated data; phone views preserve the authored horizontally scrollable composition.
+
+## 2026-10-13 — Light palettes for Agent HUD and Build Board
+
+- Changed: Added two palettes derived from the atlas light mode (`UIUX/atlas.css` `:root`: paper `#fff`, surface `#f5f5f6`, ink `#111`, muted `#65656a`, line `#dcdcdf`, red `#cc0000`) to `prototypes/agent-hud/index.html`, `board.html`, and `board.src.html`. **IVORY** is a fully light screen. **IVORY-GLASS** uses a light housing around an obsidian center display. Ember and amber are darkened for text on white (`#d9480f`, `#a86400`), and done renders as ink. Glows are removed outside the glass and pressed view pills are solid black. Palette buttons cycle every theme (board: ARES → ENOCHIAN → IVORY → IVORY-GLASS; HUD: ENOCHIAN → IVORY → IVORY-GLASS). Both pages also accept `?theme=` and save the choice to `localStorage.hudTheme`. The index.html colors were hardcoded, so they now come from tokens whose defaults equal the original values. Defaults are unchanged: board ARES, HUD ENOCHIAN.
+- Failure / root cause: The canvases composite with additive `lighter` blending and mix high-intensity ticks toward white. My first light version switched to `multiply` and mixed toward ink. Darkening ember turned it brown, so the working lane looked muddy.
+- Fix: Light palettes keep the stage hue true (`mixAmt:0`), so intensity changes opacity only. They composite with `multiply` and use one bloom pass instead of two.
+- Validation: Headless Chrome via CDP. Original vs patched computed-style fingerprints: board ARES and ENOCHIAN showed 0 diffs over 34 probes each, including the canvas ground pixel. The HUD's ENOCHIAN diffs were limited to random live roster state, and every value was an original color. A fresh profile defaults to ENOCHIAN. Theme-button cycling was asserted. No exceptions or console errors in any palette. Screenshots covered every palette plus the board field view and inspector in both light palettes.
+- Remaining limits: The published `UIUX/studies/agent-hud/` copies are not regenerated or deployed, so run the generator and release to publish. The board wrapper still pins `theme=enochian`. `board.src.html` is still untracked.
+
 ## 2026-10-13 — Light Table dashboard addition
 
 - Changed: Added Enochian Light Table as the sixth dashboard, with Fleet, Mission, Operator, and Devices screens, a captured preview, search aliases, versioned wrapper/direct-screen links, and curated release inclusion. Preserved its authored layout and actions; externalized the embedded public browser token after GitHub's push protection rejected it. Derived hero/root dashboard counts from the gallery inventory so future additions cannot leave stale copy.

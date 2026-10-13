@@ -7,21 +7,43 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{
+:root,[data-theme=enochian]{
   --void:#050506; --paper:#09090a; --surface:#0f0f11; --tile:#171719; --line:#1f1f23; --line2:#3a3a3e;
   --ink:#f7f7f8; --ink2:#c9c9ce; --muted:#7b7b82; --dim:#4a4a50;
   --red:#cc0000; --ember:#ff5a1f; --amber:#f4a934; --hot:#fff3e6;
+  --p1:#0e0e10; --p0:#0a0a0b; --scan:rgba(255,255,255,.012); --head:#e6e6e9; --num:#a9adbd; --r1:#121215; --r3:#2a2a2e; --well:#0d0d0f;
+  --nm:#dcdce0; --ag:#d8d8dc; --red-hi:#ff4040; --review-ink:#ff3b30; --done-glow:0 0 8px rgba(255,90,31,.6); --red-rgb:204,0,0;
+  --rule:#141417; --zebra:rgba(255,255,255,.012); --seg:#1d1d21;
+}
+[data-theme=ivory],[data-theme=ivory-glass]{ /* Enochian Elements light mode (UIUX atlas.css :root): paper #fff, surface #f5f5f6,
+   ink #111, muted #65656a, line #dcdcdf, signal red #cc0000. Ember/amber deepened so text holds on white; done = ink. */
+  --void:#ffffff; --paper:#ffffff; --surface:#f5f5f6; --tile:#ececee; --line:#dcdcdf; --line2:#c9c9cd;
+  --ink:#111111; --ink2:#2c2c30; --muted:#65656a; --dim:#8d8d92;
+  --red:#cc0000; --ember:#d9480f; --amber:#a86400; --hot:#111111;
+  --p1:#f8f8f9; --p0:#f5f5f6; --scan:transparent; --head:#111111; --num:#111111; --r1:#ffffff; --r3:#dcdcdf; --well:#f5f5f6;
+  --nm:#111111; --ag:#2c2c30; --red-hi:#b00000; --review-ink:#b00000; --done-glow:none; --red-rgb:204,0,0;
+  --rule:#e6e6e9; --zebra:rgba(17,17,17,.022); --seg:#e6e6e9;
+}
+[data-theme=ivory-glass] #center{ /* obsidian display glass set into the ivory housing (Enochian tokens) */
+  --void:#050506; --paper:#09090a; --surface:#0f0f11; --tile:#171719; --line:#1f1f23; --line2:#3a3a3e;
+  --ink:#f7f7f8; --ink2:#c9c9ce; --muted:#7b7b82; --dim:#4a4a50;
+  --red:#cc0000; --ember:#ff5a1f; --amber:#f4a934; --hot:#fff3e6;
+  --p1:#0e0e10; --p0:#0a0a0b; --scan:rgba(255,255,255,.012); --head:#e6e6e9; --num:#a9adbd; --r1:#121215; --r3:#2a2a2e; --well:#0d0d0f;
+  --nm:#dcdce0; --ag:#d8d8dc; --red-hi:#ff4040; --review-ink:#ff3b30; --done-glow:0 0 8px rgba(255,90,31,.6); --red-rgb:204,0,0;
+  --rule:#141417; --zebra:rgba(255,255,255,.012); --seg:#1d1d21;
+}
+:root{
   --sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--void);color:var(--ink);font-family:var(--sans);overflow:hidden}
 .hud{display:grid;grid-template-columns:300px 1fr 380px;grid-template-rows:1fr 210px;gap:10px;height:100vh;padding:10px}
-.panel{position:relative;overflow:hidden;background:linear-gradient(180deg,#0e0e10,#0a0a0b);border:1px solid var(--line);border-radius:3px}
-.panel::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.012) 0 1px,transparent 1px 3px)}
-.h{font-size:15px;font-weight:500;color:#e6e6e9;letter-spacing:.01em;margin:0}
+.panel{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--p1),var(--p0));border:1px solid var(--line);border-radius:3px}
+.panel::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,var(--scan) 0 1px,transparent 1px 3px)}
+.h{font-size:15px;font-weight:500;color:var(--head);letter-spacing:.01em;margin:0}
 .cap{font-size:11px;color:var(--muted);letter-spacing:.04em}
-.big{font-weight:300;font-size:64px;line-height:1;letter-spacing:-.02em;color:#a9adbd;font-variant-numeric:tabular-nums}
+.big{font-weight:300;font-size:64px;line-height:1;letter-spacing:-.02em;color:var(--num);font-variant-numeric:tabular-nums}
 .heat{background:linear-gradient(90deg,var(--red),var(--ember) 40%,var(--amber) 70%,var(--hot));-webkit-background-clip:text;background-clip:text;color:transparent}
 .icon{position:absolute;top:18px;right:18px;width:22px;height:22px;border:1px solid var(--line2);border-radius:50%;display:grid;place-items:center;color:var(--muted);font:500 10px var(--mono);background:none;cursor:pointer}
 .icon:hover,.icon:focus-visible{color:var(--ink);border-color:var(--red);outline:none}
@@ -31,18 +53,18 @@ html,body{margin:0;height:100%;background:var(--void);color:var(--ink);font-fami
 .sub{display:flex;gap:22px;margin:16px 12px 26px}
 .sub b{display:block;font:300 24px var(--sans);color:var(--ink2);font-variant-numeric:tabular-nums}
 .roster{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
-.roster li{display:grid;grid-template-columns:18px 38px 1fr auto;align-items:center;gap:10px;padding:9px 12px 9px 10px;background:#121215;border-radius:2px;transition:background .3s}
-.roster li.live{background:linear-gradient(90deg,rgba(204,0,0,.10),#121215 60%)}
+.roster li{display:grid;grid-template-columns:18px 38px 1fr auto;align-items:center;gap:10px;padding:9px 12px 9px 10px;background:var(--r1);border-radius:2px;transition:background .3s}
+.roster li.live{background:linear-gradient(90deg,rgba(var(--red-rgb),.10),var(--r1) 60%)}
 .rank{font:400 10px var(--mono);color:var(--dim)}
-.sigil{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:500 13px var(--sans);color:var(--ink);position:relative;background:conic-gradient(var(--red) var(--share,0deg),#2a2a2e 0)}
-.sigil::before{content:"";position:absolute;inset:3px;border-radius:50%;background:#0d0d0f}
+.sigil{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:500 13px var(--sans);color:var(--ink);position:relative;background:conic-gradient(var(--red) var(--share,0deg),var(--r3) 0)}
+.sigil::before{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--well)}
 .sigil span{position:relative}
-.nm{font-size:14px;color:#dcdce0}
+.nm{font-size:14px;color:var(--nm)}
 .md{font:400 10px var(--mono);color:var(--muted);margin-top:2px}
 .st{font:500 9px var(--mono);letter-spacing:.08em;color:var(--dim);text-align:right}
 .st i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--dim);margin-right:6px;vertical-align:1px}
 .st.working{color:var(--ember)} .st.working i{background:var(--ember);box-shadow:0 0 8px var(--ember)}
-.st.review{color:#ff4040} .st.review i{background:var(--red);box-shadow:0 0 8px var(--red)}
+.st.review{color:var(--red-hi)} .st.review i{background:var(--red);box-shadow:0 0 8px var(--red)}
 .st b{display:block;font-weight:400;color:var(--muted);margin-top:3px}
 /* center */
 #center{padding:0}
@@ -56,6 +78,7 @@ html,body{margin:0;height:100%;background:var(--void);color:var(--ink);font-fami
 .ctl button,.gear{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--muted);background:none;color:var(--muted);cursor:pointer;font:500 9px var(--mono)}
 .ctl button[aria-pressed=true]{border-color:var(--red);color:var(--red)}
 .gear{position:absolute;left:22px;bottom:18px;border-radius:5px}
+.ctl button.thm{width:auto;border-radius:12px;padding:0 9px;letter-spacing:.1em;color:var(--red);border-color:var(--line2)}
 .ctl button:hover,.gear:hover,.ctl button:focus-visible,.gear:focus-visible{border-color:var(--ink);color:var(--ink);outline:none}
 /* stream */
 #right{padding:26px 0 0 18px}
@@ -63,11 +86,11 @@ html,body{margin:0;height:100%;background:var(--void);color:var(--ink);font-fami
 .clock span{font:400 11px var(--mono);color:var(--muted)}
 #stream{list-style:none;margin:14px 0 0;padding:0;font:400 11.5px/1.35 var(--mono);position:absolute;left:0;right:0;top:92px;bottom:0;overflow:hidden;
   -webkit-mask-image:linear-gradient(180deg,#000 75%,transparent);mask-image:linear-gradient(180deg,#000 75%,transparent)}
-#stream li{padding:7px 18px 8px;border-top:1px solid #141417;animation:in .5s ease-out}
-#stream li:nth-child(odd){background:rgba(255,255,255,.012)}
-@keyframes in{from{opacity:0;transform:translateY(-6px);background:rgba(204,0,0,.18)}}
-.ts{color:var(--dim)} .id{color:var(--dim)} .k-created{color:var(--ink2)} .k-working{color:var(--ember)} .k-review{color:#ff3b30} .k-done{color:var(--hot);text-shadow:0 0 8px rgba(255,90,31,.6)}
-.ag{color:#d8d8dc} .pj{color:var(--amber)} .tk{color:var(--muted)}
+#stream li{padding:7px 18px 8px;border-top:1px solid var(--rule);animation:in .5s ease-out}
+#stream li:nth-child(odd){background:var(--zebra)}
+@keyframes in{from{opacity:0;transform:translateY(-6px);background:rgba(var(--red-rgb),.18)}}
+.ts{color:var(--dim)} .id{color:var(--dim)} .k-created{color:var(--ink2)} .k-working{color:var(--ember)} .k-review{color:var(--review-ink)} .k-done{color:var(--hot);text-shadow:var(--done-glow)}
+.ag{color:var(--ag)} .pj{color:var(--amber)} .tk{color:var(--muted)}
 /* bottom */
 .bottom{grid-column:1/-1;display:grid;grid-template-columns:300px 1fr 1fr;gap:10px}
 .bottom .panel{padding:26px 26px 18px}
@@ -83,19 +106,24 @@ html,body{margin:0;height:100%;background:var(--void);color:var(--ink);font-fami
 .meters{display:flex;flex-direction:column;gap:9px;padding-bottom:4px}
 .meter{display:grid;grid-template-columns:86px 1fr 46px;gap:10px;align-items:center;font:400 10px var(--mono);color:var(--muted)}
 .segs{display:grid;grid-template-columns:repeat(24,1fr);gap:2px;height:9px}
-.segs i{background:#1d1d21;border-radius:1px}
+.segs i{background:var(--seg);border-radius:1px}
 .segs i.on{background:var(--ink2)} .segs i.on.w{background:var(--amber)} .segs i.on.r{background:var(--red);box-shadow:0 0 6px var(--red)}
 .note{position:absolute;right:26px;bottom:14px;font:400 9.5px var(--mono);color:var(--dim)}
 /* wire drawer */
-dialog{background:#0d0d0f;color:var(--ink);border:1px solid var(--line2);border-radius:4px;width:min(720px,92vw);padding:22px}
+dialog{background:var(--well);color:var(--ink);border:1px solid var(--line2);border-radius:4px;width:min(720px,92vw);padding:22px}
 dialog::backdrop{background:rgba(0,0,0,.6)}
-dialog textarea,dialog input,dialog select{width:100%;background:#09090a;color:var(--ink2);border:1px solid var(--line2);border-radius:2px;font:400 11.5px var(--mono);padding:8px}
+dialog textarea,dialog input,dialog select{width:100%;background:var(--paper);color:var(--ink2);border:1px solid var(--line2);border-radius:2px;font:400 11.5px var(--mono);padding:8px}
 dialog textarea{height:150px;resize:vertical}
 dialog label{display:block;font:500 10px var(--mono);letter-spacing:.08em;color:var(--muted);margin:12px 0 5px}
 dialog .row{display:flex;gap:10px;align-items:center;margin-top:14px}
-dialog button{background:#171719;color:var(--ink);border:1px solid var(--line2);border-radius:2px;padding:7px 14px;font:500 11px var(--mono);cursor:pointer}
+dialog button{background:var(--tile);color:var(--ink);border:1px solid var(--line2);border-radius:2px;padding:7px 14px;font:500 11px var(--mono);cursor:pointer}
 dialog button.p{background:var(--red);border-color:var(--red)}
 #wireMsg{font:400 11px var(--mono);color:var(--amber);margin-left:auto}
+/* light palettes: flat ink on paper like the atlas (the glass screen keeps its glow) */
+:is([data-theme=ivory],[data-theme=ivory-glass]) :is(.st i,.segs i.on.r){box-shadow:none}
+:is([data-theme=ivory],[data-theme=ivory-glass]) .k-done{font-weight:500}
+:is([data-theme=ivory],[data-theme=ivory-glass]) dialog button.p{color:#fff}
+:is([data-theme=ivory],[data-theme=ivory-glass]) dialog::backdrop{background:rgba(17,17,17,.32)}
 @media (prefers-reduced-motion:reduce){.sweep,#stream li{animation:none}}
 </style>
 </head>
@@ -122,7 +150,7 @@ dialog button.p{background:var(--red);border-color:var(--red)}
     <div class="sweep"></div>
     <div class="ov ttl"><p class="h">Agent Activity</p><div class="big" data-n="events">0</div><p class="cap" style="margin-top:12px">Events today</p></div>
     <button class="gear" id="wireBtn" title="Wire a data source" aria-label="Wire a data source">⚙</button>
-    <div class="ctl"><span id="cd">20 sec</span><button id="pause" aria-pressed="false" aria-label="Pause">II</button></div>
+    <div class="ctl"><button class="thm" id="themeBtn" title="Switch palette">ENOCHIAN</button><span id="cd">20 sec</span><button id="pause" aria-pressed="false" aria-label="Pause">II</button></div>
   </section>
 
   <section class="panel" id="right" aria-label="Data stream">
@@ -199,6 +227,25 @@ const CFG = {
 document.getElementById("unitLabel").textContent = CFG.unitLabel;
 document.getElementById("map").value = JSON.stringify(CFG.map, null, 0);
 const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+// canvas light per palette (CSS tokens live in :root / [data-theme]). Light palettes: ink on paper (multiply),
+// one soft bloom, hue stays true (intensity = opacity only). ivory-glass keeps the obsidian field, light housing.
+const THEMES = {
+  enochian: { ground:"#0a0a0b", label:"#c9c9ce", blend:"lighter", bloom:2, mixAmt:1,
+    core:"255,246,236", flare:"255,90,31", edge:"204,0,0", hstreak:"255,60,40", vstreak:"255,120,80",
+    stages:{ created:[201,201,206], working:[255,90,31], review:[204,0,0], done:[255,243,230] },
+    grid:["#1b1b1f","#5a1010","#cc0000","#ff5a1f","#fff3e6"] },
+  ivory: { ground:"#f6f6f7", label:"#65656a", blend:"multiply", bloom:1, mixAmt:0,
+    core:"204,0,0", flare:"204,0,0", edge:"204,0,0", hstreak:"204,0,0", vstreak:"217,72,15",
+    stages:{ created:[141,141,146], working:[217,72,15], review:[204,0,0], done:[17,17,17] },
+    grid:["#e6e6e9","#efb3b3","#cc0000","#8a0000","#111111"] },
+};
+THEMES["ivory-glass"] = { ...THEMES.enochian, grid:THEMES.ivory.grid };   // throughput grid sits in the ivory housing
+const THEME_ORDER = ["enochian", "ivory", "ivory-glass"];
+let TH = THEMES.enochian;
+function applyTheme(name){ if (!THEMES[name]) name = "enochian"; TH = THEMES[name]; document.documentElement.dataset.theme = name;
+  for (const st of CFG.stages) st.rgb = TH.stages[st.id];
+  document.getElementById("themeBtn").textContent = name.toUpperCase(); try { localStorage.hudTheme = name; } catch {} }
+applyTheme(new URLSearchParams(location.search).get("theme") || (()=>{ try { return localStorage.hudTheme; } catch { return null; } })() || "enochian");
 
 /* ============ STATE ============ */
 const S = { events:[], tok:[], agents:new Map(), projects:new Set(), tasks:new Map(), flares:[],
@@ -341,7 +388,7 @@ function place(lane, t01, inten){
   return { x: lerp(hx, vx, q), y: lerp(hy, vy, q),
            w: lerp(1.5+inten*2.5, lane.vw*.82, q), h: lerp(lane.hh*.82, 1.5+inten*2.5, q) };
 }
-function mix(rgb, w){ return rgb.map(c => Math.round(c + (255-c)*w)); }
+function mix(rgb, w){ const k = TH.mixAmt; return rgb.map(c => Math.round(c + (255-c)*w*k)); }
 function draw(tp){
   if (layoutDirty || !L) layout();
   const dt = 1/60; kTarget = kTarget; k += ((kTarget) - k) * (RM ? 1 : Math.min(1, dt*1.6));
@@ -376,18 +423,18 @@ function draw(tp){
     const p = place(ln, 1 - (T - f.e.ts)/CFG.windowMs, 1), a = Math.pow(1-life, 2);
     const r = 30 + 110*a;
     const g = cx.createRadialGradient(p.x,p.y,0,p.x,p.y,r);
-    g.addColorStop(0, `rgba(255,246,236,${.9*a})`); g.addColorStop(.25, `rgba(255,90,31,${.45*a})`); g.addColorStop(1, "rgba(204,0,0,0)");
+    g.addColorStop(0, `rgba(${TH.core},${.9*a})`); g.addColorStop(.25, `rgba(${TH.flare},${.45*a})`); g.addColorStop(1, `rgba(${TH.edge},0)`);
     cx.fillStyle = g; cx.fillRect(p.x-r, p.y-r, r*2, r*2);
-    cx.fillStyle = `rgba(255,60,40,${.16*a})`; cx.fillRect(0, p.y-1, W, 2);          // horizontal streak
-    cx.fillStyle = `rgba(255,120,80,${.10*a})`; cx.fillRect(p.x-1, 0, 2, H);          // vertical streak
+    cx.fillStyle = `rgba(${TH.hstreak},${.16*a})`; cx.fillRect(0, p.y-1, W, 2);          // horizontal streak
+    cx.fillStyle = `rgba(${TH.vstreak},${.10*a})`; cx.fillRect(p.x-1, 0, 2, H);          // vertical streak
   }
   cx.globalCompositeOperation = "source-over";
   // composite: obsidian ground → wide bloom → tight bloom → sharp light
   ox.setTransform(1,0,0,1,0,0); ox.globalCompositeOperation = "source-over"; ox.filter = "none"; ox.globalAlpha = 1;
-  ox.fillStyle = "#0a0a0b"; ox.fillRect(0,0,cv.width,cv.height);
+  ox.fillStyle = TH.ground; ox.fillRect(0,0,cv.width,cv.height);
   bx.globalCompositeOperation = "copy"; bx.filter = RM ? "none" : "blur(3px)"; bx.imageSmoothingQuality = "high"; bx.drawImage(tc,0,0,bc.width,bc.height);
-  ox.globalCompositeOperation = "lighter"; ox.imageSmoothingQuality = "high";
-  ox.drawImage(bc,0,0,cv.width,cv.height); ox.drawImage(bc,0,0,cv.width,cv.height);
+  ox.globalCompositeOperation = TH.blend; ox.imageSmoothingQuality = "high";
+  for (let i = 0; i < TH.bloom; i++) ox.drawImage(bc,0,0,cv.width,cv.height);
   ox.globalAlpha = 1; ox.drawImage(tc,0,0);
   ox.globalCompositeOperation = "source-over";
   cx.clearRect(0,0,W,H); // reuse light layer for chrome (lines/labels), drawn sharp below
@@ -405,7 +452,7 @@ function draw(tp){
     const hy = (first.hy + last.hy + last.hh)/2, vx = (first.vx + last.vx + last.vw)/2;
     const x = lerp(30, vx - 20, q), y = lerp(hy, H-30, q);
     cx.globalAlpha = 1; cx.fillStyle = `rgb(${st.rgb})`; cx.beginPath(); cx.arc(x+4, y-6, 4, 0, 7); cx.fill();
-    cx.fillStyle = "#c9c9ce"; cx.fillText(st.label, x+16, y-6);
+    cx.fillStyle = TH.label; cx.fillText(st.label, x+16, y-6);
     cx.fillStyle = `rgb(${st.rgb})`; cx.font = "400 10px 'IBM Plex Mono',monospace"; cx.fillText(counts[s], x+16, y+8);
     cx.font = "500 10px 'IBM Plex Sans',sans-serif";
   });
@@ -429,7 +476,7 @@ function drawGrid(){
     if (e.stage==="review" || e.stage==="done"){ const c = cols-1-Math.floor(age/bucket), a = S.agents.get(e.agent); if (a) m[a.lane*cols+c] += e.stage==="done"?1:.5; } }
   for (let y=0;y<rows;y++) for (let c=0;c<cols;c++){
     const v = Math.min(1, m[y*cols+c]/3), rr = Math.max(1.6, Math.min(cw,ch)*.32);
-    gx.fillStyle = v===0 ? "#1b1b1f" : v<.34 ? "#5a1010" : v<.67 ? "#cc0000" : v<1 ? "#ff5a1f" : "#fff3e6";
+    gx.fillStyle = TH.grid[v===0 ? 0 : v<.34 ? 1 : v<.67 ? 2 : v<1 ? 3 : 4];
     gx.beginPath(); gx.arc(c*cw+cw/2, y*ch+ch/2, rr, 0, 7); gx.fill(); }
 }
 
@@ -469,6 +516,7 @@ function streamLine(e, a){
 }
 
 /* ============ controls ============ */
+$("#themeBtn").onclick = () => applyTheme(THEME_ORDER[(THEME_ORDER.indexOf(document.documentElement.dataset.theme) + 1) % THEME_ORDER.length]);
 $("#pause").onclick = ev => { S.paused = !S.paused; if (S.paused) S.pauseAt = Date.now(); else nextState = performance.now()+CFG.stateMs;
   ev.currentTarget.setAttribute("aria-pressed", S.paused); ev.currentTarget.textContent = S.paused ? "▶" : "II"; };
 document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => { S.winTok = +b.dataset.w;

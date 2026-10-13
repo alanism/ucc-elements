@@ -77,6 +77,15 @@ def atlas_files():
     for record in hud_manifest['images']:
         if hashlib.sha256((ROOT/'UIUX/previews'/f'{record["slug"]}-hud.png').read_bytes()).hexdigest()!=record['sha256']:
             raise SystemExit('Dashboard preview changed after capture')
+    expected_light={h['slug'] for h in HUDS if h.get('palette_previews')}
+    light_previews=hud_manifest.get('light_images', [])
+    if {r['slug'] for r in light_previews}!=expected_light or len(light_previews)!=len(expected_light):
+        raise SystemExit('Dashboard light preview inventory does not match the showcase')
+    for record in light_previews:
+        relative=Path(f'UIUX/previews/{record["slug"]}-hud-light.png')
+        if hashlib.sha256((ROOT/relative).read_bytes()).hexdigest()!=record['sha256']:
+            raise SystemExit('Dashboard light preview changed after capture')
+        files.add(relative)
     for hud in HUDS:
         if hashlib.sha256((ROOT/'prototypes/agent-hud'/hud['source']).read_bytes()).hexdigest()!=hud_manifest['source_hashes'].get(hud['source']):
             raise SystemExit(f'Recapture dashboard preview after changing {hud["source"]}')

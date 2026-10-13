@@ -20,6 +20,21 @@
   --red:#d62832; --red-hi:#fc6253; --ember:#f2701e; --amber:#e8924f; --hot:#fff1e8;
   --red-rgb:214,40,50; --ember-rgb:242,112,30; --hot-rgb:255,241,232; --done-rgb:120,184,96; --card-rgb:4,16,22;
 }
+[data-theme=ivory],[data-theme=ivory-glass]{ /* Enochian Elements light mode (UIUX atlas.css :root): paper #fff, surface #f5f5f6,
+   ink #111, muted #65656a, line #dcdcdf, signal red #cc0000. Ember/amber deepened so text holds on white; done = ink. */
+  --void:#ffffff; --p0:#f5f5f6; --p1:#f8f8f9; --r1:#ffffff; --r2:#ececee; --r3:#dcdcdf; --sel:#fbeeee;
+  --line:#dcdcdf; --line2:#c9c9cd; --litline:#e09a9a;
+  --ink:#111111; --ink2:#2c2c30; --num:#111111; --muted:#65656a; --dim:#8d8d92;
+  --red:#cc0000; --red-hi:#b00000; --ember:#d9480f; --amber:#a86400; --hot:#111111;
+  --red-rgb:204,0,0; --ember-rgb:217,72,15; --hot-rgb:17,17,17; --done-rgb:17,17,17; --card-rgb:255,255,255;
+}
+[data-theme=ivory-glass] #center{ /* obsidian display glass set into the ivory housing (Enochian tokens) */
+  --void:#050506; --p0:#0a0a0b; --p1:#0e0e10; --r1:#121215; --r2:#1c1c20; --r3:#2a2a2e; --sel:#1a1214;
+  --line:#1f1f23; --line2:#3a3a3e; --litline:#4a3030;
+  --ink:#f7f7f8; --ink2:#c9c9ce; --num:#a9adbd; --muted:#7b7b82; --dim:#4a4a50;
+  --red:#cc0000; --red-hi:#ff4040; --ember:#ff5a1f; --amber:#f4a934; --hot:#fff3e6;
+  --red-rgb:204,0,0; --ember-rgb:255,90,31; --hot-rgb:255,243,230; --done-rgb:255,225,205; --card-rgb:14,14,17;
+}
 :root{
   --sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
@@ -188,6 +203,17 @@ dialog button{background:var(--r2);color:var(--ink);border:1px solid var(--line2
 dialog button.p{background:var(--red);border-color:var(--red)}
 #wireMsg{font:400 11px var(--mono);color:var(--amber);margin-left:auto}
 
+/* ---------- light palettes: flat ink on paper (glass screen keeps its glow) ---------- */
+:is([data-theme=ivory],[data-theme=ivory-glass]) :is(.st i,.segs i.on.r,.cells i,.pill i){box-shadow:none}
+:is([data-theme=ivory],[data-theme=ivory-glass]) #stream li:nth-child(odd){background:rgba(17,17,17,.022)}
+:is([data-theme=ivory],[data-theme=ivory-glass]) .k-done{text-shadow:none;font-weight:500}
+:is([data-theme=ivory],[data-theme=ivory-glass]) dialog button.p{color:#fff}
+:is([data-theme=ivory],[data-theme=ivory-glass]) dialog::backdrop{background:rgba(17,17,17,.32)}
+:is([data-theme=ivory],[data-theme=ivory-glass]) .panel:not(#center)::after{background:none}
+[data-theme=ivory] .panel::after{background:none}
+[data-theme=ivory] :is(.col h2 i,.pres,.chip i,.pips i.ok){box-shadow:none}
+[data-theme=ivory] .views button[aria-pressed=true]{background:#111;color:#fff;box-shadow:none}
+[data-theme=ivory] .card{box-shadow:0 1px 0 rgba(17,17,17,.04)}
 @media (prefers-reduced-motion:reduce){.sweep,#stream li,.pres,.chip.fresh{animation:none}.board,.card,#field{transition:none}}
 </style>
 </head>
@@ -290,6 +316,13 @@ const CFG = {
     ares: { ground:"#02090d", label:"#cdcacb", core:"242,255,236", flare:"120,184,96", streak:"214,40,50",
       wireDone:"120,184,96", wireBlock:"214,40,50", wireNext:"242,112,30",
       stages:{ waiting:[84,110,124], planned:[228,226,230], working:[214,40,50], review:[242,112,30], done:[120,184,96] } },
+    // light palettes: ink on paper composites with multiply, one soft bloom; hue stays true (intensity = opacity only)
+    ivory: { ground:"#f6f6f7", label:"#65656a", core:"204,0,0", flare:"204,0,0", streak:"204,0,0", blend:"multiply", bloom:1, mixAmt:0,
+      wireDone:"17,17,17", wireBlock:"204,0,0", wireNext:"217,72,15",
+      stages:{ waiting:[154,154,160], planned:[101,101,106], working:[217,72,15], review:[204,0,0], done:[17,17,17] } },
+    "ivory-glass": { ground:"#0a0a0b", label:"#c9c9ce", core:"255,246,236", flare:"255,90,31", streak:"255,60,40",
+      wireDone:"255,243,230", wireBlock:"204,0,0", wireNext:"255,90,31",
+      stages:{ waiting:[110,110,118], planned:[201,201,206], working:[255,90,31], review:[204,0,0], done:[255,243,230] } },
   },
   stateAlias: { WAITING:"waiting", BLOCKED:"waiting", BACKLOG:"planned", TODO:"planned", PLANNED:"planned",
     IN_PROGRESS:"working", DOING:"working", WORKING:"working", REVIEW:"review", IN_REVIEW:"review", DONE:"done", VERIFIED:"done" },
@@ -601,7 +634,7 @@ function colGeom(){ // offset* ignores CSS transforms → stays aligned while th
   return [...boardEl.children].map(el => { const head = el.firstElementChild;
     return {x:boardEl.offsetLeft + el.offsetLeft, w:el.offsetWidth, y:boardEl.offsetTop + el.offsetTop + head.offsetHeight + 4, h:Math.max(40, el.offsetHeight - head.offsetHeight - 4)}; });
 }
-const mix = (rgb, w) => rgb.map(c => Math.round(c + (255-c)*w));
+const mix = (rgb, w) => { const k = TH.mixAmt ?? 1; return rgb.map(c => Math.round(c + (255-c)*w*k)); };
 
 function drawField(){
   const cols = colGeom(), T = now(), nA = Math.max(1, B.agents.size);
@@ -625,7 +658,7 @@ function drawField(){
   cx.globalCompositeOperation = "source-over";
   ox.setTransform(1,0,0,1,0,0); ox.globalCompositeOperation = "source-over"; ox.fillStyle = TH.ground; ox.fillRect(0,0,fieldCv.width,fieldCv.height);
   bx.globalCompositeOperation = "copy"; bx.filter = RM ? "none" : "blur(3px)"; bx.drawImage(tc,0,0,bc.width,bc.height);
-  ox.globalCompositeOperation = "lighter"; ox.drawImage(bc,0,0,fieldCv.width,fieldCv.height); ox.drawImage(bc,0,0,fieldCv.width,fieldCv.height); ox.drawImage(tc,0,0);
+  ox.globalCompositeOperation = TH.blend || "lighter"; for (let i = 0; i < (TH.bloom ?? 2); i++) ox.drawImage(bc,0,0,fieldCv.width,fieldCv.height); ox.drawImage(tc,0,0);
   ox.globalCompositeOperation = "source-over";
   if (B.view === "field"){ // column heads stay readable when the cards have receded
     ox.setTransform(dpr,0,0,dpr,0,0);
@@ -729,7 +762,9 @@ function streamSys(html){ if (B.paused) return; const li = document.createElemen
 
 /* ================= CONTROLS ================= */
 function setView(v){ B.view = v; centerEl.dataset.view = v; document.querySelectorAll(".views button[data-v]").forEach(b => b.setAttribute("aria-pressed", b.dataset.v===v)); }
-$("#themeBtn").onclick = () => { applyTheme(document.documentElement.dataset.theme==="ares" ? "enochian" : "ares"); render(); stats(); };
+const THEME_ORDER = ["ares", "enochian", "ivory", "ivory-glass"];
+$("#themeBtn").onclick = () => { const i = THEME_ORDER.indexOf(document.documentElement.dataset.theme);
+  applyTheme(THEME_ORDER[(i + 1) % THEME_ORDER.length]); render(); stats(); };
 document.querySelectorAll(".views button[data-v]").forEach(b => b.onclick = () => { setView(b.dataset.v); if (B.auto) toggleAuto(); });
 let nextFlip = 0;
 function toggleAuto(){ B.auto = !B.auto; $("#auto").setAttribute("aria-pressed", B.auto); nextFlip = performance.now() + CFG.wall[B.view==="field" ? "field" : "hybrid"]; if (!B.auto) $("#cd").textContent = "AUTO OFF"; }

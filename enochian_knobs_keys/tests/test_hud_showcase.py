@@ -37,9 +37,15 @@ class HUDShowcaseTests(unittest.TestCase):
                     for theme in ['light','dark']:
                         page.locator(f'[data-theme-option="{theme}"]').click()
                         self.assertTrue(page.evaluate('document.documentElement.scrollWidth<=innerWidth'))
-                        for image in page.locator('.hud-item img').all():
+                        for image in page.locator('.hud-item img:visible').all():
                             image.scroll_into_view_if_needed();image.evaluate('(image)=>image.decode()')
                             self.assertTrue(image.is_visible())
+                        self.assertEqual(page.locator('.hud-item img:visible').count(),6)
+                        for slug in ['agent-hud','build-board']:
+                            card=page.locator(f'#study-{slug}')
+                            expect(card.locator(f'.preview-{theme}')).to_be_visible()
+                            expected='ivory' if theme=='light' else 'enochian'
+                            self.assertIn('theme='+expected,card.locator('.study-open').get_attribute('href'))
                 for link in links:
                     for width in [1440,390]:
                         page.set_viewport_size({'width':width,'height':1000})
@@ -48,6 +54,12 @@ class HUDShowcaseTests(unittest.TestCase):
                         self.assertTrue(page.evaluate('document.documentElement.scrollWidth<=innerWidth'))
                         if 'agent-hud.html' in link or 'build-board.html' in link:
                             screen.locator('#pause').click();expect(screen.locator('#pause')).to_have_attribute('aria-pressed','true')
+                            expect(screen.locator('html')).to_have_attribute('data-theme','ivory')
+                            screen.locator('#themeBtn').click()
+                            expect(screen.locator('html')).to_have_attribute('data-theme','ivory-glass')
+                            screen.locator('#themeBtn').click()
+                            expected='ares' if 'build-board.html' in link else 'enochian'
+                            expect(screen.locator('html')).to_have_attribute('data-theme',expected)
                         if 'build-board.html' in link:
                             screen.locator('.views [data-v="board"]').click();expect(screen.locator('#center')).to_have_attribute('data-view','board')
                             screen.locator('.views [data-v="field"]').click();expect(screen.locator('#center')).to_have_attribute('data-view','field')

@@ -4,13 +4,13 @@
   "images": [
     {
       "slug": "agent-hud",
-      "sha256": "4866cede6f013e76719c62c86ed9876cc86f7b3cff9b55f6e5718b137afb6b16",
+      "sha256": "497da04dd51d6cd9f5348669339360dbdfd764f2bdb693d8cd650c403e5433cf",
       "width": 1440,
       "height": 900
     },
     {
       "slug": "build-board",
-      "sha256": "fe6ad00e7625c725754e2b074fd5ee21c90cdb186989481037f289a41c420236",
+      "sha256": "06fb0d394d932efe85b2a1ba2a45e8bc3df9b1146ed950921e420387c0e23605",
       "width": 1440,
       "height": 900
     },
@@ -40,11 +40,25 @@
     }
   ],
   "source_hashes": {
-    "index.html": "9773abf096c3c08981adb0162113ae0b839ca3fa0a0edacfcc0fbbb1a9a554bb",
-    "board.html": "52b7e703658415124c5c41546a473103e7a1b8e0f65f0e42cbe8ceee2ddfbef7",
+    "index.html": "53e2961d575969d181a3b2cc8edad6387d212361534b78402cb5335e2f19f37e",
+    "board.html": "c735f5ffbadfdefdbd56950d3cfeda94acc310c34e28fadef86b2d1824d79f02",
     "matrix-journey.html": "618ee417239726e54ebdfaa23d173c794d53a33f1c30ca037f0ee7d0506668af",
     "command-deck.html": "bfde326a61e2fb15450b79aae89890658ac1c638f9e36c5fe95bf7273da44335",
     "v2/command-deck-v2.html": "10f626772ff6ef203bebd035cefc673e56cfec3bfb470b32dfd9df897b090626",
     "light-table/light-table.html": "012d7c01a438690a6818570e326a805a966701259445558d04aac546d948a6e0"
-  }
+  },
+  "light_images": [
+    {
+      "slug": "agent-hud",
+      "sha256": "23f4e7d1e3e3c6c6447a552f76b6e51412068fa1f8ef0435116014cb640e58b5",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "slug": "build-board",
+      "sha256": "05af5edcc710f690744af4a720c23b75991d6fbd5f88ceed9272b2ec8250e991",
+      "width": 1440,
+      "height": 900
+    }
+  ]
 }

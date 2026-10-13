@@ -69,6 +69,11 @@ function setTheme(theme) {
   document.documentElement.dataset.theme = theme;
   document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#09090a' : '#ffffff';
   document.querySelectorAll('[data-theme-option]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.themeOption === theme)));
+  document.querySelectorAll('a[data-hud-palettes]').forEach(link => {
+    const url = new URL(link.getAttribute('href'), location.href);
+    url.searchParams.set('theme', theme === 'dark' ? 'enochian' : 'ivory');
+    link.setAttribute('href', url.pathname + url.search);
+  });
   for (const group of document.querySelectorAll('.source .rthemes')) {
     if (group.closest('[data-name="Enochian Rotary Knob 01"], [data-name="Enochian Rotary Knob 02"]')) continue;
     const desired = group.querySelector(`[data-finish="${theme === 'dark' ? 'obsidian' : 'ivory'}"]`) || group.querySelector(`[data-theme="${theme === 'dark' ? 'black' : 'light'}"]`) || group.querySelector(`[data-theme="${theme === 'dark' ? 'black' : 'white'}"]`);

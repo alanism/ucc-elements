@@ -168,8 +168,8 @@ ANCHORS = {
 }
 
 HUDS = [
-    {"slug": "agent-hud", "name": "Enochian Agent HUD", "source": "index.html", "query": "", "wide": True, "description": "Agent activity, token flow, context pressure, and event traces in one live screen.", "aliases": "dashboard hud coding agent harness tokens context telemetry VR video production"},
-    {"slug": "build-board", "name": "Enochian Build Board", "source": "board.html", "query": "theme=enochian", "wide": True, "description": "Board, hybrid, and field views for following a build and inspecting its activity.", "aliases": "dashboard hud coding agent harness board kanban tasks trace VR video production"},
+    {"slug": "agent-hud", "name": "Enochian Agent HUD", "source": "index.html", "query": "theme=enochian", "palette_previews": True, "wide": True, "description": "Agent activity, token flow, context pressure, and event traces. Enochian, Ivory, and Ivory Glass palettes.", "aliases": "dashboard hud coding agent harness tokens context telemetry VR video production ivory glass palette"},
+    {"slug": "build-board", "name": "Enochian Build Board", "source": "board.html", "query": "theme=enochian", "palette_previews": True, "wide": True, "description": "Board, hybrid, and field views for following a build. Enochian, Ivory, and Ivory Glass palettes.", "aliases": "dashboard hud coding agent harness board kanban tasks trace VR video production ivory glass palette"},
     {"slug": "decision-matrix", "name": "Enochian Decision Matrix", "source": "matrix-journey.html", "query": "theme=enochian", "wide": False, "description": "Priority, difficulty, and journey views for deciding what comes next.", "aliases": "dashboard hud matrix priority urgency importance journey planning VR video production"},
     {"slug": "command-deck", "name": "Enochian Command Deck", "source": "command-deck.html", "query": "theme=enochian", "wide": False, "description": "A cinematic priority radar, project journey, and batch-processing wall.", "aliases": "dashboard hud command deck cinematic radar batch content video production"},
     {"slug": "command-deck-v2", "name": "Enochian Command Deck 02", "source": "v2/command-deck-v2.html", "query": "theme=obsidian", "wide": False, "description": "A ranked queue, editable priority matrix, task actions with undo, and batch review.", "aliases": "dashboard hud command deck v2 priority matrix queue undo harness coding agent batch video production"},
@@ -180,15 +180,22 @@ HUDS = [
 def hud_markup():
     cards = []
     for hud in HUDS:
-        path = UIUX / "previews" / f'{hud["slug"]}-hud.png'
-        data = path.read_bytes()
-        digest = hashlib.sha256(data).hexdigest()[:12]
-        width, height = int.from_bytes(data[16:20], "big"), int.from_bytes(data[20:24], "big")
+        images = []
+        for theme in (["light", "dark"] if hud.get("palette_previews") else [None]):
+            filename = f'{hud["slug"]}-hud' + ("-light" if theme == "light" else "") + ".png"
+            path = UIUX / "previews" / filename
+            data = path.read_bytes()
+            digest = hashlib.sha256(data).hexdigest()[:12]
+            width, height = int.from_bytes(data[16:20], "big"), int.from_bytes(data[20:24], "big")
+            image_class = f' class="preview-{theme}"' if theme else ""
+            finish = f'{theme} palette' if theme else "digital dashboard"
+            images.append(f'<img{image_class} src="/UIUX/previews/{path.name}?v={digest}" width="{width}" height="{height}" loading="lazy" alt="{escape(hud["name"])} — {finish} preview">')
         wrapper_version = hashlib.sha256((UIUX / "studies" / "agent-hud" / f'{hud["slug"]}.html').read_bytes()).hexdigest()[:12]
         link = f'/UIUX/studies/agent-hud/{hud["slug"]}.html?v={wrapper_version}'
+        palette_attribute = ' data-hud-palettes' if hud.get("palette_previews") else ""
         cards.append(f'<article class="study-item hud-item" id="study-{hud["slug"]}" data-name="{escape(hud["name"])}" data-group="Dashboards &amp; HUDs" data-search-terms="{escape(hud["aliases"])}">'
-                     f'<a class="study-preview" href="{link}" aria-label="Open {escape(hud["name"])}"><img src="/UIUX/previews/{path.name}?v={digest}" width="{width}" height="{height}" loading="lazy" alt="{escape(hud["name"])} — digital dashboard preview"></a>'
-                     f'<h3><a href="{link}">{escape(hud["name"])}</a></h3><p>{escape(hud["description"])}</p><a class="study-open" href="{link}">Open dashboard →</a></article>')
+                     f'<a class="study-preview"{palette_attribute} href="{link}" aria-label="Open {escape(hud["name"])}">{"".join(images)}</a>'
+                     f'<h3><a{palette_attribute} href="{link}">{escape(hud["name"])}</a></h3><p>{escape(hud["description"])}</p><a class="study-open"{palette_attribute} href="{link}">Open dashboard →</a></article>')
     return "\n".join(cards)
 
 
@@ -215,6 +222,18 @@ def public_huds():
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{hud["name"]} — Enochian Elements</title>
 <style>*{{box-sizing:border-box}}html,body{{margin:0;height:100%;background:#09090a;color:#f7f7f8;font:13px system-ui,sans-serif}}body{{display:flex;flex-direction:column}}nav{{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 20px;min-height:56px;border-bottom:1px solid #3a3a3e;flex-shrink:0}}nav a{{color:inherit;text-underline-offset:4px;min-height:32px;display:inline-flex;align-items:center}}nav a:focus-visible{{outline:2px solid #cc0000;outline-offset:3px}}.screen-scroll{{flex:1;min-height:0;overflow:auto}}iframe{{display:block;width:100%;height:100%;border:0}}.wide-screen iframe{{min-width:1120px}}small{{color:#aaaab0}}@media(max-width:600px){{nav{{padding:8px 12px;flex-wrap:wrap;gap:4px 16px}}nav strong{{font-size:12px}}small{{display:none}}}}</style></head>
 <body><nav aria-label="Dashboard navigation"><a href="/UIUX#dashboards">← Showcase</a><strong>{hud["name"]}</strong><small>Interactive screen · simulated data</small><a href="/UIUX/studies/agent-hud/{hud["slug"]}-screen.html{query}">Open screen ↗</a></nav><div class="screen-scroll{wide}"><iframe title="{hud["name"]} interactive screen" src="/UIUX/studies/agent-hud/{hud["slug"]}-screen.html{query}"></iframe></div></body></html>'''
+        if hud.get("palette_previews"):
+            wrapper = wrapper.replace('</body>', '''<script>
+const palette = new URLSearchParams(location.search).get('theme');
+if (['enochian', 'ivory', 'ivory-glass', 'ares'].includes(palette)) {
+  for (const element of [document.querySelector('iframe'), document.querySelector('nav a:last-child')]) {
+    const attribute = element.tagName === 'IFRAME' ? 'src' : 'href';
+    const url = new URL(element.getAttribute(attribute), location.href);
+    url.searchParams.set('theme', palette);
+    element.setAttribute(attribute, url.pathname + url.search);
+  }
+}
+</script></body>''')
         (destination / f'{hud["slug"]}.html').write_text(wrapper)
     (destination / "demo-frame.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180"><rect width="320" height="180" fill="#111"/><path d="M0 90h320M160 0v180M30 30h260v120H30z" fill="none" stroke="#444"/><circle cx="160" cy="90" r="45" fill="none" stroke="#aaa"/><text x="160" y="168" text-anchor="middle" fill="#aaa" font-family="monospace" font-size="12">ENOCHIAN · DEMO FRAME</text></svg>')
 
