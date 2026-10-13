@@ -192,6 +192,9 @@ def hud_markup():
             images.append(f'<img{image_class} src="/UIUX/previews/{path.name}?v={digest}" width="{width}" height="{height}" loading="lazy" alt="{escape(hud["name"])} — {finish} preview">')
         wrapper_version = hashlib.sha256((UIUX / "studies" / "agent-hud" / f'{hud["slug"]}.html').read_bytes()).hexdigest()[:12]
         link = f'/UIUX/studies/agent-hud/{hud["slug"]}.html?v={wrapper_version}'
+        if hud.get("palette_previews"):
+            # Match the initial Light preview before the atlas module initializes.
+            link += '&amp;theme=ivory'
         palette_attribute = ' data-hud-palettes' if hud.get("palette_previews") else ""
         cards.append(f'<article class="study-item hud-item" id="study-{hud["slug"]}" data-name="{escape(hud["name"])}" data-group="Dashboards &amp; HUDs" data-search-terms="{escape(hud["aliases"])}">'
                      f'<a class="study-preview"{palette_attribute} href="{link}" aria-label="Open {escape(hud["name"])}">{"".join(images)}</a>'
@@ -223,15 +226,17 @@ def public_huds():
 <style>*{{box-sizing:border-box}}html,body{{margin:0;height:100%;background:#09090a;color:#f7f7f8;font:13px system-ui,sans-serif}}body{{display:flex;flex-direction:column}}nav{{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 20px;min-height:56px;border-bottom:1px solid #3a3a3e;flex-shrink:0}}nav a{{color:inherit;text-underline-offset:4px;min-height:32px;display:inline-flex;align-items:center}}nav a:focus-visible{{outline:2px solid #cc0000;outline-offset:3px}}.screen-scroll{{flex:1;min-height:0;overflow:auto}}iframe{{display:block;width:100%;height:100%;border:0}}.wide-screen iframe{{min-width:1120px}}small{{color:#aaaab0}}@media(max-width:600px){{nav{{padding:8px 12px;flex-wrap:wrap;gap:4px 16px}}nav strong{{font-size:12px}}small{{display:none}}}}</style></head>
 <body><nav aria-label="Dashboard navigation"><a href="/UIUX#dashboards">← Showcase</a><strong>{hud["name"]}</strong><small>Interactive screen · simulated data</small><a href="/UIUX/studies/agent-hud/{hud["slug"]}-screen.html{query}">Open screen ↗</a></nav><div class="screen-scroll{wide}"><iframe title="{hud["name"]} interactive screen" src="/UIUX/studies/agent-hud/{hud["slug"]}-screen.html{query}"></iframe></div></body></html>'''
         if hud.get("palette_previews"):
+            # Set the iframe URL once, after resolving the requested palette.
+            # An initial dark navigation can otherwise race the palette navigation.
+            wrapper = wrapper.replace(f'src="/UIUX/studies/agent-hud/{hud["slug"]}-screen.html', f'data-screen-src="/UIUX/studies/agent-hud/{hud["slug"]}-screen.html')
             wrapper = wrapper.replace('</body>', '''<script>
-const palette = new URLSearchParams(location.search).get('theme');
-if (['enochian', 'ivory', 'ivory-glass', 'ares'].includes(palette)) {
-  for (const element of [document.querySelector('iframe'), document.querySelector('nav a:last-child')]) {
-    const attribute = element.tagName === 'IFRAME' ? 'src' : 'href';
-    const url = new URL(element.getAttribute(attribute), location.href);
-    url.searchParams.set('theme', palette);
-    element.setAttribute(attribute, url.pathname + url.search);
-  }
+const requested = new URLSearchParams(location.search).get('theme');
+const palette = ['enochian', 'ivory', 'ivory-glass', 'ares'].includes(requested) ? requested : 'enochian';
+for (const element of [document.querySelector('iframe'), document.querySelector('nav a:last-child')]) {
+  const isScreen = element.tagName === 'IFRAME';
+  const url = new URL(element.getAttribute(isScreen ? 'data-screen-src' : 'href'), location.href);
+  url.searchParams.set('theme', palette);
+  element.setAttribute(isScreen ? 'src' : 'href', url.pathname + url.search);
 }
 </script></body>''')
         (destination / f'{hud["slug"]}.html').write_text(wrapper)

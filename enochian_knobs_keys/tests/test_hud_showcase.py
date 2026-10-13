@@ -22,6 +22,14 @@ class HUDShowcaseTests(unittest.TestCase):
                 errors=[];bad=[]
                 page.on('pageerror',lambda error:errors.append(str(error)))
                 page.on('response',lambda response:bad.append(response.url) if response.status>=400 and response.url.startswith(base) else None)
+                # Slow optional motion loading must not make the initial Light
+                # preview open a dark screen before atlas initialization.
+                initial=browser.new_page()
+                initial.route('**/controls.js*',lambda route:route.abort())
+                initial.goto(base+'/UIUX/')
+                for slug in ['agent-hud','build-board']:
+                    self.assertIn('theme=ivory',initial.locator(f'#study-{slug} .study-open').get_attribute('href'))
+                initial.close()
                 page.goto(base+'/UIUX/');page.wait_for_selector('#code-select option',state='attached')
                 self.assertEqual(page.locator('.atlas-item:not(.code-veil-item)').count(),63)
                 self.assertEqual(page.locator('.study-item:not(.hud-item)').count(),12)

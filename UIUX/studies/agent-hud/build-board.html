@@ -1,14 +1,13 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Enochian Build Board — Enochian Elements</title>
 <style>*{box-sizing:border-box}html,body{margin:0;height:100%;background:#09090a;color:#f7f7f8;font:13px system-ui,sans-serif}body{display:flex;flex-direction:column}nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 20px;min-height:56px;border-bottom:1px solid #3a3a3e;flex-shrink:0}nav a{color:inherit;text-underline-offset:4px;min-height:32px;display:inline-flex;align-items:center}nav a:focus-visible{outline:2px solid #cc0000;outline-offset:3px}.screen-scroll{flex:1;min-height:0;overflow:auto}iframe{display:block;width:100%;height:100%;border:0}.wide-screen iframe{min-width:1120px}small{color:#aaaab0}@media(max-width:600px){nav{padding:8px 12px;flex-wrap:wrap;gap:4px 16px}nav strong{font-size:12px}small{display:none}}</style></head>
-<body><nav aria-label="Dashboard navigation"><a href="/UIUX#dashboards">← Showcase</a><strong>Enochian Build Board</strong><small>Interactive screen · simulated data</small><a href="/UIUX/studies/agent-hud/build-board-screen.html?theme=enochian&v=1f4f1a079805">Open screen ↗</a></nav><div class="screen-scroll wide-screen"><iframe title="Enochian Build Board interactive screen" src="/UIUX/studies/agent-hud/build-board-screen.html?theme=enochian&v=1f4f1a079805"></iframe></div><script>
-const palette = new URLSearchParams(location.search).get('theme');
-if (['enochian', 'ivory', 'ivory-glass', 'ares'].includes(palette)) {
-  for (const element of [document.querySelector('iframe'), document.querySelector('nav a:last-child')]) {
-    const attribute = element.tagName === 'IFRAME' ? 'src' : 'href';
-    const url = new URL(element.getAttribute(attribute), location.href);
-    url.searchParams.set('theme', palette);
-    element.setAttribute(attribute, url.pathname + url.search);
-  }
+<body><nav aria-label="Dashboard navigation"><a href="/UIUX#dashboards">← Showcase</a><strong>Enochian Build Board</strong><small>Interactive screen · simulated data</small><a href="/UIUX/studies/agent-hud/build-board-screen.html?theme=enochian&v=1f4f1a079805">Open screen ↗</a></nav><div class="screen-scroll wide-screen"><iframe title="Enochian Build Board interactive screen" data-screen-src="/UIUX/studies/agent-hud/build-board-screen.html?theme=enochian&v=1f4f1a079805"></iframe></div><script>
+const requested = new URLSearchParams(location.search).get('theme');
+const palette = ['enochian', 'ivory', 'ivory-glass', 'ares'].includes(requested) ? requested : 'enochian';
+for (const element of [document.querySelector('iframe'), document.querySelector('nav a:last-child')]) {
+  const isScreen = element.tagName === 'IFRAME';
+  const url = new URL(element.getAttribute(isScreen ? 'data-screen-src' : 'href'), location.href);
+  url.searchParams.set('theme', palette);
+  element.setAttribute(isScreen ? 'src' : 'href', url.pathname + url.search);
 }
 </script></body></html>
